@@ -1,0 +1,22 @@
+# Next.js
+/node_modules
+/.next/
+/out/
+/build
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Vercel
+.vercel
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode
+.idea
