@@ -33,18 +33,28 @@ export default function Page() {
           <p className="mb-4">
             {">"} Making learning feel like play
           </p>
-          
+
           <h2 className="text-xl mt-4 mb-2">Design Principles:</h2>
           {designPrinciples.map((principle, index) => (
             <p key={index} className="ml-4">
               {index + 1}. {principle}
             </p>
           ))}
-          
+
+          <h2 className="text-xl mt-6 mb-2">Projects:</h2>
+          <div className="ml-4">
+            <a
+              href="/debt-payoff"
+              className="text-blue-400 hover:text-blue-300 underline"
+            >
+              💰 Debt Payoff Calculator - Compare strategies to pay off debt faster
+            </a>
+          </div>
+
           <div className="command-line mt-4 flex items-center">
             <span className="mr-2">{">"}</span>
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={commandInput}
               onChange={(e) => setCommandInput(e.target.value)}
               onKeyDown={handleCommand}
