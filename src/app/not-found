@@ -1,0 +1,28 @@
+import Link from 'next/link'
+
+export default function NotFound() {
+  return (
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
+        <p className="text-xl text-gray-600 mb-6">
+          Oops! The page you're looking for doesn't exist.
+        </p>
+        <div className="flex justify-center space-x-4">
+          <Link 
+            href="/" 
+            className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition"
+          >
+            Return Home
+          </Link>
+          <Link 
+            href="/works" 
+            className="px-4 py-2 border border-gray-800 rounded hover:bg-gray-100 transition"
+          >
+            View Works
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}

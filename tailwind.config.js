@@ -1,29 +1,29 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: [
-      './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-      './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-      './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    ],
-    theme: {
-      extend: {
-        colors: {
-          'terminal-bg': '#1E1E1E',
-          'terminal-text': '#39FF14', // Cyberpunk green
-        },
-        fontFamily: {
-          'mono': ['Courier New', 'monospace'],
-        },
-        animation: {
-          'cursor-blink': 'blink 1s step-end infinite'
-        },
-        keyframes: {
-          blink: {
-            '0%, 100%': { opacity: 1 },
-            '50%': { opacity: 0 }
-          }
-        }
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        'brand-beige': '#F9F8F5',
+        'brand-bg': '#f4f4f4',
+        'brand-text': '#333333',
+        'brand-accent': '#666666',
       },
+      fontFamily: {
+        'sans': ['var(--font-bricolage)', 'system-ui', 'sans-serif'],
+        'mono': ['var(--font-commit-mono)', 'monospace'],
+      },
+      backgroundImage: {
+        'dotted-pattern': 'linear-gradient(#f4f4f4 25px, transparent 25px), linear-gradient(90deg, #f4f4f4 25px, transparent 25px)'
+      },
+      backgroundSize: {
+        'dot-grid': '50px 50px'
+      }
     },
-    plugins: [],
-  }
+  },
+  plugins: [],
+}
