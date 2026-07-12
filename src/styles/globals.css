@@ -1,26 +1,164 @@
 @import "tailwindcss";
 
+@theme {
+  /* Typography */
+  --font-display: var(--font-bricolage), sans-serif;
+  --font-mono: var(--font-commit-mono), monospace;
+
+  /* Palette — K-Zen (design-intent/tokens.md, V2 delta) */
+  --color-page: #F2ECE2;
+  --color-ink-primary: #3A3226;
+  --color-ink-body: #6B6152;
+  --color-ink-muted: #8A8074;
+  --color-ink-faint: #A99A7F;
+
+  --color-sand-light: #DED1B3;
+  --color-sand-dark: #C9B992;
+  --color-sand-vignette: rgba(70, 55, 30, 0.16);
+
+  --color-rock-highlight: #8F887A;
+  --color-rock-mid: #6F6A5D;
+  --color-rock-shadow: #4C483D;
+
+  --color-groove-shadow: rgba(70, 55, 38, 0.32);
+  --color-groove-highlight: rgba(255, 248, 232, 0.5);
+
+  /* V2: blue washi is the primary interactive accent (nav hover/active) */
+  --color-accent-washi-blue: #8AB4D1;
+  --color-brush-blue-light: #AEC5D4;
+  --color-blossom-pink: #DE9AAE;
+  /* Retained for hand-drawn accents on /works (tags, CTA arrows) per V2 delta */
+  --color-accent-orange: #C9622F;
+
+  --color-hairline: rgba(61, 50, 38, 0.12);
+  --color-chip-line: rgba(120, 100, 70, 0.3);
+  --color-tag: #E9E1CF;
+  --color-placeholder-stripe-a: #E7DDC9;
+  --color-placeholder-stripe-b: #DED1B3;
+
+  /* Corner radii */
+  --radius-plot: 34px;
+  --radius-plot-mobile: 22px;
+  --radius-card: 16px;
+  --radius-card-mobile: 14px;
+  --radius-chip: 999px;
+  --radius-tooltip: 6px;
+
+  /* Motion — emil-design-eng: strong custom easing beats default CSS easing */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
 body {
-  color: #1f2937;
+  background-color: var(--color-page);
+  color: var(--color-ink-body);
+  font-family: var(--font-mono);
 }
 
 h1, h2, h3 {
-  font-weight: 700;
-  color: #111827;
+  color: var(--color-ink-primary);
+  font-family: var(--font-display);
 }
 
-/* Soft, subtle scrollbar */
 ::-webkit-scrollbar {
   width: 0.5rem;
-  background-color: #f3f4f6;
+  background-color: var(--color-page);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
+  background-color: var(--color-ink-faint);
   border-radius: 9999px;
 }
 
-/* Smooth transitions for interactive elements */
-a, button {
-  transition: color 0.3s ease-in-out;
+/* Nav watercolor-brush hover underlay: fades in under the label, gated to real hover devices */
+.nav-brush {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .nav-brush {
+    opacity: 1;
+  }
+}
+.nav-brush.is-active {
+  opacity: 1;
+}
+
+/* Press feedback for buttons/links per emil-design-eng */
+.press-scale {
+  transition: transform 160ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .press-scale:hover {
+    color: var(--color-accent-washi-blue);
+  }
+}
+.press-scale:active {
+  transform: scale(0.97);
+}
+
+/* Mobile nav overlay entrance/exit */
+.nav-overlay {
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+  transition: opacity 200ms ease-out, transform 200ms var(--ease-out-strong);
+}
+.nav-overlay.is-open {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* Zen garden: hide the OS cursor only where a real pointer + custom cursor apply */
+@media (hover: hover) and (pointer: fine) {
+  .garden-plot {
+    cursor: none;
+  }
+}
+
+.rock {
+  transition: transform 150ms var(--ease-out-strong), filter 150ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .rock:hover {
+    transform: scale(1.04);
+    filter: drop-shadow(0 6px 10px rgba(70, 55, 35, 0.22));
+  }
+}
+
+.tool-card {
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 160ms var(--ease-out-strong);
+}
+.tool-card.is-selected {
+  border-color: var(--color-accent-washi-blue);
+  box-shadow: 0 0 0 2px rgba(138, 180, 209, 0.35);
+}
+
+/* Selected Works card entrance: fade + rise on first scroll into view, staggered per card */
+.work-card {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 220ms var(--ease-out-strong), transform 220ms var(--ease-out-strong);
+}
+.work-card[data-visible='true'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+.work-card .rounded-2xl {
+  transition: transform 200ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .work-card:hover .rounded-2xl {
+    transform: scale(1.015);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
