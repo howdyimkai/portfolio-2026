@@ -40,10 +40,10 @@ const BAMBOO = [
   { src: '/garden/bamboo-4.webp', ratio: 244 / 420, style: { right: '-2%', top: '58%', width: '5%' } },
 ]
 
-const TOOLS: { key: Tool; label: string; icon: string }[] = [
-  { key: 'rake', label: 'TEETH RAKE', icon: '/garden/tool-teethrake.webp' },
-  { key: 'eraser', label: 'ERASER RAKE', icon: '/garden/tool-eraserrake.webp' },
-  { key: 'blossom', label: 'BLOSSOM', icon: '/garden/tool-blossom.webp' },
+const TOOLS: { key: Tool; label: string; icon: string; ratio: number }[] = [
+  { key: 'rake', label: 'TEETH RAKE', icon: '/garden/tool-teethrake.webp', ratio: 174 / 304 },
+  { key: 'eraser', label: 'ERASER RAKE', icon: '/garden/tool-eraserrake.webp', ratio: 174 / 304 },
+  { key: 'blossom', label: 'BLOSSOM', icon: '/garden/tool-blossom.webp', ratio: 166 / 144 },
 ]
 
 let blossomIdCounter = 0
@@ -356,21 +356,21 @@ export default function ZenGarden() {
         </div>
       </div>
 
-      <div className="mt-10 flex justify-center gap-6 md:gap-8">
+      <div className="mt-10 flex justify-center gap-6 md:gap-10">
         {TOOLS.map((t) => (
           <button
             key={t.key}
             type="button"
             onClick={() => setTool(t.key)}
             aria-pressed={tool === t.key}
-            className={`tool-card press-scale flex w-24 flex-col items-center gap-2 rounded-2xl border border-hairline bg-page px-3 py-4 font-mono text-[11px] text-ink-body md:w-28 ${
+            className={`tool-card press-scale flex w-32 flex-col items-center gap-4 overflow-hidden rounded-2xl border border-hairline bg-page px-4 pt-5 font-mono text-xs text-ink-body md:w-44 ${
               tool === t.key ? 'is-selected' : ''
             }`}
           >
-            <span className="relative h-10 w-10">
-              <Image src={t.icon} alt="" fill sizes="40px" className="object-contain" />
-            </span>
             {t.label}
+            <span className="relative w-20 md:w-28" style={{ aspectRatio: t.ratio }}>
+              <Image src={t.icon} alt="" fill sizes="112px" className="object-contain" />
+            </span>
           </button>
         ))}
       </div>
