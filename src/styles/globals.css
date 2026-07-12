@@ -110,9 +110,11 @@ h1, h2, h3 {
   pointer-events: auto;
 }
 
-/* Zen garden: hide the OS cursor only where a real pointer + custom cursor apply */
+/* Zen garden: hide the OS cursor only where a real pointer + custom cursor apply,
+   and only once a tool is active — with nothing selected the garden stays a still
+   scene with a normal cursor (rake is a discovered easter egg, not the default). */
 @media (hover: hover) and (pointer: fine) {
-  .garden-plot {
+  .garden-plot.has-tool {
     cursor: none;
   }
 }

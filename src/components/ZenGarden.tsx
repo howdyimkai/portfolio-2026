@@ -114,7 +114,7 @@ function finalizeStroke(stroke: Stroke) {
 }
 
 export default function ZenGarden() {
-  const [tool, setTool] = useState<Tool>('rake')
+  const [tool, setTool] = useState<Tool | null>(null)
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
@@ -122,7 +122,7 @@ export default function ZenGarden() {
   const activeStrokeRef = useRef<Stroke | null>(null)
   const hoveringRef = useRef(false)
   const lastPointRef = useRef<Point | null>(null)
-  const toolRef = useRef<Tool>(tool)
+  const toolRef = useRef<Tool | null>(tool)
   const blossomImgRef = useRef<HTMLImageElement | null>(null)
   const [blossoms, setBlossoms] = useState<Blossom[]>([])
   const blossomsRef = useRef<Blossom[]>([])
@@ -247,6 +247,7 @@ export default function ZenGarden() {
   }
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (!toolRef.current) return
     const p = getPoint(e)
     // Rake/eraser act on hover alone; only the blossom stamp is a discrete click.
     if (toolRef.current === 'blossom') {
@@ -286,6 +287,8 @@ export default function ZenGarden() {
   }
 
   const handlePointerMove = (e: React.PointerEvent) => {
+    if (!toolRef.current) return
+
     // Use getCoalescedEvents when available so fast strokes get every intermediate
     // sample the OS actually captured, instead of just one point per rendered frame.
     const native = e.nativeEvent as PointerEvent & { getCoalescedEvents?: () => PointerEvent[] }
@@ -328,6 +331,7 @@ export default function ZenGarden() {
   }
 
   const handlePointerEnter = (e: React.PointerEvent) => {
+    if (!toolRef.current) return
     hoveringRef.current = true
     if (cursorRef.current) cursorRef.current.style.opacity = '1'
 
@@ -350,7 +354,7 @@ export default function ZenGarden() {
     if (cursorRef.current) cursorRef.current.style.opacity = '0'
   }
 
-  const cursorIcon = TOOLS.find((t) => t.key === tool)!.icon
+  const activeToolIcon = tool ? TOOLS.find((t) => t.key === tool)?.icon : undefined
 
   return (
     <div className="w-full">
@@ -361,7 +365,7 @@ export default function ZenGarden() {
 
       <div
         ref={wrapRef}
-        className="garden-plot relative aspect-[592/926] touch-none overflow-visible rounded-[22px] md:aspect-[803/517] md:rounded-[34px]"
+        className={`garden-plot relative aspect-[592/926] touch-none overflow-visible rounded-[22px] md:aspect-[803/517] md:rounded-[34px] ${tool ? 'has-tool' : ''}`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerEnter={handlePointerEnter}
@@ -429,14 +433,16 @@ export default function ZenGarden() {
           <Image src="/garden/bonsai.webp" alt="" fill draggable={false} sizes="340px" className="object-contain" />
         </div>
 
-        <div
-          ref={cursorRef}
-          aria-hidden
-          className="garden-cursor pointer-events-none absolute left-0 top-0 z-30 h-10 w-10 opacity-0"
-          style={{ transition: 'opacity 150ms ease' }}
-        >
-          <Image src={cursorIcon} alt="" fill draggable={false} sizes="40px" className="object-contain" />
-        </div>
+        {tool && (
+          <div
+            ref={cursorRef}
+            aria-hidden
+            className="garden-cursor pointer-events-none absolute left-0 top-0 z-30 h-10 w-10 opacity-0"
+            style={{ transition: 'opacity 150ms ease' }}
+          >
+            <Image src={activeToolIcon!} alt="" fill draggable={false} sizes="40px" className="object-contain" />
+          </div>
+        )}
       </div>
 
       <div className="mt-10 flex justify-center gap-6 md:gap-10">
