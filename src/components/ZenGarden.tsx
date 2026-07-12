@@ -265,7 +265,7 @@ export default function ZenGarden() {
 
       <div
         ref={wrapRef}
-        className="garden-plot relative touch-none overflow-visible rounded-[22px] shadow-[0_20px_44px_rgba(70,55,35,0.18)] md:rounded-[34px]"
+        className="garden-plot relative touch-none overflow-visible rounded-[22px] md:rounded-[34px]"
         style={{ aspectRatio: '803 / 517' }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -291,10 +291,6 @@ export default function ZenGarden() {
           draggable={false}
           sizes="(min-width: 768px) 900px, 100vw"
           className="rounded-[22px] object-cover md:rounded-[34px]"
-        />
-        <div
-          className="pointer-events-none absolute inset-0 rounded-[22px] md:rounded-[34px]"
-          style={{ boxShadow: 'inset 0 0 60px rgba(70,55,30,0.16)' }}
         />
 
         <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full" />
@@ -325,7 +321,7 @@ export default function ZenGarden() {
 
         <div
           className="pointer-events-none absolute z-20"
-          style={{ left: '62%', top: '48%', width: '38%', aspectRatio: 674 / 522 }}
+          style={{ left: '62%', top: '58%', width: '38%', aspectRatio: 674 / 522 }}
         >
           <Image src="/garden/bonsai.webp" alt="" fill draggable={false} sizes="340px" className="object-contain" />
         </div>
