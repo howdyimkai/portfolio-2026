@@ -6,14 +6,18 @@ import Image from 'next/image'
 type Tool = 'rake' | 'eraser' | 'blossom'
 
 type Point = { x: number; y: number }
-type Stroke = { tines: Point[][]; born: number }
+type TinePath = { dark: Path2D; light: Path2D; lastDark: Point | null; lastLight: Point | null }
+type Stroke = { tines: Point[][]; paths: TinePath[]; born: number }
 type Blossom = { id: number; x: number; y: number; rotation: number; scale: number }
+type Rect = { left: number; top: number; width: number; height: number }
 
 const HOLD_MS = 6000
 const FADE_MS = 3000
 const TINES = 5
 const ERASE_RADIUS = 28
 const BLOSSOM_ERASE_RADIUS = 34
+// Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
+const CURSOR_ANGLE_LERP = 0.35
 
 const ROCKS = [
   {
@@ -48,6 +52,67 @@ const TOOLS: { key: Tool; label: string; icon: string; ratio: number }[] = [
 
 let blossomIdCounter = 0
 
+function createStroke(): Stroke {
+  return {
+    tines: Array.from({ length: TINES }, () => []),
+    paths: Array.from({ length: TINES }, () => ({
+      dark: new Path2D(),
+      light: new Path2D(),
+      lastDark: null,
+      lastLight: null,
+    })),
+    born: Date.now(),
+  }
+}
+
+// Appends one raking sample to a stroke's hit-test points and its per-tine Path2D.
+// Uses the midpoint-quadratic technique (control point = previous raw sample, endpoint =
+// midpoint to the new sample) so fast, angular pointer motion still reads as a calm curve,
+// without ever rebuilding path history from scratch.
+function pushRakePoint(stroke: Stroke, p: Point, prev: Point, spacing: number) {
+  const dx = p.x - prev.x
+  const dy = p.y - prev.y
+  const len = Math.hypot(dx, dy) || 1
+  const perpx = -dy / len
+  const perpy = dx / len
+
+  for (let i = 0; i < TINES; i++) {
+    const off = (i - (TINES - 1) / 2) * spacing
+    const cx = p.x + perpx * off
+    const cy = p.y + perpy * off
+    const darkPt = { x: cx + 1, y: cy + 1 }
+    const lightPt = { x: cx - 1, y: cy - 1 }
+
+    stroke.tines[i].push({ x: cx, y: cy })
+
+    const pair = stroke.paths[i]
+    if (!pair.lastDark || !pair.lastLight) {
+      pair.dark.moveTo(darkPt.x, darkPt.y)
+      pair.light.moveTo(lightPt.x, lightPt.y)
+    } else {
+      const midDark = { x: (pair.lastDark.x + darkPt.x) / 2, y: (pair.lastDark.y + darkPt.y) / 2 }
+      const midLight = { x: (pair.lastLight.x + lightPt.x) / 2, y: (pair.lastLight.y + lightPt.y) / 2 }
+      pair.dark.quadraticCurveTo(pair.lastDark.x, pair.lastDark.y, midDark.x, midDark.y)
+      pair.light.quadraticCurveTo(pair.lastLight.x, pair.lastLight.y, midLight.x, midLight.y)
+    }
+    pair.lastDark = darkPt
+    pair.lastLight = lightPt
+  }
+}
+
+// The quadratic-midpoint technique always stops half a segment short of the last real
+// sample (the curve endpoint is a midpoint, never the raw point). Cap each tine with a
+// final line to its true last position so a stroke doesn't visibly stop short when the
+// gesture ends (pointer leaves, or the tool switches away mid-hover).
+function finalizeStroke(stroke: Stroke) {
+  stroke.paths.forEach((pair) => {
+    if (pair.lastDark && pair.lastLight) {
+      pair.dark.lineTo(pair.lastDark.x, pair.lastDark.y)
+      pair.light.lineTo(pair.lastLight.x, pair.lastLight.y)
+    }
+  })
+}
+
 export default function ZenGarden() {
   const [tool, setTool] = useState<Tool>('rake')
   const wrapRef = useRef<HTMLDivElement>(null)
@@ -62,15 +127,26 @@ export default function ZenGarden() {
   const [blossoms, setBlossoms] = useState<Blossom[]>([])
   const blossomsRef = useRef<Blossom[]>([])
   const rafRef = useRef<number>(0)
+  // Cached plot geometry, refreshed only on resize — avoids forced layout reads
+  // (getBoundingClientRect) in the pointermove/draw hot paths.
+  const rectRef = useRef<Rect>({ left: 0, top: 0, width: 0, height: 0 })
+  const isMobileRef = useRef(false)
+  // Cursor position is applied immediately (translate); rotation eases toward its
+  // target every animation frame so fast direction changes don't snap.
+  const cursorPosRef = useRef<Point>({ x: 0, y: 0 })
+  const cursorAngleRef = useRef(0)
+  const cursorTargetAngleRef = useRef(0)
 
   useEffect(() => {
+    const prevStroke = activeStrokeRef.current
     toolRef.current = tool
+    if (prevStroke) finalizeStroke(prevStroke)
     // Switching tools mid-hover shouldn't reconnect a stale stroke to a new one.
     activeStrokeRef.current = null
     // Switching to rake while already hovering the plot should start drawing
     // immediately rather than waiting for the next pointer enter.
     if (tool === 'rake' && hoveringRef.current) {
-      const stroke: Stroke = { tines: Array.from({ length: TINES }, () => []), born: Date.now() }
+      const stroke = createStroke()
       strokesRef.current.push(stroke)
       activeStrokeRef.current = stroke
     }
@@ -91,6 +167,8 @@ export default function ZenGarden() {
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
     const rect = wrap.getBoundingClientRect()
+    rectRef.current = { left: rect.left, top: rect.top, width: rect.width, height: rect.height }
+    isMobileRef.current = rect.width < 520
     const dpr = window.devicePixelRatio || 1
     canvas.width = Math.round(rect.width * dpr)
     canvas.height = Math.round(rect.height * dpr)
@@ -109,10 +187,9 @@ export default function ZenGarden() {
     const draw = () => {
       const canvas = canvasRef.current
       const ctx = canvas?.getContext('2d')
-      const wrap = wrapRef.current
-      if (canvas && ctx && wrap) {
-        const rect = wrap.getBoundingClientRect()
-        ctx.clearRect(0, 0, rect.width, rect.height)
+      if (canvas && ctx) {
+        const { width, height } = rectRef.current
+        ctx.clearRect(0, 0, width, height)
 
         const blossomImg = blossomImgRef.current
         if (blossomImg && blossomImg.complete) {
@@ -137,24 +214,26 @@ export default function ZenGarden() {
           ctx.globalAlpha = alpha
           ctx.lineCap = 'round'
           ctx.lineJoin = 'round'
-          s.tines.forEach((pts) => {
-            if (pts.length < 2) return
-            ctx.beginPath()
-            ctx.moveTo(pts[0].x + 1, pts[0].y + 1)
-            for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x + 1, pts[i].y + 1)
+          s.paths.forEach((pair) => {
             ctx.strokeStyle = 'rgba(70,55,38,0.32)'
             ctx.lineWidth = 2.2
-            ctx.stroke()
+            ctx.stroke(pair.dark)
 
-            ctx.beginPath()
-            ctx.moveTo(pts[0].x - 1, pts[0].y - 1)
-            for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x - 1, pts[i].y - 1)
             ctx.strokeStyle = 'rgba(255,248,232,0.5)'
             ctx.lineWidth = 1.8
-            ctx.stroke()
+            ctx.stroke(pair.light)
           })
           ctx.restore()
         })
+
+        const cursorEl = cursorRef.current
+        if (cursorEl) {
+          let diff = cursorTargetAngleRef.current - cursorAngleRef.current
+          diff = ((diff + 180) % 360 + 360) % 360 - 180
+          cursorAngleRef.current += diff * CURSOR_ANGLE_LERP
+          const { x, y } = cursorPosRef.current
+          cursorEl.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${cursorAngleRef.current}deg)`
+        }
       }
       rafRef.current = requestAnimationFrame(draw)
     }
@@ -162,22 +241,13 @@ export default function ZenGarden() {
     return () => cancelAnimationFrame(rafRef.current)
   }, [])
 
-  const getPoint = (e: React.PointerEvent): Point | null => {
-    const wrap = wrapRef.current
-    if (!wrap) return null
-    const rect = wrap.getBoundingClientRect()
+  const getPoint = (e: { clientX: number; clientY: number }): Point => {
+    const rect = rectRef.current
     return { x: e.clientX - rect.left, y: e.clientY - rect.top }
-  }
-
-  const moveCursor = (p: Point, angleDeg?: number) => {
-    const el = cursorRef.current
-    if (!el) return
-    el.style.transform = `translate(${p.x}px, ${p.y}px) translate(-50%, -50%) rotate(${angleDeg ?? 0}deg)`
   }
 
   const handlePointerDown = (e: React.PointerEvent) => {
     const p = getPoint(e)
-    if (!p) return
     // Rake/eraser act on hover alone; only the blossom stamp is a discrete click.
     if (toolRef.current === 'blossom') {
       stampBlossom(p)
@@ -193,7 +263,14 @@ export default function ZenGarden() {
       }
       return true
     })
-    setBlossoms((prev) => prev.filter((b) => Math.hypot(b.x - p.x, b.y - p.y) >= BLOSSOM_ERASE_RADIUS))
+    // Only touch React state when a blossom is actually in range — avoids a
+    // setState (and re-render) on every pointermove while erasing empty sand.
+    const hasBlossomToRemove = blossomsRef.current.some(
+      (b) => Math.hypot(b.x - p.x, b.y - p.y) < BLOSSOM_ERASE_RADIUS
+    )
+    if (hasBlossomToRemove) {
+      setBlossoms((prev) => prev.filter((b) => Math.hypot(b.x - p.x, b.y - p.y) >= BLOSSOM_ERASE_RADIUS))
+    }
   }
 
   const stampBlossom = (p: Point) => {
@@ -209,63 +286,65 @@ export default function ZenGarden() {
   }
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    const p = getPoint(e)
-    if (!p) return
+    // Use getCoalescedEvents when available so fast strokes get every intermediate
+    // sample the OS actually captured, instead of just one point per rendered frame.
+    const native = e.nativeEvent as PointerEvent & { getCoalescedEvents?: () => PointerEvent[] }
+    const samples = native.getCoalescedEvents?.() ?? [native]
+    const events = samples.length > 0 ? samples : [native]
 
-    const last = lastPointRef.current
-    let angleDeg: number | undefined
-    if (last) {
-      const dx = p.x - last.x
-      const dy = p.y - last.y
-      if (Math.hypot(dx, dy) > 0.5) {
-        angleDeg = (Math.atan2(dy, dx) * 180) / Math.PI + 90
-      }
-    }
-    moveCursor(p, angleDeg)
+    let prev = lastPointRef.current
+    let finalPoint: Point | null = null
+    let finalAngle: number | undefined
 
-    if (!hoveringRef.current) {
-      lastPointRef.current = p
-      return
-    }
-
-    if (toolRef.current === 'rake') {
-      const wrap = wrapRef.current
-      const isMobile = (wrap?.getBoundingClientRect().width ?? 800) < 520
-      const spacing = isMobile ? 5 : 7
-      const stroke = activeStrokeRef.current
-      const prev = last ?? p
-      const dx = p.x - prev.x
-      const dy = p.y - prev.y
-      const len = Math.hypot(dx, dy) || 1
-      const perpx = -dy / len
-      const perpy = dx / len
-      if (stroke) {
-        for (let i = 0; i < TINES; i++) {
-          const off = (i - (TINES - 1) / 2) * spacing
-          stroke.tines[i].push({ x: p.x + perpx * off, y: p.y + perpy * off })
+    for (const ne of events) {
+      const p = getPoint(ne)
+      if (prev) {
+        const dx = p.x - prev.x
+        const dy = p.y - prev.y
+        if (Math.hypot(dx, dy) > 0.5) {
+          finalAngle = (Math.atan2(dy, dx) * 180) / Math.PI + 90
         }
       }
-    } else if (toolRef.current === 'eraser') {
-      eraseAt(p)
+
+      if (hoveringRef.current) {
+        if (toolRef.current === 'rake') {
+          const stroke = activeStrokeRef.current
+          if (stroke) pushRakePoint(stroke, p, prev ?? p, isMobileRef.current ? 5 : 7)
+        } else if (toolRef.current === 'eraser') {
+          eraseAt(p)
+        }
+      }
+
+      prev = p
+      finalPoint = p
     }
 
-    lastPointRef.current = p
+    if (finalPoint) {
+      cursorPosRef.current = finalPoint
+      if (finalAngle !== undefined) cursorTargetAngleRef.current = finalAngle
+    }
+
+    lastPointRef.current = finalPoint
   }
 
   const handlePointerEnter = (e: React.PointerEvent) => {
     hoveringRef.current = true
     if (cursorRef.current) cursorRef.current.style.opacity = '1'
 
+    const p = getPoint(e)
+    cursorPosRef.current = p
+    lastPointRef.current = p
+
     if (toolRef.current === 'rake') {
-      const stroke: Stroke = { tines: Array.from({ length: TINES }, () => []), born: Date.now() }
+      const stroke = createStroke()
       strokesRef.current.push(stroke)
       activeStrokeRef.current = stroke
-      lastPointRef.current = getPoint(e)
     }
   }
 
   const handlePointerLeave = () => {
     hoveringRef.current = false
+    if (activeStrokeRef.current) finalizeStroke(activeStrokeRef.current)
     activeStrokeRef.current = null
     lastPointRef.current = null
     if (cursorRef.current) cursorRef.current.style.opacity = '0'
