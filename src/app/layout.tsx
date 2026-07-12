@@ -2,8 +2,7 @@ import type { Metadata } from 'next'
 import { Bricolage_Grotesque } from 'next/font/google'
 import localFont from 'next/font/local'
 import '../styles/globals.css'
-import Navigation from '@/components/Navigation'
-import Footer from '@/components/Footer'
+import AppShell from '@/components/AppShell'
 
 const bricolage = Bricolage_Grotesque({ 
   subsets: ['latin'],
@@ -45,10 +44,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${bricolage.variable} ${commitMono.variable} flex min-h-screen flex-col`}>
-        <Navigation />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+      <body className={`${bricolage.variable} ${commitMono.variable}`}>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   )
