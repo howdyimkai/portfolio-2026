@@ -104,7 +104,15 @@ function pushRakePoint(stroke: Stroke, p: Point, prev: Point, spacing: number) {
 // sample (the curve endpoint is a midpoint, never the raw point). Cap each tine with a
 // final line to its true last position so a stroke doesn't visibly stop short when the
 // gesture ends (pointer leaves, or the tool switches away mid-hover).
+//
+// This is also where a groove's hold/fade clock starts: `born` is reset to the moment
+// the gesture ends, so the 6s hold + 3s linear fade time a *finished* groove. While a
+// stroke is still being carved it is exempt from aging in the draw loop — otherwise 9s
+// of continuous hover-raking would silently filter the active stroke out of the render
+// list while pushRakePoint kept appending to it, and it would start fading at 6s while
+// the user was still extending it.
 function finalizeStroke(stroke: Stroke) {
+  stroke.born = Date.now()
   stroke.paths.forEach((pair) => {
     if (pair.lastDark && pair.lastLight) {
       pair.dark.lineTo(pair.lastDark.x, pair.lastDark.y)
@@ -205,9 +213,15 @@ export default function ZenGarden() {
         }
 
         const now = Date.now()
-        strokesRef.current = strokesRef.current.filter((s) => now - s.born < HOLD_MS + FADE_MS)
+        // The active stroke never ages: its hold/fade clock starts at finalizeStroke
+        // (when the gesture ends), so a groove still being carved can't be filtered
+        // out or start fading mid-draw no matter how long the hover lasts.
+        const active = activeStrokeRef.current
+        strokesRef.current = strokesRef.current.filter(
+          (s) => s === active || now - s.born < HOLD_MS + FADE_MS
+        )
         strokesRef.current.forEach((s) => {
-          const age = now - s.born
+          const age = s === active ? 0 : now - s.born
           const alpha = age < HOLD_MS ? 1 : Math.max(0, 1 - (age - HOLD_MS) / FADE_MS)
           if (alpha <= 0) return
           ctx.save()
