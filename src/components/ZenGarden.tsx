@@ -265,8 +265,7 @@ export default function ZenGarden() {
 
       <div
         ref={wrapRef}
-        className="garden-plot relative touch-none overflow-visible rounded-[22px] md:rounded-[34px]"
-        style={{ aspectRatio: '803 / 517' }}
+        className="garden-plot relative aspect-[592/926] touch-none overflow-visible rounded-[22px] md:aspect-[803/517] md:rounded-[34px]"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={endDrag}
@@ -284,13 +283,22 @@ export default function ZenGarden() {
         ))}
 
         <Image
+          src="/garden/sand-portrait.webp"
+          alt=""
+          fill
+          priority
+          draggable={false}
+          sizes="100vw"
+          className="rounded-[22px] object-cover md:hidden"
+        />
+        <Image
           src="/garden/sand.webp"
           alt=""
           fill
           priority
           draggable={false}
-          sizes="(min-width: 768px) 900px, 100vw"
-          className="rounded-[22px] object-cover md:rounded-[34px]"
+          sizes="900px"
+          className="hidden rounded-[34px] object-cover md:block"
         />
 
         <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full" />
