@@ -55,7 +55,7 @@ export default function ZenGarden() {
   const cursorRef = useRef<HTMLDivElement>(null)
   const strokesRef = useRef<Stroke[]>([])
   const activeStrokeRef = useRef<Stroke | null>(null)
-  const draggingRef = useRef(false)
+  const hoveringRef = useRef(false)
   const lastPointRef = useRef<Point | null>(null)
   const toolRef = useRef<Tool>(tool)
   const blossomImgRef = useRef<HTMLImageElement | null>(null)
@@ -65,6 +65,15 @@ export default function ZenGarden() {
 
   useEffect(() => {
     toolRef.current = tool
+    // Switching tools mid-hover shouldn't reconnect a stale stroke to a new one.
+    activeStrokeRef.current = null
+    // Switching to rake while already hovering the plot should start drawing
+    // immediately rather than waiting for the next pointer enter.
+    if (tool === 'rake' && hoveringRef.current) {
+      const stroke: Stroke = { tines: Array.from({ length: TINES }, () => []), born: Date.now() }
+      strokesRef.current.push(stroke)
+      activeStrokeRef.current = stroke
+    }
   }, [tool])
 
   useEffect(() => {
@@ -169,17 +178,8 @@ export default function ZenGarden() {
   const handlePointerDown = (e: React.PointerEvent) => {
     const p = getPoint(e)
     if (!p) return
-    ;(e.target as Element).setPointerCapture?.(e.pointerId)
-    draggingRef.current = true
-    lastPointRef.current = p
-
-    if (toolRef.current === 'rake') {
-      const stroke: Stroke = { tines: Array.from({ length: TINES }, () => []), born: Date.now() }
-      strokesRef.current.push(stroke)
-      activeStrokeRef.current = stroke
-    } else if (toolRef.current === 'eraser') {
-      eraseAt(p)
-    } else if (toolRef.current === 'blossom') {
+    // Rake/eraser act on hover alone; only the blossom stamp is a discrete click.
+    if (toolRef.current === 'blossom') {
       stampBlossom(p)
     }
   }
@@ -223,7 +223,7 @@ export default function ZenGarden() {
     }
     moveCursor(p, angleDeg)
 
-    if (!draggingRef.current) {
+    if (!hoveringRef.current) {
       lastPointRef.current = p
       return
     }
@@ -252,18 +252,23 @@ export default function ZenGarden() {
     lastPointRef.current = p
   }
 
-  const endDrag = () => {
-    draggingRef.current = false
-    activeStrokeRef.current = null
-  }
-
-  const handlePointerEnter = () => {
+  const handlePointerEnter = (e: React.PointerEvent) => {
+    hoveringRef.current = true
     if (cursorRef.current) cursorRef.current.style.opacity = '1'
+
+    if (toolRef.current === 'rake') {
+      const stroke: Stroke = { tines: Array.from({ length: TINES }, () => []), born: Date.now() }
+      strokesRef.current.push(stroke)
+      activeStrokeRef.current = stroke
+      lastPointRef.current = getPoint(e)
+    }
   }
 
   const handlePointerLeave = () => {
+    hoveringRef.current = false
+    activeStrokeRef.current = null
+    lastPointRef.current = null
     if (cursorRef.current) cursorRef.current.style.opacity = '0'
-    endDrag()
   }
 
   const cursorIcon = TOOLS.find((t) => t.key === tool)!.icon
@@ -280,7 +285,6 @@ export default function ZenGarden() {
         className="garden-plot relative aspect-[592/926] touch-none overflow-visible rounded-[22px] md:aspect-[803/517] md:rounded-[34px]"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
-        onPointerUp={endDrag}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
       >
