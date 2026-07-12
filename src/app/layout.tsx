@@ -45,13 +45,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${bricolage.variable} ${commitMono.variable} font-sans min-h-screen flex flex-col`} style={{ backgroundColor: '#F8F8F8' }}>
-        <div className="w-full mx-auto flex-grow">
-          <Navigation />
-          <main>
-            {children}
-          </main>
-        </div>
+      <body className={`${bricolage.variable} ${commitMono.variable} flex min-h-screen flex-col`}>
+        <Navigation />
+        <main className="flex-grow">{children}</main>
         <Footer />
       </body>
     </html>

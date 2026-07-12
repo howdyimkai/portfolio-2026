@@ -1,19 +1,29 @@
-// src/components/Footer.tsx
+'use client'
+
+import { usePathname } from 'next/navigation'
+
 export default function Footer() {
-    const currentYear = new Date().getFullYear();
-  
-    return (
-      <footer className="bg-gray-100 py-6 mt-12">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="text-gray-600">
-            © {currentYear} Kai Tran. All rights reserved.
-          </div>
-          <div className="flex space-x-4">
-            <a href="https://linkedin.com" target="_blank" className="text-gray-600 hover:text-black">LinkedIn</a>
-            <a href="https://github.com" target="_blank" className="text-gray-600 hover:text-black">GitHub</a>
-            <a href="mailto:your-email@example.com" className="text-gray-600 hover:text-black">Contact</a>
-          </div>
+  const pathname = usePathname()
+  if (pathname === '/') return null
+
+  const currentYear = new Date().getFullYear()
+
+  return (
+    <footer className="border-t border-hairline">
+      <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-2 px-6 py-8 font-mono text-xs text-ink-muted sm:flex-row sm:justify-between md:px-10">
+        <div>© {currentYear} Kai Tran. All rights reserved.</div>
+        <div className="flex gap-6">
+          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="press-scale">
+            LinkedIn
+          </a>
+          <a href="https://github.com" target="_blank" rel="noreferrer" className="press-scale">
+            GitHub
+          </a>
+          <a href="mailto:uxdesignerkaitran@gmail.com" className="press-scale">
+            Contact
+          </a>
         </div>
-      </footer>
-    );
-  }
+      </div>
+    </footer>
+  )
+}
