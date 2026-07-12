@@ -279,7 +279,7 @@ export default function ZenGarden() {
             className="pointer-events-none absolute z-0 opacity-40"
             style={{ ...b.style, aspectRatio: b.ratio }}
           >
-            <Image src={b.src} alt="" fill sizes="80px" className="object-contain" />
+            <Image src={b.src} alt="" fill draggable={false} sizes="80px" className="object-contain" />
           </div>
         ))}
 
@@ -288,6 +288,7 @@ export default function ZenGarden() {
           alt=""
           fill
           priority
+          draggable={false}
           sizes="(min-width: 768px) 900px, 100vw"
           className="rounded-[22px] object-cover md:rounded-[34px]"
         />
@@ -301,7 +302,7 @@ export default function ZenGarden() {
         {/* Desktop: title embedded on the sand, centered in the plot */}
         <div className="pointer-events-none absolute inset-0 hidden flex-col items-center justify-center md:flex">
           <div className="relative aspect-[806/310] w-[46%] min-w-[220px]">
-            <Image src="/hero/kai-hero-title.webp" alt="Kai Tran — Design Engineer" fill sizes="420px" className="object-contain" priority />
+            <Image src="/hero/kai-hero-title.webp" alt="Kai Tran — Design Engineer" fill draggable={false} sizes="420px" className="object-contain" priority />
           </div>
         </div>
 
@@ -309,7 +310,7 @@ export default function ZenGarden() {
           className="pointer-events-none absolute z-10"
           style={{ left: '9%', top: '13%', width: '14%', aspectRatio: 362 / 392 }}
         >
-          <Image src="/garden/moss.webp" alt="" fill sizes="130px" className="object-contain" />
+          <Image src="/garden/moss.webp" alt="" fill draggable={false} sizes="130px" className="object-contain" />
         </div>
 
         {ROCKS.map((r, i) => (
@@ -318,7 +319,7 @@ export default function ZenGarden() {
             className="rock pointer-events-none absolute z-10"
             style={{ ...r.style, aspectRatio: r.ratio }}
           >
-            <Image src={r.src} alt="" fill sizes="150px" className="object-contain" />
+            <Image src={r.src} alt="" fill draggable={false} sizes="150px" className="object-contain" />
           </div>
         ))}
 
@@ -326,7 +327,7 @@ export default function ZenGarden() {
           className="pointer-events-none absolute z-20"
           style={{ left: '62%', top: '48%', width: '38%', aspectRatio: 674 / 522 }}
         >
-          <Image src="/garden/bonsai.webp" alt="" fill sizes="340px" className="object-contain" />
+          <Image src="/garden/bonsai.webp" alt="" fill draggable={false} sizes="340px" className="object-contain" />
         </div>
 
         <div
@@ -335,7 +336,7 @@ export default function ZenGarden() {
           className="garden-cursor pointer-events-none absolute left-0 top-0 z-30 h-10 w-10 opacity-0"
           style={{ transition: 'opacity 150ms ease' }}
         >
-          <Image src={cursorIcon} alt="" fill sizes="40px" className="object-contain" />
+          <Image src={cursorIcon} alt="" fill draggable={false} sizes="40px" className="object-contain" />
         </div>
       </div>
 

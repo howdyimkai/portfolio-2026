@@ -117,6 +117,13 @@ h1, h2, h3 {
   }
 }
 
+/* Prevent native image drag from hijacking rake/eraser/blossom gestures mid-stroke */
+.garden-plot img {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .rock {
   transition: transform 150ms var(--ease-out-strong), filter 150ms var(--ease-out-strong);
 }
