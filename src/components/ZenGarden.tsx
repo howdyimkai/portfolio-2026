@@ -16,9 +16,21 @@ const ERASE_RADIUS = 28
 const BLOSSOM_ERASE_RADIUS = 34
 
 const ROCKS = [
-  { src: '/garden/rock-1.webp', ratio: 378 / 304, style: { left: '4%', top: '68%', width: '17%' } },
-  { src: '/garden/rock-2.webp', ratio: 346 / 296, style: { left: '77%', top: '13%', width: '14%' } },
-  { src: '/garden/rock-3.webp', ratio: 356 / 394, style: { left: '26%', top: '81%', width: '9%' } },
+  {
+    src: '/garden/rock-1.webp',
+    ratio: 378 / 304,
+    className: 'left-[2%] top-[53%] w-[34%] md:left-[4%] md:top-[68%] md:w-[17%]',
+  },
+  {
+    src: '/garden/rock-2.webp',
+    ratio: 346 / 296,
+    className: 'hidden md:block md:left-[77%] md:top-[13%] md:w-[14%]',
+  },
+  {
+    src: '/garden/rock-3.webp',
+    ratio: 356 / 394,
+    className: 'left-[20%] top-[30%] w-[17%] md:left-[26%] md:top-[81%] md:w-[9%]',
+  },
 ]
 
 const BAMBOO = [
@@ -311,25 +323,25 @@ export default function ZenGarden() {
         </div>
 
         <div
-          className="pointer-events-none absolute z-10"
-          style={{ left: '9%', top: '13%', width: '14%', aspectRatio: 362 / 392 }}
+          className="pointer-events-none absolute z-10 left-[57%] top-[2%] w-[30%] md:left-[9%] md:top-[13%] md:w-[14%]"
+          style={{ aspectRatio: 268 / 248 }}
         >
-          <Image src="/garden/moss.webp" alt="" fill draggable={false} sizes="130px" className="object-contain" />
+          <Image src="/garden/mossy-island-rock.webp" alt="" fill draggable={false} sizes="130px" className="object-contain" />
         </div>
 
         {ROCKS.map((r, i) => (
           <div
             key={i}
-            className="rock pointer-events-none absolute z-10"
-            style={{ ...r.style, aspectRatio: r.ratio }}
+            className={`rock pointer-events-none absolute z-10 ${r.className}`}
+            style={{ aspectRatio: r.ratio }}
           >
             <Image src={r.src} alt="" fill draggable={false} sizes="150px" className="object-contain" />
           </div>
         ))}
 
         <div
-          className="pointer-events-none absolute z-20"
-          style={{ left: '62%', top: '58%', width: '38%', aspectRatio: 674 / 522 }}
+          className="pointer-events-none absolute z-20 left-[34%] top-[58%] w-[56%] md:left-[62%] md:w-[38%]"
+          style={{ aspectRatio: 674 / 522 }}
         >
           <Image src="/garden/bonsai.webp" alt="" fill draggable={false} sizes="340px" className="object-contain" />
         </div>
