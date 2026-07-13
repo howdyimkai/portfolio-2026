@@ -22,18 +22,23 @@ type Rect = { left: number; top: number; width: number; height: number }
 
 // Groove anatomy. Two calibration sources, reconciled: GardenRakeStudy.mov gives the
 // mark its CHARACTER (each tine displaces sand into a bright soft ridge beside a dark
-// trench; tines packed so the band reads as ribbed sand; marks persist and new passes
-// carve over old ones), while the teeth-rake TOOL sets the SCALE — the band must look
-// like it was made by the ~40px cursor asset in the user's hand. That asset
-// (design-intent/teethrake@2x.png, 174x304, 9 teeth spanning ~68% of its width)
-// renders 22.9px wide at the cursor's 40px box, giving a ~16px tooth span / ~23px
-// head. Values are fixed CSS px at every breakpoint because the cursor is too.
-const TINES = 7
-const TINE_PITCH = 3.2
-const RIDGE_WIDTH = 2.2
-const TRENCH_SOFT_WIDTH = 3.2
-const TRENCH_CORE_WIDTH = 1.7
-const EMBOSS_OFFSET = 0.7 // light from top-left: ridge shifts -x/-y, trench +x/+y
+// trench, low contrast, tonal shifts rather than outlines; marks persist and new
+// passes carve over old ones), while the teeth-rake TOOL sets the SCALE — the band
+// must look like it was made by the ~40px cursor asset in the user's hand. That asset
+// (design-intent/Teethrake4prongs-2x.png, 198x348 @2x) has 4 prongs ~10px wide each,
+// paired ±1 either side of the central handle shaft, with outer prong centers 117px
+// apart at full asset scale. The cursor renders it in a 40x40 object-contain box,
+// height-limited to scale ≈ 40/348 ≈ 0.115, so on screen the outer tine centers land
+// ≈13.4px apart. The asset's paired layout is a shaft-junction artifact, not the
+// rake's ribbing — the study video's bands are even, so the 4 tines below are spaced
+// evenly rather than mirroring the asset's pairing. Values are fixed CSS px at every
+// breakpoint because the cursor is too.
+const TINES = 4
+const TINE_PITCH = 4.4 // outer tine centers ≈ 3 * 4.4 = 13.2px apart, matching the asset
+const RIDGE_WIDTH = 1.1
+const TRENCH_SOFT_WIDTH = 1.6
+const TRENCH_CORE_WIDTH = 0.9
+const EMBOSS_OFFSET = 0.6 // light from top-left: ridge shifts -x/-y, trench +x/+y
 // The rake head flattens a band slightly wider than the tine span as it carves,
 // erasing whatever pattern it crosses (the carve-over moment in the study video).
 const CARVE_WIDTH = (TINES - 1) * TINE_PITCH + 4
@@ -42,8 +47,10 @@ const RIDGE_COLOR = 'rgba(255,250,238,0.55)'
 const TRENCH_SOFT_COLOR = 'rgba(80,62,44,0.22)'
 const TRENCH_CORE_COLOR = 'rgba(80,62,44,0.42)'
 // Displaced sand piles up brightest along the outside edges of the band in the study
-// video; a wide soft light pass along the two outer tines reads as that spill.
-const EDGE_RIDGE_WIDTH = 5.5
+// video; a soft light pass along the two outer tines reads as that spill. Narrowed
+// well below the old 5.5px now that the whole band is only ~13px wide — at the old
+// width this pass alone would bridge clear across the tine spacing.
+const EDGE_RIDGE_WIDTH = 3
 const EDGE_RIDGE_COLOR = 'rgba(255,250,238,0.28)'
 
 // Rolling bake: the active gesture is committed to the persistent layer in chunks so
