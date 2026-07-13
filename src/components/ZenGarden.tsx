@@ -88,7 +88,7 @@ const BAMBOO = [
 ]
 
 const TOOLS: { key: Tool; label: string; icon: string; ratio: number }[] = [
-  { key: 'rake', label: 'TEETH RAKE', icon: '/garden/tool-teethrake.webp', ratio: 174 / 304 },
+  { key: 'rake', label: 'TEETH RAKE', icon: '/garden/tool-teethrake.webp', ratio: 198 / 348 },
   { key: 'eraser', label: 'ERASER RAKE', icon: '/garden/tool-eraserrake.webp', ratio: 174 / 304 },
   { key: 'blossom', label: 'BLOSSOM', icon: '/garden/tool-blossom.webp', ratio: 336 / 356 },
 ]
