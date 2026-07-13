@@ -76,6 +76,41 @@ const BLOSSOM_ERASE_RADIUS = 34
 // Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
 const CURSOR_ANGLE_LERP = 0.35
 
+// --- Towed-head rake mechanic (2026-07-13 feel experiment) ---
+// A real rake is pulled, not pushed: the hand leads, the head drags behind on a fixed
+// leash, and grooves flow out from under the trailing head. The rake/eraser head is
+// modeled as a towed point — a caster/tractrix follow, the same math as a trailer
+// behind a car — recomputed every pointer sample (including coalesced ones). Grooves
+// come from the HEAD's path, not the raw pointer path, so a fast zigzag hand motion
+// sweeps into arcs instead of snapping to sharp corners. Isolated here (constants +
+// stepHead + the towed branch in handlePointerMove) so it's trivially revertible/tunable
+// without touching the groove rendering system below, which is unchanged.
+const RAKE_FOLLOW_DIST = 24 // px the head trails behind the pointer, once it's moving
+// The head starts coincident with the pointer on every (re)arm and only begins moving
+// once the pointer has pulled farther than RAKE_FOLLOW_DIST away — that alone prevents
+// most entry dots. HEAD_MIN_TRAVEL is a second, explicit gate: no groove point is pushed
+// until the head has accumulated this much of its own travel, so the very first sliver
+// of head movement can't stamp a short stub either.
+const HEAD_MIN_TRAVEL = 6
+// Cursor renders at the HEAD position, rotated so the handle points from the head
+// toward the pointer (handle toward the hand, head trailing). Verified visually in the
+// browser against the actual asset — see iteration-5-report.md. The old push-mode
+// offset was +90 (tines lead, in the direction of travel); pulling needs the opposite
+// tines/handle assignment for the same on-screen angle, hence -90 here, not +90.
+const CURSOR_HANDLE_OFFSET_DEG = -90
+
+// Moves `head` toward `pointer` along the head->pointer line so it ends up exactly
+// `follow` behind. If the pointer is already within `follow`, the head doesn't move at
+// all (this is what makes it fall behind naturally instead of snapping to a fixed lag).
+function stepHead(head: Point, pointer: Point, follow: number): Point {
+  const dx = pointer.x - head.x
+  const dy = pointer.y - head.y
+  const dist = Math.hypot(dx, dy)
+  if (dist <= follow) return head
+  const t = (dist - follow) / dist
+  return { x: head.x + dx * t, y: head.y + dy * t }
+}
+
 const ROCKS = [
   {
     src: '/garden/rock-1.webp',
@@ -218,6 +253,13 @@ export default function ZenGarden() {
   const activeGestureRef = useRef<Gesture | null>(null)
   const hoveringRef = useRef(false)
   const lastPointRef = useRef<Point | null>(null)
+  // Current towed-head position for rake/eraser, in the same plot-local coords as
+  // everything else. `null` is the "(re)arm" signal: the next pointermove sample snaps
+  // the head to the raw pointer instead of stepping it, so every arm starts coincident
+  // and falls behind naturally. headTraveledRef accumulates the head's own path length
+  // since the last (re)arm, for the HEAD_MIN_TRAVEL entry-dot guard.
+  const headPosRef = useRef<Point | null>(null)
+  const headTraveledRef = useRef(0)
   const toolRef = useRef<Tool | null>(tool)
   const blossomImgRef = useRef<HTMLImageElement | null>(null)
   const [blossoms, setBlossoms] = useState<Blossom[]>([])
@@ -273,6 +315,11 @@ export default function ZenGarden() {
   useEffect(() => {
     commitGesture()
     toolRef.current = tool
+    // Re-arm the towed head on every tool switch (rake<->eraser included) so it starts
+    // coincident with the current pointer rather than carrying over a lag computed for
+    // a different tool/gesture.
+    headPosRef.current = null
+    headTraveledRef.current = 0
     // Switching to rake while already hovering the plot should start drawing
     // immediately rather than waiting for the next pointer enter.
     if (tool === 'rake' && hoveringRef.current) {
@@ -315,6 +362,11 @@ export default function ZenGarden() {
     // lastPointRef is in the same stale coordinate space — drop it so the next sample
     // starts a fresh segment instead of drawing a long streak from the old position.
     lastPointRef.current = null
+    // Same reasoning for the towed head: null re-arms it, so the next sample snaps the
+    // head to the pointer in the new coordinate space instead of stepping from a
+    // position that belongs to the old plot geometry.
+    headPosRef.current = null
+    headTraveledRef.current = 0
     // If the pointer is already hovering with the rake selected when a resize lands
     // (e.g. a breakpoint change mid-gesture), no new pointerenter will ever fire — the
     // cursor never actually left the element — so without this, activeStrokeRef would
@@ -455,28 +507,59 @@ export default function ZenGarden() {
 
     for (const ne of events) {
       const p = getPoint(ne)
-      if (prev) {
-        const dx = p.x - prev.x
-        const dy = p.y - prev.y
-        if (Math.hypot(dx, dy) > 0.5) {
-          finalAngle = (Math.atan2(dy, dx) * 180) / Math.PI + 90
-        }
-      }
+      const isTowedTool = toolRef.current === 'rake' || toolRef.current === 'eraser'
 
-      if (hoveringRef.current) {
-        if (toolRef.current === 'rake') {
-          const stroke = activeStrokeRef.current
-          if (stroke) {
-            pushRakePoint(stroke, p, prev ?? p)
-            if (stroke.length > CHUNK_COMMIT_LEN) rolloverActiveStroke()
-          }
-        } else if (toolRef.current === 'eraser') {
-          eraseAt(p)
+      if (isTowedTool) {
+        // Towed-head physics. headPosRef.current === null is the (re)arm signal (set on
+        // pointerenter, tool switch, and resize) — the head snaps to the raw pointer on
+        // that first sample instead of stepping, so every arm starts coincident with the
+        // pointer and only starts trailing once the pointer has pulled away.
+        const head = headPosRef.current ?? p
+        const newHead = stepHead(head, p, RAKE_FOLLOW_DIST)
+        const moved = Math.hypot(newHead.x - head.x, newHead.y - head.y)
+        headPosRef.current = newHead
+        if (moved > 0) headTraveledRef.current += moved
+
+        // Handle points from the head toward the pointer (toward the hand), recomputed
+        // every sample so it stays live even while the head itself is anchored.
+        const hdx = p.x - newHead.x
+        const hdy = p.y - newHead.y
+        if (Math.hypot(hdx, hdy) > 0.5) {
+          finalAngle = (Math.atan2(hdy, hdx) * 180) / Math.PI + CURSOR_HANDLE_OFFSET_DEG
         }
+
+        if (moved > 0 && hoveringRef.current) {
+          if (toolRef.current === 'rake') {
+            // HEAD_MIN_TRAVEL: don't push a groove point until the head has accumulated
+            // real travel of its own, so the moment it starts pulling away doesn't stamp
+            // a short stub at the arm point.
+            if (headTraveledRef.current > HEAD_MIN_TRAVEL) {
+              const stroke = activeStrokeRef.current
+              if (stroke) {
+                pushRakePoint(stroke, newHead, head)
+                if (stroke.length > CHUNK_COMMIT_LEN) rolloverActiveStroke()
+              }
+            }
+          } else {
+            // Eraser is also a rake — it erases from the towed head, not the raw pointer.
+            eraseAt(newHead)
+          }
+        }
+
+        finalPoint = newHead
+      } else {
+        // Blossom is untouched: cursor follows the raw pointer, travel-direction rotation.
+        if (prev) {
+          const dx = p.x - prev.x
+          const dy = p.y - prev.y
+          if (Math.hypot(dx, dy) > 0.5) {
+            finalAngle = (Math.atan2(dy, dx) * 180) / Math.PI + 90
+          }
+        }
+        finalPoint = p
       }
 
       prev = p
-      finalPoint = p
     }
 
     if (finalPoint) {
@@ -484,7 +567,9 @@ export default function ZenGarden() {
       if (finalAngle !== undefined) cursorTargetAngleRef.current = finalAngle
     }
 
-    lastPointRef.current = finalPoint
+    // lastPointRef always tracks the raw pointer (used by the blossom branch above),
+    // independent of the towed head's position.
+    lastPointRef.current = prev
   }
 
   const handlePointerEnter = (e: React.PointerEvent) => {
@@ -495,6 +580,9 @@ export default function ZenGarden() {
     const p = getPoint(e)
     cursorPosRef.current = p
     lastPointRef.current = p
+    // Re-arm the towed head: it snaps to this pointer position on the next sample.
+    headPosRef.current = null
+    headTraveledRef.current = 0
 
     if (toolRef.current === 'rake') {
       const gesture: Gesture = { active: true, born: Date.now() }
@@ -507,6 +595,10 @@ export default function ZenGarden() {
     hoveringRef.current = false
     commitGesture()
     lastPointRef.current = null
+    // The head does not keep coasting toward a pointer that's no longer over the plot —
+    // drop it too so the next entry re-arms cleanly.
+    headPosRef.current = null
+    headTraveledRef.current = 0
     if (cursorRef.current) cursorRef.current.style.opacity = '0'
   }
 
