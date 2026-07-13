@@ -23,8 +23,11 @@ untouched — out of scope for this exploration.
   Never recreate these with CSS gradients/fonts. `KaiHeroTitle@2x.png` is the
   hero title asset, not typography.
 - `design-intent/kai-tran-portfolio.dc.html` — behavior reference only for
-  the rake groove algorithm (5 tines, paired dark/light stroke offset ±1px,
-  6s hold + 3s linear fade). Don't port its code directly.
+  the rake groove algorithm (5 tines, paired dark/light stroke offset ±1px).
+  Don't port its code directly. Its 6s hold + 3s linear fade is superseded
+  (Kai's call, 2026-07-12) — grooves now persist indefinitely; see
+  `design-intent/GardenRakeStudy.mov` and the `ZenGarden` entry below for
+  the current persistence model.
 
 ## Tokens & motion
 
@@ -60,7 +63,17 @@ untouched — out of scope for this exploration.
   desktop and portrait on mobile (`sand.webp` vs `sand-portrait.webp`).
   Every `<Image>` in the garden needs `draggable={false}` — next/image
   renders real `<img>` tags, which are draggable by default and will hijack
-  a mouse gesture mid-stroke otherwise.
+  a mouse gesture mid-stroke otherwise. Grooves **persist indefinitely** —
+  there is no hold/fade timer. Finished rake strokes bake into a persistent
+  offscreen canvas layer; a new pass carves over whatever pattern it
+  crosses (`destination-out` under the rake head), with a hovering gesture
+  committed to that layer in rolling chunks so a single long gesture can
+  still carve over its own earlier part. The eraser is a soft pixel-radius
+  wipe of that same persistent layer, not a whole-stroke removal; blossoms
+  stay object-based (React state) and are removed whole when the eraser
+  passes near enough. The persistent layer is sized with the canvas and
+  cleared on resize — raked sand resets to smooth across a breakpoint
+  change rather than warping old pixels into new plot geometry.
 
 ## Assets
 
