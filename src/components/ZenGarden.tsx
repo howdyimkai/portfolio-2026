@@ -7,65 +7,72 @@ type Tool = 'rake' | 'eraser' | 'blossom'
 
 type Point = { x: number; y: number }
 type TinePath = { light: Path2D; dark: Path2D; lastLight: Point | null; lastDark: Point | null }
+// A gesture is one continuous rake hover (pointerenter to pointerleave, or until the
+// tool switches away). It owns the hold/fade clock: while `active` is true every chunk
+// belonging to it renders at full alpha no matter how long the hover lasts; the clock
+// starts only when the gesture ends, at which point every chunk born under it holds and
+// fades together (see HOLD_MS/FADE_MS below).
+type Gesture = { active: boolean; born: number }
 // A stroke is one chunk of a rake gesture: per-tine groove paths plus a center path
-// used to carve (flatten) the sand under the rake head before the grooves are drawn.
-// Raw points and accumulated path length drive the rolling chunk bake.
+// used to carve (erase) older chunks it crosses before its own grooves are drawn. Raw
+// points and accumulated path length drive the rolling chunk split; every chunk of a
+// gesture shares that gesture's alpha/aging state by reference.
 type Stroke = {
   tines: TinePath[]
   center: Path2D
   lastCenter: Point | null
   points: Point[]
   length: number
+  gesture: Gesture
 }
 type Blossom = { id: number; x: number; y: number; rotation: number; scale: number }
 type Rect = { left: number; top: number; width: number; height: number }
 
-// Groove anatomy. Two calibration sources, reconciled: GardenRakeStudy.mov gives the
-// mark its CHARACTER (each tine displaces sand into a bright soft ridge beside a dark
-// trench, low contrast, tonal shifts rather than outlines; marks persist and new
-// passes carve over old ones), while the teeth-rake TOOL sets the SCALE — the band
-// must look like it was made by the ~40px cursor asset in the user's hand. That asset
-// (design-intent/Teethrake4prongs-2x.png, 198x348 @2x) has 4 prongs ~10px wide each,
-// paired ±1 either side of the central handle shaft, with outer prong centers 117px
-// apart at full asset scale. The cursor renders it in a 40x40 object-contain box,
-// height-limited to scale ≈ 40/348 ≈ 0.115, so on screen the outer tine centers land
-// ≈13.4px apart. The asset's paired layout is a shaft-junction artifact, not the
-// rake's ribbing — the study video's bands are even, so the 4 tines below are spaced
-// evenly rather than mirroring the asset's pairing. Values are fixed CSS px at every
+// Groove anatomy: one dark stroke and one light stroke per tine, each offset ±1px
+// diagonally (light toward top-left, dark toward bottom-right) so the pair reads as a
+// thin embossed pinstripe rather than a hard outline — the subtle pre-video mark,
+// restored from the last committed version (884bd59) in place of the heavier
+// trench+ridge stack built while chasing GardenRakeStudy.mov realism.
+//
+// TINES/TINE_PITCH/CARVE_WIDTH stay from that carve-over iteration: the mark must look
+// like it was made by the ~40px 4-prong cursor asset (design-intent/Teethrake4prongs-2x.png,
+// 198x348 @2x). That asset has 4 prongs; at the cursor's 40x40 object-contain box
+// (scale ≈ 40/348 ≈ 0.115) the outer prong centers land ≈13.4px apart, hence 4 tines at
+// a 4.4px pitch (3 * 4.4 ≈ 13.2px outer span). Values are fixed CSS px at every
 // breakpoint because the cursor is too.
 const TINES = 4
 const TINE_PITCH = 4.4 // outer tine centers ≈ 3 * 4.4 = 13.2px apart, matching the asset
-const RIDGE_WIDTH = 1.1
-const TRENCH_SOFT_WIDTH = 1.6
-const TRENCH_CORE_WIDTH = 0.9
-const EMBOSS_OFFSET = 0.6 // light from top-left: ridge shifts -x/-y, trench +x/+y
+const GROOVE_OFFSET = 1 // light shifts -x/-y, dark shifts +x/+y (884bd59 emboss offset)
+const DARK_COLOR = 'rgba(70,55,38,0.32)'
+// 884bd59 used 2.2/1.8 at a 7px (desktop) tine pitch. At this scale's tighter 4.4px
+// pitch those widths bridge clear across the gap between tines under a real drag — a
+// pixel cross-section of a drawn stroke showed the 4 ribs fused into one solid band
+// with no dips back to zero alpha. Narrowed here (colors/alphas unchanged) until a
+// cross-section shows 4 distinct peaks separated by near-zero valleys.
+const DARK_WIDTH = 1.5
+const LIGHT_COLOR = 'rgba(255,248,232,0.5)'
+const LIGHT_WIDTH = 1.2
 // The rake head flattens a band slightly wider than the tine span as it carves,
 // erasing whatever pattern it crosses (the carve-over moment in the study video).
 const CARVE_WIDTH = (TINES - 1) * TINE_PITCH + 4
 
-const RIDGE_COLOR = 'rgba(255,250,238,0.55)'
-const TRENCH_SOFT_COLOR = 'rgba(80,62,44,0.22)'
-const TRENCH_CORE_COLOR = 'rgba(80,62,44,0.42)'
-// Displaced sand piles up brightest along the outside edges of the band in the study
-// video; a soft light pass along the two outer tines reads as that spill. Narrowed
-// well below the old 5.5px now that the whole band is only ~13px wide — at the old
-// width this pass alone would bridge clear across the tine spacing.
-const EDGE_RIDGE_WIDTH = 3
-const EDGE_RIDGE_COLOR = 'rgba(255,250,238,0.28)'
+// Hold/fade timing (884bd59): a finished gesture holds at full strength, then fades
+// linearly to nothing. Aging is per GESTURE, not per chunk — see the Gesture type.
+const HOLD_MS = 10000
+const FADE_MS = 3000
 
-// Rolling bake: the active gesture is committed to the persistent layer in chunks so
-// that raking over an *earlier part of the same gesture* still carves it away (hover
-// raking makes a single gesture arbitrarily long, so self-crossing is the common
-// case, and it is the signature realism moment in the study video). The next chunk
-// starts exactly at the previous chunk's last point with its direction preserved, so
-// the seam is a butt joint of identical geometry — and butt line caps keep a chunk's
-// carve from reaching backward and eating the previous chunk's baked tail. Bonus:
-// per-frame live drawing cost is bounded by chunk length instead of growing with the
-// whole gesture.
+// Rolling chunk split: a long gesture is cut into ~120px chunks so raking over an
+// *earlier part of the same gesture* still carves it away (hover raking makes a single
+// gesture arbitrarily long, so self-crossing is the common case). The next chunk starts
+// exactly at the previous chunk's last point with its direction preserved, so the seam
+// is a butt joint of identical geometry — and butt caps on the carve pass keep a
+// chunk's erase from reaching backward past that seam. Bonus: per-frame draw cost is
+// bounded by the live population (everything fades out within HOLD_MS + FADE_MS)
+// instead of growing with how long the page has been open.
 const CHUNK_COMMIT_LEN = 120
 
-const ERASE_RADIUS = 16
-const BLOSSOM_ERASE_RADIUS = 30
+const ERASE_RADIUS = 28
+const BLOSSOM_ERASE_RADIUS = 34
 // Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
 const CURSOR_ANGLE_LERP = 0.35
 
@@ -102,7 +109,7 @@ const TOOLS: { key: Tool; label: string; icon: string; ratio: number }[] = [
 
 let blossomIdCounter = 0
 
-function createStroke(): Stroke {
+function createStroke(gesture: Gesture): Stroke {
   return {
     tines: Array.from({ length: TINES }, () => ({
       light: new Path2D(),
@@ -114,6 +121,7 @@ function createStroke(): Stroke {
     lastCenter: null,
     points: [],
     length: 0,
+    gesture,
   }
 }
 
@@ -130,7 +138,7 @@ function extendPath(path: Path2D, last: Point | null, next: Point): Point {
 
 // Appends one raking sample to the stroke's per-tine groove paths and its carve path.
 // Incremental (points are appended once, never rebuilt), so per-frame draw cost does
-// not grow with how long the pattern has existed — only with the current chunk.
+// not grow with how long the gesture has been going — only with the current chunk.
 function pushRakePoint(stroke: Stroke, p: Point, prev: Point) {
   const dx = p.x - prev.x
   const dy = p.y - prev.y
@@ -144,8 +152,8 @@ function pushRakePoint(stroke: Stroke, p: Point, prev: Point) {
     const cx = p.x + perpx * tineOff
     const cy = p.y + perpy * tineOff
     const tine = stroke.tines[i]
-    tine.lastLight = extendPath(tine.light, tine.lastLight, { x: cx - EMBOSS_OFFSET, y: cy - EMBOSS_OFFSET })
-    tine.lastDark = extendPath(tine.dark, tine.lastDark, { x: cx + EMBOSS_OFFSET, y: cy + EMBOSS_OFFSET })
+    tine.lastLight = extendPath(tine.light, tine.lastLight, { x: cx - GROOVE_OFFSET, y: cy - GROOVE_OFFSET })
+    tine.lastDark = extendPath(tine.dark, tine.lastDark, { x: cx + GROOVE_OFFSET, y: cy + GROOVE_OFFSET })
   }
   stroke.lastCenter = extendPath(stroke.center, stroke.lastCenter, p)
   stroke.points.push(p)
@@ -153,8 +161,8 @@ function pushRakePoint(stroke: Stroke, p: Point, prev: Point) {
 }
 
 // The quadratic-midpoint technique always stops half a segment short of the last real
-// sample. Cap each path with a final line to its true last position so a stroke doesn't
-// visibly stop short when the gesture ends (pointer leaves, or the tool switches away).
+// sample. Cap each path with a final line to its true last position so a chunk doesn't
+// visibly stop short when it's committed (chunk rollover, gesture end, or tool switch).
 function finalizeStroke(stroke: Stroke) {
   stroke.tines.forEach((tine) => {
     if (tine.lastLight) tine.light.lineTo(tine.lastLight.x, tine.lastLight.y)
@@ -163,42 +171,34 @@ function finalizeStroke(stroke: Stroke) {
   if (stroke.lastCenter) stroke.center.lineTo(stroke.lastCenter.x, stroke.lastCenter.y)
 }
 
-// Carve-over + grooves. First flattens the sand under the rake head (destination-out
-// along the center path), erasing any older pattern the chunk crosses, then draws
-// each tine's trench+ridge pair. Used both for the live active chunk (every frame on
-// the visible canvas) and to bake a finished chunk into the persistent layer once.
-// Butt caps everywhere: chunk seams butt-joint cleanly against identical re-seeded
-// geometry with no double-composited beads, and the carve never reaches backward
-// past a seam the way a round cap's half-disc would.
-function drawStroke(ctx: CanvasRenderingContext2D, stroke: Stroke) {
+// Carve-over + grooves for one chunk. First flattens the sand under the rake head
+// (destination-out along the center path, butt cap so the erase can't reach backward
+// past a chunk seam), erasing any older chunk it crosses, then draws each tine's paired
+// dark/light stroke at the gesture's current alpha. The carve pass always runs at full
+// strength regardless of alpha — every chunk only ever draws over strictly older chunks
+// (strokesRef is chronological), so a fading chunk carving at full strength can never
+// wipe something newer.
+function drawStroke(ctx: CanvasRenderingContext2D, stroke: Stroke, alpha: number) {
   ctx.save()
-  ctx.lineCap = 'butt'
   ctx.lineJoin = 'round'
 
+  ctx.lineCap = 'butt'
   ctx.globalCompositeOperation = 'destination-out'
   ctx.strokeStyle = '#000'
   ctx.lineWidth = CARVE_WIDTH
   ctx.stroke(stroke.center)
   ctx.globalCompositeOperation = 'source-over'
 
-  // Soft spill of displaced sand along the outside edges of the band.
-  ctx.strokeStyle = EDGE_RIDGE_COLOR
-  ctx.lineWidth = EDGE_RIDGE_WIDTH
-  ctx.stroke(stroke.tines[0].light)
-  ctx.stroke(stroke.tines[TINES - 1].light)
-
+  ctx.lineCap = 'round'
+  ctx.globalAlpha = alpha
   stroke.tines.forEach((tine) => {
-    ctx.strokeStyle = RIDGE_COLOR
-    ctx.lineWidth = RIDGE_WIDTH
+    ctx.strokeStyle = DARK_COLOR
+    ctx.lineWidth = DARK_WIDTH
+    ctx.stroke(tine.dark)
+
+    ctx.strokeStyle = LIGHT_COLOR
+    ctx.lineWidth = LIGHT_WIDTH
     ctx.stroke(tine.light)
-
-    ctx.strokeStyle = TRENCH_SOFT_COLOR
-    ctx.lineWidth = TRENCH_SOFT_WIDTH
-    ctx.stroke(tine.dark)
-
-    ctx.strokeStyle = TRENCH_CORE_COLOR
-    ctx.lineWidth = TRENCH_CORE_WIDTH
-    ctx.stroke(tine.dark)
   })
   ctx.restore()
 }
@@ -208,12 +208,14 @@ export default function ZenGarden() {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
-  // Persistent sand layer: finished strokes and eraser wipes are baked into this
-  // offscreen canvas, so grooves persist indefinitely (no hold/fade — matching the
-  // study video) while per-frame cost stays flat: one drawImage plus the active stroke.
-  const layerRef = useRef<HTMLCanvasElement | null>(null)
-  const layerCtxRef = useRef<CanvasRenderingContext2D | null>(null)
+  // Every live chunk (from any gesture, finished or in-progress-but-rolled-over) in
+  // chronological insertion order. No persistent bake layer — the whole population is
+  // redrawn from scratch every frame, oldest first, so later chunks' carve passes erase
+  // earlier ones where they cross. Population stays bounded because every chunk expires
+  // (filtered out) within HOLD_MS + FADE_MS of its gesture ending.
+  const strokesRef = useRef<Stroke[]>([])
   const activeStrokeRef = useRef<Stroke | null>(null)
+  const activeGestureRef = useRef<Gesture | null>(null)
   const hoveringRef = useRef(false)
   const lastPointRef = useRef<Point | null>(null)
   const toolRef = useRef<Tool | null>(tool)
@@ -230,45 +232,55 @@ export default function ZenGarden() {
   const cursorAngleRef = useRef(0)
   const cursorTargetAngleRef = useRef(0)
 
-  // Bake the active chunk into the persistent layer and drop it (gesture over).
-  const commitActiveStroke = useCallback(() => {
+  // Finalize the active chunk, push it into the live list, and stamp the gesture's
+  // aging clock (gesture over — every chunk it owns starts holding/fading together).
+  const commitGesture = useCallback(() => {
     const stroke = activeStrokeRef.current
-    if (!stroke) return
-    finalizeStroke(stroke)
-    const lctx = layerCtxRef.current
-    if (lctx) drawStroke(lctx, stroke)
+    const gesture = activeGestureRef.current
+    if (stroke) {
+      finalizeStroke(stroke)
+      strokesRef.current.push(stroke)
+    }
+    if (gesture) {
+      gesture.active = false
+      gesture.born = Date.now()
+    }
     activeStrokeRef.current = null
+    activeGestureRef.current = null
   }, [])
 
-  // Mid-gesture chunk rollover: bake the current chunk, then start the next one at
-  // the same point with the same direction, so the seam is a butt joint of identical
-  // geometry (no gap, no double-composite).
+  // Mid-gesture chunk rollover: finalize the current chunk into the live list, then
+  // start the next one at the same point with the same direction, so the seam is a
+  // butt joint of identical geometry (no gap, no double-composite). The new chunk keeps
+  // the same gesture reference, so it stays exempt from aging until the gesture ends.
   const rolloverActiveStroke = useCallback(() => {
     const stroke = activeStrokeRef.current
-    if (!stroke || stroke.points.length < 2) return
+    const gesture = activeGestureRef.current
+    if (!stroke || !gesture || stroke.points.length < 2) return
     const pts = stroke.points
     const last = pts[pts.length - 1]
     const prev = pts[pts.length - 2]
 
     finalizeStroke(stroke)
-    const lctx = layerCtxRef.current
-    if (lctx) drawStroke(lctx, stroke)
+    strokesRef.current.push(stroke)
 
-    const next = createStroke()
+    const next = createStroke(gesture)
     pushRakePoint(next, last, prev)
     next.length = 0
     activeStrokeRef.current = next
   }, [])
 
   useEffect(() => {
-    commitActiveStroke()
+    commitGesture()
     toolRef.current = tool
     // Switching to rake while already hovering the plot should start drawing
     // immediately rather than waiting for the next pointer enter.
     if (tool === 'rake' && hoveringRef.current) {
-      activeStrokeRef.current = createStroke()
+      const gesture: Gesture = { active: true, born: Date.now() }
+      activeGestureRef.current = gesture
+      activeStrokeRef.current = createStroke(gesture)
     }
-  }, [tool, commitActiveStroke])
+  }, [tool, commitGesture])
 
   useEffect(() => {
     blossomsRef.current = blossoms
@@ -287,29 +299,32 @@ export default function ZenGarden() {
     const rect = wrap.getBoundingClientRect()
     rectRef.current = { left: rect.left, top: rect.top, width: rect.width, height: rect.height }
     const dpr = window.devicePixelRatio || 1
-    const w = Math.round(rect.width * dpr)
-    const h = Math.round(rect.height * dpr)
-    canvas.width = w
-    canvas.height = h
+    canvas.width = Math.round(rect.width * dpr)
+    canvas.height = Math.round(rect.height * dpr)
     const ctx = canvas.getContext('2d')
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-    // Persistent layer follows the canvas size. Resizing a canvas clears it — that is
-    // deliberate here: plot geometry changes across breakpoints (landscape sand on
-    // desktop, portrait on mobile) and dpr changes, so scaling old pixels would distort
-    // the pattern. The raked sand resets to smooth on resize instead of warping.
-    let layer = layerRef.current
-    if (!layer) {
-      layer = document.createElement('canvas')
-      layerRef.current = layer
+    // Live chunks are vector paths in plot-local coordinates; a breakpoint change swaps
+    // the sand image (landscape ↔ portrait) and its coordinate space entirely, so old
+    // paths would land in the wrong place. Simplest correct behavior: drop them. They
+    // would fade out within HOLD_MS + FADE_MS on their own anyway, so this is never a
+    // jarring loss.
+    strokesRef.current = []
+    activeStrokeRef.current = null
+    activeGestureRef.current = null
+    // lastPointRef is in the same stale coordinate space — drop it so the next sample
+    // starts a fresh segment instead of drawing a long streak from the old position.
+    lastPointRef.current = null
+    // If the pointer is already hovering with the rake selected when a resize lands
+    // (e.g. a breakpoint change mid-gesture), no new pointerenter will ever fire — the
+    // cursor never actually left the element — so without this, activeStrokeRef would
+    // stay null and raking would silently stop until the pointer leaves and re-enters.
+    // Re-arm immediately instead, exactly like the tool-switch effect does.
+    if (hoveringRef.current && toolRef.current === 'rake') {
+      const gesture: Gesture = { active: true, born: Date.now() }
+      activeGestureRef.current = gesture
+      activeStrokeRef.current = createStroke(gesture)
     }
-    if (layer.width !== w || layer.height !== h) {
-      layer.width = w
-      layer.height = h
-    }
-    const lctx = layer.getContext('2d')
-    if (lctx) lctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    layerCtxRef.current = lctx
   }, [])
 
   useEffect(() => {
@@ -327,15 +342,26 @@ export default function ZenGarden() {
         const { width, height } = rectRef.current
         ctx.clearRect(0, 0, width, height)
 
-        // Baked sand pattern (device-pixel layer drawn at CSS size — the context's
-        // dpr transform maps it 1:1).
-        const layer = layerRef.current
-        if (layer && layer.width > 0) ctx.drawImage(layer, 0, 0, width, height)
-
-        // Live gesture on top: carves over the baked pattern visually each frame;
-        // the same carve is applied to the layer for real when the stroke commits.
+        const now = Date.now()
+        // A gesture's chunks never age while it's still active (gesture.active stays
+        // true until the gesture ends), so a groove still being carved can't be
+        // filtered out or start fading mid-draw no matter how long the hover lasts.
+        strokesRef.current = strokesRef.current.filter((chunk) => {
+          const g = chunk.gesture
+          return g.active || now - g.born < HOLD_MS + FADE_MS
+        })
+        // Chronological order: every chunk's carve pass erases only chunks drawn
+        // before it, so later (newer) chunks always carve over earlier ones —
+        // including a gesture crossing its own earlier path.
+        strokesRef.current.forEach((chunk) => {
+          const g = chunk.gesture
+          const age = g.active ? 0 : now - g.born
+          const alpha = age < HOLD_MS ? 1 : Math.max(0, 1 - (age - HOLD_MS) / FADE_MS)
+          if (alpha <= 0) return
+          drawStroke(ctx, chunk, alpha)
+        })
         const active = activeStrokeRef.current
-        if (active) drawStroke(ctx, active)
+        if (active) drawStroke(ctx, active, 1)
 
         // Blossoms rest on top of the sand; the rake carve passes beneath them.
         const blossomImg = blossomImgRef.current
@@ -380,25 +406,18 @@ export default function ZenGarden() {
     }
   }
 
-  // Pixel-radius wipe on the persistent layer (partial erase — closer to smoothing
-  // sand back flat than the old whole-stroke removal). Soft-edged so the wipe
-  // boundary doesn't read as a hard punch-out. Blossoms stay object-based and are
+  // Whole-chunk removal (884bd59): hit-test each live chunk's raw points against the
+  // eraser radius and drop any chunk that has a point in range. A per-frame full redraw
+  // has no persistent layer to wipe into, so the eraser goes back to removing whole
+  // chunks rather than a soft pixel-radius wipe. Blossoms stay object-based and are
   // removed whole when the eraser passes near enough.
   const eraseAt = (p: Point) => {
-    const lctx = layerCtxRef.current
-    if (lctx) {
-      const r = ERASE_RADIUS
-      const grad = lctx.createRadialGradient(p.x, p.y, r * 0.45, p.x, p.y, r)
-      grad.addColorStop(0, 'rgba(0,0,0,1)')
-      grad.addColorStop(1, 'rgba(0,0,0,0)')
-      lctx.save()
-      lctx.globalCompositeOperation = 'destination-out'
-      lctx.fillStyle = grad
-      lctx.beginPath()
-      lctx.arc(p.x, p.y, r, 0, Math.PI * 2)
-      lctx.fill()
-      lctx.restore()
-    }
+    strokesRef.current = strokesRef.current.filter((chunk) => {
+      for (const pt of chunk.points) {
+        if (Math.hypot(pt.x - p.x, pt.y - p.y) < ERASE_RADIUS) return false
+      }
+      return true
+    })
     // Only touch React state when a blossom is actually in range — avoids a
     // setState (and re-render) on every pointermove while erasing empty sand.
     const hasBlossomToRemove = blossomsRef.current.some(
@@ -478,13 +497,15 @@ export default function ZenGarden() {
     lastPointRef.current = p
 
     if (toolRef.current === 'rake') {
-      activeStrokeRef.current = createStroke()
+      const gesture: Gesture = { active: true, born: Date.now() }
+      activeGestureRef.current = gesture
+      activeStrokeRef.current = createStroke(gesture)
     }
   }
 
   const handlePointerLeave = () => {
     hoveringRef.current = false
-    commitActiveStroke()
+    commitGesture()
     lastPointRef.current = null
     if (cursorRef.current) cursorRef.current.style.opacity = '0'
   }
