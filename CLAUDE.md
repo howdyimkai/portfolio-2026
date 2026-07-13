@@ -93,6 +93,29 @@ untouched — out of scope for this exploration.
   plot geometry, and since every chunk fades out within 13s regardless,
   this is never a jarring loss.
 
+  **Pulled, not pushed (2026-07-13):** the rake/eraser head is a towed
+  point, not the raw pointer. It trails `RAKE_FOLLOW_DIST` (24px) behind
+  the pointer along the head→pointer line — caster/tractrix follow, the
+  same math as a trailer behind a car — recomputed on every pointer sample
+  including coalesced ones (`stepHead` in `ZenGarden.tsx`). Grooves are
+  generated from the head's path, not the pointer's, so a fast zigzag hand
+  motion sweeps into arcs instead of snapping to sharp corners. The cursor
+  renders at the head position, rotated so the handle points from the head
+  toward the pointer (`CURSOR_HANDLE_OFFSET_DEG`, -90° — the mirror of the
+  old push-mode +90°, since pulling swaps which end leads). On every
+  (re)arm — `pointerenter`, tool switch, resize — the head is reset to
+  `null`, a signal consumed by the next `pointermove` sample to snap the
+  head onto the pointer rather than stepping from a stale position; it
+  then falls behind naturally as the pointer pulls away. A second gate,
+  `HEAD_MIN_TRAVEL` (6px), withholds the first groove point until the head
+  has accumulated that much of its own travel, so the moment it starts
+  moving can't stamp a short stub. The eraser uses the same towed head
+  (`eraseAt` receives head positions, not raw pointer positions); blossom
+  stamping is untouched — still a discrete click at the raw pointer. All
+  of this is isolated to `stepHead` + three constants at the top of the
+  file plus the towed branch in `handlePointerMove`, so it's revertible
+  without touching the groove rendering system described above.
+
 ## Assets
 
 - `public/garden/`, `public/nav/`, `public/hero/` — WebP, converted from
