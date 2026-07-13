@@ -23,11 +23,12 @@ untouched — out of scope for this exploration.
   Never recreate these with CSS gradients/fonts. `KaiHeroTitle@2x.png` is the
   hero title asset, not typography.
 - `design-intent/kai-tran-portfolio.dc.html` — behavior reference only for
-  the rake groove algorithm (5 tines, paired dark/light stroke offset ±1px).
-  Don't port its code directly. Its 6s hold + 3s linear fade is superseded
-  (Kai's call, 2026-07-12) — grooves now persist indefinitely; see
-  `design-intent/GardenRakeStudy.mov` and the `ZenGarden` entry below for
-  the current persistence model.
+  the rake groove algorithm (5 tines, paired dark/light stroke offset ±1px,
+  6s hold + 3s linear fade). Don't port its code directly. Its hold/fade
+  timing is close but not exact — see the `ZenGarden` entry below for the
+  current model (10s hold + 3s linear fade per gesture, Kai's call
+  2026-07-13, reverting the brief indefinite-persistence detour documented
+  in `design-intent/GardenRakeStudy.mov`).
 
 ## Tokens & motion
 
@@ -63,17 +64,26 @@ untouched — out of scope for this exploration.
   desktop and portrait on mobile (`sand.webp` vs `sand-portrait.webp`).
   Every `<Image>` in the garden needs `draggable={false}` — next/image
   renders real `<img>` tags, which are draggable by default and will hijack
-  a mouse gesture mid-stroke otherwise. Grooves **persist indefinitely** —
-  there is no hold/fade timer. Finished rake strokes bake into a persistent
-  offscreen canvas layer; a new pass carves over whatever pattern it
-  crosses (`destination-out` under the rake head), with a hovering gesture
-  committed to that layer in rolling chunks so a single long gesture can
-  still carve over its own earlier part. The eraser is a soft pixel-radius
-  wipe of that same persistent layer, not a whole-stroke removal; blossoms
-  stay object-based (React state) and are removed whole when the eraser
-  passes near enough. The persistent layer is sized with the canvas and
-  cleared on resize — raked sand resets to smooth across a breakpoint
-  change rather than warping old pixels into new plot geometry.
+  a mouse gesture mid-stroke otherwise. Grooves **hold 10s then fade over
+  3s, linearly** (Kai's call, 2026-07-13) — the subtle paired dark/light
+  pinstripe per tine, not the heavier trench+ridge stack from the
+  GardenRakeStudy.mov detour. There is no persistent offscreen layer:
+  every live rake chunk is kept in a plain list and the whole population
+  is redrawn from scratch each frame in chronological order, so a chunk's
+  carve pass (`destination-out` along its center path) only ever erases
+  chunks drawn before it — this is what makes a gesture carve over its own
+  earlier path (rolling ~120px chunks, same as before) or over an older,
+  not-yet-faded gesture. Aging is per gesture, not per chunk: a gesture's
+  chunks all render at full alpha while it's still being raked, and only
+  start their hold/fade clock together once the gesture ends. The eraser
+  reverts to whole-chunk removal (hit-testing each chunk's raw points
+  against a radius) rather than a pixel wipe, since there's no persistent
+  layer left to wipe into; blossoms stay object-based (React state) and
+  are removed whole when the eraser passes near enough. Resize clears all
+  live chunks and cancels the in-progress gesture — raked sand resets to
+  smooth across a breakpoint change rather than warping old paths into new
+  plot geometry, and since every chunk fades out within 13s regardless,
+  this is never a jarring loss.
 
 ## Assets
 
