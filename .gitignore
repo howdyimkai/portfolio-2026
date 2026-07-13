@@ -17,6 +17,9 @@ node_modules/
 # macOS
 .DS_Store
 
+# Large local-only design references (see CLAUDE.md — design source of truth)
+design-intent/*.mov
+
 # IDE
 .vscode
 .idea

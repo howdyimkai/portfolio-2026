@@ -21,14 +21,22 @@ untouched — out of scope for this exploration.
   color-diff scanning approach used to place the garden elements).
 - `design-intent/*.png` (`@2x` exports) — rendering truth for garden art.
   Never recreate these with CSS gradients/fonts. `KaiHeroTitle@2x.png` is the
-  hero title asset, not typography.
+  hero title asset, not typography. Current tool art:
+  `Teethrake4prongs-2x.png` (teeth rake — also the groove SCALE truth: 4
+  tines, drawn band ≈ its prong span at the 40px cursor, ~13.4px between
+  outer tine centers) and `cherryblossomstampNEW@2x.png` (blossom).
+  `teethrake@2x.png` / `blossomstamp@2x.png` are superseded originals.
+- `design-intent/GardenRakeStudy.mov` — 176MB real-raking study video,
+  deliberately untracked (gitignored); lives only on Kai's machine. Was the
+  reference for groove mark character; the heavy trench+ridge rendering
+  derived from it was reverted 2026-07-13, but it stays the reference if
+  mark realism comes up again.
 - `design-intent/kai-tran-portfolio.dc.html` — behavior reference only for
-  the rake groove algorithm (5 tines, paired dark/light stroke offset ±1px,
-  6s hold + 3s linear fade). Don't port its code directly. Its hold/fade
-  timing is close but not exact — see the `ZenGarden` entry below for the
-  current model (10s hold + 3s linear fade per gesture, Kai's call
-  2026-07-13, reverting the brief indefinite-persistence detour documented
-  in `design-intent/GardenRakeStudy.mov`).
+  the rake groove algorithm (paired dark/light stroke offset ±1px; it shows
+  5 tines and 6s hold — the current build uses 4 tines per the 4-prong
+  asset, and 10s hold + 3s linear fade per gesture, Kai's calls 2026-07-13).
+  Don't port its code directly. See the `ZenGarden` entry below for the
+  current model.
 
 ## Tokens & motion
 
@@ -96,6 +104,12 @@ untouched — out of scope for this exploration.
 ## Verifying changes
 
 Dev server: `.claude/launch.json` has a `portfolio-dev` config
-(`npm run dev`, port 3000) for the Browser pane / `preview_start`. Always
-check both 1440px and 390px — desktop and mobile frequently need different
-values (see `ZenGarden`'s responsive `left-[X%] md:left-[Y%]` pattern).
+(`npm run dev`, port 3000, `autoPort: true` so it falls back to a free port
+when another session holds 3000) for the Browser pane / `preview_start`.
+Note: two `next dev` instances can't share this working tree (they fight
+over `.next/dev/lock`) — reuse a running server via `preview_start {url}`,
+or run a second server from an isolated git worktree. Always check both
+1440px and 390px — desktop and mobile frequently need different values (see
+`ZenGarden`'s responsive `left-[X%] md:left-[Y%]` pattern). Canvas behavior
+(groove timing, fade) must be verified with in-page scripts and real
+timestamps, not screenshot round-trips.
