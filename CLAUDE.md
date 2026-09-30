@@ -117,13 +117,28 @@ untouched — out of scope for this exploration.
   without touching the groove rendering system described above.
 
   **Erase-the-name reveal (desktop only, 2026-09-29):** sweeping the eraser
-  over the hero title fades it by swept coverage (8×4 grid, 85% threshold),
-  then plays one of Kai's five hand-written principles as a write-on video,
-  holds, and fades back to the title (shuffled bag, no repeat at the seam).
+  over the hero title fades it by swept coverage, then plays one of Kai's five
+  hand-written principles as a write-on video, holds, and fades back to the
+  title (shuffled bag, no repeat at the seam). Coverage is a 16×6 grid where
+  only cells holding title ink count (mask read from the asset's alpha), hit
+  by the head's swept SEGMENT, not its sample points — both fixes for "fast
+  straight wipes erase weaker than turning" (2026-09-29); 80% of inked cells
+  triggers. The 4s read clock starts when the video ends; the returns use an
+  even ease-in-out, since the shared strong ease-out made a 900ms fade look
+  like a snap.
   Videos live in `public/principles/` (`.mp4` + final-frame `.webp` poster,
   which is the whole reveal under reduced motion). They're blended onto the
   sand with `mix-blend-multiply` on the **wrapper**, not the `<video>` — the
-  wrapper's opacity/filter isolate it, so a child blend leaves a white box.
+  wrapper's opacity isolates it, so a child blend leaves a white box.
+  `filter: blur` over a `<video>` draws a dark frame at the layer edges
+  (multiply makes it visible), so when the write-on ends the video is swapped
+  for its identical `.webp` still, and blur is only ever applied to the still.
+  The principle is **erasable** like the title (same swept-segment coverage
+  over an ink-only 20×5 grid read from the still, scrubbed opacity + blur) —
+  but only once its writing has finished, because the wipe that erased the
+  title is usually still moving over the same spot. Fully erased → title
+  returns; partly erased then left alone for 2.5s → finishes on its own;
+  never touched → the 4s read timer returns it.
   Sources are `design-intent/principles/*` (each opens ~1.1s on the finished
   sentence, then a blank flash, then the rewrite). Regenerate by trimming to
   the last blank frame, `hue=s=0` + `curves=all='0/0 0.88/1 1/1'` to level the
