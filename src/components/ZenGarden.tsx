@@ -142,6 +142,57 @@ const TOOLS: { key: Tool; label: string; icon: string; ratio: number }[] = [
   { key: 'blossom', label: 'BLOSSOM', icon: '/garden/tool-blossom.webp', ratio: 336 / 356 },
 ]
 
+// --- Erase-the-name reveal (desktop only, 2026-07-19) ---
+// Kai's hand-written principles (same asset-not-CSS-type rule as kai-hero-title.webp):
+// write-on videos from design-intent/principles/, trimmed to the rewrite, background
+// levelled to pure white and cropped to a shared 1240x280 frame so the handwriting scale
+// matches across all five. They sit on the sand via mix-blend-mode: multiply, so white
+// drops out and only ink shows. The .webp is each video's final frame — the poster, and
+// the whole reveal under prefers-reduced-motion (the video is never played there).
+const PRINCIPLES = [
+  { text: 'great design disappears in use, but becomes priceless when it matters', src: '/principles/greatdesigns' },
+  { text: 'learning should feel like discovery, and discovery should feel like delight', src: '/principles/delight' },
+  { text: 'i design interfaces to fade, so content can shine and shimmer', src: '/principles/content' },
+  { text: 'the best designs remove friction rather than add', src: '/principles/removefriction' },
+  { text: 'solid systems should be practical and save time', src: '/principles/solidsystems' },
+]
+
+// Coverage grid over the title's bounding box: erasing is tracked as swept cells, not a
+// single hit-test, so the title's opacity can fade continuously with progress instead of
+// snapping at a threshold. Desktop-only — the title lives inside the interactive plot only
+// at md+ (see the md:flex title block below); on mobile it's a separate static block above
+// the plot entirely, so this whole mechanic is gated behind an explicit viewport check
+// rather than relying on a hidden element's (unreliable) getBoundingClientRect.
+const TITLE_GRID_COLS = 8
+const TITLE_GRID_ROWS = 4
+const TITLE_ERASE_THRESHOLD = 0.85
+
+// Sequence timings (emil-design-eng: occasional/rare interaction earns a bit more time
+// than a 150-250ms UI control, but stays well under "marketing" length). Asymmetric:
+// reading is "deciding" (linger), returning to default is the system settling back (snappier).
+const PRINCIPLE_ENTER_MS = 380
+const PRINCIPLE_HOLD_MS = 4500
+const PRINCIPLE_EXIT_MS = 280
+const TITLE_ENTER_MS = 320
+
+// Fisher-Yates shuffle of principle indices, with a guard so a fresh reshuffle never
+// starts with the same principle that just finished — otherwise "shuffled bag" can still
+// feel like a repeat right at the seam between bags.
+function shuffledPrincipleIndices(avoid?: number): number[] {
+  const arr = PRINCIPLES.map((_, i) => i)
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  if (avoid !== undefined && arr[0] === avoid && arr.length > 1) {
+    const swapWith = 1 + Math.floor(Math.random() * (arr.length - 1))
+    ;[arr[0], arr[swapWith]] = [arr[swapWith], arr[0]]
+  }
+  return arr
+}
+
+type SequencePhase = 'idle' | 'principle-in' | 'principle-hold' | 'principle-out' | 'title-in'
+
 let blossomIdCounter = 0
 
 function createStroke(gesture: Gesture): Stroke {
@@ -274,6 +325,127 @@ export default function ZenGarden() {
   const cursorAngleRef = useRef(0)
   const cursorTargetAngleRef = useRef(0)
 
+  // Erase-the-name reveal state (desktop only — see PRINCIPLES block above).
+  const titleElRef = useRef<HTMLDivElement>(null)
+  const isDesktopRef = useRef(false)
+  const titleRectRef = useRef<Rect>({ left: 0, top: 0, width: 0, height: 0 })
+  const titleGridRef = useRef<boolean[]>(new Array(TITLE_GRID_COLS * TITLE_GRID_ROWS).fill(false))
+  const titleCoveredCountRef = useRef(0)
+  const sequenceActiveRef = useRef(false)
+  const principleQueueRef = useRef<number[]>(shuffledPrincipleIndices())
+  const lastPrincipleRef = useRef<number | undefined>(undefined)
+  const sequenceTimeoutsRef = useRef<number[]>([])
+  const [sequencePhase, setSequencePhase] = useState<SequencePhase>('idle')
+  const [principleIndex, setPrincipleIndex] = useState(0)
+  const principleVideoRefs = useRef<(HTMLVideoElement | null)[]>([])
+
+  const clearSequenceTimeouts = useCallback(() => {
+    sequenceTimeoutsRef.current.forEach((id) => window.clearTimeout(id))
+    sequenceTimeoutsRef.current = []
+  }, [])
+
+  const resetTitleErase = useCallback(() => {
+    clearSequenceTimeouts()
+    titleGridRef.current.fill(false)
+    titleCoveredCountRef.current = 0
+    sequenceActiveRef.current = false
+    setSequencePhase('idle')
+    if (titleElRef.current) {
+      titleElRef.current.style.opacity = ''
+      titleElRef.current.style.filter = ''
+    }
+  }, [clearSequenceTimeouts])
+
+  // Fires once coverage crosses TITLE_ERASE_THRESHOLD: walks the title through
+  // principle-in -> hold -> principle-out -> title-in -> idle on its own timers,
+  // independent of further pointer activity (a rare narrative beat, not a live drag).
+  const triggerReveal = useCallback(() => {
+    if (sequenceActiveRef.current) return
+    sequenceActiveRef.current = true
+    if (titleElRef.current) {
+      titleElRef.current.style.opacity = '0'
+      titleElRef.current.style.filter = 'blur(3px)'
+    }
+
+    if (principleQueueRef.current.length === 0) {
+      principleQueueRef.current = shuffledPrincipleIndices(lastPrincipleRef.current)
+    }
+    const nextIndex = principleQueueRef.current.shift()!
+    lastPrincipleRef.current = nextIndex
+    setPrincipleIndex(nextIndex)
+    const video = principleVideoRefs.current[nextIndex]
+    if (video && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      video.currentTime = 0
+      // Autoplay of a muted inline video can still be refused; the poster (final frame)
+      // is already showing, so a rejected play() degrades to the static principle.
+      video.play().catch(() => {})
+    }
+    setSequencePhase('principle-in')
+
+    sequenceTimeoutsRef.current.push(
+      window.setTimeout(() => setSequencePhase('principle-hold'), PRINCIPLE_ENTER_MS),
+      window.setTimeout(() => setSequencePhase('principle-out'), PRINCIPLE_ENTER_MS + PRINCIPLE_HOLD_MS),
+      window.setTimeout(() => {
+        // Coverage resets here, not at the end — by the time the title is visible again
+        // it requires fresh erasing, so a cursor still lingering over it can't instantly
+        // re-trigger the sequence.
+        titleGridRef.current.fill(false)
+        titleCoveredCountRef.current = 0
+        if (titleElRef.current) {
+          titleElRef.current.style.opacity = ''
+          titleElRef.current.style.filter = ''
+        }
+        setSequencePhase('title-in')
+      }, PRINCIPLE_ENTER_MS + PRINCIPLE_HOLD_MS + PRINCIPLE_EXIT_MS),
+      window.setTimeout(
+        () => {
+          sequenceActiveRef.current = false
+          setSequencePhase('idle')
+        },
+        PRINCIPLE_ENTER_MS + PRINCIPLE_HOLD_MS + PRINCIPLE_EXIT_MS + TITLE_ENTER_MS
+      )
+    )
+  }, [])
+
+  // Coverage-driven title fade: each towed-head sample marks any not-yet-swept grid cell
+  // within ERASE_RADIUS as covered. Opacity maps 1:1 to coverage progress (a scrubbed
+  // value, not a discrete state change) so the title visibly erases as you rake it,
+  // rather than jump-cutting at the threshold.
+  const updateTitleErase = useCallback(
+    (p: Point) => {
+      if (!isDesktopRef.current || sequenceActiveRef.current) return
+      const rect = titleRectRef.current
+      if (rect.width <= 0 || rect.height <= 0) return
+
+      const cellW = rect.width / TITLE_GRID_COLS
+      const cellH = rect.height / TITLE_GRID_ROWS
+      let changed = false
+      for (let row = 0; row < TITLE_GRID_ROWS; row++) {
+        for (let col = 0; col < TITLE_GRID_COLS; col++) {
+          const idx = row * TITLE_GRID_COLS + col
+          if (titleGridRef.current[idx]) continue
+          const cx = rect.left + (col + 0.5) * cellW
+          const cy = rect.top + (row + 0.5) * cellH
+          if (Math.hypot(cx - p.x, cy - p.y) < ERASE_RADIUS) {
+            titleGridRef.current[idx] = true
+            titleCoveredCountRef.current += 1
+            changed = true
+          }
+        }
+      }
+      if (!changed) return
+
+      const coverage = Math.min(1, titleCoveredCountRef.current / (TITLE_GRID_COLS * TITLE_GRID_ROWS) / TITLE_ERASE_THRESHOLD)
+      const el = titleElRef.current
+      if (el) {
+        el.style.opacity = String(1 - coverage)
+        el.style.filter = `blur(${coverage * 3}px)`
+      }
+      if (coverage >= 1) triggerReveal()
+    },
+    [triggerReveal]
+  )
+
   // Finalize the active chunk, push it into the live list, and stamp the gesture's
   // aging clock (gesture over — every chunk it owns starts holding/fading together).
   const commitGesture = useCallback(() => {
@@ -377,14 +549,35 @@ export default function ZenGarden() {
       activeGestureRef.current = gesture
       activeStrokeRef.current = createStroke(gesture)
     }
-  }, [])
+
+    // Erase-the-name reveal is desktop-only: the title only lives inside the interactive
+    // plot at md+ (see the md:flex title block in the JSX). A breakpoint change swaps
+    // coordinate spaces same as the rake grooves above, so drop any in-progress sequence
+    // rather than let it resolve against stale geometry.
+    isDesktopRef.current = window.matchMedia('(min-width: 768px)').matches
+    resetTitleErase()
+    if (isDesktopRef.current && titleElRef.current) {
+      const tRect = titleElRef.current.getBoundingClientRect()
+      titleRectRef.current = {
+        left: tRect.left - rect.left,
+        top: tRect.top - rect.top,
+        width: tRect.width,
+        height: tRect.height,
+      }
+    } else {
+      titleRectRef.current = { left: 0, top: 0, width: 0, height: 0 }
+    }
+  }, [resetTitleErase])
 
   useEffect(() => {
     resize()
     const ro = new ResizeObserver(resize)
     if (wrapRef.current) ro.observe(wrapRef.current)
-    return () => ro.disconnect()
-  }, [resize])
+    return () => {
+      ro.disconnect()
+      clearSequenceTimeouts()
+    }
+  }, [resize, clearSequenceTimeouts])
 
   useEffect(() => {
     const draw = () => {
@@ -543,6 +736,7 @@ export default function ZenGarden() {
           } else {
             // Eraser is also a rake — it erases from the towed head, not the raw pointer.
             eraseAt(newHead)
+            updateTitleErase(newHead)
           }
         }
 
@@ -650,10 +844,45 @@ export default function ZenGarden() {
 
         <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full" />
 
-        {/* Desktop: title embedded on the sand, centered in the plot */}
+        {/* Desktop: title embedded on the sand, centered in the plot. Eraser rake wipes it
+            away (coverage-driven fade, see updateTitleErase) into a cycling design
+            principle, which holds then fades back into the title — see triggerReveal. */}
         <div className="pointer-events-none absolute inset-0 hidden flex-col items-center justify-center md:flex">
-          <div className="relative aspect-[806/310] w-[46%] min-w-[220px]">
+          <div
+            ref={titleElRef}
+            className="relative aspect-[806/310] w-[46%] min-w-[220px] transition-[opacity,filter] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
+          >
             <Image src="/hero/kai-hero-title.webp" alt="Kai Tran — Design Engineer" fill draggable={false} sizes="420px" className="object-contain" priority />
+          </div>
+
+          {/* mix-blend-multiply lives on this wrapper, not the videos: the wrapper's opacity
+              and filter make it an isolated group, so a blend on a child would only multiply
+              against the wrapper's own transparent backdrop and leave a white box. */}
+          <div
+            role="img"
+            aria-label={PRINCIPLES[principleIndex].text}
+            aria-hidden={sequencePhase === 'idle'}
+            className={`absolute aspect-[1240/280] w-[58%] mix-blend-multiply transition-[opacity,transform,filter] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:scale-100 motion-reduce:blur-[0px] ${
+              sequencePhase === 'principle-in' || sequencePhase === 'principle-hold'
+                ? 'scale-100 opacity-100 blur-[0px] duration-[380ms]'
+                : 'scale-[0.98] opacity-0 blur-[3px] duration-[280ms]'
+            }`}
+          >
+            {PRINCIPLES.map((p, i) => (
+              <video
+                key={p.src}
+                ref={(el) => {
+                  principleVideoRefs.current[i] = el
+                }}
+                src={`${p.src}.mp4`}
+                poster={`${p.src}.webp`}
+                muted
+                playsInline
+                preload="auto"
+                disablePictureInPicture
+                className={`absolute inset-0 h-full w-full ${i === principleIndex ? '' : 'invisible'}`}
+              />
+            ))}
           </div>
         </div>
 

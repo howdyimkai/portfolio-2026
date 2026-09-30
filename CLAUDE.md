@@ -116,6 +116,22 @@ untouched — out of scope for this exploration.
   file plus the towed branch in `handlePointerMove`, so it's revertible
   without touching the groove rendering system described above.
 
+  **Erase-the-name reveal (desktop only, 2026-09-29):** sweeping the eraser
+  over the hero title fades it by swept coverage (8×4 grid, 85% threshold),
+  then plays one of Kai's five hand-written principles as a write-on video,
+  holds, and fades back to the title (shuffled bag, no repeat at the seam).
+  Videos live in `public/principles/` (`.mp4` + final-frame `.webp` poster,
+  which is the whole reveal under reduced motion). They're blended onto the
+  sand with `mix-blend-multiply` on the **wrapper**, not the `<video>` — the
+  wrapper's opacity/filter isolate it, so a child blend leaves a white box.
+  Sources are `design-intent/principles/*` (each opens ~1.1s on the finished
+  sentence, then a blank flash, then the rewrite). Regenerate by trimming to
+  the last blank frame, `hue=s=0` + `curves=all='0/0 0.88/1 1/1'` to level the
+  paper to pure white, and cropping to a shared 1240×280 frame centered on
+  each ink bbox so the handwriting scale matches. Verifying with synthetic
+  events: React's `onPointerEnter` is driven by `pointerover`, not
+  `pointerenter`.
+
 ## Assets
 
 - `public/garden/`, `public/nav/`, `public/hero/` — WebP, converted from
