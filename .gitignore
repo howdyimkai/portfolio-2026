@@ -23,3 +23,8 @@ design-intent/*.mov
 # IDE
 .vscode
 .idea
+
+# aiforui.dev paid skills (account-licensed, installed via npx @aiforui/install)
+.claude/skills/emil-*/
+.cursor/
+.codex/
