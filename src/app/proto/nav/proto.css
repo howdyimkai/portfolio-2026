@@ -208,3 +208,194 @@ body:has(.proto-stage) > div > footer { display: none; }
 
 /* Keep the Next dev badge out of prototype screenshots. */
 body:has(.proto-stage) nextjs-portal { display: none; }
+
+/* ---- Graphite: green graph-paper sheet hanging off the top edge ----
+   800×165 sheet per Nav-greengraphite.png; squares 33px per Kai (2026-10-02). */
+.graphite-sheet {
+  position: relative;
+  width: min(800px, 100%);
+  height: 165px;
+  /* Tile cut from Kai's graphitepaper@2x.png (15×2 cells, seams mid-cell, baked-in
+     38% alpha), scaled so 24 cells span 800px (33.3px squares). -17px puts a line
+     at the left edge and one ~3px from the top, like the mock. */
+  background: url('/proto/graphite-tile.webp') -17px -17px / 500px auto repeat;
+  box-shadow: 0 1px 2px rgba(61, 50, 38, 0.08), 0 6px 14px -6px rgba(61, 50, 38, 0.12);
+}
+.graphite-row {
+  display: grid;
+  grid-template-columns: 5fr 4fr 6fr 4fr 5fr; /* snaps to the 24-cell grid */
+  height: 100%;
+}
+.graphite-slot { position: relative; }
+.graphite-item,
+.graphite-brand {
+  position: absolute;
+  inset: 0;
+  display: block;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.graphite-item:focus-visible,
+.graphite-brand:focus-visible {
+  outline: 2px solid var(--color-ink-primary);
+  outline-offset: -6px;
+  border-radius: 8px;
+}
+.graphite-label {
+  position: absolute;
+  top: 110px;
+  left: 50%;
+  translate: -50% 0;
+  white-space: nowrap;
+  /* direct ref: --font-mono resolves empty site-wide (set on :root, font var lives on body) */
+  font-family: var(--font-commit-mono), monospace;
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--color-ink-body);
+  transition: color 150ms ease, transform 160ms var(--ease-out-strong);
+}
+.graphite-item[aria-current='page'] .graphite-label { color: var(--color-ink-primary); }
+.graphite-item:active .graphite-label { transform: scale(0.97); }
+
+/* Icons and hat share one box: 186×134 @2x art at 1×, top 27 (puts the hat at y 40–80 like the mock). */
+.graphite-icon,
+.graphite-hat {
+  position: absolute;
+  top: 27px;
+  left: 50%;
+  width: 93px;
+  height: 67px;
+  margin-left: -46.5px;
+  pointer-events: none;
+}
+.graphite-icon {
+  opacity: 0;
+  transform: translateY(10px) scale(0.7);
+  transform-origin: 50% 90%;
+  transition: opacity 140ms ease-out, transform 160ms ease-out;
+}
+.graphite-item[data-up] .graphite-icon {
+  opacity: 1;
+  transform: none;
+  transition: opacity 180ms ease-out, transform 280ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+.graphite-wordmark {
+  position: absolute;
+  top: 84px;
+  left: 50%;
+  width: 155px;
+  height: auto;
+  margin-left: -77.5px;
+}
+/* Same hat-tip as the Ruler brand. */
+.graphite-hat {
+  transform-origin: 50% 80%;
+  transition: transform 180ms var(--ease-out-strong);
+}
+.graphite-brand:active .graphite-hat { transform: rotate(6deg) scale(0.96); }
+.graphite-brand:focus-visible .graphite-hat { transform: rotate(8deg) translateY(1px); }
+@media (hover: hover) and (pointer: fine) {
+  .graphite-item:hover .graphite-label { color: var(--color-ink-primary); }
+  .graphite-brand:hover .graphite-hat {
+    transform: rotate(8deg) translateY(1px);
+    transition-duration: 240ms;
+    transition-timing-function: cubic-bezier(0.34, 1.45, 0.64, 1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .graphite-icon,
+  .graphite-item[data-up] .graphite-icon { transform: none; transition: opacity 150ms ease; }
+  .graphite-hat { transition: none; }
+}
+
+/* Mobile: brand gets the top two rows, the four labels share the third. No room
+   for icons over the labels, so the active page gets a green-graphite marker. */
+@media (max-width: 767px) {
+  .graphite-sheet { width: 100%; height: 150px; }
+  .graphite-row {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 103px 34px;
+    grid-template-areas: 'brand brand brand brand' 'works play notes about';
+  }
+  .graphite-slot[data-slot='brand'] { grid-area: brand; }
+  .graphite-slot[data-slot='works'] { grid-area: works; }
+  .graphite-slot[data-slot='play'] { grid-area: play; }
+  .graphite-slot[data-slot='notes'] { grid-area: notes; }
+  .graphite-slot[data-slot='about'] { grid-area: about; }
+  .graphite-icon { display: none; }
+  .graphite-label {
+    top: 50%;
+    translate: -50% -50%;
+    width: max-content;
+    max-width: calc(100% - 12px);
+    white-space: normal;
+    text-align: center;
+    text-wrap: balance;
+    font-size: 12px;
+    line-height: 15px;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  .graphite-item[aria-current='page'] .graphite-label { background: rgb(174 208 118 / 0.45); }
+  .graphite-hat { top: 6px; width: 56px; height: 40px; margin-left: -28px; }
+  .graphite-wordmark { top: 44px; width: 110px; margin-left: -55px; }
+}
+
+/* ---- Graphite hover-motion variants (/proto/nav-hover) ---- */
+/* Drop: transform is driven by a baked gravity simulation (WAAPI); CSS only fades. */
+.graphite-sheet[data-motion='drop'] .graphite-icon,
+.graphite-sheet[data-motion='drop'] .graphite-item[data-up] .graphite-icon {
+  transform: none;
+  transform-origin: 50% 92%;
+  transition: opacity 90ms ease-out;
+}
+/* Sprout: rises out from behind the label line. The clip moves with the icon, so
+   insetting the bottom by the same distance keeps the cut on a fixed line. */
+.graphite-sheet[data-motion='sprout'] .graphite-icon {
+  opacity: 1;
+  transform: translateY(40px);
+  clip-path: inset(0 0 40px 0);
+  transition: transform 160ms ease-in, clip-path 160ms ease-in, visibility 0s 160ms;
+  visibility: hidden;
+}
+.graphite-sheet[data-motion='sprout'] .graphite-item[data-up] .graphite-icon {
+  transform: none;
+  clip-path: inset(0 0 0 0);
+  visibility: visible;
+  transition: transform 260ms var(--ease-out-strong), clip-path 260ms var(--ease-out-strong), visibility 0s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .graphite-sheet[data-motion='sprout'] .graphite-icon { transform: none; clip-path: none; }
+}
+
+/* Control panel (harness chrome, top-right). */
+.proto-controls {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 2147483646;
+  width: 240px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(10, 10, 10, 0.82);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+  color: rgba(255, 255, 255, 0.85);
+  font: 12px/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.proto-controls label { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; margin-bottom: 10px; }
+.proto-controls input[type='range'] { grid-column: 1 / -1; width: 100%; accent-color: #fff; }
+.proto-controls output { font-variant-numeric: tabular-nums; color: #fff; }
+.proto-controls button {
+  width: 100%;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.proto-controls button:active { transform: scale(0.97); }
+.proto-controls .hint { margin: 0 0 10px; color: rgba(255, 255, 255, 0.5); }

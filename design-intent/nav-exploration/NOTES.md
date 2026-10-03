@@ -25,6 +25,28 @@ Both share the same behavior:
 | **Slide** (`?v=1`) | Top bar, horizontal. Mobile: 4-cell strip under the wordmark (~108px tall). | Eats fold height on mobile (homepage never scrolls). |
 | **Rail** (`?v=2`) | Left edge, vertical, on desktop. Mobile: fixed bottom bar, thumb reach. | ~170px of width; shifts the hero at 768–1100px; new mobile pattern. |
 
+## Graphite (`?v=3`, added 2026-10-02)
+
+Reference: `Nav-greengraphite.png` + felt icons in `rodeo/` (→ `public/proto/rodeo/*.webp`).
+A different concept, not a Ruler variant: a green graph-paper sheet hanging off the top
+edge, wordmark centered with the felt hat over it, mono lowercase labels either side.
+- 800×165 sheet (mock). Paper is a seamless tile cut from Kai's `graphitepaper@2x.png`
+  (`public/proto/graphite-tile.webp`), scaled to 33px squares — the mock's 50px read
+  too large (Kai, 2026-10-02). Columns snap to the 24-cell grid at 5·4·6·4·5.
+- Each label's felt icon (cloud / pony / walking pencil / star) pops up above it on
+  hover (280ms overshoot in, 160ms out) and stays up for the active page — the
+  icon *is* the active indicator, matching how the hat sits over the wordmark.
+  Hat tips on brand hover, same as Ruler.
+- Mobile: brand in the top two grid rows, four labels in the third (150px tall —
+  ~40px taller than Slide's). No room for icons, so the active label gets a
+  green-graphite marker wash instead.
+- "writing" maps to the old `notes` key; still no route.
+
+### Hover motion (`/proto/nav-hover`, 2026-10-02)
+Comparing Pop (current) / Drop (gravity bounce, tunable) / Sprout (rises from behind
+the label). Rejected: **Tag-along** (icon towed toward the cursor x with spring lag +
+tilt) — dropped by Kai.
+
 ## Rejected along the way
 - **Current** (brush-underlay links, hamburger) — baseline only.
 - **Static Ruler** (discrete cells, ticks only lengthen on hover) — Kai preferred the live scale.

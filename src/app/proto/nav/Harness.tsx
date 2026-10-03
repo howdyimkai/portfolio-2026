@@ -4,11 +4,13 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import Image from 'next/image'
 import Slide from './Slide'
 import Rail from './Rail'
+import Graphite from './Graphite'
 import './proto.css'
 
 const VARIANTS: { name: string; render: (p: P) => React.ReactNode; pickerTop?: boolean; mainClass?: string }[] = [
   { name: 'Slide', render: (p) => <Slide {...p} /> },
   { name: 'Rail', render: (p) => <Rail {...p} />, pickerTop: true, mainClass: 'pb-20 md:pb-6 md:pl-44 min-[1500px]:pl-10' },
+  { name: 'Graphite', render: (p) => <Graphite {...p} />, mainClass: 'pt-6 md:pt-10' },
 ]
 type P = { active: string; onSelect: (k: string) => void }
 
