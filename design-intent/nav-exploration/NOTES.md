@@ -61,3 +61,21 @@ tilt) — dropped by Kai.
   before promoting. Mobile screenshots are 1× pane captures, desktop are 2× headless.
 - If promoted: build into `Navigation.tsx`/`AppShell` (homepage is `h-[100dvh]`
   locked), then delete `src/app/proto/` and `public/proto/`.
+
+## Shadow-box shelf (`/proto/nav-shelf`, 2026-10-08)
+
+Branch: `explore/nav-object-hover` (off `proto/nav-explorations`). Reference:
+`design-intent/pony-test/` (shelf, pony, lift/settle sequence, bookshelf concept).
+Five chalkboard cubbies: selected works (cloud), play ground (pony), humble abode
+(hat), field notes (pencil), about me (star). Each toy is one static image moved
+only by transforms (lift + tilt, shadow shrinks/fades, opposite-tilt settle).
+
+All three variants kept for now, each with a live tuning panel (lift height, lift/settle
+tilt, durations, spring/snappy/soft easing, 1–5 settle swings, speed, zoom):
+- **Hop** (`?v=1`): one-shot spring hop on hover, two-swing settle.
+- **Float** (`?v=2`): soft lift, held with an idle bob while hovered, settles on leave.
+- **Tic** (`?v=3`): held, plus a per-toy loop — cloud puffs, pony prances, hat tips,
+  pencil waddles, star coin-flips.
+
+No pick yet. `--font-mono` doesn't resolve on this branch; labels use
+`var(--font-commit-mono)` directly.

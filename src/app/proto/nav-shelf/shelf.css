@@ -1,0 +1,108 @@
+/* PROTOTYPE — throwaway. Delete with src/app/proto/nav-shelf. */
+
+.shelf-stage {
+  --zoom: 2;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 24px 16px 96px;
+  overflow: hidden;
+}
+/* Box keeps its 1× footprint × zoom so the page centers it; contents scale from 1× coordinates. */
+.shelf-frame {
+  width: calc(394px * var(--zoom));
+  height: calc(150px * var(--zoom));
+}
+.shelf {
+  position: relative;
+  width: 394px;
+  height: 104px;
+  margin-top: 46px;
+  transform: scale(var(--zoom));
+  transform-origin: 0 0;
+}
+.shelf-wordmark {
+  position: absolute;
+  left: 50%;
+  top: -40px;
+  width: 128px;
+  height: auto;
+  transform: translateX(-46%);
+  pointer-events: none;
+  /* Kai's mock inks the wordmark maroon; the proto asset is grey. */
+  filter: brightness(0) saturate(100%) invert(9%) sepia(46%) saturate(2400%) hue-rotate(315deg);
+}
+.shelf-wood {
+  position: absolute;
+  inset: 0;
+  width: 394px;
+  height: 104px;
+  pointer-events: none;
+}
+.shelf-row { position: absolute; inset: 0; }
+
+.shelf-cubby {
+  position: absolute;
+  top: 8px;
+  height: 84px;
+  border-radius: 2px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.shelf-cubby:focus-visible { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7) inset; }
+
+.shelf-label {
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  font-family: var(--font-commit-mono), ui-monospace, monospace;
+  font-size: 7.5px;
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  color: rgba(236, 232, 224, 0.82);
+  text-shadow: 0 0 0.6px rgba(236, 232, 224, 0.5); /* chalk softness */
+  pointer-events: none;
+}
+
+.shelf-shadow {
+  position: absolute;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+  transform: translateX(-50%) scale(1);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.shelf-toy {
+  position: absolute;
+  display: block;
+  transform-origin: 50% 100%;
+  pointer-events: none;
+  will-change: transform;
+}
+.shelf-toy-inner {
+  display: block;
+  transform-origin: 50% 100%;
+}
+.shelf-toy img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0.5px 0.5px rgba(0, 0, 0, 0.35));
+}
+
+.proto-controls select {
+  grid-column: 1 / -1;
+  height: 24px;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font: inherit;
+}
+.proto-controls .row { display: flex; gap: 6px; }
+.proto-controls .row button { flex: 1; }
+.proto-controls .group { margin: 12px 0 8px; color: rgba(255, 255, 255, 0.45); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+.proto-controls { max-height: calc(100dvh - 32px); overflow-y: auto; }
