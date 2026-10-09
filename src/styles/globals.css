@@ -163,11 +163,25 @@ h1, h2, h3 {
   }
 }
 
+/* Hero title line-boil: a 7-frame sprite strip, one frame per step, moved by transform
+   so it stays on the compositor. Play state is driven inline (see TitleArt in ZenGarden). */
+@keyframes title-boil {
+  to {
+    transform: translateX(-100%);
+  }
+}
+.title-boil {
+  animation: title-boil 980ms steps(7) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .title-boil {
+    animation: none;
   }
 }
