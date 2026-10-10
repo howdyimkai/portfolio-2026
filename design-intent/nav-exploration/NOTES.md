@@ -79,3 +79,21 @@ tilt, durations, spring/snappy/soft easing, 1–5 settle swings, speed, zoom):
 
 No pick yet. `--font-mono` doesn't resolve on this branch; labels use
 `var(--font-commit-mono)` directly.
+
+## Decision — Sweep shelf on the homepage (2026-10-10)
+
+Decided from `/proto/nav-shelf` (Tic) + `/proto/nav-shelf-tidy` (Sweep). Built as
+`src/components/shelf/ShelfNav.tsx`; homepage only (AppShell), other routes keep `Navigation`.
+- Hover: **Tic** (lift 13px, −8° lift / +4° settle, 280ms lift snappy ease-out, 240ms
+  gravity fall, one 150ms swing). Star tic gets a 0.35 brightness glint as it lands face-on.
+- Broom (Kai's sparkle-broom SVG) top-right of the shelf toggles **Sweep**: toys knocked off
+  right→left (45ms stagger, −34px / −28°), box + chalk fade at 300ms, plain mono text row
+  writes in at 480ms. Reverse: text clears, box returns, toys slide back left→right.
+  Sparkles go out while tidied. Lands with the shelf out.
+- Links: selected works → /works, play ground → /play, humble abode → / (home),
+  field notes → `#` (no page yet), about me → /about.
+- Size: 0.86× on phones (16px+ gutters at 375), 1.4× from md. Desktop garden now yields
+  width on short screens (`Hero.tsx`) so tool cards sit where they did under the old bar.
+- Rejected: Hop, Float (hover); 3D thick-felt star turn (kept only the glint); Chalk line
+  (text only, no sweep), Unboxed (toys without box), Suspend (box hoisted on strings),
+  Elevator (box sinks into the floor).

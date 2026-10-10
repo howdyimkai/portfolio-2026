@@ -6,9 +6,9 @@ import { useRef } from 'react'
 import Image from 'next/image'
 import { enter, leave, tap, type Mode, type Rig, type Tic } from './motion'
 
-type Toy = { label: [string, string]; src: string; w: number; h: number; x0: number; x1: number; floor: number; width: number; tic: Tic }
+export type Toy = { label: [string, string]; src: string; w: number; h: number; x0: number; x1: number; floor: number; width: number; tic: Tic }
 
-const TOYS: Toy[] = [
+export const TOYS: Toy[] = [
   { label: ['selected', 'works'], src: '/proto/shelf/cloud.webp', w: 183, h: 111, x0: 25.5, x1: 81.5, floor: 85, width: 50, tic: 'puff' },
   { label: ['play', 'ground'], src: '/proto/shelf/pony.webp', w: 385, h: 395, x0: 95.5, x1: 157, floor: 87, width: 38, tic: 'prance' },
   { label: ['humble', 'abode'], src: '/proto/shelf/hat.webp', w: 139, h: 84, x0: 164, x1: 230, floor: 82, width: 50, tic: 'tip' },
@@ -16,7 +16,7 @@ const TOYS: Toy[] = [
   { label: ['about', 'me'], src: '/proto/shelf/star.webp', w: 89, h: 87, x0: 312.5, x1: 369, floor: 76, width: 32, tic: 'spin' },
 ]
 
-function Cubby({ toy, mode }: { toy: Toy; mode: Mode }) {
+export function Cubby({ toy, mode, i = 0 }: { toy: Toy; mode: Mode; i?: number }) {
   const toyRef = useRef<HTMLSpanElement>(null)
   const innerRef = useRef<HTMLSpanElement>(null)
   const shadowRef = useRef<HTMLSpanElement>(null)
@@ -30,7 +30,7 @@ function Cubby({ toy, mode }: { toy: Toy; mode: Mode }) {
     <a
       href="#"
       className="shelf-cubby"
-      style={{ left: toy.x0, width: toy.x1 - toy.x0 }}
+      style={{ left: toy.x0, width: toy.x1 - toy.x0, '--i': i } as React.CSSProperties}
       onClick={(e) => e.preventDefault()}
       onPointerEnter={(e) => e.pointerType === 'mouse' && rig() && enter(rig()!, mode)}
       onPointerLeave={(e) => e.pointerType === 'mouse' && rig() && leave(rig()!, mode)}

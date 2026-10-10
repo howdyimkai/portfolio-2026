@@ -72,6 +72,12 @@ untouched — out of scope for this exploration.
   no wordmark ("hello world" = home); other routes show the "Kai Tran"
   wordmark + 3 links. Each item's watercolor brush underlay fades in under
   the label on hover and stays persistent on the active page.
+- **`ShelfNav`** (`src/components/shelf/`) — the homepage nav (AppShell renders it
+  instead of `Navigation` on `/`). A shadow-box shelf of felt toys drawn at 1× shelf
+  units and scaled by `--zoom` (0.86 phones, 1.4 md+). Hover runs the "Tic" motion in
+  `shelfMotion.ts`; the broom button sweeps the toys off and leaves a plain text row.
+  Taller than the old bar, so `Hero.tsx` shrinks the garden on short desktop screens to
+  keep the tool cards at the fold. Decision record: `design-intent/nav-exploration/NOTES.md`.
 - **`ZenGarden`** — self-contained canvas-based tool system (teeth rake,
   eraser rake, blossom stamp). Rake/eraser act on **hover alone** — drawing
   starts on `pointerenter` and continues on every `pointermove`, no

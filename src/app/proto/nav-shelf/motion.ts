@@ -18,12 +18,13 @@ export type Cfg = {
   ease: Ease
   bounce: number // spring only
   speed: number // duration multiplier denominator — 0.25 plays at quarter speed
+  starGlint: number // star tic: brightness flash as it comes back face-on (0 = none)
 }
 
 export const DEFAULTS: Record<Mode, Cfg> = {
-  hop: { lift: 16, liftDeg: -10, settleDeg: 5, liftMs: 300, hangMs: 40, fallMs: 220, swingMs: 130, swings: 2, decay: 0.5, ease: 'spring', bounce: 0.3, speed: 1 },
-  float: { lift: 11, liftDeg: -6, settleDeg: 3, liftMs: 520, hangMs: 0, fallMs: 420, swingMs: 280, swings: 1, decay: 0.5, ease: 'soft', bounce: 0.3, speed: 1 },
-  tic: { lift: 13, liftDeg: -8, settleDeg: 4, liftMs: 280, hangMs: 0, fallMs: 240, swingMs: 150, swings: 1, decay: 0.5, ease: 'snappy', bounce: 0.3, speed: 1 },
+  hop: { lift: 16, liftDeg: -10, settleDeg: 5, liftMs: 300, hangMs: 40, fallMs: 220, swingMs: 130, swings: 2, decay: 0.5, ease: 'spring', bounce: 0.3, speed: 1, starGlint: 0.35 },
+  float: { lift: 11, liftDeg: -6, settleDeg: 3, liftMs: 520, hangMs: 0, fallMs: 420, swingMs: 280, swings: 1, decay: 0.5, ease: 'soft', bounce: 0.3, speed: 1, starGlint: 0.35 },
+  tic: { lift: 13, liftDeg: -8, settleDeg: 4, liftMs: 280, hangMs: 0, fallMs: 240, swingMs: 150, swings: 1, decay: 0.5, ease: 'snappy', bounce: 0.3, speed: 1, starGlint: 0.35 },
 }
 
 // Mutable live config, read at animation time so sliders never re-render the shelf.
@@ -158,11 +159,23 @@ function idle(rig: Rig, mode: Mode) {
     spin: { d: 1600, k: [{ transform: 'rotateY(0deg)', offset: 0 }, { transform: 'rotateY(360deg)', offset: 0.5 }, { transform: 'rotateY(360deg)', offset: 1 }] },
   }[rig.tic]
   rig.inner.animate(T.k, { ...it, duration: sp(T.d), easing: rig.tic === 'spin' ? 'cubic-bezier(0.45, 0, 0.25, 1)' : SWING })
+  // star: a shine flash as it lands face-on after the spin
+  if (rig.tic === 'spin' && cfg.starGlint > 0)
+    rig.inner.firstElementChild?.animate(
+      [
+        { filter: 'brightness(1)', offset: 0 },
+        { filter: 'brightness(1)', offset: 0.47 },
+        { filter: `brightness(${1 + cfg.starGlint})`, offset: 0.53 },
+        { filter: 'brightness(1)', offset: 0.66 },
+        { filter: 'brightness(1)', offset: 1 },
+      ],
+      { ...it, duration: sp(T.d) },
+    )
 }
 
 function stopIdle(rig: Rig) {
   const from = getComputedStyle(rig.inner).transform
-  rig.inner.getAnimations().forEach((a) => a.cancel())
+  rig.inner.getAnimations({ subtree: true }).forEach((a) => a.cancel())
   if (from !== 'none') rig.inner.animate([{ transform: from }, { transform: 'none' }], { duration: 160, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' })
 }
 

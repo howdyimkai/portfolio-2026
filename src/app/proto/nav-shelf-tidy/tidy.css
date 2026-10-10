@@ -1,0 +1,184 @@
+/* PROTOTYPE — throwaway. Delete with src/app/proto/nav-shelf-tidy.
+   Coordinates are 1× shelf units; .shelf scales them by --zoom.
+   Every state change is a CSS transition so a double-tap on the broom reverses mid-flight.
+   Each selector pair below: [data-tidy] = leaving (ease-in, quick), default = coming back (ease-out). */
+
+.tidy {
+  --tidy-ink: #4b1426; /* matches the filtered maroon wordmark */
+  --tidy-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --tidy-out: var(--ease-out-strong);
+}
+
+/* ---- Broom ---- */
+.tidy-broom {
+  position: absolute;
+  right: 2px;
+  top: -26px;
+  width: 22px; /* 44px at 2× */
+  height: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--tidy-ink);
+  cursor: pointer;
+  transition: scale 150ms var(--ease-out-strong);
+  -webkit-tap-highlight-color: transparent;
+}
+.tidy-broom svg { width: 13px; height: 13px; transform-origin: 70% 30%; transition: rotate 200ms var(--ease-out-strong); }
+.tidy-broom .tidy-spark { transform-box: fill-box; transform-origin: center; transition: opacity 200ms ease-out, scale 200ms var(--ease-out-strong); }
+.tidy-broom:active { scale: 0.96; }
+.tidy-broom:focus-visible { outline: 1px solid var(--tidy-ink); outline-offset: 1px; }
+@media (hover: hover) and (pointer: fine) {
+  .tidy-broom:hover svg { rotate: -10deg; }
+}
+/* Tidied: sparkles go out — the job's done; they return when there's mess again. */
+.tidy[data-tidy] .tidy-spark { opacity: 0; scale: 0.4; }
+
+/* Shared box transitions (returning). */
+.tidy .shelf-wood,
+.tidy .shelf-label,
+.tidy .shelf-row {
+  transition: opacity 240ms ease-out, scale 240ms var(--tidy-out);
+}
+
+/* ---- 1 · Sweep: toys knocked off right→left, then the box goes ---- */
+.tidy[data-variant='sweep'] .shelf-toy,
+.tidy[data-variant='sweep'] .shelf-shadow {
+  transition:
+    translate 280ms var(--tidy-out) calc(220ms + var(--i) * 45ms),
+    rotate 280ms var(--tidy-out) calc(220ms + var(--i) * 45ms),
+    opacity 200ms ease-out calc(220ms + var(--i) * 45ms);
+}
+.tidy[data-variant='sweep'][data-tidy] .shelf-toy {
+  translate: -34px 0;
+  rotate: -28deg;
+  opacity: 0;
+}
+.tidy[data-variant='sweep'][data-tidy] .shelf-shadow { opacity: 0; }
+.tidy[data-variant='sweep'][data-tidy] .shelf-toy,
+.tidy[data-variant='sweep'][data-tidy] .shelf-shadow {
+  transition:
+    translate 200ms var(--tidy-in) calc((4 - var(--i)) * 45ms),
+    rotate 200ms var(--tidy-in) calc((4 - var(--i)) * 45ms),
+    opacity 160ms var(--tidy-in) calc(40ms + (4 - var(--i)) * 45ms);
+}
+.tidy[data-variant='sweep'][data-tidy] .shelf-wood,
+.tidy[data-variant='sweep'][data-tidy] .shelf-label {
+  opacity: 0;
+  scale: 0.98;
+  transition: opacity 200ms var(--tidy-in) 300ms, scale 200ms var(--tidy-in) 300ms;
+}
+
+/* Sweep leaves the chalk row behind: it writes in once the box has gone,
+   and on the way back clears first so the box returns to an empty spot. */
+.tidy[data-variant='sweep'][data-tidy] .tidy-chalk a {
+  transition:
+    opacity 220ms ease-out calc(480ms + var(--i) * 35ms),
+    translate 220ms var(--tidy-out) calc(480ms + var(--i) * 35ms),
+    color 150ms ease;
+}
+.tidy[data-variant='sweep'] .shelf-wood,
+.tidy[data-variant='sweep'] .shelf-label {
+  transition: opacity 240ms ease-out 100ms, scale 240ms var(--tidy-out) 100ms;
+}
+
+/* ---- 4 · Elevator: the box, toys and all, sinks into the floor at its base
+   line, then the chalk row is left behind; coming back it rises out of the ground ---- */
+.tidy-well { position: absolute; inset: 0; }
+.tidy-box { position: absolute; inset: 0; }
+/* Clip only below the base line — hovering toys can still lift above the box. */
+.tidy[data-variant='elevator'] .tidy-well { clip-path: inset(-200px -200px 0 -200px); }
+.tidy[data-variant='elevator'] .tidy-box {
+  transition: translate 620ms cubic-bezier(0.22, 1, 0.36, 1) 120ms;
+}
+.tidy[data-variant='elevator'][data-tidy] .tidy-box {
+  translate: 0 106px;
+  transition: translate 560ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.tidy[data-variant='elevator'][data-tidy] .tidy-chalk a {
+  transition:
+    opacity 220ms ease-out calc(520ms + var(--i) * 35ms),
+    translate 220ms var(--tidy-out) calc(520ms + var(--i) * 35ms),
+    color 150ms ease;
+}
+
+/* ---- 2 · Chalk line: the box swaps for a plain row of links ---- */
+.tidy[data-variant='chalk'] .shelf-wood,
+.tidy[data-variant='chalk'] .shelf-row {
+  transition: opacity 240ms ease-out 100ms, scale 240ms var(--tidy-out) 100ms;
+}
+.tidy[data-variant='chalk'][data-tidy] .shelf-wood,
+.tidy[data-variant='chalk'][data-tidy] .shelf-row {
+  opacity: 0;
+  scale: 0.97;
+  transition: opacity 160ms var(--tidy-in), scale 160ms var(--tidy-in);
+}
+.tidy-chalk {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.tidy-chalk a {
+  padding: 6px 5px; /* hit area */
+  font-family: var(--font-commit-mono), ui-monospace, monospace;
+  font-size: 8px;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--color-ink-body);
+  text-decoration: none;
+  opacity: 0;
+  translate: 0 3px;
+  transition: opacity 140ms var(--tidy-in), translate 140ms var(--tidy-in), color 150ms ease;
+}
+.tidy[data-tidy] .tidy-chalk a {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity 220ms ease-out calc(120ms + var(--i) * 35ms),
+    translate 220ms var(--tidy-out) calc(120ms + var(--i) * 35ms),
+    color 150ms ease;
+}
+.tidy-chalk a:focus-visible { outline: 1px solid var(--color-ink-primary); outline-offset: -1px; border-radius: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .tidy-chalk a:hover { color: var(--tidy-ink); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 0.5px; }
+}
+
+/* ---- 3 · Unboxed: the box and chalk go, the toys stay with ink labels ---- */
+.tidy[data-variant='unboxed'][data-tidy] .shelf-wood,
+.tidy[data-variant='unboxed'][data-tidy] .shelf-label {
+  opacity: 0;
+  transition: opacity 200ms var(--tidy-in);
+}
+.tidy[data-variant='unboxed'][data-tidy] .shelf-cubby:focus-visible { box-shadow: 0 0 0 1px var(--color-ink-primary) inset; }
+.tidy-ink-label {
+  position: absolute;
+  top: 93px;
+  font-family: var(--font-commit-mono), ui-monospace, monospace;
+  font-size: 7px;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--color-ink-body);
+  pointer-events: none;
+  opacity: 0;
+  translate: 0 -2px;
+  transition: opacity 120ms var(--tidy-in), translate 120ms var(--tidy-in);
+}
+.tidy[data-tidy] .tidy-ink-label {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity 220ms ease-out calc(140ms + var(--i) * 35ms),
+    translate 220ms var(--tidy-out) calc(140ms + var(--i) * 35ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tidy *,
+  .tidy[data-tidy] * { transition: none !important; }
+}

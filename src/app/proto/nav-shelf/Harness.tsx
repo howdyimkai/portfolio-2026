@@ -34,6 +34,10 @@ const DIALS: { group: string; dials: Dial[] }[] = [
       { key: 'decay', label: 'Swing decay', min: 0.2, max: 0.9, step: 0.05, unit: '×' },
     ],
   },
+  {
+    group: 'Star',
+    dials: [{ key: 'starGlint', label: 'Glint', min: 0, max: 1, step: 0.05, unit: '', only: ['tic'] }],
+  },
 ]
 
 function Panel({ mode, onZoom, zoom }: { mode: Mode; zoom: number; onZoom: (z: number) => void }) {
@@ -83,7 +87,7 @@ function Panel({ mode, onZoom, zoom }: { mode: Mode; zoom: number; onZoom: (z: n
           <input type="range" min={0} max={0.7} step={0.05} value={cfg.bounce} onChange={(e) => set('bounce', Number(e.target.value))} />
         </label>
       )}
-      {DIALS.map((g) => (
+      {DIALS.filter((g) => g.dials.some((d) => !d.only || d.only.includes(mode))).map((g) => (
         <div key={g.group}>
           <p className="group">{g.group}</p>
           {g.dials

@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import ShelfNav from '@/components/shelf/ShelfNav'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -11,7 +12,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   if (isHome) {
     return (
       <div className="flex h-[100dvh] flex-col overflow-hidden">
-        <Navigation />
+        <ShelfNav />
         <main className="min-h-0 flex-1 overflow-hidden">{children}</main>
         <Footer />
       </div>
