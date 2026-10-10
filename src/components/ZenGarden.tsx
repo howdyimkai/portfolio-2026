@@ -143,18 +143,18 @@ const TOOLS: { key: Tool; label: string; icon: string; ratio: number }[] = [
 ]
 
 // --- Erase-the-name reveal (desktop only, 2026-07-19) ---
-// Kai's hand-written principles (same asset-not-CSS-type rule as kai-hero-title.webp):
-// write-on videos from design-intent/principles/, trimmed to the rewrite, background
-// levelled to pure white and cropped to a shared 1240x280 frame so the handwriting scale
-// matches across all five. They sit on the sand via mix-blend-mode: multiply, so white
+// Kai's hand-written principles (same asset-not-CSS-type rule as the hero title):
+// write-on videos from design-intent/principles-v2/ (bolder brush, two lines; 2026-10-08),
+// background levelled to pure white and cropped at native scale to a shared 1440x540 frame
+// centered on each ink bbox, so the handwriting scale matches across all five. They sit on the sand via mix-blend-mode: multiply, so white
 // drops out and only ink shows. The .webp is each video's final frame — the poster, and
 // the whole reveal under prefers-reduced-motion (the video is never played there).
 const PRINCIPLES = [
-  { text: 'great design disappears in use, but becomes priceless when it matters', src: '/principles/greatdesigns' },
-  { text: 'learning should feel like discovery, and discovery should feel like delight', src: '/principles/delight' },
-  { text: 'i design interfaces to fade, so content can shine and shimmer', src: '/principles/content' },
+  { text: 'learning should feel like discovery, and discovery should be delightful', src: '/principles/delight' },
   { text: 'the best designs remove friction rather than add', src: '/principles/removefriction' },
+  { text: 'great designs can be both genius and stupid simple', src: '/principles/simple' },
   { text: 'solid systems should be practical and save time', src: '/principles/solidsystems' },
+  { text: 'i design interfaces to fade, so content can shimmer and shine', src: '/principles/content' },
 ]
 
 // Coverage grid over the title's bounding box: erasing is tracked as swept cells, not a
@@ -168,11 +168,28 @@ const PRINCIPLES = [
 // read from the title asset's alpha once on mount). The bounding box has a lot of bare
 // sand around the letterforms; counting those cells meant you could wipe every visible
 // stroke and still sit under the threshold, hunting for invisible corners. Inked cells
-// count equally rather than by ink amount, so the thin "Kai Tran" script weighs as much
-// as the dense DESIGN ENGINEER band — the name is what people are trying to erase.
-const TITLE_SRC = '/hero/kai-hero-title.webp'
+// count equally rather than by ink amount, so thin strokes weigh as much as dense ones.
+//
+// The title is Kai's October hero (design-intent/Kai-October-Hero.GIF, 2026-10-08), a
+// line-boil loop. The GIF ping-pongs 7 drawings (1-7-2); here they're a sprite strip in
+// a scrambled order (1-4-2-6-3-7-5) so the boil reads as redrawn rather than as a
+// wobble, stepped by a CSS animation whose play state we own: an animated image can't
+// be paused or restarted. The still is frame 1 — painted first (the strip is ~4x the
+// bytes), the ink-grid source, and what rests underneath until the strip has loaded.
+const TITLE_STILL_SRC = '/hero/kai-hero-october-still.webp'
+const TITLE_BOIL_SRC = '/hero/kai-hero-october-boil.webp'
+const TITLE_BOIL_FRAMES = 7
+const TITLE_ALT = 'Kai Tran — designer and tinkerer. I make learning feel like play.'
 const TITLE_GRID_COLS = 16
 const TITLE_GRID_ROWS = 6
+
+// The title rests and wiggles (boils) only while the pointer is over it — Kai, 2026-10-08:
+// boiling on load / whenever the garden was entered "feels kinda abrupt". It finishes one
+// loop after the pointer leaves rather than stopping dead. Pausing freezes on whatever
+// drawing is up — every frame is a whole title, so there's no snap back to frame 1.
+// One loop = 7 frames at the GIF's 140ms (matches .title-boil in globals.css).
+const BOIL_LOOP_MS = 980
+const BOIL_TAIL_MS = BOIL_LOOP_MS
 const INK_CELL_MIN = 0.03
 const TITLE_ERASE_THRESHOLD = 0.8
 
@@ -180,6 +197,7 @@ const TITLE_ERASE_THRESHOLD = 0.8
 // the reveal starts — a fixed hold from the start ate 1.3-2.1s of it on the writing and
 // left ~2.5s to read (Kai, 2026-09-29: "snaps back too fast"). The return is a slow
 // settle with a beat of empty sand between principle and title, not a swap.
+const REVEAL_DELAY_MS = 1000
 const PRINCIPLE_ENTER_MS = 380
 const PRINCIPLE_READ_MS = 4000
 const PRINCIPLE_EXIT_MS = 600
@@ -196,7 +214,7 @@ const SETTLE_EASE = 'cubic-bezier(0.45, 0, 0.55, 1)'
 // timer is replaced by PRINCIPLE_IDLE_MS of inactivity, so a half-erased principle
 // finishes its return on its own instead of sitting there partly wiped.
 const PRINCIPLE_GRID_COLS = 20
-const PRINCIPLE_GRID_ROWS = 5
+const PRINCIPLE_GRID_ROWS = 8
 const PRINCIPLE_ERASE_THRESHOLD = 0.8
 const PRINCIPLE_IDLE_MS = 2500
 
@@ -261,6 +279,40 @@ function sweepInkCells(covered: boolean[], ink: InkGrid, rect: Rect, prev: Point
     }
   }
   return added
+}
+
+// Still first, then the sprite strip over it once loaded (the still is hidden then, or its
+// ink would show through the other frames). The strip is 7 cells wide, so one cell fills
+// the box; title-boil steps it across them. Reduced motion: the strip rests on cell 1.
+function TitleArt({ boiling }: { boiling: boolean }) {
+  const [stripReady, setStripReady] = useState(false)
+  const markReady = useCallback(() => setStripReady(true), [])
+  return (
+    <div role="img" aria-label={TITLE_ALT} className="absolute inset-0 overflow-hidden">
+      <Image
+        src={TITLE_STILL_SRC}
+        alt=""
+        fill
+        unoptimized
+        priority
+        draggable={false}
+        className={`object-contain ${stripReady ? 'invisible' : ''}`}
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        // A cached strip can finish before hydration attaches onLoad, so check on mount too.
+        ref={(el) => {
+          if (el?.complete && el.naturalWidth > 0 && !stripReady) markReady()
+        }}
+        src={TITLE_BOIL_SRC}
+        alt=""
+        draggable={false}
+        onLoad={markReady}
+        className={`title-boil absolute top-0 left-0 h-full max-w-none ${stripReady ? '' : 'invisible'}`}
+        style={{ width: `${TITLE_BOIL_FRAMES * 100}%`, animationPlayState: boiling ? 'running' : 'paused' }}
+      />
+    </div>
+  )
 }
 
 // Fisher-Yates shuffle of principle indices, with a guard so a fresh reshuffle never
@@ -415,8 +467,38 @@ export default function ZenGarden() {
 
   // Erase-the-name reveal state (desktop only — see PRINCIPLES block above).
   const titleElRef = useRef<HTMLDivElement>(null)
+
+  // Title boil (see BOIL_* above). Tracked apart from hoveringRef, which only follows
+  // hover while a tool is armed — the title wiggles under a bare pointer too.
+  const [titleBoiling, setTitleBoiling] = useState(false)
+  const boilTimerRef = useRef<number | null>(null)
+  const overTitleRef = useRef(false)
+  // Boil now; settle after `ms`, or keep going until told otherwise when null.
+  const boilFor = useCallback((ms: number | null) => {
+    if (boilTimerRef.current !== null) window.clearTimeout(boilTimerRef.current)
+    boilTimerRef.current = ms === null ? null : window.setTimeout(() => setTitleBoiling(false), ms)
+    setTitleBoiling(true)
+  }, [])
+  useEffect(
+    () => () => {
+      if (boilTimerRef.current !== null) window.clearTimeout(boilTimerRef.current)
+    },
+    []
+  )
   const isDesktopRef = useRef(false)
   const titleRectRef = useRef<Rect>({ left: 0, top: 0, width: 0, height: 0 })
+  // Desktop: the title sits in a pointer-events-none layer over the plot, so hover is a
+  // hit-test of plot-local points against its box (titleRectRef is zeroed on mobile).
+  const updateTitleHover = useCallback(
+    (p: Point | null) => {
+      const r = titleRectRef.current
+      const over = p !== null && p.x >= r.left && p.x <= r.left + r.width && p.y >= r.top && p.y <= r.top + r.height
+      if (over === overTitleRef.current) return
+      overTitleRef.current = over
+      boilFor(over ? null : BOIL_TAIL_MS)
+    },
+    [boilFor]
+  )
   const titleGridRef = useRef<boolean[]>(new Array(TITLE_GRID_COLS * TITLE_GRID_ROWS).fill(false))
   const titleCoveredCountRef = useRef(0)
   // Which cells hold ink, and how many — null until the mask is read.
@@ -544,57 +626,64 @@ export default function ZenGarden() {
       titleElRef.current.style.filter = 'blur(3px)'
     }
 
-    if (principleQueueRef.current.length === 0) {
-      principleQueueRef.current = shuffledPrincipleIndices(lastPrincipleRef.current)
-    }
-    const nextIndex = principleQueueRef.current.shift()!
-    lastPrincipleRef.current = nextIndex
-    setPrincipleIndex(nextIndex)
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const video = principleVideoRefs.current[nextIndex]
-    showPrincipleStill(reduceMotion)
-    if (video && !reduceMotion) {
-      video.currentTime = 0
-      // Autoplay of a muted inline video can still be refused; the poster (final frame)
-      // is already showing, so a rejected play() degrades to the static principle.
-      video.play().catch(() => {
-        showPrincipleStill(true)
-        principleErasableRef.current = true
-      })
-    }
-    setSequencePhase('principle-in')
-
-    // Principle hit area: the wrapper's untransformed box (it rests at scale 0.98 while
-    // hidden, so the bounding rect alone would be 2% small), centered on its layout center.
-    // Not erasable yet: the wipe that erased the title is usually still moving over this
-    // same spot, and would start wiping the principle the instant it appears. It opens
-    // up once the writing is done (video 'ended', or the hold timer for a still).
-    principleGridRef.current.fill(false)
-    principleCoveredCountRef.current = 0
-    principleErasableRef.current = false
-    const pEl = principleElRef.current
-    if (pEl) {
-      const b = pEl.getBoundingClientRect()
-      const w = pEl.offsetWidth
-      const h = pEl.offsetHeight
-      principleRectRef.current = {
-        left: b.left + b.width / 2 - w / 2 - rectRef.current.left,
-        top: b.top + b.height / 2 - h / 2 - rectRef.current.top,
-        width: w,
-        height: h,
-      }
-    }
-
-    // The reading clock starts when the write-on video finishes.
-    const writeMs = !reduceMotion && video && Number.isFinite(video.duration) ? video.duration * 1000 : 0
+    // A beat of bare sand between the wiped title and the principle writing in (Kai,
+    // 2026-10-08: it came in too soon after the erase). Queued with the other sequence
+    // timeouts so a reset mid-beat cancels it.
     sequenceTimeoutsRef.current.push(
       window.setTimeout(() => {
-        setSequencePhase('principle-hold')
-        if (principleStillRef.current) principleErasableRef.current = true
-      }, PRINCIPLE_ENTER_MS)
+        if (principleQueueRef.current.length === 0) {
+          principleQueueRef.current = shuffledPrincipleIndices(lastPrincipleRef.current)
+        }
+        const nextIndex = principleQueueRef.current.shift()!
+        lastPrincipleRef.current = nextIndex
+        setPrincipleIndex(nextIndex)
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        const video = principleVideoRefs.current[nextIndex]
+        showPrincipleStill(reduceMotion)
+        if (video && !reduceMotion) {
+          video.currentTime = 0
+          // Autoplay of a muted inline video can still be refused; the poster (final frame)
+          // is already showing, so a rejected play() degrades to the static principle.
+          video.play().catch(() => {
+            showPrincipleStill(true)
+            principleErasableRef.current = true
+          })
+        }
+        setSequencePhase('principle-in')
+
+        // Principle hit area: the wrapper's untransformed box (it rests at scale 0.98 while
+        // hidden, so the bounding rect alone would be 2% small), centered on its layout center.
+        // Not erasable yet: the wipe that erased the title is usually still moving over this
+        // same spot, and would start wiping the principle the instant it appears. It opens
+        // up once the writing is done (video 'ended', or the hold timer for a still).
+        principleGridRef.current.fill(false)
+        principleCoveredCountRef.current = 0
+        principleErasableRef.current = false
+        const pEl = principleElRef.current
+        if (pEl) {
+          const b = pEl.getBoundingClientRect()
+          const w = pEl.offsetWidth
+          const h = pEl.offsetHeight
+          principleRectRef.current = {
+            left: b.left + b.width / 2 - w / 2 - rectRef.current.left,
+            top: b.top + b.height / 2 - h / 2 - rectRef.current.top,
+            width: w,
+            height: h,
+          }
+        }
+
+        // The reading clock starts when the write-on video finishes.
+        const writeMs = !reduceMotion && video && Number.isFinite(video.duration) ? video.duration * 1000 : 0
+        sequenceTimeoutsRef.current.push(
+          window.setTimeout(() => {
+            setSequencePhase('principle-hold')
+            if (principleStillRef.current) principleErasableRef.current = true
+          }, PRINCIPLE_ENTER_MS)
+        )
+        scheduleAutoReturn(Math.max(PRINCIPLE_ENTER_MS, writeMs) + PRINCIPLE_READ_MS)
+      }, REVEAL_DELAY_MS)
     )
-    scheduleAutoReturn(Math.max(PRINCIPLE_ENTER_MS, writeMs) + PRINCIPLE_READ_MS)
   }, [showPrincipleStill, scheduleAutoReturn])
 
   // Coverage-driven fades for both the title and the principle: each towed-head step
@@ -652,7 +741,7 @@ export default function ZenGarden() {
   // erasing that target is a no-op.
   useEffect(() => {
     let cancelled = false
-    readInkGrid(TITLE_SRC, TITLE_GRID_COLS, TITLE_GRID_ROWS, (d, i) => d[i + 3] > 64).then(
+    readInkGrid(TITLE_STILL_SRC, TITLE_GRID_COLS, TITLE_GRID_ROWS, (d, i) => d[i + 3] > 64).then(
       (g) => {
         if (!cancelled) titleInkRef.current = g
       },
@@ -913,6 +1002,7 @@ export default function ZenGarden() {
   }
 
   const handlePointerMove = (e: React.PointerEvent) => {
+    updateTitleHover(getPoint(e))
     if (!toolRef.current) return
 
     // Use getCoalescedEvents when available so fast strokes get every intermediate
@@ -994,6 +1084,7 @@ export default function ZenGarden() {
   }
 
   const handlePointerEnter = (e: React.PointerEvent) => {
+    updateTitleHover(getPoint(e))
     if (!toolRef.current) return
     hoveringRef.current = true
     if (cursorRef.current) cursorRef.current.style.opacity = '1'
@@ -1014,6 +1105,7 @@ export default function ZenGarden() {
   }
 
   const handlePointerLeave = () => {
+    updateTitleHover(null)
     hoveringRef.current = false
     commitGesture()
     lastPointRef.current = null
@@ -1030,8 +1122,12 @@ export default function ZenGarden() {
   return (
     <div className="w-full">
       {/* Mobile: title sits above the plot as its own block (see 00-KaiMobileHERO frame) */}
-      <div className="relative mx-auto mb-6 aspect-[806/310] w-[78%] max-w-[320px] md:hidden">
-        <Image src="/hero/kai-hero-title.webp" alt="Kai Tran — Design Engineer" fill sizes="320px" className="object-contain" priority />
+      <div
+        className="relative mx-auto mb-6 aspect-[900/436] w-[78%] max-w-[320px] md:hidden"
+        onPointerEnter={() => boilFor(null)}
+        onPointerLeave={() => boilFor(BOIL_TAIL_MS)}
+      >
+        <TitleArt boiling={titleBoiling} />
       </div>
 
       <div
@@ -1079,9 +1175,9 @@ export default function ZenGarden() {
         <div className="pointer-events-none absolute inset-0 hidden flex-col items-center justify-center md:flex">
           <div
             ref={titleElRef}
-            className="relative aspect-[806/310] w-[46%] min-w-[220px] transition-[opacity,filter] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
+            className="relative aspect-[900/436] w-[46%] min-w-[220px] transition-[opacity,filter] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
           >
-            <Image src={TITLE_SRC} alt="Kai Tran — Design Engineer" fill draggable={false} sizes="420px" className="object-contain" priority />
+            <TitleArt boiling={titleBoiling} />
           </div>
 
           {/* mix-blend-multiply lives on this wrapper, not the videos: the wrapper's opacity
@@ -1095,7 +1191,7 @@ export default function ZenGarden() {
             role="img"
             aria-label={PRINCIPLES[principleIndex].text}
             aria-hidden={sequencePhase === 'idle'}
-            className={`absolute aspect-[1240/280] w-[67%] mix-blend-multiply transition-[opacity,transform,filter] motion-reduce:scale-100 motion-reduce:blur-[0px] ${
+            className={`absolute aspect-[1440/540] w-[67%] mix-blend-multiply transition-[opacity,transform,filter] motion-reduce:scale-100 motion-reduce:blur-[0px] ${
               sequencePhase === 'principle-in' || sequencePhase === 'principle-hold'
                 ? 'scale-100 opacity-100 blur-[0px] duration-[380ms] ease-[cubic-bezier(0.23,1,0.32,1)]'
                 : `scale-[0.98] opacity-0 duration-[600ms] ease-[cubic-bezier(0.45,0,0.55,1)] ${principleStill ? 'blur-[3px]' : ''}`

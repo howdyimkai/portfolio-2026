@@ -20,8 +20,18 @@ untouched — out of scope for this exploration.
   eyeballing (see git log on `explore/k-zen` for examples of the row/col
   color-diff scanning approach used to place the garden elements).
 - `design-intent/*.png` (`@2x` exports) — rendering truth for garden art.
-  Never recreate these with CSS gradients/fonts. `KaiHeroTitle@2x.png` is the
-  hero title asset, not typography. Current tool art:
+  Never recreate these with CSS gradients/fonts. The hero title is an asset, not
+  typography: `Kai-October-Hero.GIF` (2026-10-08, supersedes
+  `KaiHeroTitle@2x.png`), a line-boil GIF that ping-pongs 7 unique drawings
+  at 140ms. Shipped as a 7-cell sprite strip in scrambled order (1-4-2-6-3-7-5,
+  `public/hero/kai-hero-october-boil.webp`, `cwebp -q 60 -alpha_q 50 -m 6`,
+  ~320KB) stepped by the `.title-boil` keyframe in `globals.css`, plus a
+  first-frame still that paints first and feeds the ink grid. Not an animated
+  WebP on purpose: the title rests and only wiggles while hovered (desktop:
+  hit-tested from the plot's pointer events, since the title layer is
+  pointer-events-none; mobile: a tap plays one loop), finishing one loop after
+  the pointer leaves, which needs `animation-play-state`. Kai, 2026-10-08:
+  auto-boiling on load / garden entry "feels kinda abrupt". Current tool art:
   `Teethrake4prongs-2x.png` (teeth rake — also the groove SCALE truth: 4
   tines, drawn band ≈ its prong span at the 40px cursor, ~13.4px between
   outer tine centers) and `cherryblossomstampNEW@2x.png` (blossom).
@@ -117,7 +127,8 @@ untouched — out of scope for this exploration.
   without touching the groove rendering system described above.
 
   **Erase-the-name reveal (desktop only, 2026-09-29):** sweeping the eraser
-  over the hero title fades it by swept coverage, then plays one of Kai's five
+  over the hero title fades it by swept coverage, then — after a 1s beat of
+  bare sand (`REVEAL_DELAY_MS`, 2026-10-08) — plays one of Kai's five
   hand-written principles as a write-on video, holds, and fades back to the
   title (shuffled bag, no repeat at the seam). Coverage is a 16×6 grid where
   only cells holding title ink count (mask read from the asset's alpha), hit
@@ -134,18 +145,19 @@ untouched — out of scope for this exploration.
   (multiply makes it visible), so when the write-on ends the video is swapped
   for its identical `.webp` still, and blur is only ever applied to the still.
   The principle is **erasable** like the title (same swept-segment coverage
-  over an ink-only 20×5 grid read from the still, scrubbed opacity + blur) —
+  over an ink-only 20×8 grid read from the still, scrubbed opacity + blur) —
   but only once its writing has finished, because the wipe that erased the
   title is usually still moving over the same spot. Fully erased → title
   returns; partly erased then left alone for 2.5s → finishes on its own;
   never touched → the 4s read timer returns it.
-  Sources are `design-intent/principles/*` (each opens ~1.1s on the finished
-  sentence, then a blank flash, then the rewrite). Regenerate by trimming to
-  the last blank frame, `hue=s=0` + `curves=all='0/0 0.88/1 1/1'` to level the
-  paper to pure white, and cropping to a shared 1240×280 frame centered on
-  each ink bbox so the handwriting scale matches. Verifying with synthetic
-  events: React's `onPointerEnter` is driven by `pointerover`, not
-  `pointerenter`.
+  Sources are `design-intent/principles-v2/*` (bolder brush, two lines,
+  2026-10-08; v1 single-line originals stay in `design-intent/principles/`).
+  v2 clips already start blank, so regenerate by dropping any leading blank
+  frames, `hue=s=0` + `curves=all='0/0 0.88/1 1/1'` to level the paper to pure
+  white, then padding white and cropping at native scale to a shared 1440×540
+  frame centered on each ink bbox so the handwriting scale matches. Verifying
+  with synthetic events: React's `onPointerEnter` is driven by `pointerover`,
+  not `pointerenter`.
 
 ## Assets
 
