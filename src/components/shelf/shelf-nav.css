@@ -1,7 +1,9 @@
-/* Homepage shelf nav. Drawn at 1× shelf units (394×150: wordmark band + 394×104 box)
+/* Homepage shelf nav. Drawn at 1× shelf units (394×160: wordmark band + 394×104 box)
    and scaled by --zoom; the header reserves the scaled footprint so layout stays honest.
    Tidy/untidy are CSS transitions so a double-tap on the broom reverses mid-flight:
-   [data-tidy] rules = leaving (ease-in, quick), default rules = coming back (ease-out). */
+   [data-tidy] rules = leaving (ease-in, quick), default rules = coming back (ease-out).
+   Once the box has gone, ShelfNav sets [data-compact]: the header collapses to the
+   wordmark + text row and the garden grows into the space (FLIP-animated in ShelfNav). */
 
 .shelf-nav {
   --zoom: 0.86; /* 339px wide: keeps a 16px+ gutter at 375 */
@@ -14,42 +16,68 @@
   justify-content: center;
   padding-top: 8px;
 }
+/* Desktop: the shelf is 70% of the garden's width, and both share the fold.
+   The homepage stacks: shelf pad 36 + 160·zoom, hero pad 20, garden W/1.553, cards gap 40,
+   card peek 148 (whole blossom). With zoom = 0.7·W/394 that solves to
+   W = (1.553·100dvh − 378.9px) / 1.4415, capped at 900. Hero.tsx reads --home-garden-w;
+   tan(atan2(len, len)) turns the length ratio into the unitless zoom scale() needs.
+   Compact keeps that zoom (the wordmark doesn't jump) and frees the header down to 96·zoom:
+   W = 1.553·(100dvh − 244px − 96px·zoom), capped at 900. */
 @media (min-width: 768px) {
-  .shelf-nav { --zoom: 1.4; padding-top: 12px; }
+  :root {
+    --home-garden-base: min(900px, calc(107.74dvh - 262.9px));
+    --shelf-zoom: tan(atan2(var(--home-garden-base), 562.86px));
+    --home-garden-w: var(--home-garden-base);
+  }
+  :root:has(.shelf-nav-draw[data-compact]) {
+    --home-garden-w: min(900px, calc(155.3dvh - 378.9px - 149.1px * var(--shelf-zoom)));
+  }
+  .shelf-nav { --zoom: var(--shelf-zoom); padding-top: 36px; }
 }
 .shelf-nav::before {
   /* Reserve the scaled drawing's footprint. */
   content: '';
   display: block;
   width: calc(394px * var(--zoom));
-  height: calc(150px * var(--zoom));
+  height: calc(160px * var(--zoom));
+}
+/* Compact: wordmark band + text row only (two wrapped rows on phones). */
+.shelf-nav:has([data-compact])::before { height: calc(136px * var(--zoom)); }
+@media (min-width: 768px) {
+  .shelf-nav:has([data-compact])::before { height: calc(96px * var(--zoom)); }
 }
 .shelf-nav-draw {
   position: absolute;
   left: 50%;
   width: 394px;
-  height: 150px;
+  height: 160px;
   margin-left: calc(-197px * var(--zoom));
   transform: scale(var(--zoom));
   transform-origin: 0 0;
 }
 .shelf-nav-draw { top: 8px; }
 @media (min-width: 768px) {
-  .shelf-nav-draw { top: 12px; }
+  .shelf-nav-draw { top: 36px; }
 }
 
 .shelf-wordmark {
   position: absolute;
   left: 50%;
-  top: 6px;
-  width: 128px;
+  top: 4px;
+  width: 152px; /* sized up for legibility (Kai, 2026-10-10) */
   height: auto;
   transform: translateX(-46%);
   pointer-events: none;
   /* The source asset is grey; Kai's mock inks it maroon. */
   filter: brightness(0) saturate(100%) invert(9%) sepia(46%) saturate(2400%) hue-rotate(315deg);
 }
-.shelf-box { position: absolute; left: 0; top: 46px; width: 394px; height: 104px; }
+.shelf-box { position: absolute; left: 0; top: 56px; width: 394px; height: 104px; }
+/* Containers never catch the pointer — once compact, the box overhangs the garden's top edge. */
+.shelf-box,
+.shelf-row,
+.shelf-text { pointer-events: none; }
+.shelf-cubby,
+.shelf-text a { pointer-events: auto; }
 .shelf-wood { position: absolute; inset: 0; width: 394px; height: 104px; pointer-events: none; }
 .shelf-row { position: absolute; inset: 0; }
 
@@ -57,7 +85,7 @@
 .shelf-broom {
   position: absolute;
   right: 2px;
-  top: 20px;
+  top: 25px;
   width: 22px;
   height: 22px;
   display: grid;
@@ -99,7 +127,7 @@
   left: 6px;
   top: 8px;
   font-family: var(--font-commit-mono), ui-monospace, monospace;
-  font-size: 7.5px;
+  font-size: 9.5px;
   line-height: 0.95;
   letter-spacing: 0.01em;
   color: rgba(236, 232, 224, 0.82);
@@ -134,9 +162,9 @@
 .shelf-toy,
 .shelf-shadow {
   transition:
-    translate 280ms var(--shelf-out) calc(220ms + var(--i) * 45ms),
-    rotate 280ms var(--shelf-out) calc(220ms + var(--i) * 45ms),
-    opacity 200ms ease-out calc(220ms + var(--i) * 45ms);
+    translate 280ms var(--shelf-out) calc(720ms + var(--i) * 45ms),
+    rotate 280ms var(--shelf-out) calc(720ms + var(--i) * 45ms),
+    opacity 200ms ease-out calc(720ms + var(--i) * 45ms);
 }
 [data-tidy] .shelf-toy { translate: -34px 0; rotate: -28deg; opacity: 0; }
 [data-tidy] .shelf-shadow { opacity: 0; }
@@ -149,7 +177,8 @@
 }
 .shelf-wood,
 .shelf-label {
-  transition: opacity 240ms ease-out 100ms, scale 240ms var(--shelf-out) 100ms;
+  /* Coming back waits ~600ms: text out, then the header re-expands, then the box. */
+  transition: opacity 240ms ease-out 600ms, scale 240ms var(--shelf-out) 600ms;
 }
 [data-tidy] .shelf-wood,
 [data-tidy] .shelf-label {
@@ -166,10 +195,12 @@
   justify-content: center;
   gap: 4px;
 }
+/* Compact: the row tucks up under the wordmark (box top 56 + 10 = y 66). */
+[data-compact] .shelf-text { top: 10px; bottom: auto; align-items: flex-start; align-content: flex-start; }
 .shelf-text a {
   padding: 6px 5px; /* hit area */
   font-family: var(--font-commit-mono), ui-monospace, monospace;
-  font-size: 8px;
+  font-size: calc(14px / var(--zoom)); /* 14px on screen at any zoom — the old bar's size */
   line-height: 1;
   white-space: nowrap;
   color: var(--color-ink-body);
@@ -178,18 +209,18 @@
   translate: 0 3px;
   transition: opacity 140ms var(--shelf-in), translate 140ms var(--shelf-in), color 150ms ease;
 }
-/* Phones: 8px × 0.86 is unreadable — set it to ~12px rendered and let the row wrap to two lines. */
+/* Phones: at 0.86× the row is wider than the screen — wrap it to two lines. */
 @media (max-width: 767px) {
   .shelf-text { flex-wrap: wrap; align-content: center; column-gap: 2px; padding: 0 12px; }
-  .shelf-text a { font-size: 14px; padding: 8px 6px; }
+  .shelf-text a { padding: 8px 6px; }
 }
 .shelf-text a[aria-current='page'] { color: var(--color-ink-primary); }
-[data-tidy] .shelf-text a {
+[data-tidy][data-compact] .shelf-text a {
   opacity: 1;
   translate: 0 0;
   transition:
-    opacity 220ms ease-out calc(480ms + var(--i) * 35ms),
-    translate 220ms var(--shelf-out) calc(480ms + var(--i) * 35ms),
+    opacity 220ms ease-out calc(180ms + var(--i) * 35ms),
+    translate 220ms var(--shelf-out) calc(180ms + var(--i) * 35ms),
     color 150ms ease;
 }
 .shelf-text a:focus-visible { outline: 1px solid var(--color-ink-primary); outline-offset: -1px; border-radius: 2px; }

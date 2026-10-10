@@ -4,7 +4,7 @@
 // toys off and leaves a plain text row behind. Picked from /proto/nav-shelf-tidy (Sweep).
 // Coordinates are 1× shelf units (394×104, measured off design-intent/pony-test/
 // Chalk inside shelf@2x.png); .shelf-nav scales the whole drawing by --zoom.
-import { useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -75,10 +75,58 @@ function Broom() {
   )
 }
 
+// The header collapses once the swept box has faded (~500ms in), and re-expands
+// after the text row has cleared (~150ms in) on the way back.
+const COMPACT_AFTER_MS = 520
+const EXPAND_AFTER_MS = 150
+const GROW_MS = 460
+
 export default function ShelfNav() {
   const pathname = usePathname()
   const [tidy, setTidy] = useState(false)
+  const [compact, setCompact] = useState(false)
   const broomRef = useRef<HTMLButtonElement>(null)
+  const timer = useRef<number | undefined>(undefined)
+
+  useEffect(() => () => window.clearTimeout(timer.current), [])
+
+  const before = useRef<{ plot: DOMRect; tools: DOMRect } | null>(null)
+  const parts = () => {
+    const plot = document.querySelector<HTMLElement>('[data-home-hero] .garden-plot')
+    const tools = document.querySelector<HTMLElement>('[data-home-tools]')
+    return plot && tools ? { plot, tools } : null
+  }
+
+  // Swap the layout in one step, then FLIP from the old boxes to the new ones: the garden
+  // scales (its canvas re-measures once, not every frame); the tool cards keep their size
+  // and only slide, so they never shrink-and-regrow.
+  const setLayout = (next: boolean) => {
+    const p = parts()
+    before.current = p ? { plot: p.plot.getBoundingClientRect(), tools: p.tools.getBoundingClientRect() } : null
+    setCompact(next)
+  }
+
+  useLayoutEffect(() => {
+    const p = parts()
+    const b = before.current
+    before.current = null
+    if (!p || !b || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    p.plot.getAnimations().forEach((a) => a.cancel())
+    p.tools.getAnimations().forEach((a) => a.cancel())
+    const plot = p.plot.getBoundingClientRect()
+    const tools = p.tools.getBoundingClientRect()
+    if (!plot.width) return
+    const timing = { duration: GROW_MS, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
+    const dx = b.plot.left - plot.left + (b.plot.width - plot.width) / 2
+    p.plot.animate(
+      [
+        { transformOrigin: '50% 0', transform: `translate(${dx}px, ${b.plot.top - plot.top}px) scale(${b.plot.width / plot.width})` },
+        { transformOrigin: '50% 0', transform: 'none' },
+      ],
+      timing,
+    )
+    p.tools.animate([{ transform: `translateY(${b.tools.top - tools.top}px)` }, { transform: 'none' }], timing)
+  }, [compact])
 
   const toggle = () => {
     // One-shot sweep flick on every press; it always runs to completion.
@@ -87,12 +135,15 @@ export default function ShelfNav() {
         [{ rotate: '0deg' }, { rotate: '-22deg', offset: 0.35 }, { rotate: '10deg', offset: 0.7 }, { rotate: '0deg' }],
         { duration: 360, easing: 'cubic-bezier(0.45, 0, 0.25, 1)' },
       )
-    setTidy((t) => !t)
+    const next = !tidy
+    setTidy(next)
+    window.clearTimeout(timer.current)
+    if (next !== compact) timer.current = window.setTimeout(() => setLayout(next), next ? COMPACT_AFTER_MS : EXPAND_AFTER_MS)
   }
 
   return (
     <header className="shelf-nav">
-      <div className="shelf-nav-draw" data-tidy={tidy ? '' : undefined}>
+      <div className="shelf-nav-draw" data-tidy={tidy ? '' : undefined} data-compact={compact ? '' : undefined}>
         <Image src="/nav/shelf/wordmark.webp" alt="howdy im Kai" width={309} height={130} className="shelf-wordmark" draggable={false} priority unoptimized />
 
         <button ref={broomRef} type="button" className="shelf-broom" aria-pressed={tidy} aria-label="Tidy up navigation" onClick={toggle}>

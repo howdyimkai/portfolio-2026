@@ -65,7 +65,8 @@ untouched — out of scope for this exploration.
 
 - **`AppShell`** (`src/components/AppShell.tsx`) — route-aware shell used by
   `layout.tsx`. The homepage is locked to `h-[100dvh]` with `overflow-hidden`
-  on `main` — no page scroll at all; content that doesn't fit (the tool
+  on the outer wrapper (not `main` — clipping main's top edge cut the garden while
+  ShelfNav animates it across the header line) — no page scroll at all; content that doesn't fit (the tool
   cards) is genuinely clipped at the fold, not just scrollable-to. Every
   other route uses normal `min-h-screen` scrolling.
 - **`Navigation`** — route-aware: homepage renders 4 items edge-to-edge with

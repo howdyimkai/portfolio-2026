@@ -13,7 +13,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="flex h-[100dvh] flex-col overflow-hidden">
         <ShelfNav />
-        <main className="min-h-0 flex-1 overflow-hidden">{children}</main>
+        {/* No clip here: the outer div already crops at the fold, and clipping main's top edge
+            would cut the garden while ShelfNav animates it across the header boundary. */}
+        <main className="min-h-0 flex-1">{children}</main>
         <Footer />
       </div>
     )

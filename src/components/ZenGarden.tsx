@@ -826,10 +826,20 @@ export default function ZenGarden() {
     blossomImgRef.current = img
   }, [])
 
+  const resizeRef = useRef<() => void>(() => {})
   const resize = useCallback(() => {
     const wrap = wrapRef.current
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
+    // ShelfNav grows/shrinks the plot with a FLIP transform when its header collapses, and
+    // the ResizeObserver fires on that animation's first frame — getBoundingClientRect would
+    // report the in-between size. Measure once the transform has settled instead.
+    const running = wrap.getAnimations()
+    if (running.length) {
+      const again = () => resizeRef.current()
+      Promise.all(running.map((a) => a.finished)).then(again, again)
+      return
+    }
     const rect = wrap.getBoundingClientRect()
     rectRef.current = { left: rect.left, top: rect.top, width: rect.width, height: rect.height }
     const dpr = window.devicePixelRatio || 1
@@ -886,6 +896,7 @@ export default function ZenGarden() {
   }, [resetTitleErase])
 
   useEffect(() => {
+    resizeRef.current = resize
     resize()
     const ro = new ResizeObserver(resize)
     if (wrapRef.current) ro.observe(wrapRef.current)
@@ -1123,7 +1134,7 @@ export default function ZenGarden() {
     <div className="w-full">
       {/* Mobile: title sits above the plot as its own block (see 00-KaiMobileHERO frame) */}
       <div
-        className="relative mx-auto mb-6 aspect-[900/436] w-[78%] max-w-[320px] md:hidden"
+        className="relative mx-auto mb-6 aspect-[900/436] w-[90%] max-w-[368px] md:hidden"
         onPointerEnter={() => boilFor(null)}
         onPointerLeave={() => boilFor(BOIL_TAIL_MS)}
       >
@@ -1175,7 +1186,7 @@ export default function ZenGarden() {
         <div className="pointer-events-none absolute inset-0 hidden flex-col items-center justify-center md:flex">
           <div
             ref={titleElRef}
-            className="relative aspect-[900/436] w-[46%] min-w-[220px] transition-[opacity,filter] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
+            className="relative aspect-[900/436] w-[53%] min-w-[253px] transition-[opacity,filter] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
           >
             <TitleArt boiling={titleBoiling} />
           </div>
@@ -1269,19 +1280,19 @@ export default function ZenGarden() {
         )}
       </div>
 
-      <div className="mt-10 flex justify-center gap-6 md:gap-10">
+      <div data-home-tools className="mt-10 flex justify-center gap-6 md:gap-8">
         {TOOLS.map((t) => (
           <button
             key={t.key}
             type="button"
             onClick={() => setTool(t.key)}
             aria-pressed={tool === t.key}
-            className={`tool-card press-scale flex w-32 flex-col items-center gap-4 overflow-hidden rounded-2xl border border-hairline bg-page px-4 pt-5 font-mono text-xs text-ink-body md:w-44 ${
+            className={`tool-card press-scale flex w-32 flex-col items-center gap-4 overflow-hidden rounded-2xl border border-hairline bg-page px-4 pt-5 font-mono text-xs text-ink-body md:w-[140px] md:gap-3 md:pt-4 ${
               tool === t.key ? 'is-selected' : ''
             }`}
           >
             {t.label}
-            <span className="relative w-20 md:w-28" style={{ aspectRatio: t.ratio }}>
+            <span className="relative w-20 md:w-[90px]" style={{ aspectRatio: t.ratio }}>
               <Image src={t.icon} alt="" fill sizes="112px" className="object-contain" />
             </span>
           </button>
