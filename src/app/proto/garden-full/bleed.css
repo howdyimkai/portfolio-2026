@@ -1,0 +1,8 @@
+/* Full bleed: the shelf is 1.21× on tall windows and eases down toward 1× on short ones so
+   it keeps ~50px clear of the hero title (title top = 50dvh − 127px at 1440-class widths;
+   shelf bottom = 36px + 160px·zoom). Full size from ~813px tall; 1× floor below ~733px. */
+@media (min-width: 768px) {
+  .bleed-shelf {
+    --shelf-zoom: clamp(1, tan(atan2(50dvh - 213px, 160px)), 1.21);
+  }
+}
