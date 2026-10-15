@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import ShelfNav from '@/components/shelf/ShelfNav'
+import NavPiece from './NavPiece'
 import './piece.css'
 
 // One piece of the portfolio on its own: the shelf nav, centered on bare page,
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="piece-stage">
-      <ShelfNav />
+      <NavPiece />
     </div>
   )
 }

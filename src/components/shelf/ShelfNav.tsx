@@ -22,7 +22,7 @@ const TOYS: Toy[] = [
   { label: 'about me', href: '/about', src: '/nav/shelf/star.webp', w: 89, h: 87, x0: 312.5, x1: 369, floor: 76, width: 32, tic: 'spin' },
 ]
 
-function Cubby({ toy, i, active }: { toy: Toy; i: number; active: boolean }) {
+function Cubby({ toy, i, active, landing, onSelect }: { toy: Toy; i: number; active: boolean; landing: boolean; onSelect?: (href: string) => void }) {
   const toyRef = useRef<HTMLSpanElement>(null)
   const innerRef = useRef<HTMLSpanElement>(null)
   const shadowRef = useRef<HTMLSpanElement>(null)
@@ -38,7 +38,13 @@ function Cubby({ toy, i, active }: { toy: Toy; i: number; active: boolean }) {
       href={toy.href}
       className="shelf-cubby"
       aria-current={active ? 'page' : undefined}
+      data-landing={landing ? '' : undefined}
       style={{ left: toy.x0, width: toy.x1 - toy.x0, '--i': i } as React.CSSProperties}
+      onClick={(e) => {
+        if (!onSelect) return
+        e.preventDefault()
+        onSelect(toy.href)
+      }}
       onPointerEnter={(e) => e.pointerType === 'mouse' && rig() && enter(rig()!)}
       onPointerLeave={(e) => e.pointerType === 'mouse' && rig() && leave(rig()!)}
       onPointerDown={(e) => e.pointerType !== 'mouse' && rig() && tap(rig()!)}
@@ -81,10 +87,19 @@ const COMPACT_AFTER_MS = 520
 const EXPAND_AFTER_MS = 150
 const GROW_MS = 460
 
-// `activeHref` lets a prototype route light up the cubby it stands in for.
-export default function ShelfNav({ activeHref }: { activeHref?: string } = {}) {
+// `activeHref` lets a prototype route light up the cubby it stands in for; with `onSelect`,
+// picking a cubby moves the spotlight in place instead of navigating (/pieces/nav).
+export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string; onSelect?: (href: string) => void } = {}) {
   const route = usePathname()
   const pathname = activeHref ?? route
+  // The cubby that just lost the spotlight sets its toy back down.
+  const [shown, setShown] = useState(pathname)
+  const [landing, setLanding] = useState<string | null>(null)
+  if (shown !== pathname) {
+    setLanding(shown)
+    setShown(pathname)
+  }
+  const spot = TOYS.find((t) => t.href === pathname)
   const [tidy, setTidy] = useState(false)
   const [compact, setCompact] = useState(false)
   const broomRef = useRef<HTMLButtonElement>(null)
@@ -155,8 +170,16 @@ export default function ShelfNav({ activeHref }: { activeHref?: string } = {}) {
         <div className="shelf-box">
           <Image src="/nav/shelf/shelf.webp" alt="" width={788} height={208} className="shelf-wood" draggable={false} priority unoptimized />
           <nav className="shelf-row" aria-label="Main" inert={tidy}>
+            {/* One light for the whole shelf, so a new page slides it across rather than
+                switching it off in one cubby and on in another. */}
+            <span
+              className="shelf-spot"
+              data-on={spot ? '' : undefined}
+              style={spot ? { left: spot.x0, width: spot.x1 - spot.x0 } : undefined}
+              aria-hidden
+            />
             {TOYS.map((t, i) => (
-              <Cubby key={t.label} toy={t} i={i} active={pathname === t.href} />
+              <Cubby key={t.label} toy={t} i={i} active={pathname === t.href} landing={landing === t.href} onSelect={onSelect} />
             ))}
           </nav>
           {/* Left behind once the toys are swept off. */}

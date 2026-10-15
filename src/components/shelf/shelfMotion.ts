@@ -21,6 +21,11 @@ const SWING = 'cubic-bezier(0.37, 0, 0.63, 1)' // even sine-like in-out
 
 type Pose = { ms: number; ty: number; r: number; easing?: string }
 
+// Only cancel what this file started: the active cubby's float is a CSS animation on the
+// same elements, and cancelling a CSS animation stops it until its name changes.
+const ours = (a: Animation) => !(a instanceof CSSAnimation)
+const cancelOurs = (el: Element, opts?: GetAnimationsOptions) => el.getAnimations(opts).filter(ours).forEach((a) => a.cancel())
+
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 const tf = (p: Pose) => `translateY(${p.ty}px) rotate(${p.r}deg)`
@@ -44,8 +49,8 @@ function play(rig: Rig, poses: Pose[], hold: boolean) {
     ...(i === 0 ? { transform: fromShadow.transform, opacity: Number(fromShadow.opacity) } : shadowOf(p.ty)),
     easing: p.easing ?? 'linear',
   }))
-  rig.toy.getAnimations().forEach((a) => a.cancel())
-  rig.shadow.getAnimations().forEach((a) => a.cancel())
+  cancelOurs(rig.toy)
+  cancelOurs(rig.shadow)
   const opts: KeyframeAnimationOptions = { duration: total, fill: hold ? 'forwards' : 'none' }
   rig.toy.animate(toyFrames, opts)
   rig.shadow.animate(shFrames, opts)
@@ -126,7 +131,7 @@ function idle(rig: Rig) {
 
 function stopIdle(rig: Rig) {
   const from = getComputedStyle(rig.inner).transform
-  rig.inner.getAnimations({ subtree: true }).forEach((a) => a.cancel())
+  cancelOurs(rig.inner, { subtree: true })
   if (from !== 'none') rig.inner.animate([{ transform: from }, { transform: 'none' }], { duration: 160, easing: LIFT_EASE })
 }
 

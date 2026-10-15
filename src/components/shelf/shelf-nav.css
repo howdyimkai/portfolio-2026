@@ -239,26 +239,40 @@
 }
 
 /* ---- You are here: a spotlight on the active cubby, its toy idling just off the floor ---- */
-.shelf-cubby[aria-current='page']::before {
+.shelf-spot {
   /* A warm cone from the top of the cubby that pools on the floor. Screen keeps the
      chalkboard's texture showing through, so it reads as light, not paint. */
-  content: '';
   position: absolute;
-  inset: -8px 0 0;
+  top: 0;
+  height: 92px;
   background:
     radial-gradient(60% 18% at 50% 92%, rgba(255, 236, 196, 0.6), transparent 100%),
     radial-gradient(70% 115% at 50% -12%, rgba(255, 232, 186, 0.48), rgba(255, 232, 186, 0.14) 62%, transparent 82%);
   mix-blend-mode: screen;
+  opacity: 0;
   pointer-events: none;
-  transition: opacity 240ms ease-out 600ms;
+  /* Moving between cubbies, the light swings across the shelf like a stage lamp. */
+  transition:
+    opacity 240ms ease-out 600ms,
+    left 560ms cubic-bezier(0.65, 0, 0.35, 1),
+    width 560ms cubic-bezier(0.65, 0, 0.35, 1);
 }
-[data-tidy] .shelf-cubby[aria-current='page']::before { opacity: 0; transition: opacity 200ms var(--shelf-in) 300ms; }
+.shelf-spot[data-on] { opacity: 1; }
+[data-tidy] .shelf-spot { opacity: 0; transition: opacity 200ms var(--shelf-in) 300ms; }
+.shelf-label { transition: opacity 240ms ease-out 600ms, scale 240ms var(--shelf-out) 600ms, color 300ms ease-out 260ms; }
 .shelf-cubby[aria-current='page'] .shelf-label { color: rgba(250, 244, 230, 0.95); }
 
 /* The idle float lives on the img and shadow's own `translate`/`scale`, so it composes
    with the hover lift (WAAPI transform on .shelf-toy / .shelf-shadow) instead of fighting it. */
-.shelf-cubby[aria-current='page'] .shelf-toy img { animation: shelf-hover-idle 3.2s cubic-bezier(0.37, 0, 0.63, 1) infinite; }
-.shelf-cubby[aria-current='page'] .shelf-shadow { animation: shelf-hover-shadow 3.2s cubic-bezier(0.37, 0, 0.63, 1) infinite; }
+.shelf-cubby[aria-current='page'] .shelf-toy img { animation: shelf-lift 420ms var(--ease-out-strong) 300ms backwards, shelf-hover-idle 3.2s cubic-bezier(0.37, 0, 0.63, 1) 720ms infinite; }
+.shelf-cubby[aria-current='page'] .shelf-shadow { animation: shelf-lift-shadow 420ms var(--ease-out-strong) 300ms backwards, shelf-hover-shadow 3.2s cubic-bezier(0.37, 0, 0.63, 1) 720ms infinite; }
+/* The toy rises as the light reaches it, and the one left in the dark settles back down. */
+.shelf-cubby[data-landing] .shelf-toy img { animation: shelf-land 360ms cubic-bezier(0.45, 0, 0.55, 1); }
+.shelf-cubby[data-landing] .shelf-shadow { animation: shelf-land-shadow 360ms cubic-bezier(0.45, 0, 0.55, 1); }
+@keyframes shelf-lift { from { translate: 0 0; } to { translate: 0 -3px; } }
+@keyframes shelf-lift-shadow { from { scale: 1; } to { scale: 0.85; } }
+@keyframes shelf-land { from { translate: 0 -4px; } to { translate: 0 0; } }
+@keyframes shelf-land-shadow { from { scale: 0.8; } to { scale: 1; } }
 @keyframes shelf-hover-idle {
   0%, 100% { translate: 0 -3px; }
   50% { translate: 0 -6px; }
@@ -270,4 +284,6 @@
 @media (prefers-reduced-motion: reduce) {
   .shelf-cubby[aria-current='page'] .shelf-toy img { animation: none; translate: 0 -3px; }
   .shelf-cubby[aria-current='page'] .shelf-shadow { animation: none; scale: 0.85; }
+  .shelf-cubby[data-landing] :is(.shelf-toy img, .shelf-shadow) { animation: none; }
+  .shelf-spot { transition: opacity 200ms ease-out; }
 }
