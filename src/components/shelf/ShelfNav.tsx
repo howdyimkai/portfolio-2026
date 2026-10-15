@@ -103,11 +103,13 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
   const [tidy, setTidy] = useState(false)
   const [compact, setCompact] = useState(false)
   const broomRef = useRef<HTMLButtonElement>(null)
+  const drawRef = useRef<HTMLDivElement>(null)
   const timer = useRef<number | undefined>(undefined)
 
   useEffect(() => () => window.clearTimeout(timer.current), [])
 
   const before = useRef<{ plot: DOMRect; tools: DOMRect } | null>(null)
+  const drawBefore = useRef<number | null>(null)
   const parts = () => {
     const plot = document.querySelector<HTMLElement>('[data-home-hero] .garden-plot')
     const tools = document.querySelector<HTMLElement>('[data-home-tools]')
@@ -120,10 +122,33 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
   const setLayout = (next: boolean) => {
     const p = parts()
     before.current = p ? { plot: p.plot.getBoundingClientRect(), tools: p.tools.getBoundingClientRect() } : null
+    drawBefore.current = drawRef.current?.getBoundingClientRect().top ?? null
     setCompact(next)
   }
 
   useLayoutEffect(() => {
+    // Where the header re-centers (/pieces/nav), the wordmark floats down to its
+    // new spot and sinks a hair past it, like a toy settling onto its hover height.
+    const draw = drawRef.current
+    const drawTop = drawBefore.current
+    drawBefore.current = null
+    if (draw && drawTop !== null && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      draw.getAnimations().filter((a) => !(a instanceof CSSAnimation)).forEach((a) => a.cancel())
+      const dy = drawTop - draw.getBoundingClientRect().top
+      if (Math.abs(dy) >= 0.5) {
+        const sink = -Math.sign(dy) * Math.min(4, Math.abs(dy) * 0.08)
+        const float = 'cubic-bezier(0.37, 0, 0.63, 1)'
+        draw.animate(
+          [
+            { translate: `0 ${dy}px`, easing: float },
+            { translate: `0 ${sink}px`, easing: float, offset: 0.72 },
+            { translate: '0 0' },
+          ],
+          { duration: 720 },
+        )
+      }
+    }
+
     const p = parts()
     const b = before.current
     before.current = null
@@ -160,7 +185,7 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
 
   return (
     <header className="shelf-nav">
-      <div className="shelf-nav-draw" data-tidy={tidy ? '' : undefined} data-compact={compact ? '' : undefined}>
+      <div ref={drawRef} className="shelf-nav-draw" data-tidy={tidy ? '' : undefined} data-compact={compact ? '' : undefined}>
         <Image src="/nav/shelf/wordmark.webp" alt="howdy im Kai" width={309} height={130} className="shelf-wordmark" draggable={false} priority unoptimized />
 
         <button ref={broomRef} type="button" className="shelf-broom" aria-pressed={tidy} aria-label="Tidy up navigation" onClick={toggle}>
