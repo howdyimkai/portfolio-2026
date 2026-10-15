@@ -9,6 +9,49 @@ The homepage and `/works` are being rebuilt in a design direction called
 the pre-K-Zen baseline. `/about`, `/play`, `/resume` are intentionally
 untouched — out of scope for this exploration.
 
+## Taste (read first)
+
+- **Calm page, playful touch.** Zen garden for structure: one sand tray,
+  generous space, quiet type. The play lives in the interactions (rake,
+  eraser, blossom, sweep), not in decoration. If everything moves, nothing
+  feels thoughtful.
+- **Felt toys, not photos.** Every object reads as handmade felt or clay
+  (moss, rocks, pony, cowboy hat, star). Nothing photoreal. If a new asset
+  looks like a photo, flag it instead of shipping it.
+- **Works for someone who never touches it.** The hero has to land before
+  anyone rakes or erases. Interactions are a bonus, never the only way to
+  get the message.
+- **Hand-made over generated.** Titles, principles, and brush strokes are
+  Kai's drawn assets. Never recreate them with fonts, gradients, or CSS.
+
+## Positioning & copy (locked 2026-10-10)
+
+Copy source of truth: `~/Desktop/Claude-Workspace/projects/2026-10-PortfolioSprint/Positioning Brainstorm.md`.
+Voice rules: `~/Desktop/Claude-Workspace/context/brand-voice.md` (sentence
+case, no em dashes or hyphens in creative copy, no buzzwords).
+
+- **Never "Design Engineer"** in visible copy. Kai is a "designer and tinkerer."
+  The title stays off the site until announced.
+- **H1:** Designer and tinkerer. I make learning feel like play.
+- **First card under the hero:** Design Garden, then Tallo. Don't put the
+  Tallo quiz numbers in the footer or hero.
+- **Footer (every page):** I'm a designer and tinkerer who sweeps the gap
+  between marketing and product, with roots in film and games. I translate
+  pixels, stories and code, and I tinker and wrestle with AI until ideas
+  work. My specialty is making hard things feel easy, with a sprinkle of
+  whimsy. Sweep icon sits beside it.
+- **CTA:** Come play. Say howdy at [email]
+
+**Planned layout change (decided 2026-10-10, not built yet):** the homepage
+will scroll. The hero fills the first screen, then the Design Garden card and
+footer sit below. This replaces the no-scroll `h-[100dvh]` lock described
+under `AppShell`.
+
+**Sprint scope (updated 2026-10-11):** the homepage hero is built and Kai
+likes it. Remaining sprint work: footer (every page), high level project
+cards under the hero, and About v2 with the five principles on `/about`.
+About copy draft lives in the Positioning Brainstorm doc.
+
 ## Design source of truth
 
 - `design-intent/tokens.md` — colors, type, spacing, radii, motion intent.

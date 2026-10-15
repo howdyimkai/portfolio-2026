@@ -21,7 +21,7 @@ still valid, rendering style must follow this delta (texture, palette, hand-draw
 
 Changes visible in the new frames:
 
-- **Positioning:** title is now "Kai Tran — DESIGN ENGINEER" (handwritten script +
+- **Positioning (superseded 2026-10-10, see CLAUDE.md "Positioning & copy"; never "Design Engineer"):** title is now "Kai Tran — DESIGN ENGINEER" (handwritten script +
   hand-lettered caps on a blue washi-tape strip), replacing the mono tagline hero.
 - **Nav:** four top-nav items — `hello world` (home), `selected works`, `playground`,
   `about me`, each with a hand-drawn ink underline. **Hover behavior (confirmed by Kai):**
