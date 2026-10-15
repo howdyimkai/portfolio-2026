@@ -1,0 +1,17 @@
+/* The shelf alone, centered in the viewport. On the homepage its zoom is tied to the
+   garden below it; here there's nothing else to share the fold, so it just sizes to fit. */
+.piece-stage {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 16px;
+  background: var(--color-page);
+}
+.piece-stage .shelf-nav {
+  --zoom: 0.86;
+  padding-top: 0;
+}
+.piece-stage .shelf-nav-draw { top: 0; }
+@media (min-width: 768px) {
+  .piece-stage .shelf-nav { --zoom: 1.8; }
+}

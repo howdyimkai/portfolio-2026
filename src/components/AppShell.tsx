@@ -9,6 +9,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isHome = pathname === '/'
 
+  // /pieces/* show one part of the site on its own, so no site chrome around it.
+  if (pathname.startsWith('/pieces/')) return <main>{children}</main>
+
   if (isHome) {
     return (
       <div className="flex h-[100dvh] flex-col overflow-hidden">
