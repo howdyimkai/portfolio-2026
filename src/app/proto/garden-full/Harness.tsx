@@ -12,7 +12,7 @@ import './bleed.css'
 function Current() {
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <ShelfNav />
+      <ShelfNav activeHref="/" />
       <main className="min-h-0 flex-1">
         <Hero />
       </main>
@@ -28,7 +28,7 @@ function FullBleed() {
       {/* Wordmark and broom inked dark like the hero title: black at 85% over the sand
           (Kai, 2026-10-13), so the sand's warmth shows through. */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-40 [&_.shelf-broom]:pointer-events-auto [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark]:[filter:brightness(0)]!">
-        <ShelfNav />
+        <ShelfNav activeHref="/" />
       </div>
     </div>
   )
@@ -38,7 +38,7 @@ function FullBleed() {
 function Tray() {
   return (
     <div className="flex h-full flex-col overflow-hidden md:[--shelf-zoom:1]">
-      <ShelfNav />
+      <ShelfNav activeHref="/" />
       <main className="min-h-0 flex-1 pt-4 md:pt-5">
         <Garden layout="tray" />
       </main>
@@ -50,7 +50,7 @@ function Tray() {
 function Expand() {
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <ShelfNav />
+      <ShelfNav activeHref="/" />
       <main className="min-h-0 flex-1">
         <section className="relative mx-auto max-w-[1440px] px-6 pb-16 pt-6 md:px-10 md:pt-5">
           <div data-home-hero className="relative mx-auto max-w-[900px] md:max-w-[var(--home-garden-w)]">

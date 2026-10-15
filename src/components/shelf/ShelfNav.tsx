@@ -81,8 +81,10 @@ const COMPACT_AFTER_MS = 520
 const EXPAND_AFTER_MS = 150
 const GROW_MS = 460
 
-export default function ShelfNav() {
-  const pathname = usePathname()
+// `activeHref` lets a prototype route light up the cubby it stands in for.
+export default function ShelfNav({ activeHref }: { activeHref?: string } = {}) {
+  const route = usePathname()
+  const pathname = activeHref ?? route
   const [tidy, setTidy] = useState(false)
   const [compact, setCompact] = useState(false)
   const broomRef = useRef<HTMLButtonElement>(null)

@@ -237,3 +237,37 @@
   .shelf-nav *,
   .shelf-nav [data-tidy] * { transition: none !important; }
 }
+
+/* ---- You are here: a spotlight on the active cubby, its toy idling just off the floor ---- */
+.shelf-cubby[aria-current='page']::before {
+  /* A warm cone from the top of the cubby that pools on the floor. Screen keeps the
+     chalkboard's texture showing through, so it reads as light, not paint. */
+  content: '';
+  position: absolute;
+  inset: -8px 0 0;
+  background:
+    radial-gradient(60% 18% at 50% 92%, rgba(255, 236, 196, 0.6), transparent 100%),
+    radial-gradient(70% 115% at 50% -12%, rgba(255, 232, 186, 0.48), rgba(255, 232, 186, 0.14) 62%, transparent 82%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transition: opacity 240ms ease-out 600ms;
+}
+[data-tidy] .shelf-cubby[aria-current='page']::before { opacity: 0; transition: opacity 200ms var(--shelf-in) 300ms; }
+.shelf-cubby[aria-current='page'] .shelf-label { color: rgba(250, 244, 230, 0.95); }
+
+/* The idle float lives on the img and shadow's own `translate`/`scale`, so it composes
+   with the hover lift (WAAPI transform on .shelf-toy / .shelf-shadow) instead of fighting it. */
+.shelf-cubby[aria-current='page'] .shelf-toy img { animation: shelf-hover-idle 3.2s cubic-bezier(0.37, 0, 0.63, 1) infinite; }
+.shelf-cubby[aria-current='page'] .shelf-shadow { animation: shelf-hover-shadow 3.2s cubic-bezier(0.37, 0, 0.63, 1) infinite; }
+@keyframes shelf-hover-idle {
+  0%, 100% { translate: 0 -3px; }
+  50% { translate: 0 -6px; }
+}
+@keyframes shelf-hover-shadow {
+  0%, 100% { scale: 0.85; }
+  50% { scale: 0.72; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shelf-cubby[aria-current='page'] .shelf-toy img { animation: none; translate: 0 -3px; }
+  .shelf-cubby[aria-current='page'] .shelf-shadow { animation: none; scale: 0.85; }
+}
