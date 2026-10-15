@@ -1326,18 +1326,18 @@ export default function Garden({ layout }: { layout: Layout }) {
           </div>
         </div>
 
-        <div className={`pointer-events-none absolute z-10 w-[calc(var(--u)*30)] md:w-[calc(var(--u)*14)] ${D.moss}`} style={{ aspectRatio: 268 / 248 }}>
-          <Image src="/garden/mossy-island-rock.webp" alt="" fill draggable={false} sizes="130px" className="object-contain" />
+        <div className={`pointer-events-none absolute z-10 ${D.moss}`} style={{ aspectRatio: 268 / 248 }}>
+          <Image src="/garden/mossy-island-rock.webp" alt="" fill draggable={false} sizes="210px" className="object-contain" />
         </div>
 
         {ROCKS.map((r, i) => (
           <div key={i} className={`rock pointer-events-none absolute z-10 ${D.rocks[i]}`} style={{ aspectRatio: r.ratio }}>
-            <Image src={r.src} alt="" fill draggable={false} sizes="150px" className="object-contain" />
+            <Image src={r.src} alt="" fill draggable={false} sizes="180px" className="object-contain" />
           </div>
         ))}
 
-        <div className={`pointer-events-none absolute z-20 w-[calc(var(--u)*56)] md:w-[calc(var(--u)*38)] ${D.bonsai}`} style={{ aspectRatio: 674 / 522 }}>
-          <Image src="/garden/bonsai.webp" alt="" fill draggable={false} sizes="340px" className="object-contain" />
+        <div className={`pointer-events-none absolute z-20 ${D.bonsai}`} style={{ aspectRatio: 674 / 522 }}>
+          <Image src="/garden/bonsai.webp" alt="" fill draggable={false} sizes="440px" className="object-contain" />
         </div>
 
         {tool && (
@@ -1454,34 +1454,35 @@ function ToolRail({
 const DECOR: Record<'home' | 'bleed' | 'tray', { mobileTitle: string; moss: string; rocks: string[]; bonsai: string }> = {
   home: {
     mobileTitle: '',
-    moss: 'left-[57%] top-[2%] md:left-[9%] md:top-[13%]',
+    moss: 'w-[calc(var(--u)*30)] md:w-[calc(var(--u)*14)] left-[57%] top-[2%] md:left-[9%] md:top-[13%]',
     rocks: [
       'w-[calc(var(--u)*34)] left-[2%] top-[53%] md:w-[calc(var(--u)*17)] md:left-[4%] md:top-[68%]',
       'hidden md:block md:w-[calc(var(--u)*14)] md:left-[77%] md:top-[13%]',
       'w-[calc(var(--u)*17)] left-[20%] top-[30%] md:w-[calc(var(--u)*9)] md:left-[26%] md:top-[81%]',
     ],
-    bonsai: 'left-[34%] top-[58%] md:left-[62%] md:top-[58%]',
+    bonsai: 'w-[calc(var(--u)*56)] md:w-[calc(var(--u)*38)] left-[34%] top-[58%] md:left-[62%] md:top-[58%]',
   },
-  // Plot starts at the top of the screen, under the floating shelf.
+  // Plot starts at the top of the screen, under the floating shelf. Desktop moss, near rock
+  // and bonsai follow Kai's red-circle pass (2026-10-14): in from the corners, bigger.
   bleed: {
     mobileTitle: 'top-[150px]',
-    moss: 'left-[60%] top-[42%] md:left-[7%] md:top-[11%]',
+    moss: 'w-[calc(var(--u)*30)] left-[60%] top-[42%] md:w-[calc(var(--u)*23)] md:left-[9.6%] md:top-[15.2%]',
     rocks: [
-      'w-[calc(var(--u)*34)] left-[2%] top-[58%] md:w-[calc(var(--u)*17)] md:left-[7%] md:top-[71%]',
+      'w-[calc(var(--u)*34)] left-[2%] top-[58%] md:w-[calc(var(--u)*20)] md:left-[9.5%] md:top-[70.6%]',
       'hidden md:block md:w-[calc(var(--u)*14)] md:left-[81%] md:top-[12%]',
       'w-[calc(var(--u)*17)] left-[14%] top-[44%] md:w-[calc(var(--u)*9)] md:left-[27%] md:top-[82%]',
     ],
-    bonsai: 'left-[38%] top-[60%] md:left-[66%] md:top-[57%]',
+    bonsai: 'w-[calc(var(--u)*56)] left-[38%] top-[60%] md:w-[calc(var(--u)*48)] md:left-[69.2%] md:top-[57.2%]',
   },
   // Plot starts under the shelf, framed by the page.
   tray: {
     mobileTitle: 'top-[4%]',
-    moss: 'left-[60%] top-[36%] md:left-[6%] md:top-[9%]',
+    moss: 'w-[calc(var(--u)*30)] md:w-[calc(var(--u)*14)] left-[60%] top-[36%] md:left-[6%] md:top-[9%]',
     rocks: [
       'w-[calc(var(--u)*34)] left-[2%] top-[56%] md:w-[calc(var(--u)*17)] md:left-[4%] md:top-[66%]',
       'hidden md:block md:w-[calc(var(--u)*14)] md:left-[80%] md:top-[9%]',
       'w-[calc(var(--u)*17)] left-[14%] top-[40%] md:w-[calc(var(--u)*9)] md:left-[27%] md:top-[80%]',
     ],
-    bonsai: 'left-[38%] top-[62%] md:left-[66%] md:top-[56%]',
+    bonsai: 'w-[calc(var(--u)*56)] md:w-[calc(var(--u)*38)] left-[38%] top-[62%] md:left-[66%] md:top-[56%]',
   },
 }
