@@ -43,8 +43,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${bricolage.variable} ${commitMono.variable}`}>
+    // Font variables live on <html> so the @theme tokens (resolved at :root) can see them.
+    <html lang="en" className={`${bricolage.variable} ${commitMono.variable}`}>
+      <body>
         <AppShell>{children}</AppShell>
       </body>
     </html>
