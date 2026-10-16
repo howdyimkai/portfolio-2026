@@ -206,7 +206,7 @@
   color: var(--color-ink-body);
   text-decoration: none;
   opacity: 0;
-  translate: 0 3px;
+  translate: 0 -6px;
   transition: opacity 140ms var(--shelf-in), translate 140ms var(--shelf-in), color 150ms ease;
 }
 /* Phones: at 0.86× the row is wider than the screen — wrap it to two lines. */
@@ -219,8 +219,10 @@
   opacity: 1;
   translate: 0 0;
   transition:
-    opacity 220ms ease-out calc(180ms + var(--i) * 35ms),
-    translate 220ms var(--shelf-out) calc(180ms + var(--i) * 35ms),
+    /* Each word drifts down and sinks a hair past its line before settling, like the
+       toys landing on their hover height. */
+    opacity 320ms ease-out calc(180ms + var(--i) * 45ms),
+    translate 600ms cubic-bezier(0.37, 0, 0.4, 1.6) calc(180ms + var(--i) * 45ms),
     color 150ms ease;
 }
 .shelf-text a:focus-visible { outline: 1px solid var(--color-ink-primary); outline-offset: -1px; border-radius: 2px; }

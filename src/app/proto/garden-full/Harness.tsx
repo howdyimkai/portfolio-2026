@@ -5,9 +5,9 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ShelfNav from '@/components/shelf/ShelfNav'
 import Hero from '@/components/Hero'
-import Garden from './Garden'
+import Garden from '@/components/SandGarden'
+import SandboxHome from '@/components/SandboxHome'
 import './picker.css'
-import './bleed.css'
 
 function Current() {
   return (
@@ -20,18 +20,8 @@ function Current() {
   )
 }
 
-// Sand is the page: the shelf and tools float on top of it.
 function FullBleed() {
-  return (
-    <div className="bleed-shelf relative h-full overflow-hidden">
-      <Garden layout="bleed" />
-      {/* Wordmark and broom inked dark like the hero title: black at 85% over the sand
-          (Kai, 2026-10-13), so the sand's warmth shows through. */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-40 [&_.shelf-broom]:pointer-events-auto [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark]:[filter:brightness(0)]!">
-        <ShelfNav activeHref="/" />
-      </div>
-    </div>
-  )
+  return <SandboxHome />
 }
 
 // A framed tray that fills what the shelf leaves, tools on the page beside it.

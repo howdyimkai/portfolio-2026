@@ -1,0 +1,15 @@
+/* Full bleed: the shelf hangs up to 64px down (36px on the old homepage) so it has room to
+   breathe above it (Kai, 2026-10-15), while keeping ~50px clear of the hero title
+   (title top = 50dvh − 127px at 1440-class widths; shelf bottom = top + 160px·zoom).
+   As windows get shorter it gives back the extra top space first (64px from ~869px tall,
+   36px by ~813px), then the shelf eases from 1.21× toward its 1× floor (below ~733px).
+   SandGarden's FEATHER_TOP reads --bleed-top to keep the sand's soft top edge just above
+   the shelf box. */
+@media (min-width: 768px) {
+  .bleed-shelf {
+    --bleed-top: clamp(36px, 50dvh - 371px, 64px);
+    --shelf-zoom: clamp(1, tan(atan2(50dvh - 177px - var(--bleed-top), 160px)), 1.21);
+  }
+  .bleed-shelf .shelf-nav { padding-top: var(--bleed-top); }
+  .bleed-shelf .shelf-nav-draw { top: var(--bleed-top); }
+}

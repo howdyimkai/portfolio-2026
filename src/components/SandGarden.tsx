@@ -1,7 +1,7 @@
 'use client'
 
-// PROTOTYPE — copy of components/ZenGarden.tsx with a layout prop for the full-screen
-// sandbox exploration. Delete with src/app/proto/garden-full.
+// The homepage sandbox ('bleed', picked 2026-10-13): ZenGarden with a layout prop. The other
+// layouts stay for the /proto/garden-full comparison; drop them once that proto goes.
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
@@ -1384,10 +1384,10 @@ export default function Garden({ layout }: { layout: Layout }) {
 }
 
 // The mask's top fade is solid 7.9% of the way down. Shift the mask so that point always
-// lands ~3px above the shelf box (36px + 56px·zoom; zoom shrinks on short windows, see bleed.css): the wordmark sits on the page
+// lands ~3px above the shelf box (--bleed-top + 56px·zoom; both set in sandbox-home.css): the wordmark sits on the page
 // color and the shelf sits on the sand at every window height (Kai, 2026-10-13, from the
 // 1000×1200 framing). Negative at tall heights — the mask just starts above the window.
-const FEATHER_TOP = 'calc((33px + 56px * var(--shelf-zoom, 0.86) - 7.9dvh) / 0.921)'
+const FEATHER_TOP = 'calc((var(--bleed-top, 36px) - 3px + 56px * var(--shelf-zoom, 0.86) - 7.9dvh) / 0.921)'
 
 const SHORT_LABEL: Record<Tool, string> = { rake: 'rake', eraser: 'eraser', blossom: 'blossom' }
 

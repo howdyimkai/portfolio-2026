@@ -1,5 +1,5 @@
-import Hero from '@/components/Hero'
+import SandboxHome from '@/components/SandboxHome'
 
 export default function HomePage() {
-  return <Hero />
+  return <SandboxHome />
 }

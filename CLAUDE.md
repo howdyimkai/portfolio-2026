@@ -107,11 +107,12 @@ About copy draft lives in the Positioning Brainstorm doc.
 ## Key components
 
 - **`AppShell`** (`src/components/AppShell.tsx`) — route-aware shell used by
-  `layout.tsx`. The homepage is locked to `h-[100dvh]` with `overflow-hidden`
-  on the outer wrapper (not `main` — clipping main's top edge cut the garden while
-  ShelfNav animates it across the header line) — no page scroll at all; content that doesn't fit (the tool
-  cards) is genuinely clipped at the fold, not just scrollable-to. Every
-  other route uses normal `min-h-screen` scrolling.
+  `layout.tsx`. The homepage is the **Full bleed sandbox** (promoted from
+  `/proto/garden-full?v=2`, 2026-10-15): `<main>` locked to `h-[100dvh]` with
+  `overflow-hidden`, and `SandboxHome` (`src/components/SandboxHome.tsx`) brings
+  its own floating `ShelfNav` over `SandGarden layout="bleed"`. No footer on `/`.
+  `/pieces/*` renders bare (one piece of the site on its own, for recordings).
+  Every other route uses `Navigation` + `Footer` with normal scrolling.
 - **`Navigation`** — route-aware: homepage renders 4 items edge-to-edge with
   no wordmark ("hello world" = home); other routes show the "Kai Tran"
   wordmark + 3 links. Each item's watercolor brush underlay fades in under
