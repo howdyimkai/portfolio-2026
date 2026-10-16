@@ -1265,6 +1265,10 @@ export default function Garden({ layout }: { layout: Layout }) {
           />
 
           <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full" />
+
+          {/* Grid paper printed over the sand, viewport-fixed so its lines run straight on
+              from the page grid through the feathered edge. */}
+          {mode === 'bleed' && <div className="grid-paper absolute inset-0 mix-blend-multiply" />}
         </div>
 
         {/* Phones: in the full-screen layouts the title sits on the sand (no erase reveal). */}

@@ -49,6 +49,20 @@
   --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
+/* Grid paper overlay: one 4×4 repeat cropped cross-to-cross from
+   design-intent/Green grid paper.png (alpha ×1.6), sized so the green
+   crosses land ~84px apart. The sandbox reuses it over the sand,
+   viewport-fixed so it lines up with the body grid (the homepage never scrolls). */
+body,
+.grid-paper {
+  background-image: url('/textures/grid-paper.webp');
+  background-size: 336px auto;
+}
+
+.grid-paper {
+  background-attachment: fixed;
+}
+
 body {
   background-color: var(--color-page);
   color: var(--color-ink-body);
