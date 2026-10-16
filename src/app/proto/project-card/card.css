@@ -7,9 +7,7 @@
     0 6px 16px -6px rgb(61 50 38 / 0.1);
 }
 
-/* Frosted card. Rest: white tray surface with only the app window showing, a little small.
-   Hover: the clip opens to the whole cover (grass grows out from the window) and the header and
-   footer become the garden tray's frosted chips. Window bounds measured off the cover crop. */
+/* Frosted card: white tray surface with only the app window showing. */
 .pc-frost {
   border: 1px solid var(--color-hairline);
   background-color: color-mix(in srgb, white 88%, transparent);
@@ -17,24 +15,45 @@
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
-.pc-grow {
-  clip-path: inset(19.5% 15.6% 10.4% 15.9% round 6px);
-  transform-origin: 50% 54.5%;
-  transform: translateY(-4%) scale(0.78);
-  transition:
-    clip-path 520ms var(--ease-out-strong),
-    transform 520ms var(--ease-out-strong);
+/* designgarden-cover.gif (800×835), centered between the header and footer rows. */
+.pc-window {
+  --tx: 0;
+  --ty: 0;
+  left: 20.45%;
+  top: 20.6%;
+  width: 59.1%;
+  /* Tilt toward the cursor (vars set in FrostedCard). The transition makes it trail the pointer
+     a little and ease home on leave. preserve-3d lets the blossoms sit in front in real depth. */
+  transform: perspective(800px) rotateX(calc(var(--ty) * -8deg)) rotateY(calc(var(--tx) * 10deg));
+  transform-style: preserve-3d;
+  transition: transform 450ms var(--ease-out-strong);
 }
-.pc-chip {
-  border: 1px solid transparent;
-  background-color: transparent;
-  /* Always on: over white it's invisible, so the chip never pops when the grass arrives. */
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+.pc-gif {
+  transition: transform 500ms var(--ease-out-strong);
+}
+/* Blossoms float in front of the window (translateZ), so the tilt slides them more than the GIF.
+   On hover they lift further off it and drift outward with a small turn. */
+.pc-blossom {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgb(58 50 38 / 0.18));
   transition:
-    background-color 300ms ease-out,
-    border-color 300ms ease-out,
-    box-shadow 300ms ease-out;
+    transform 600ms var(--ease-out-strong),
+    filter 600ms var(--ease-out-strong);
+}
+.pc-blossom-a {
+  width: 21%;
+  right: -7%;
+  top: -6%;
+  transform: translateZ(30px) rotate(-8deg);
+}
+.pc-blossom-b {
+  width: 15%;
+  left: -6%;
+  bottom: -4%;
+  transform: translateZ(22px) rotate(14deg);
+  transition-delay: 40ms;
 }
 .pc-arrow {
   transition: transform 200ms var(--ease-out-strong);
@@ -43,17 +62,26 @@
   transform: scale(0.99);
 }
 .pc-frost {
-  transition: transform 150ms var(--ease-out-strong);
+  transition:
+    transform 150ms var(--ease-out-strong),
+    background-color 200ms ease-out;
 }
 @media (hover: hover) and (pointer: fine) {
-  .pc-card:hover .pc-grow {
-    clip-path: inset(0 0 0 0 round 0px);
-    transform: none;
+  /* The grid paper shows through the frost, softened by its blur. */
+  .pc-card:hover .pc-frost {
+    background-color: color-mix(in srgb, white 68%, transparent);
   }
-  .pc-card:hover .pc-chip {
-    border-color: var(--color-hairline);
-    background-color: color-mix(in srgb, var(--color-page) 82%, transparent);
-    box-shadow: 0 1px 1.5px rgba(58, 50, 38, 0.06), 0 5px 14px rgba(58, 50, 38, 0.12);
+  .pc-card:hover .pc-gif {
+    transform: scale(1.015);
+  }
+  .pc-card:hover .pc-blossom {
+    filter: drop-shadow(0 8px 10px rgb(58 50 38 / 0.2));
+  }
+  .pc-card:hover .pc-blossom-a {
+    transform: translateZ(60px) translate(10%, -12%) rotate(10deg);
+  }
+  .pc-card:hover .pc-blossom-b {
+    transform: translateZ(50px) translate(-12%, 10%) rotate(-6deg);
   }
   .pc-card:hover .pc-arrow {
     transform: translateX(3px);
@@ -80,21 +108,26 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pc-grow,
-  .pc-chip,
   .pc-arrow,
   .pc-frost,
+  .pc-window,
+  .pc-gif,
+  .pc-blossom,
   .pc-zoom {
     transition: none;
   }
 }
 
-/* Chalk grounds for the story panel. Grain + a big soft smudge, both SVG noise (no asset yet;
-   swap for a real scanned chalk texture if this direction wins). */
+/* Chalk grounds for the story panel. Chalkboard is Kai's drawn board with its wooden ledge
+   (design-intent/case-study-chalk.png, cropped to the wood since its top rows are a soft
+   transparent shadow that let the slate show through); pinned to the top so the ledge always shows, and the
+   slate color fills below if the story runs taller than the art. */
 .pc-chalkboard {
-  background-color: #2F3B33;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.8 -1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.0 -0.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E");
-  background-size: 220px 220px, 520px 520px;
+  background-color: #252524;
+  background-image: url('/proto/project-card/case-study-chalk.webp');
+  background-size: 100% auto;
+  background-position: top center;
+  background-repeat: no-repeat;
 }
 .pc-chalk-ink {
   color: rgb(240 236 226 / 0.9);
