@@ -1,0 +1,129 @@
+/* Selected works cards: promoted from /proto/project-card (Chalkboard variant, 2026-10-16). */
+
+/* Frosted card: white tray surface with only the app window showing. */
+.wk-frost {
+  border: 1px solid var(--color-hairline);
+  background-color: color-mix(in srgb, white 88%, transparent);
+  box-shadow: 0 1px 2px rgba(58, 50, 38, 0.06), 0 8px 24px rgba(58, 50, 38, 0.1);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition:
+    transform 150ms var(--ease-out-strong),
+    background-color 200ms ease-out;
+}
+.wk-raised {
+  box-shadow:
+    0 0 0 1px rgb(61 50 38 / 0.06),
+    0 1px 3px rgb(61 50 38 / 0.06),
+    0 6px 16px -6px rgb(61 50 38 / 0.1);
+}
+
+/* The cover window, centered between the header and footer rows. */
+.wk-window {
+  --tx: 0;
+  --ty: 0;
+  left: 20.45%;
+  top: 20.6%;
+  width: 59.1%;
+  /* Tilt toward the cursor (vars set in ProjectCard). The transition makes it trail the pointer
+     a little and ease home on leave. preserve-3d lets the blossoms sit in front in real depth. */
+  transform: perspective(800px) rotateX(calc(var(--ty) * -8deg)) rotateY(calc(var(--tx) * 10deg));
+  transform-style: preserve-3d;
+  transition: transform 450ms var(--ease-out-strong);
+}
+/* No cover yet: a quiet dashed frame the same shape as Design Garden's window. */
+.wk-window-empty {
+  aspect-ratio: 800 / 835;
+  border: 1px dashed var(--color-chip-line);
+  border-radius: 5px;
+}
+.wk-gif {
+  transition: transform 500ms var(--ease-out-strong);
+}
+/* Blossoms float in front of the window (translateZ), so the tilt slides them more than the GIF.
+   On hover they lift further off it and drift outward with a small turn. */
+.wk-blossom {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgb(58 50 38 / 0.18));
+  transition:
+    transform 600ms var(--ease-out-strong),
+    filter 600ms var(--ease-out-strong);
+}
+.wk-blossom-a {
+  width: 21%;
+  right: -7%;
+  top: -6%;
+  transform: translateZ(30px) rotate(-8deg);
+}
+.wk-blossom-b {
+  width: 15%;
+  left: -6%;
+  bottom: -4%;
+  transform: translateZ(22px) rotate(14deg);
+  transition-delay: 40ms;
+}
+.wk-arrow {
+  transition: transform 200ms var(--ease-out-strong);
+}
+a.wk-card:active .wk-frost {
+  transform: scale(0.99);
+}
+@media (hover: hover) and (pointer: fine) {
+  /* The grid paper shows through the frost, softened by its blur. */
+  a.wk-card:hover .wk-frost {
+    background-color: color-mix(in srgb, white 68%, transparent);
+  }
+  a.wk-card:hover .wk-gif {
+    transform: scale(1.015);
+  }
+  a.wk-card:hover .wk-blossom {
+    filter: drop-shadow(0 8px 10px rgb(58 50 38 / 0.2));
+  }
+  a.wk-card:hover .wk-blossom-a {
+    transform: translateZ(60px) translate(10%, -12%) rotate(10deg);
+  }
+  a.wk-card:hover .wk-blossom-b {
+    transform: translateZ(50px) translate(-12%, 10%) rotate(-6deg);
+  }
+  a.wk-card:hover .wk-arrow {
+    transform: translateX(3px);
+  }
+}
+
+/* Story panel: Kai's drawn chalkboard with its wooden ledge (design-intent/casestudy-chalk-large.png, 706×750),
+   pinned to the top so the ledge always shows. Drawn tall enough (1.06× its width) to cover the
+   tallest panel (0.84×, three across at ~1100px); the slate color is only a fallback. */
+.wk-chalkboard {
+  background-color: #262626; /* the art's bottom slate */
+  background-image: url('/works/case-study-chalk-large.webp');
+  background-size: 100% auto;
+  background-position: top center;
+  background-repeat: no-repeat;
+}
+.wk-chalk-ink {
+  color: rgb(240 236 226 / 0.9);
+  text-shadow: 0 0 1px rgb(240 236 226 / 0.35);
+}
+.wk-link {
+  text-decoration: underline;
+  text-decoration-color: rgb(240 236 226 / 0.35);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 150ms ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  a.wk-card:hover .wk-link {
+    text-decoration-color: currentColor;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wk-arrow,
+  .wk-frost,
+  .wk-window,
+  .wk-gif,
+  .wk-blossom {
+    transition: none;
+  }
+}

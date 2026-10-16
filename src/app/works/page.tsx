@@ -1,23 +1,47 @@
-import WorkCard from '@/components/WorkCard'
+import ProjectCard, { type Project } from '@/components/works/ProjectCard'
 
-const PROJECTS = [
-  { title: 'Project Alpha', blurb: 'placeholder one-line description of the project', tags: ['product', 'lead design'], year: '2023' },
-  { title: 'Project Beta', blurb: 'placeholder one-line description of the project', tags: ['0→1', 'systems'], year: '2024' },
-  { title: 'Project Gamma', blurb: 'placeholder one-line description of the project', tags: ['research', 'ai'], year: '2024' },
-  { title: 'Project Delta', blurb: 'placeholder one-line description of the project', tags: ['mobile'], year: '2023' },
+// Design Garden leads, then Tallo (positioning, 2026-10-10). Tallo and apolloED copy is a draft
+// and their covers aren't made yet, so they show as "coming soon" cards.
+const PROJECTS: Project[] = [
+  {
+    name: 'design garden',
+    hook: 'Most online courses never get finished. These sprints do.',
+    story: 'A four week sprint platform I built and run. Designers pair up, check in weekly, and end on showcase night with real progress on their next move.',
+    role: 'founder',
+    year: '2026',
+    // designgarden-cover.gif frames 0-66 (the Takeaway tab), 480px wide animated WebP.
+    cover: {
+      anim: '/works/design-garden-cover-anim.webp',
+      still: '/works/design-garden-cover-still.webp',
+      alt: "Design Garden: two designers' shared garden board for the week",
+    },
+    href: '#',
+    cta: 'see how it grew',
+  },
+  {
+    name: 'tallo',
+    hook: 'A career quiz students finish, with a mascot to guide them.',
+    story: 'I created a mascot for a career exploration platform for gen z and tested it with our community. It led a quiz I built for marketing, and product adopted it into the core experience.',
+    role: 'brand and product',
+  },
+  {
+    name: 'apolloED',
+    hook: 'An edtech dashboard.',
+    story: 'The story behind this dashboard is on its way.',
+    role: 'product design',
+  },
 ]
 
+// White grid paper, the same shelf nav as the homepage, and the three cards.
 export default function WorksPage() {
   return (
-    <div className="mx-auto max-w-[1200px] px-6 py-14 md:px-10 md:py-20">
-      <h1 className="font-display text-3xl font-semibold text-ink-primary md:text-5xl">Selected Works</h1>
-      <p className="mt-3 max-w-xl font-mono text-sm text-ink-muted md:text-base">
-        a handful of shipped products and the systems behind them
-      </p>
-
-      <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
-        {PROJECTS.map((project, i) => (
-          <WorkCard key={project.title} project={project} index={i} />
+    <div className="mx-auto max-w-[1360px] px-4 pb-20 pt-10 md:px-10 md:pb-28 md:pt-14">
+      <h1 className="sr-only">Selected works</h1>
+      <div className="grid grid-cols-1 justify-items-center gap-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        {PROJECTS.map((p, i) => (
+          <div key={p.name} className="flex w-full max-w-[440px]">
+            <ProjectCard project={p} index={i} />
+          </div>
         ))}
       </div>
     </div>

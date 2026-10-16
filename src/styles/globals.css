@@ -52,15 +52,21 @@
 /* Grid paper overlay: one 4×4 repeat cropped cross-to-cross from
    design-intent/Green grid paper.png (alpha ×1.6), sized so the green
    crosses land ~84px apart. The sandbox reuses it over the sand,
-   viewport-fixed so it lines up with the body grid (the homepage never scrolls). */
+   viewport-fixed so it lines up with the body grid (the homepage never scrolls).
+   .grid-sheet is the same paper on a white sheet that scrolls with the page (/works). */
 body,
-.grid-paper {
+.grid-paper,
+.grid-sheet {
   background-image: url('/textures/grid-paper.webp');
   background-size: 336px auto;
 }
 
 .grid-paper {
   background-attachment: fixed;
+}
+
+.grid-sheet {
+  background-color: white;
 }
 
 body {

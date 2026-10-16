@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import ShelfNav from '@/components/shelf/ShelfNav'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -15,6 +16,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return (
       // The sandbox fills the screen and brings its own floating shelf nav (SandboxHome).
       <main className="h-[100dvh] overflow-hidden">{children}</main>
+    )
+  }
+
+  // /works shares the homepage's shelf nav, on white grid paper (Kai, 2026-10-16). The wordmark
+  // and broom are inked like the homepage's: black at 85%.
+  if (pathname === '/works') {
+    return (
+      <div className="grid-sheet flex min-h-screen flex-col">
+        <div className="[&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark]:[filter:brightness(0)]!">
+          <ShelfNav />
+        </div>
+        <main className="flex-grow">{children}</main>
+        <Footer />
+      </div>
     )
   }
 

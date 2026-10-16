@@ -42,10 +42,14 @@ case, no em dashes or hyphens in creative copy, no buzzwords).
   whimsy. Sweep icon sits beside it.
 - **CTA:** Come play. Say howdy at [email]
 
-**Planned layout change (decided 2026-10-10, not built yet):** the homepage
-will scroll. The hero fills the first screen, then the Design Garden card and
-footer sit below. This replaces the no-scroll `h-[100dvh]` lock described
-under `AppShell`.
+**Selected works live on `/works`, not under the hero (Kai, 2026-10-16).**
+This replaces the 2026-10-10 plan to make the homepage scroll. The homepage
+stays one full-bleed screen with no footer; the shelf's "selected works" toy
+is the way in. `/works` uses the same `ShelfNav` on white grid paper
+(`.grid-sheet`) with three cards: Design Garden, Tallo, apolloED. Tallo and
+apolloED are "coming soon" (draft copy, no covers yet). Cards are
+`src/components/works/ProjectCard.tsx`, promoted from `/proto/project-card`'s
+Chalkboard variant.
 
 **Sprint scope (updated 2026-10-11):** the homepage hero is built and Kai
 likes it. Remaining sprint work: footer (every page), high level project
@@ -112,7 +116,8 @@ About copy draft lives in the Positioning Brainstorm doc.
   `overflow-hidden`, and `SandboxHome` (`src/components/SandboxHome.tsx`) brings
   its own floating `ShelfNav` over `SandGarden layout="bleed"`. No footer on `/`.
   `/pieces/*` renders bare (one piece of the site on its own, for recordings).
-  Every other route uses `Navigation` + `Footer` with normal scrolling.
+  `/works` uses `ShelfNav` + `Footer` on white grid paper. Every other route
+  uses `Navigation` + `Footer` with normal scrolling.
 - **`Navigation`** — route-aware: homepage renders 4 items edge-to-edge with
   no wordmark ("hello world" = home); other routes show the "Kai Tran"
   wordmark + 3 links. Each item's watercolor brush underlay fades in under
