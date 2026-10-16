@@ -38,9 +38,9 @@ export default function WorksPage() {
     <div className="mx-auto max-w-[1360px] px-4 pb-20 pt-10 md:px-10 md:pb-28 md:pt-14">
       <h1 className="sr-only">Selected works</h1>
       <div className="grid grid-cols-1 justify-items-center gap-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-        {PROJECTS.map((p, i) => (
+        {PROJECTS.map((p) => (
           <div key={p.name} className="flex w-full max-w-[440px]">
-            <ProjectCard project={p} index={i} />
+            <ProjectCard project={p} />
           </div>
         ))}
       </div>

@@ -18,12 +18,12 @@
     0 6px 16px -6px rgb(61 50 38 / 0.1);
 }
 
-/* The cover window, centered between the header and footer rows. */
+/* The cover window, centered in the card (its height is 61.7% of the card's width). */
 .wk-window {
   --tx: 0;
   --ty: 0;
   left: 20.45%;
-  top: 20.6%;
+  top: 18.7%;
   width: 59.1%;
   /* Tilt toward the cursor (vars set in ProjectCard). The transition makes it trail the pointer
      a little and ease home on leave. preserve-3d lets the blossoms sit in front in real depth. */

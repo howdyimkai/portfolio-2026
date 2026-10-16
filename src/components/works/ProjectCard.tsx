@@ -1,7 +1,7 @@
 'use client'
 
-// One high level case study card: the frosted card (name, number, cover window, hook) sitting on
-// Kai's chalkboard, which carries the story. Promoted from /proto/project-card (Chalkboard).
+// One high level case study card: the frosted card (name, role, cover window) sitting on Kai's
+// chalkboard, which carries the hook and the story. Promoted from /proto/project-card (Chalkboard).
 import { useRef, type PointerEvent } from 'react'
 import './project-card.css'
 
@@ -18,7 +18,7 @@ export type Project = {
   cta?: string
 }
 
-export default function ProjectCard({ project: p, index }: { project: Project; index: number }) {
+export default function ProjectCard({ project: p }: { project: Project }) {
   const windowRef = useRef<HTMLDivElement>(null)
   // The window tilts toward the cursor: --tx/--ty run -1..1 across the card, and the CSS turns
   // them into a rotation. Mouse only, and not under reduced motion.
@@ -53,29 +53,25 @@ export default function ProjectCard({ project: p, index }: { project: Project; i
             <div className="wk-window-empty flex items-center justify-center font-mono text-[12px] text-ink-faint">coming soon</div>
           )}
         </div>
-        <span className="absolute left-2 top-2 px-3 py-2.5 font-mono text-[13px] text-ink-primary">{p.name}</span>
-        <span className="absolute right-2 top-2 px-3 py-2.5 font-mono text-[13px] text-ink-faint tabular-nums">
-          {String(index + 1).padStart(2, '0')}
-        </span>
-        <div className="absolute inset-x-2 bottom-2 flex items-center justify-between gap-4 px-3 py-2.5 font-mono text-[13px] text-ink-primary">
-          <span className="[text-wrap:balance]">{p.hook}</span>
-          {p.href && (
-            <svg className="wk-arrow shrink-0" width="22" height="14" viewBox="0 0 22 14" fill="none" aria-hidden="true">
-              <path d="M1 7h18M14 2l5 5-5 5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          )}
+        {/* Header: what it is, then my part in it, on the chalkboard's 24px gutter. */}
+        <div className="absolute inset-x-6 top-5 flex items-baseline justify-between gap-4 font-mono text-[13px]">
+          <span className="text-ink-primary">{p.name}</span>
+          <span className="text-ink-faint">{[p.role, p.year].filter(Boolean).join(' · ')}</span>
         </div>
       </div>
 
-      <div className="wk-raised wk-chalkboard flex flex-1 flex-col rounded-b-[22px] px-6 pb-6 pt-[calc(7.6%+20px)]">
-        <div className="flex items-baseline justify-between border-b border-[rgb(240_236_226/0.22)] pb-2 font-mono text-[11px] tracking-[0.04em] text-[rgb(240_236_226/0.6)]">
-          <span>the story</span>
-          <span>{[p.role, p.year].filter(Boolean).join(' · ')}</span>
-        </div>
-        <p className="wk-chalk-ink mt-4 font-mono text-[13px] leading-[1.6] [text-wrap:pretty]">{p.story}</p>
-        <span className={`wk-chalk-ink mt-auto self-start pt-4 font-mono text-[13px] ${p.href ? 'wk-link' : 'opacity-60'}`}>
-          {p.href ? p.cta ?? 'read the story' : 'case study coming soon'}
-        </span>
+      {/* The hook leads, the story supports it, and the one action sits at the bottom. */}
+      <div className="wk-raised wk-chalkboard flex flex-1 flex-col rounded-b-[22px] px-6 pb-6 pt-[calc(7.6%+22px)]">
+        <h2 className="wk-chalk-ink font-display text-[19px] font-medium leading-[1.3] [text-wrap:balance]">{p.hook}</h2>
+        <p className="wk-chalk-ink mt-2 font-mono text-[13px] leading-[1.6] opacity-70 [text-wrap:pretty]">{p.story}</p>
+        {p.href && (
+          <span className="wk-chalk-ink mt-auto flex items-center gap-2 self-start pt-6 font-mono text-[13px]">
+            <span className="wk-link">{p.cta ?? 'read the story'}</span>
+            <svg className="wk-arrow" width="16" height="10" viewBox="0 0 22 14" fill="none" aria-hidden="true">
+              <path d="M1 7h18M14 2l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        )}
       </div>
     </>
   )
