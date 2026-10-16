@@ -54,9 +54,7 @@ function FrostedCard({ onShelf = false }: { onShelf?: boolean }) {
         <img src="/garden/tool-blossom.webp" alt="" draggable={false} className="pc-blossom pc-blossom-a" />
         <img src="/garden/tool-blossom.webp" alt="" draggable={false} className="pc-blossom pc-blossom-b" />
       </div>
-      {/* Commit Mono by its next/font variable: the `font-mono` token resolves to system sans
-          site-wide, since the variable lives on <body> but the token is read on :root. */}
-      <span className="absolute left-2 top-2 rounded-[14px] px-3 py-2.5 font-[family-name:var(--font-commit-mono)] text-[13px] text-ink-primary">{P.name}</span>
+      <span className="absolute left-2 top-2 rounded-[14px] px-3 py-2.5 font-mono text-[13px] text-ink-primary">{P.name}</span>
       <span className="absolute right-2 top-2 rounded-[14px] px-3 py-2.5 font-mono text-[13px] text-ink-faint tabular-nums">01</span>
       <div className="absolute inset-x-2 bottom-2 flex items-center justify-between gap-4 rounded-[14px] px-3 py-2.5 font-mono text-[13px] text-ink-primary">
         <span className="[text-wrap:balance]">{P.hook}</span>
