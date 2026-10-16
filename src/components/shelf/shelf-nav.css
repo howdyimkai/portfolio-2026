@@ -82,21 +82,26 @@
 .shelf-row { position: absolute; inset: 0; }
 
 /* ---- Broom ---- */
+/* Same frosted chip as the garden tool tray (bg-page/85, hairline, blur, soft lift),
+   in shelf units: 26 → ~36px rendered on desktop. Centered where the bare icon sat. */
 .shelf-broom {
   position: absolute;
-  right: 2px;
-  top: 25px;
-  width: 22px;
-  height: 22px;
+  right: 0;
+  top: 23px;
+  width: 26px;
+  height: 26px;
   display: grid;
   place-items: center;
   padding: 0;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
+  border: 1px solid var(--color-hairline);
+  border-radius: 9px;
+  background-color: color-mix(in srgb, var(--color-page) 85%, transparent);
+  box-shadow: 0 1px 1.5px rgba(58, 50, 38, 0.06), 0 5px 14px rgba(58, 50, 38, 0.12);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   color: var(--shelf-ink);
   cursor: pointer;
-  transition: scale 150ms var(--ease-out-strong);
+  transition: scale 150ms var(--ease-out-strong), background-color 150ms ease-out;
   -webkit-tap-highlight-color: transparent;
 }
 /* Mobile draws at 0.86×: grow the hit area to ~43px rendered without moving the icon. */
@@ -104,8 +109,9 @@
 .shelf-broom svg { width: 13px; height: 13px; transform-origin: 70% 30%; transition: rotate 200ms var(--ease-out-strong); }
 .shelf-broom .shelf-spark { transform-box: fill-box; transform-origin: center; transition: opacity 200ms ease-out, scale 200ms var(--ease-out-strong); }
 .shelf-broom:active { scale: 0.96; }
-.shelf-broom:focus-visible { outline: 1px solid var(--shelf-ink); outline-offset: 1px; }
+.shelf-broom:focus-visible { outline: 1px solid var(--shelf-ink); outline-offset: 2px; }
 @media (hover: hover) and (pointer: fine) {
+  .shelf-broom:hover { background-color: color-mix(in srgb, var(--color-sand-light) 40%, color-mix(in srgb, var(--color-page) 85%, transparent)); }
   .shelf-broom:hover svg { rotate: -10deg; }
 }
 /* Tidied: the sparkles go out — they come back when the mess does. */
