@@ -33,6 +33,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     )
   }
 
+  // /about is the shelf page (2026-10-18): same shelf nav, inked the same way, on the same white
+  // grid paper as /works (Kai, 2026-10-18).
+  if (pathname === '/about') {
+    return (
+      <div className="grid-sheet flex min-h-screen flex-col">
+        <div className="[&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark]:[filter:brightness(0)]!">
+          <ShelfNav />
+        </div>
+        <main className="flex-grow">{children}</main>
+        <Footer />
+      </div>
+    )
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <Navigation />
