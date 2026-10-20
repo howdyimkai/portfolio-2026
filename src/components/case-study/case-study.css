@@ -1,0 +1,108 @@
+/* Case study template. Decision record: design-intent/case-study-exploration/NOTES.md */
+
+/* The grid paper fades out under the content column and stays full strength in the margins. */
+.cs-backdrop {
+  position: absolute;
+  z-index: 0;
+  inset: -32px -8px -48px;
+  pointer-events: none;
+  background-color: rgb(255 255 255 / 0.85);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent), linear-gradient(to bottom, transparent, #000 56px, #000 calc(100% - 56px), transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent), linear-gradient(to bottom, transparent, #000 56px, #000 calc(100% - 56px), transparent);
+  mask-composite: intersect;
+}
+@media (min-width: 768px) {
+  .cs-backdrop { inset: -48px -56px -64px; }
+}
+
+/* A visual that isn't made yet: striped tag paper, so it reads as "goes here", not broken. */
+.cs-placeholder {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-placeholder-stripe-a) 0 10px,
+    color-mix(in srgb, var(--color-placeholder-stripe-a) 55%, white) 10px 20px
+  );
+}
+
+/* Chapter bar: the chapters chalked on the birch frame from /about. It hangs straight and swings
+   toward the content on hover, from its top center like a nail. */
+.cs-frame {
+  rotate: 0deg;
+  transform-origin: 50% 0;
+  filter: drop-shadow(0 8px 10px rgba(64, 42, 18, 0.18));
+  transition: rotate 400ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cs-frame:hover { rotate: -2deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-frame { transition: none; }
+}
+.cs-frame > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+/* The chalkboard area, measured off frame.webp (same as /about's .about-chalk). */
+.cs-chalk {
+  position: absolute;
+  inset: 6.5% 11.8% 11.4% 6.5%;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.cs-chalk a {
+  display: flex;
+  gap: 0.75em;
+  padding: 0.3em 0;
+  color: rgba(244, 240, 230, 0.5);
+  transition: color 150ms ease-out;
+}
+.cs-chalk a[aria-current] { color: rgba(244, 240, 230, 0.95); }
+@media (hover: hover) and (pointer: fine) {
+  .cs-chalk a:hover { color: rgba(244, 240, 230, 0.85); }
+}
+.cs-chalk a:focus-visible {
+  outline: 1px solid rgba(244, 240, 230, 0.6);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Close, back to /works: the nav's broom chip (shelf-nav.css .shelf-broom at desktop zoom),
+   pinned over the frame's top right wood corner. */
+.cs-close {
+  position: absolute;
+  z-index: 1;
+  top: calc(2.5% - 18px);
+  right: calc(5.5% - 18px);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 12px;
+  background-color: color-mix(in srgb, var(--color-page) 85%, transparent);
+  box-shadow: 0 1px 1.5px rgba(58, 50, 38, 0.06), 0 5px 14px rgba(58, 50, 38, 0.12);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: rgb(0 0 0 / 0.85);
+  transition: scale 150ms var(--ease-out-strong), background-color 150ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+.cs-close::after { content: ''; position: absolute; inset: -6px; }
+.cs-close svg { width: 16px; height: 16px; transition: rotate 200ms var(--ease-out-strong); }
+.cs-close:active { scale: 0.96; }
+.cs-close:focus-visible { outline: 1px solid rgb(0 0 0 / 0.85); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .cs-close:hover { background-color: color-mix(in srgb, var(--color-sand-light) 40%, color-mix(in srgb, var(--color-page) 85%, transparent)); }
+  .cs-close:hover svg { rotate: -10deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-close svg { transition: none; }
+}

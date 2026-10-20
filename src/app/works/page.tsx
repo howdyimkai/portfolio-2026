@@ -5,7 +5,7 @@ import ProjectCard, { type Project } from '@/components/works/ProjectCard'
 const PROJECTS: Project[] = [
   {
     name: 'design garden',
-    hook: 'Most online courses never get finished. These sprints do.',
+    hook: 'Helping designers ship the project they keep putting off, with a partner and a deadline.',
     story: 'A four week sprint platform I built and run. Designers pair up, check in weekly, and end on showcase night with real progress on their next move.',
     role: 'founder',
     year: '2026',
@@ -15,7 +15,7 @@ const PROJECTS: Project[] = [
       still: '/works/design-garden-cover-still.webp',
       alt: "Design Garden: two designers' shared garden board for the week",
     },
-    href: '#',
+    href: '/works/design-garden',
     cta: 'see how it grew',
   },
   {
