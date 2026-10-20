@@ -46,8 +46,9 @@ case, no em dashes or hyphens in creative copy, no buzzwords).
 This replaces the 2026-10-10 plan to make the homepage scroll. The homepage
 stays one full-bleed screen with no footer; the shelf's "selected works" toy
 is the way in. `/works` uses the same `ShelfNav` on white grid paper
-(`.grid-sheet`) with three cards: Design Garden, Tallo, apolloED. Tallo and
-apolloED are "coming soon" (draft copy, no covers yet). Cards are
+(`.grid-sheet`) with three cards: Design Garden, Tallo, apolloED. Tallo links to
+the Cal case study (`/works/cal`, still noindex) but has no cover yet;
+apolloED is "coming soon". Cards are
 `src/components/works/ProjectCard.tsx`, promoted from `/proto/project-card`'s
 Chalkboard variant.
 

@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import CaseStudyPage from '@/components/case-study/CaseStudyPage'
 import { cal } from '@/content/case-studies/cal'
 
-// Unlisted until Tallo OKs public use (sprint plan, 2026-10-20): not linked from /works and kept
-// out of search, so it can go to reviewers as a private link.
+// Linked from the Tallo card on /works (2026-10-20), but still kept out of search until Tallo OKs
+// public use.
 export const metadata: Metadata = {
   title: "Cal's Career Quiz",
   description: cal.hook,

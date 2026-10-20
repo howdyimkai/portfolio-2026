@@ -1,7 +1,7 @@
 import ProjectCard, { type Project } from '@/components/works/ProjectCard'
 
-// Design Garden leads, then Tallo (positioning, 2026-10-10). Tallo and apolloED copy is a draft
-// and their covers aren't made yet, so they show as "coming soon" cards.
+// Design Garden leads, then Tallo (positioning, 2026-10-10). Tallo links to the Cal quiz case
+// study but has no cover yet; apolloED is still a "coming soon" card.
 const PROJECTS: Project[] = [
   {
     name: 'design garden',
@@ -23,6 +23,8 @@ const PROJECTS: Project[] = [
     hook: 'A career quiz students finish, with a mascot to guide them.',
     story: 'I created a mascot for a career exploration platform for gen z and tested it with our community. It led a quiz I built for marketing, and product adopted it into the core experience.',
     role: 'brand and product',
+    href: '/works/cal',
+    cta: 'meet cal',
   },
   {
     name: 'apolloED',

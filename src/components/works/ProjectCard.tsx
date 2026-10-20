@@ -11,7 +11,8 @@ export type Project = {
   story: string
   role: string
   year?: string
-  // Animated cover plus its first frame for reduced motion. No cover → a quiet empty window.
+  // Animated cover plus its first frame for reduced motion. No cover → a quiet empty window,
+  // labeled "coming soon" only when there's no case study to link to either.
   cover?: { anim: string; still: string; alt: string }
   // No href → the card is a "coming soon" placeholder and isn't a link.
   href?: string
@@ -50,7 +51,7 @@ export default function ProjectCard({ project: p }: { project: Project }) {
               <img src="/garden/tool-blossom.webp" alt="" draggable={false} className="wk-blossom wk-blossom-b" />
             </>
           ) : (
-            <div className="wk-window-empty flex items-center justify-center font-mono text-[12px] text-ink-faint">coming soon</div>
+            <div className="wk-window-empty flex items-center justify-center font-mono text-[12px] text-ink-faint">{!p.href && 'coming soon'}</div>
           )}
         </div>
         {/* Header: what it is, then my part in it, on the chalkboard's 24px gutter. */}
