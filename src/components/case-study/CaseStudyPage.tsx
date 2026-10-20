@@ -9,17 +9,22 @@ import './case-study.css'
 
 const num = (i: number) => String(i + 1).padStart(2, '0')
 
+// Reading text caps at ~62 characters a line (mono reads dense past that); visuals, the stat strip
+// and charts use the full column. Body text is fluid, 16px on phones to 18px on large screens
+// (.cs-body), and the ch cap grows with it, so a line stays ~62 characters at every size.
+const PROSE = 'max-w-[62ch]'
+const BODY = 'cs-body font-mono text-ink-body [text-wrap:pretty]'
+
 export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
   const active = useActiveChapter(s.chapters.map((c) => c.id))
 
   return (
-    <article className="mx-auto max-w-[1180px] px-4 pb-24 pt-8 md:px-10 md:pt-12">
-      <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-16">
+    <article className="mx-auto max-w-[1280px] px-4 pb-32 pt-12 md:px-10 md:pt-24">
+      <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-20">
         {/* Chapter bar: desktop only, chalked on the birch frame from /about and sticky beside the
             whole page. The chip on its corner closes the case study back to /works. */}
         <nav aria-label="Chapters" className="relative z-10 hidden lg:block">
           <div className="cs-frame sticky top-10">
-            <img src="/about/frame.webp" alt="" width={722} height={923} draggable={false} />
             <a href="/works" aria-label="Back to selected works" className="cs-close">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4.75 4.75L19.25 19.25M19.25 4.75L4.75 19.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -39,39 +44,38 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
         </nav>
 
         {/* Everything sits above the backdrop, which fades the grid paper out under the column. */}
-        <div className="relative max-w-[720px] [&>*:not(.cs-backdrop)]:relative">
+        <div className="relative max-w-[880px] [&>*:not(.cs-backdrop)]:relative">
           <div className="cs-backdrop" aria-hidden="true" />
           <header>
             {s.coldOpen && (
-              <p className="mb-8 max-w-[560px] font-mono text-[13px] leading-[1.7] text-ink-muted [text-wrap:pretty]">
+              <p className={`mb-12 ${PROSE} font-mono text-[13px] leading-[1.7] text-ink-muted [text-wrap:pretty]`}>
                 {s.coldOpen.text}
               </p>
             )}
-            <h1 className="font-display text-[40px] font-semibold leading-[1.05] tracking-[-0.01em] md:text-[56px]">{s.title}</h1>
-            <p className="mt-4 font-display text-[20px] leading-[1.35] text-ink-body [text-wrap:balance] md:text-[24px]">{s.hook}</p>
-            <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-3 font-mono text-[13px] leading-[1.6] sm:grid-cols-2">
+            <h1 className="font-display text-[44px] font-semibold leading-[1.02] tracking-[-0.015em] md:text-[68px]">{s.title}</h1>
+            <p className="mt-5 max-w-[640px] font-display text-[20px] leading-[1.35] text-ink-body [text-wrap:balance] md:text-[26px]">{s.hook}</p>
+            <dl className="mt-12 grid grid-cols-1 gap-x-10 gap-y-5 border-t border-hairline pt-6 font-mono text-[13px] leading-[1.6] sm:grid-cols-2">
               {s.meta.map((m) => (
                 <div key={m.label}>
-                  <dt className="text-ink-faint">{m.label}</dt>
-                  <dd className="text-ink-primary">{m.value}</dd>
+                  <dt className="mb-1 text-[12px] text-ink-faint">{m.label}</dt>
+                  <dd className="text-ink-primary [text-wrap:pretty]">{m.value}</dd>
                 </div>
               ))}
             </dl>
           </header>
 
-          <div className="mt-10">
+          <div className="mt-16">
             <VisualBlock v={s.hero} />
           </div>
 
           <StatStrip stats={s.stats} />
 
           {s.chapters.map((c, i) => (
-            <section key={c.id} id={c.id} className="mt-16 scroll-mt-10 md:mt-20">
-              <h2 className="flex items-baseline gap-3 font-display text-[24px] font-medium leading-[1.2] md:text-[28px]">
-                <span className="font-mono text-[13px] font-normal tabular-nums text-ink-faint">{num(i)}</span>
-                {c.title}
-              </h2>
-              <div className="mt-5 flex flex-col gap-5">
+            <section key={c.id} id={c.id} className="mt-[77px] scroll-mt-12 md:mt-[104px]">
+              {/* Chapter number as a quiet label above, so the title alone carries the weight. */}
+              <p className="font-mono text-[13px] tabular-nums text-ink-faint">{num(i)}</p>
+              <h2 className="mt-2 font-display text-[28px] font-medium leading-[1.15] tracking-[-0.01em] md:text-[36px]">{c.title}</h2>
+              <div className="mt-7 flex flex-col gap-7">
                 {c.blocks.map((b, j) => (
                   <BlockView key={j} b={b} />
                 ))}
@@ -87,23 +91,23 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
 function StatStrip({ stats }: { stats: CaseStudy['stats'] }) {
   const notes = stats.filter((st) => st.note)
   return (
-    <div className="mt-10">
+    <div className="mt-14">
       <dl className="grid grid-cols-3 border-y border-hairline">
         {stats.map((st, i) => (
-          <div key={st.label} className={`py-5 ${i > 0 ? 'border-l border-hairline pl-4 md:pl-6' : ''}`}>
+          <div key={st.label} className={`py-6 md:py-8 ${i > 0 ? 'border-l border-hairline pl-4 md:pl-8' : ''}`}>
             <dt className="sr-only">{st.label}</dt>
             <dd>
-              <span className="block font-display text-[32px] font-semibold leading-none text-ink-primary md:text-[44px]">
+              <span className="block font-display text-[32px] font-semibold leading-none tracking-[-0.01em] text-ink-primary md:text-[52px]">
                 {st.value}
-                {st.note && <sup className="ml-0.5 font-mono text-[13px] font-normal text-ink-faint">*</sup>}
+                {st.note && <span className="ml-1 align-top font-mono text-[13px] font-normal text-ink-faint">*</span>}
               </span>
-              <span className="mt-2 block font-mono text-[12px] leading-[1.4] text-ink-body md:text-[13px]">{st.label}</span>
+              <span className="mt-3 block font-mono text-[12px] leading-[1.45] text-ink-body [text-wrap:balance] md:text-[13px]">{st.label}</span>
             </dd>
           </div>
         ))}
       </dl>
       {notes.map((st) => (
-        <p key={st.label} className="mt-3 font-mono text-[12px] leading-[1.6] text-ink-faint">
+        <p key={st.label} className={`mt-4 ${PROSE} font-mono text-[12px] leading-[1.6] text-ink-faint`}>
           * {st.note}
         </p>
       ))}
@@ -114,10 +118,10 @@ function StatStrip({ stats }: { stats: CaseStudy['stats'] }) {
 function BlockView({ b }: { b: Block }) {
   switch (b.kind) {
     case 'p':
-      return <p className="font-mono text-[15px] leading-[1.75] text-ink-body [text-wrap:pretty]">{b.text}</p>
+      return <p className={`${PROSE} ${BODY}`}>{b.text}</p>
     case 'owned':
       return (
-        <ol className="flex flex-col gap-3 font-mono text-[15px] leading-[1.6] text-ink-body">
+        <ol className={`${PROSE} cs-body flex flex-col gap-4 font-mono text-ink-body`}>
           {b.items.map((item, i) => (
             <li key={i} className="flex gap-4">
               <span className="tabular-nums text-ink-faint">{num(i)}</span>
@@ -128,23 +132,56 @@ function BlockView({ b }: { b: Block }) {
       )
     case 'scene':
       return (
-        <div>
+        <div className={PROSE}>
           <h3 className="font-mono! text-[13px] font-normal text-ink-primary">{b.slug}</h3>
-          <p className="mt-1.5 font-mono text-[15px] leading-[1.75] text-ink-body [text-wrap:pretty]">{b.text}</p>
+          <p className={`mt-2 ${BODY}`}>{b.text}</p>
         </div>
       )
     case 'quote':
       return (
-        <figure className="my-2 border-l-2 border-ink-primary pl-5">
+        <figure className={`my-3 ${PROSE} border-l-2 border-ink-primary pl-6`}>
           <blockquote className="font-display text-[20px] leading-[1.4] text-ink-primary [text-wrap:pretty] md:text-[22px]">
             “{b.text}”
           </blockquote>
           {b.cite && <figcaption className="mt-2 font-mono text-[12px] text-ink-faint">{b.cite}</figcaption>}
         </figure>
       )
+    case 'callout':
+      return (
+        <p className="my-2 border-y border-hairline py-7 font-display text-[23px] leading-[1.3] tracking-[-0.005em] text-ink-primary [text-wrap:balance] md:py-8 md:text-[30px]">
+          <span className="mb-2 block font-mono text-[12px] text-ink-faint">{b.label}</span>
+          {b.text}
+        </p>
+      )
+    case 'cards':
+      return (
+        <ul className="mt-2 grid grid-cols-1 gap-6 sm:grid-cols-3">
+          {b.items.map((item, i) => (
+            <li key={i} className="flex flex-col gap-4">
+              <VisualBlock v={{ aspect: '1 / 1', ...item.visual }} />
+              <p className="font-mono text-[14px] leading-[1.5] text-ink-primary [text-wrap:pretty]">{item.text}</p>
+            </li>
+          ))}
+        </ul>
+      )
+    case 'quotes':
+      return (
+        <ul className={`my-2 ${PROSE} flex flex-col gap-7 border-l-2 border-ink-primary pl-6`}>
+          {b.items.map((q, i) => (
+            <li key={i}>
+              <figure>
+                <blockquote className="font-display text-[19px] leading-[1.4] text-ink-primary [text-wrap:pretty] md:text-[20px]">“{q.text}”</blockquote>
+                {q.cite && <figcaption className="mt-2 font-mono text-[12px] leading-[1.5] text-ink-faint">{q.cite}</figcaption>}
+              </figure>
+            </li>
+          ))}
+        </ul>
+      )
+    case 'funnel':
+      return <Funnel steps={b.steps} caption={b.caption} />
     case 'visual':
       return (
-        <div className="mt-3">
+        <div className="mt-2">
           <VisualBlock v={b.visual} />
         </div>
       )
@@ -170,7 +207,35 @@ function VisualBlock({ v }: { v: Visual }) {
           <span className="max-w-[420px]">visual: {v.label}</span>
         </div>
       )}
-      {v.caption && <figcaption className="mt-3 font-mono text-[12px] leading-[1.6] text-ink-faint">{v.caption}</figcaption>}
+      {v.caption && <figcaption className="mt-4 font-mono text-[12px] leading-[1.6] text-ink-faint">{v.caption}</figcaption>}
+    </figure>
+  )
+}
+
+// Each step's bar is its share of the first step, with the count and the share labeled on every
+// row (four values, so labels replace a hover layer). One series, so no legend.
+function Funnel({ steps, caption }: { steps: { label: string; count: number }[]; caption?: string }) {
+  const top = steps[0]?.count || 1
+  return (
+    <figure className="mt-2">
+      <ol className="flex flex-col gap-5">
+        {steps.map((st) => {
+          const share = st.count / top
+          return (
+            <li key={st.label}>
+              <div className="flex items-baseline justify-between gap-4 font-mono text-[13px] leading-[1.4]">
+                <span className="text-ink-body">{st.label}</span>
+                <span className="tabular-nums text-ink-primary">
+                  {st.count.toLocaleString('en-US')}
+                  <span className="ml-2 text-ink-faint">{(share * 100).toFixed(1)}%</span>
+                </span>
+              </div>
+              <div className="mt-2 h-3 rounded-r-[4px] bg-ink-primary" style={{ width: `${share * 100}%` }} aria-hidden="true" />
+            </li>
+          )
+        })}
+      </ol>
+      {caption && <figcaption className="mt-5 font-mono text-[12px] leading-[1.6] text-ink-faint">{caption}</figcaption>}
     </figure>
   )
 }

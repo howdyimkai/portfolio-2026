@@ -25,9 +25,16 @@
   );
 }
 
-/* Chapter bar: the chapters chalked on the birch frame from /about. It hangs straight and swings
-   toward the content on hover, from its top center like a nail. */
+/* Chapter bar: the chapters chalked on the birch frame from /about. The frame is a border-image
+   (9 slice: the wood stays its drawn size, the chalkboard stretches), so it grows with a long
+   chapter list; at rest it's never shorter than the frame's own proportions (240 → 307px).
+   Slices are /about's chalk insets measured off frame.webp (722×923): 60 85 105 47, drawn at
+   240/722. It hangs straight and swings toward the content on hover, from its top center. */
 .cs-frame {
+  min-height: 307px;
+  border-style: solid;
+  border-width: 20px 28px 35px 16px;
+  border-image: url('/about/frame.webp') 60 85 105 47 fill / 20px 28px 35px 16px stretch;
   rotate: 0deg;
   transform-origin: 50% 0;
   filter: drop-shadow(0 8px 10px rgba(64, 42, 18, 0.18));
@@ -39,16 +46,7 @@
 @media (prefers-reduced-motion: reduce) {
   .cs-frame { transition: none; }
 }
-.cs-frame > img {
-  display: block;
-  width: 100%;
-  height: auto;
-  user-select: none;
-}
-/* The chalkboard area, measured off frame.webp (same as /about's .about-chalk). */
 .cs-chalk {
-  position: absolute;
-  inset: 6.5% 11.8% 11.4% 6.5%;
   padding: 22px 20px;
   display: flex;
   flex-direction: column;
@@ -75,12 +73,12 @@
 }
 
 /* Close, back to /works: the nav's broom chip (shelf-nav.css .shelf-broom at desktop zoom),
-   pinned over the frame's top right wood corner. */
+   pinned over the frame's top right wood corner (positioned from the border edge). */
 .cs-close {
   position: absolute;
   z-index: 1;
-  top: calc(2.5% - 18px);
-  right: calc(5.5% - 18px);
+  top: -30px;
+  right: -33px;
   display: grid;
   place-items: center;
   width: 36px;
@@ -105,4 +103,12 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .cs-close svg { transition: none; }
+}
+
+/* Reading text only: fluid from 16px at 390px wide to 18px at 1440px (Kai, 2026-10-20, after
+   Emil's "make your text big if you want it to be read"). Mono runs wide, so 18px tops out about
+   where a proportional face would sit at 19 to 20px. Labels, captions and the chalk list stay fixed. */
+.cs-body {
+  font-size: clamp(1rem, 0.954rem + 0.19vw, 1.125rem);
+  line-height: 1.75;
 }

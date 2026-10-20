@@ -21,6 +21,14 @@ export type Block =
   // A place and year heading, like a slug line in a script.
   | { kind: 'scene'; slug: string; text: string }
   | { kind: 'quote'; text: string; cite?: string }
+  // A labeled one liner set apart from the body, like a "how might we".
+  | { kind: 'callout'; label: string; text: string }
+  // Short cards in a row, each with its own small visual (Cal's rules, one pose per card).
+  | { kind: 'cards'; items: { text: string; visual: Visual }[] }
+  // Several short quotes together, quieter than a single pull quote.
+  | { kind: 'quotes'; items: { text: string; cite?: string }[] }
+  // A funnel drawn from real counts: each step's bar is its share of the first step.
+  | { kind: 'funnel'; steps: { label: string; count: number }[]; caption?: string }
   | { kind: 'visual'; visual: Visual }
 
 export type Chapter = {
