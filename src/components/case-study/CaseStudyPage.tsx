@@ -5,6 +5,7 @@
 // Backdrop and chapter bar: design-intent/case-study-exploration/NOTES.md (2026-10-20).
 import { useEffect, useState, type CSSProperties } from 'react'
 import StepFrame from './StepFrame'
+import Strip from './Strip'
 import Toggle from './Toggle'
 import type { Block, CaseStudy, Visual } from './types'
 import './case-study.css'
@@ -223,6 +224,8 @@ function VisualBlock({ v }: { v: Visual }) {
     <figure>
       {v.flow ? (
         <StepFrame flow={v.flow} />
+      ) : v.strip ? (
+        <Strip items={v.strip} aspect={v.aspect ?? '1 / 1'} cols={v.cols ?? [v.strip.length, v.strip.length]} />
       ) : v.compare ? (
         <Toggle views={v.compare} aspect={v.aspect ?? '16 / 10'} framed={v.frame === 'browser'} />
       ) : v.src ? (

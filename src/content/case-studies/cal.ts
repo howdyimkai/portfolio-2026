@@ -71,6 +71,13 @@ const quizFlow: Flow = {
 // in place. Before public: the new one still shows the unverified "2+ Million Users" badge, and the
 // old one the CBS News bar.
 
+// Chapter 3's Calvolution, from Kai's Paper export Cal-Visuals/03-finding-cal/03-findingcal.png
+// (3942x1303, on white): four 900x1030 cells cut on one shared row band (y 60 to 1090) so the feet
+// keep one baseline, each centered on its character (x 537, 1447, 2361, 3304). The baked labels are
+// cropped off and set as captions, word for word. Before public: paint out the scribbles on Cal's
+// right glove cuff (an AI artifact).
+const F = '/works/cal/finding'
+
 // Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/Final Drafts/CaseStudy_Cal_V4.md, Part 1
 // (locked 2026-10-21). Paste as written: don't edit copy here, edit the doc. Every visual but the hero is
 // still a placeholder named after its *[...]* marker; Part 2 of the doc specs each one.
@@ -176,11 +183,28 @@ export const cal: CaseStudy = {
           kind: 'visual',
           visual: {
             label: 'Calvolution strip: first idea · my sketch · Orion, rendered from my sketch · Cal, down to earth',
-            tiles: [
-              { aspect: '3 / 4', label: 'First idea' },
-              { aspect: '3 / 4', label: 'My sketch' },
-              { aspect: '3 / 4', label: 'Orion' },
-              { aspect: '3 / 4', label: 'Cal' },
+            aspect: '900 / 1030',
+            strip: [
+              {
+                src: `${F}/calvolution-1-idea.webp`,
+                caption: 'a scrappy idea',
+                alt: 'A scrappy first drawing: a round dark navy compass face with a purple star and a small smile, stick arms raised, stick legs, and a glowing orange lightbulb above its head.',
+              },
+              {
+                src: `${F}/calvolution-2-sketch.webp`,
+                caption: 'a sketch of Orion',
+                alt: 'A black and white line sketch of Orion, a pocket compass with a star on its crown, cartoon eyes, a big smile, giving a thumbs up mid stride in sneakers.',
+              },
+              {
+                src: `${F}/calvolution-3-orion.webp`,
+                caption: 'Orion, rendered with AI',
+                alt: 'Orion rendered from the sketch: a purple pocket compass with an orange star on its crown, starry eyes, rosy cheeks and a wide grin, giving a thumbs up mid stride in purple sneakers.',
+              },
+              {
+                src: `${F}/calvolution-4-cal.webp`,
+                caption: 'Cal, retro and down to Earth',
+                alt: 'Cal, the final character: a retro compass with a cream face marked N, E, S and W, sparkly eyes and rosy cheeks, waving in purple gloves, wearing a striped purple scarf, a green hiking pack with a bedroll, and tan hiking boots.',
+              },
             ],
             cols: [2, 4],
           },

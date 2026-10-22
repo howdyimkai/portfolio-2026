@@ -110,7 +110,69 @@
   transition: opacity 200ms var(--ease-out-strong);
 }
 
+/* Strip: each piece lifts a touch on hover, presses like a button, and opens larger in a dialog
+   that settles in from 96%. */
+.st-tile {
+  cursor: zoom-in;
+  border-radius: 10px;
+  transition: transform 160ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .st-tile:hover { transform: translateY(-3px); }
+}
+.st-tile:active { transform: scale(0.97); }
+.st-tile:focus-visible {
+  outline: 2px solid var(--color-accent-washi-blue);
+  outline-offset: 4px;
+}
+.st-dialog {
+  width: min(92vw, 720px);
+  max-width: none;
+  max-height: 92dvh;
+  margin: auto;
+  border-radius: 16px;
+  background: white;
+  cursor: zoom-out;
+  box-shadow: 0 24px 64px rgb(58 50 38 / 0.22);
+}
+.st-dialog[open] {
+  animation: st-in 200ms var(--ease-out-strong);
+}
+.st-dialog::backdrop {
+  background: rgb(33 30 26 / 0.45);
+}
+.st-dialog[open]::backdrop {
+  animation: st-fade 200ms ease-out;
+}
+@keyframes st-in {
+  from { opacity: 0; transform: scale(0.96); }
+}
+@keyframes st-fade {
+  from { opacity: 0; }
+}
+.st-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  color: var(--color-ink-muted);
+}
+.st-close svg { width: 18px; height: 18px; }
+.st-close:focus-visible {
+  outline: 2px solid var(--color-accent-washi-blue);
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .st-tile,
+  .st-tile:hover,
+  .st-tile:active { transform: none; transition: none; }
+  .st-dialog[open],
+  .st-dialog[open]::backdrop { animation: none; }
   .sf-screen,
   .sf-screen[data-active='true'] {
     transform: none;
