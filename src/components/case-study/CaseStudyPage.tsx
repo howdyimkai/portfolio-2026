@@ -4,6 +4,7 @@
 // then chapters with a chapter bar on the left. Everything is driven by a CaseStudy in src/content/.
 // Backdrop and chapter bar: design-intent/case-study-exploration/NOTES.md (2026-10-20).
 import { useEffect, useState, type CSSProperties } from 'react'
+import StepFrame from './StepFrame'
 import type { Block, CaseStudy, Visual } from './types'
 import './case-study.css'
 
@@ -219,7 +220,9 @@ function BlockView({ b }: { b: Block }) {
 function VisualBlock({ v }: { v: Visual }) {
   return (
     <figure>
-      {v.src ? (
+      {v.flow ? (
+        <StepFrame flow={v.flow} />
+      ) : v.src ? (
         <div className="overflow-hidden rounded-[14px] border border-hairline bg-white" style={{ aspectRatio: v.aspect ?? '16 / 10' }}>
           {/* A plain <picture>, not next/image: the optimizer would flatten animated WebPs. */}
           <picture>

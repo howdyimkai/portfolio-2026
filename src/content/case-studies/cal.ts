@@ -1,8 +1,73 @@
-import type { CaseStudy } from '@/components/case-study/types'
+import type { CaseStudy, Flow } from '@/components/case-study/types'
+
+// TODO before the page goes public: the live Tallo career quiz.
+const TALLO_QUIZ_URL = 'https://example.com/tallo-career-quiz-TODO'
+
+// The hero: four of the quiz's nine paths, rebuilt in Paper (Tallo Brand System › Cal Art) from the
+// live quiz. Desktop screens are cropped to 960x832 out of the 1703x952 artboards: x 371 to 1331
+// (the middle of the quiz column, which keeps the type readable in the case study and trims the back
+// arrow and Exit off the welcome and result), and y 60 to 892, except the welcome at y 112 to 944 so
+// Begin Expedition keeps its margin (that drops its "Takes ~7 min" line). Boxes are % of each
+// cropped screen, from hero-build/HERO-MEASUREMENTS.md (1080px column space: x minus 60, y minus
+// the screen's top).
+const H = '/works/cal/hero'
+const alt = {
+  welcome:
+    "Quiz welcome screen. Heading \"Discover Your Career Path / Welcome Explorer!\" above an illustration of Cal, a compass character, standing in a mountain valley. Caption \"I'm Cal, your career navigator.\" Body copy: \"You find yourself standing at the edge of the Valley of Confusion, where fog clouds your vision and countless paths stretch out before you. But don't worry, I'm here to guide you on your journey to the Peak of Clarity, where your true potential will shine as bright as the summit sun. Every great adventure begins with a single step. Ready to discover which path is truly yours?\" A green button reads \"Begin Expedition.\"",
+  question:
+    'Quiz question screen, path 3 of 9, set in a rainy forest with a frog hiker under a red umbrella. Cal\'s avatar sits above a panel headed "A fellow hiker needs help! They seem lost and overwhelmed by the trail ahead. How do you support them?" Four unselected options: "Show practical techniques, Navigate difficult terrain", "Research and share, Trail conditions knowledge", "Offer emotional support, Listen to their concerns", "Rally them forward, Conquer this together." A green "Continue" button sits below.',
+  response:
+    'Quiz reaction screen on the same rainy forest scene. Cal\'s avatar now glows inside a purple halo above a speech panel reading: Cal\'s voice softens: "The best trails are the ones where nobody gets left behind." A green "Continue" button sits below.',
+  result:
+    'Quiz result screen. A "COMPLETED" pill above the heading "Congratulations! You\'ve reached the Peak of Clarity and discovered you\'re..." An illustration shows Cal wearing a beret and holding a paintbrush on a mountain summit. The result is "The Creator." Body copy: "You\'re the imaginative visionary, the expressive artist, the innovative storyteller. You love bringing original ideas to life, thinking outside conventional boundaries, and sharing your unique perspective with the world. Whether through visual arts, writing, design, or performance, you thrive on creativity and self-expression. This reflects how you tend to approach challenges and it can evolve as you explore more." A green button reads "Explore Creator Careers" with a "Retake Assessment" link below it.',
+}
+const options = ['Show practical techniques', 'Research and share', 'Offer emotional support', 'Rally them forward']
+
+const quizFlow: Flow = {
+  desktop: {
+    width: 960,
+    height: 832,
+    select: { radius: 12, radio: { right: 21, size: 18 } },
+    screens: [
+      { name: 'Welcome', src: `${H}/desktop-1-plate.webp`, alt: alt.welcome, float: { src: `${H}/desktop-1-cal.webp`, box: [38.65, 31.25, 27.08, 32.09] }, targets: [{ label: 'Begin Expedition', box: [22.4, 92.79, 55.31, 5.53], does: 'next' }] },
+      {
+        name: 'Path 3 question',
+        src: `${H}/desktop-2-question.webp`,
+        alt: alt.question,
+        targets: [
+          ...options.map((label, i) => ({ label, box: [22.4, [46.15, 55.77, 65.5, 75.12][i], 55.31, 7.57] as [number, number, number, number], does: 'select' as const })),
+          { label: 'Continue', box: [22.4, 85.46, 55.31, 5.53], does: 'next' },
+        ],
+      },
+      { name: "Cal's reaction", src: `${H}/desktop-3-response.webp`, alt: alt.response, targets: [{ label: 'Continue', box: [22.4, 60.58, 55.31, 5.53], does: 'next' }] },
+      { name: 'Result, The Creator', src: `${H}/desktop-4-result.webp`, alt: alt.result },
+    ],
+  },
+  mobile: {
+    width: 375,
+    height: 812,
+    select: { radius: 12, radio: { right: 17, size: 17 } },
+    screens: [
+      { name: 'Welcome', src: `${H}/mobile-1-plate.webp`, alt: alt.welcome, float: { src: `${H}/mobile-1-cal.webp`, box: [32.53, 27.59, 45.6, 21.67] }, targets: [{ label: 'Begin Expedition', box: [5.33, 87.68, 89.33, 5.67], does: 'next' }] },
+      {
+        name: 'Path 3 question',
+        src: `${H}/mobile-2-question.webp`,
+        alt: alt.question,
+        targets: [
+          ...options.map((label, i) => ({ label, box: [5.33, [38.42, 47.29, 56.16, 65.02][i], 89.33, 7.64] as [number, number, number, number], does: 'select' as const })),
+          { label: 'Continue', box: [5.33, 75.37, 89.33, 5.67], does: 'next' },
+        ],
+      },
+      { name: "Cal's reaction", src: `${H}/mobile-3-response.webp`, alt: alt.response, targets: [{ label: 'Continue', box: [5.33, 51.48, 89.33, 5.67], does: 'next' }] },
+      { name: 'Result, The Creator', src: `${H}/mobile-4-result.webp`, alt: alt.result },
+    ],
+  },
+  link: { label: 'Take the real quiz', href: TALLO_QUIZ_URL },
+}
 
 // Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/Final Drafts/CaseStudy_Cal_V4.md, Part 1
-// (locked 2026-10-21). Paste as written: don't edit copy here, edit the doc. Every visual is still a
-// placeholder named after its *[...]* marker; Part 2 of the doc specs each one.
+// (locked 2026-10-21). Paste as written: don't edit copy here, edit the doc. Every visual but the hero is
+// still a placeholder named after its *[...]* marker; Part 2 of the doc specs each one.
 // Private working draft: names teammates and nothing is signed off by Tallo yet, so the page is
 // unlisted and noindex (see src/app/works/cal/page.tsx). Never frame 3 in 100 → 1 in 3 as a lift.
 export const cal: CaseStudy = {
@@ -22,7 +87,8 @@ export const cal: CaseStudy = {
     },
   ],
   hero: {
-    label: 'Hero: Cal and one result screen, animated',
+    label: 'Hero: interactive quiz',
+    flow: quizFlow,
   },
   stats: [
     { value: '86.5%', label: 'finish it in product' },

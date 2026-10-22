@@ -18,6 +18,43 @@ export type Visual = {
   tiles?: { aspect: string; label?: string }[]
   cols?: [number, number]
   frame?: 'browser'
+  // A product flow you can step through by tapping, in place of a still (the Cal quiz hero).
+  flow?: Flow
+}
+
+// A box on a screen image as % of the image: [left, top, width, height]. Percentages, so hotspots
+// sit over the <img> at any size with no measuring.
+export type Box = [number, number, number, number]
+
+export type Screen = {
+  // Read out when the step changes, like "Path 3 question".
+  name: string
+  src: string
+  alt: string
+  // 'next' advances (the green button). 'select' marks one choice and stays put, no scoring.
+  targets?: { label: string; box: Box; does: 'next' | 'select' }[]
+  // A decorative layer over the screen that floats on its own (Cal on the welcome screen).
+  float?: { src: string; box: Box }
+}
+
+// Width and height are the screens' size in design px (the Paper artboard), which the frame uses
+// to draw on top of them at the right scale. select is how a picked option looks, in the same px:
+// the option's corner radius and where its radio sits (inset from the right edge, diameter).
+export type ScreenSet = {
+  width: number
+  height: number
+  select?: { radius: number; radio: { right: number; size: number } }
+  screens: Screen[]
+}
+
+// One flow, captured twice: desktop screens in a browser frame from md up, mobile screens in a
+// phone frame under md. Both lists are the same steps in the same order, so the current step
+// survives a resize across the breakpoint.
+export type Flow = {
+  desktop: ScreenSet
+  mobile: ScreenSet
+  // Opens the real thing in a new tab, under the frame.
+  link?: { label: string; href: string }
 }
 
 export type Block =

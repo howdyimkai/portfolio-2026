@@ -1,0 +1,92 @@
+/* StepFrame: a tappable product flow. --u is one design px (Paper artboard px) at the current
+   display size, so the overlays keep the screens' own radii and offsets at any width. */
+.sf-screens {
+  container-type: inline-size;
+  --u: calc(100cqw / var(--sf-w));
+}
+
+/* A step is a 220ms cross-fade, the incoming screen rising 8px. The outgoing one only fades: its
+   transform resets after it's gone, so it never drifts down on the way out. */
+.sf-screen {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 220ms var(--ease-out-strong), transform 0s linear 220ms;
+}
+.sf-screen[data-active='true'] {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 220ms var(--ease-out-strong), transform 220ms var(--ease-out-strong);
+}
+
+/* Cal's idle bob, measured off the live quiz: 5.5px over 3.5s, a clean sine. Only Cal moves. */
+@keyframes sf-float {
+  50% { transform: translateY(calc(-5.5 * var(--u))); }
+}
+.sf-float {
+  user-select: none;
+  animation: sf-float 3.5s ease-in-out infinite;
+}
+.sf-screen[data-active='false'] .sf-float {
+  animation-play-state: paused;
+}
+
+/* Hotspots are invisible until touched: the screen's own button is the visual. 'next' sits on the
+   green pill buttons; 'select' on the option rows. */
+.sf-hot {
+  cursor: pointer;
+  border-radius: 999px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 150ms ease-out;
+}
+.sf-hot[data-does='select'] {
+  border-radius: calc(var(--sf-radius) * var(--u));
+}
+/* The pill buttons draw under 44px tall on a phone, so their hit area reaches past the art. */
+.sf-hot[data-does='next']::before {
+  content: '';
+  position: absolute;
+  inset: -6px 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sf-hot[data-does='next']:hover { background-color: rgb(255 255 255 / 0.18); }
+  .sf-hot[data-does='select']:hover { background-color: rgb(255 255 255 / 0.06); }
+}
+.sf-hot:active { background-color: rgb(0 0 0 / 0.08); }
+.sf-hot:focus-visible {
+  outline: 2px solid var(--color-accent-washi-blue);
+  outline-offset: 2px;
+}
+
+/* A picked option: the quiz's lime on the row's edge, and its radio filled. */
+.sf-hot[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 calc(2 * var(--u)) #b4ec76;
+  background-color: rgb(180 236 118 / 0.1);
+}
+.sf-hot[aria-pressed='true']::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: calc(var(--sf-radio-right) * var(--u));
+  width: calc(var(--sf-radio-size) * var(--u));
+  aspect-ratio: 1;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1e0f41 0 26%, #b4ec76 30%);
+}
+
+/* Start over and the real quiz link: plain text, underlined on hover. */
+.sf-link {
+  text-underline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sf-link:hover { text-decoration: underline; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-screen,
+  .sf-screen[data-active='true'] {
+    transform: none;
+    transition: none;
+  }
+  .sf-float { animation: none; }
+}
