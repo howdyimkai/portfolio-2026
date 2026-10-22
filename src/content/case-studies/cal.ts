@@ -144,6 +144,12 @@ const calKit: Kit = {
   },
 }
 
+// Chapter 4's rule cards: Kai's three poses (Cal-Visuals/04-rules, 1024px transparent PNGs), read
+// worried, thinking, then the Researcher (Kai's pick over the plan's standard-outfit pose). Cut on
+// the Kit's canvas with the same dial rule (kit-build/normalize_cal.py) at 2x, so Cal is the same
+// size here as in the Kit. Before public: the scribbles on the ponder pose's glove cuff.
+const R = '/works/cal/rules'
+
 // Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/Final Drafts/CaseStudy_Cal_V4.md, Part 1
 // (locked 2026-10-21). Paste as written: don't edit copy here, edit the doc. Every visual but the hero is
 // still a placeholder named after its *[...]* marker; Part 2 of the doc specs each one.
@@ -284,28 +290,22 @@ export const cal: CaseStudy = {
         {
           kind: 'rules',
           items: [
-            { title: 'The trailhead looks scarier than the trail.', text: 'Drove: 9 questions, told as a story.' },
+            {
+              title: 'The trailhead looks scarier than the trail.',
+              text: 'Drove: 9 questions, told as a story.',
+              pose: { src: `${R}/1-worried.webp`, alt: 'Cal looking worried, gloved hands clasped under a frown.' },
+            },
             {
               title: "Cal doesn't pick your path. Cal helps you find it.",
               text: 'Drove: every result ends on a button into a career hub, a cluster of related careers, so people keep exploring.',
+              pose: { src: `${R}/2-ponder.webp`, alt: 'Cal pondering, one glove at the chin, eyes looking up.' },
             },
             {
               title: 'Your result can change.',
               text: 'Drove: no percent match, which felt too definitive for a short intro quiz, and every result page ends with "it can evolve as you explore more."',
+              pose: { src: `${R}/3-researcher.webp`, alt: 'Cal as the Researcher, grinning in a fedora and trench coat, holding up a magnifying glass.' },
             },
           ],
-        },
-        {
-          kind: 'visual',
-          visual: {
-            label: 'Three cards, each with a Cal pose',
-            tiles: [
-              { aspect: '4 / 3', label: 'Worried' },
-              { aspect: '4 / 3', label: 'Ponder' },
-              { aspect: '4 / 3', label: 'Excited or pointing' },
-            ],
-            cols: [1, 2],
-          },
         },
       ],
     },

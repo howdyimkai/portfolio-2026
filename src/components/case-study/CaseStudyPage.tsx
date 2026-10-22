@@ -4,7 +4,7 @@
 // then chapters with a chapter bar on the left. Everything is driven by a CaseStudy in src/content/.
 // Backdrop and chapter bar: design-intent/case-study-exploration/NOTES.md (2026-10-20).
 import { useEffect, useState, type CSSProperties } from 'react'
-import CalKit from './CalKit'
+import CalKit, { CAL, CAL_ASPECT } from './CalKit'
 import StepFrame from './StepFrame'
 import Strip from './Strip'
 import Toggle from './Toggle'
@@ -175,6 +175,21 @@ function BlockView({ b }: { b: Block }) {
         </p>
       )
     case 'rules':
+      if (b.items.some((r) => r.pose))
+        return (
+          <ul className="flex flex-col gap-3">
+            {b.items.map((r, i) => (
+              <li key={i} className="grid grid-cols-1 gap-3 rounded-[14px] bg-tag/55 p-4 sm:grid-cols-[120px_minmax(0,1fr)] sm:items-center sm:gap-7 sm:p-5">
+                {/* On phones the pose sits above the rule, so the text keeps the card's full width. */}
+                {r.pose ? <img src={r.pose.src} alt={r.pose.alt} draggable={false} className={`${CAL} ml-0 sm:mx-auto`} style={{ aspectRatio: CAL_ASPECT }} /> : <span />}
+                <p className={`${PROSE} cs-body font-mono text-ink-body [text-wrap:pretty]`}>
+                  <span className="block font-semibold text-ink-primary">{r.title}</span>
+                  <span className="mt-1 block">{r.text}</span>
+                </p>
+              </li>
+            ))}
+          </ul>
+        )
       return (
         <ul className={`${PROSE} cs-body flex flex-col gap-5 font-mono text-ink-body [text-wrap:pretty]`}>
           {b.items.map((r, i) => (

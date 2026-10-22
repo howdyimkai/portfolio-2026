@@ -72,8 +72,9 @@ export type Block =
   | { kind: 'quote'; text: string; cite?: string }
   // A labeled one liner set apart from the body, like a "how might we".
   | { kind: 'callout'; label?: string; text: string }
-  // A short list of named rules, each with what it drove.
-  | { kind: 'rules'; items: { title: string; text: string }[] }
+  // A short list of named rules, each with what it drove. With poses, each rule is a card with its
+  // character beside it, the poses reading in order down the list.
+  | { kind: 'rules'; items: { title: string; text: string; pose?: { src: string; alt: string } }[] }
   // Short cards in a row, each with its own small visual (Cal's rules, one pose per card).
   | { kind: 'cards'; items: { text: string; visual: Visual }[] }
   // Several short quotes together, quieter than a single pull quote.

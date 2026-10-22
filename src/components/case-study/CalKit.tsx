@@ -28,9 +28,9 @@ const PANEL = 'rounded-[14px] bg-tag/55'
 // Every Cal (personas and expressions) is cut to one canvas with the dial the same width and the
 // feet on one baseline (kit-build/normalize_cal.py in the sprint folder), and drawn at one width:
 // 104px on phones, 120px from md, the narrowest cell in either grid. So Cal is the same size
-// wherever Cal appears in the kit.
-const CAL = 'mx-auto block w-full max-w-[104px] mix-blend-multiply md:max-w-[120px]'
-const CAL_ASPECT = '200 / 196'
+// wherever Cal appears in the kit. Chapter 4's rule cards use the same, so Cal matches there too.
+export const CAL = 'mx-auto block w-full max-w-[104px] mix-blend-multiply md:max-w-[120px]'
+export const CAL_ASPECT = '200 / 196'
 
 const grid = (base: number, md: number) => ({ '--cols': base, '--cols-md': md }) as CSSProperties
 
