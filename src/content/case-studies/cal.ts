@@ -86,7 +86,7 @@ const F = '/works/cal/finding'
 // kit-build/normalize_cal.py (sprint folder) so every Cal's dial is the same width with the feet
 // on one baseline (Kai, 2026-10-22); run it on the Paper exports too. Panel grey (#F2F2F2) is
 // lifted to white so the art multiplies onto the page. The recap header has its "his first birthday" line filled out.
-// Before public: the intern's name in the In use note.
+// The Minecraft Short is by Gavin Han, an intern (credit OK'd by Kai, 2026-10-22).
 const K = '/works/cal/kit'
 const calKit: Kit = {
   label: 'Cal Kit',
@@ -133,7 +133,7 @@ const calKit: Kit = {
   ],
   paletteNote: 'Purple over corporate blue, lime for the moment something good happens',
   inUse: {
-    note: 'Same kit, outside the quiz: a community recap, and a Minecraft build by our intern.',
+    note: 'Same kit, outside the quiz: a community recap, and a Minecraft build by our intern, Gavin Han.',
     image: {
       src: `${K}/recap.webp`,
       width: 1055,
