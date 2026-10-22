@@ -243,7 +243,7 @@ function VisualBlock({ v }: { v: Visual }) {
       {v.flow ? (
         <StepFrame flow={v.flow} />
       ) : v.strip ? (
-        <Strip items={v.strip} aspect={v.aspect ?? '1 / 1'} cols={v.cols ?? [v.strip.length, v.strip.length]} />
+        <Strip items={v.strip} aspect={v.aspect ?? '1 / 1'} cols={v.cols ?? [v.strip.length, v.strip.length]} screens={v.frame === 'screen'} />
       ) : v.compare ? (
         <Toggle views={v.compare} aspect={v.aspect ?? '16 / 10'} framed={v.frame === 'browser'} />
       ) : v.src ? (

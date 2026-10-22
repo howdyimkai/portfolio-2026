@@ -17,15 +17,17 @@ export type Visual = {
   // cols is [phones, md and up]. frame: 'browser' draws a toolbar on the slot.
   tiles?: { aspect: string; label?: string }[]
   cols?: [number, number]
-  frame?: 'browser'
+  frame?: 'browser' | 'screen'
   // A product flow you can step through by tapping, in place of a still (the Cal quiz hero).
   flow?: Flow
   // Captures of one page in a browser frame with a switch between them (a before and after). They
   // share the visual's aspect, so crop them to the same size and zoom.
   compare?: { label: string; src: string; alt: string }[]
   // A row of art on one baseline, each with a caption, that opens larger on tap (Calvolution). The
-  // pieces share the visual's aspect and lay out by cols, like placeholder tiles.
-  strip?: { src: string; alt: string; caption: string }[]
+  // pieces share the visual's aspect and lay out by cols, like placeholder tiles. With frame
+  // 'screen' they're product screens instead: a second caption line (note), and a mark that rings
+  // a part of the screen.
+  strip?: { src: string; alt: string; caption: string; note?: string; mark?: Box }[]
 }
 
 // A box on a screen image as % of the image: [left, top, width, height]. Percentages, so hotspots

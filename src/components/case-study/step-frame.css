@@ -125,6 +125,11 @@
   outline: 2px solid var(--color-accent-washi-blue);
   outline-offset: 4px;
 }
+/* A strip screen's mark: the quiz's lime, ringing the answer that matches. */
+.st-mark {
+  border-radius: 10px;
+  box-shadow: 0 0 0 2px #bdf184, 0 0 12px 2px rgb(189 241 132 / 0.45);
+}
 .st-dialog {
   width: min(92vw, 720px);
   max-width: none;

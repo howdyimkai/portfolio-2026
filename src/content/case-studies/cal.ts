@@ -3,8 +3,19 @@ import type { CaseStudy, Flow, Kit } from '@/components/case-study/types'
 // The live Tallo career quiz, behind "Take the real quiz" under the hero.
 const TALLO_QUIZ_URL = 'https://tallo.com/talent/career/career-quiz'
 
-// The hero: four of the quiz's nine paths, rebuilt in Paper (Tallo Brand System › Cal Art) from the
-// live quiz. Desktop screens are cropped to 960x832 out of the 1703x952 artboards: x 371 to 1331
+// The hero: the quiz's welcome, one path, Cal's reaction and the result, then where the result's
+// button goes, Tallo's Design and Media career hub (moved up from chapter 5, Kai 2026-10-22, so the
+// result isn't shown twice). The hub is Kai's captures at Tallo's own margins (Cal-Visuals/05-quiz,
+// 2026-10-22): "Tallo-Results.png" (982px page at 2x) cut to the hero's 960:832 shape centered on
+// the header (x 243 to 1706, y 0 to 1268, ending under the first career row), so the logo keeps its
+// clear space; "DesignMedia-Results-Mobile.png" (393pt at 2x) under a white 59pt status bar, like an
+// iPhone's, so the logo clears the phone's rounded corner, ending under "33 Careers".
+// The desktop result is looser than the other quiz screens (Kai, 2026-10-22, more room above and
+// below): the full quiz column, x 311 to 1391 and y 12 to 948, so its type draws about 11% smaller;
+// its back arrow and Exit are patched with the paper texture beside them. The welcome waits on a
+// taller Paper export, since its content already fills the 952 artboard.
+// The quiz screens were rebuilt in Paper (Tallo Brand System › Cal Art) from the live quiz. Desktop
+// screens are cropped to 960x832 out of the 1703x952 artboards: x 371 to 1331
 // (the middle of the quiz column, which keeps the type readable in the case study and trims the back
 // arrow and Exit off the welcome and result), and y 60 to 892, except the welcome at y 112 to 944 so
 // Begin Expedition keeps its margin (that drops its "Takes ~7 min" line). Boxes are % of each
@@ -20,6 +31,8 @@ const alt = {
     'Quiz reaction screen on the same rainy forest scene. Cal\'s avatar now glows inside a purple halo above a speech panel reading: Cal\'s voice softens: "The best trails are the ones where nobody gets left behind." A green "Continue" button sits below.',
   result:
     'Quiz result screen. A "COMPLETED" pill above the heading "Congratulations! You\'ve reached the Peak of Clarity and discovered you\'re..." An illustration shows Cal wearing a beret and holding a paintbrush on a mountain summit. The result is "The Creator." Body copy: "You\'re the imaginative visionary, the expressive artist, the innovative storyteller. You love bringing original ideas to life, thinking outside conventional boundaries, and sharing your unique perspective with the world. Whether through visual arts, writing, design, or performance, you thrive on creativity and self-expression. This reflects how you tend to approach challenges and it can evolve as you explore more." A green button reads "Explore Creator Careers" with a "Retake Assessment" link below it.',
+  hub:
+    'Tallo\'s Design & Media career hub: a banner of design photos under the breadcrumb "Career Navigator > Hubs," a "My Interests" button, and a card headed "Careers in Design & Media" reading "Unleash your creativity! From visual art to writing, this hub covers design, communication, and broadcasting," with a Career Interests Match of three of five dots, 33 careers and a "View all Careers in Design & Media" button. Below it, "Fastest growing careers in Design & Media," starting with DJ / Announcer, Videographer and Media / Talent Director.',
 }
 const options = ['Show practical techniques', 'Research and share', 'Offer emotional support', 'Rally them forward']
 
@@ -40,7 +53,8 @@ const quizFlow: Flow = {
         ],
       },
       { name: "Cal's reaction", src: `${H}/desktop-3-response.webp`, alt: alt.response, targets: [{ label: 'Continue', box: [22.4, 60.58, 55.31, 5.53], does: 'next' }] },
-      { name: 'Result, The Creator', src: `${H}/desktop-4-result.webp`, alt: alt.result },
+      { name: 'Result, The Creator', src: `${H}/desktop-4-result.webp`, alt: alt.result, targets: [{ label: 'Explore Creator Careers', box: [25.46, 83.76, 49.17, 4.91], does: 'next' }] },
+      { name: 'Design and Media career hub', src: `${H}/desktop-5-hub.webp`, alt: alt.hub },
     ],
   },
   mobile: {
@@ -59,11 +73,40 @@ const quizFlow: Flow = {
         ],
       },
       { name: "Cal's reaction", src: `${H}/mobile-3-response.webp`, alt: alt.response, targets: [{ label: 'Continue', box: [5.33, 51.48, 89.33, 5.67], does: 'next' }] },
-      { name: 'Result, The Creator', src: `${H}/mobile-4-result.webp`, alt: alt.result },
+      { name: 'Result, The Creator', src: `${H}/mobile-4-result.webp`, alt: alt.result, targets: [{ label: 'Explore Creator Careers', box: [5.33, 84.48, 89.33, 5.67], does: 'next' }] },
+      { name: 'Design and Media career hub', src: `${H}/mobile-5-hub.webp`, alt: alt.hub },
     ],
   },
   link: { label: 'Take the real quiz', href: TALLO_QUIZ_URL },
 }
+
+const Q = '/works/cal/quiz'
+
+// Chapter 5's rewrite strip: one Investigative item through three versions, Kai's captures in
+// Cal-Visuals/05-quiz, each cut to 3:5 from the top (the Orion one loses the Typeform editor's
+// "Add choice" link). The ring marks Orion's Investigative answer; Cal's capture already has it
+// picked.
+const rewrite = [
+  {
+    src: `${Q}/rewrite-1-survey.webp`,
+    caption: 'the flagship survey',
+    note: 'rating scale',
+    alt: 'Tallo\'s career assessment, question 16 of 60: "You would like to... Study the movement of planets." Five answers from Strongly Disagree to Strongly Agree.',
+  },
+  {
+    src: `${Q}/rewrite-2-orion.webp`,
+    caption: 'Orion, in space',
+    note: 'scenario with options',
+    mark: [50.5, 36.2, 43, 31.6] as [number, number, number, number],
+    alt: 'The Orion quiz, question 1: "You discover an uncharted planet. What draws you there?" Four illustrated answers: the chance to meet new civilizations, mysterious energy readings to investigate (ringed), rich resources waiting to be cultivated, and beautiful landscapes to explore and document.',
+  },
+  {
+    src: `${Q}/rewrite-3-cal.webp`,
+    caption: 'Cal, on the trail',
+    note: 'scenario with options',
+    alt: 'Cal\'s quiz, path 4 of 9: "Strange tracks discovered! You\'ve found mysterious animal tracks in Mystery Grove. What\'s your instinct?" Four answers: Research and identify, what made these tracks (picked); Imagine the story, what creature made these; Document systematically, catalog these tracks; Lead an expedition, track this animal.',
+  },
+]
 
 // Chapter 2's homepage before and after: Cal-Visuals/02-problem/Tallo-LP-*.png whole, Safari window
 // and all (Kai, 2026-10-22: the tight crops lost too much). Each is trimmed to its window and shadow,
@@ -320,20 +363,11 @@ export const cal: CaseStudy = {
         {
           kind: 'visual',
           visual: {
-            label: 'Interactive result → hub, desktop and mobile versions: The Creator result → Design and Media career hub',
-            frame: 'browser',
-          },
-        },
-        {
-          kind: 'visual',
-          visual: {
             label: 'Rewrite strip: survey item "Study the movement of planets" → Orion version → Cal version',
-            tiles: [
-              { aspect: '3 / 2', label: 'Survey item' },
-              { aspect: '3 / 2', label: 'Orion version' },
-              { aspect: '3 / 2', label: 'Cal version' },
-            ],
-            cols: [1, 3],
+            frame: 'screen',
+            aspect: '3 / 5',
+            strip: rewrite,
+            cols: [3, 3],
           },
         },
       ],
