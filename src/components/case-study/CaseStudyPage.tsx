@@ -297,26 +297,24 @@ function Placeholder({ v }: { v: Visual }) {
 
 // Each step's bar is its share of the first step, with the count and the share labeled on every
 // row (four values, so labels replace a hover layer). One series, so no legend.
-function Funnel({ steps, caption }: { steps: { label: string; count: number }[]; caption?: string }) {
-  const top = steps[0]?.count || 1
+function Funnel({ steps, caption }: { steps: { label: string; share: number; value?: string }[]; caption?: string }) {
   return (
     <figure className="mt-2">
-      <ol className="flex flex-col gap-5">
-        {steps.map((st) => {
-          const share = st.count / top
-          return (
-            <li key={st.label}>
-              <div className="flex items-baseline justify-between gap-4 font-mono text-[13px] leading-[1.4]">
-                <span className="text-ink-body">{st.label}</span>
-                <span className="tabular-nums text-ink-primary">
-                  {st.count.toLocaleString('en-US')}
-                  <span className="ml-2 text-ink-faint">{(share * 100).toFixed(1)}%</span>
-                </span>
-              </div>
-              <div className="mt-2 h-3 rounded-r-[4px] bg-ink-primary" style={{ width: `${share * 100}%` }} aria-hidden="true" />
-            </li>
-          )
-        })}
+      <ol className="flex flex-col gap-6">
+        {steps.map((st) => (
+          <li key={st.label}>
+            <div className="flex items-baseline justify-between gap-4">
+              <span className="font-mono text-[13px] leading-[1.4] text-ink-body">{st.label}</span>
+              <span className="font-display text-[20px] font-semibold leading-none tabular-nums text-ink-primary md:text-[24px]">
+                {st.value ?? `${st.share}%`}
+              </span>
+            </div>
+            {/* The track is the whole 100%, so each bar reads as a share of everyone who started. */}
+            <div className="mt-2.5 h-3 rounded-full bg-tag" aria-hidden="true">
+              <div className="h-full rounded-full bg-ink-primary" style={{ width: `${st.share}%` }} />
+            </div>
+          </li>
+        ))}
       </ol>
       {caption && <figcaption className="mt-5 font-mono text-[12px] leading-[1.6] text-ink-faint">{caption}</figcaption>}
     </figure>

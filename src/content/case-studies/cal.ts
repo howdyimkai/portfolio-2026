@@ -393,14 +393,20 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: "Most people who start Cal finish it. Most who finish click through into a career hub, and about 1 in 3 go on to start the full assessment. I can't say how many would have gone to the assessment anyway, since there's no comparison group.",
+          text: "Most people who start Cal finish it. Most who finish click through into a career hub, and about 1 in 3 go on to start the full assessment. Without a comparison group, I can't say how many would have started it anyway.",
         },
+        // Shares as set in CaseStudy_Cal_V4.md Part 2 (86.5% and 34.5% also in the quiz system
+        // DATA-SUMMARY.md). The last step is 34.5% of finishers, 29.8% of starters, so "about 30%".
+        // Never a count on the page.
         {
-          kind: 'visual',
-          visual: {
-            label: 'Funnel chart, share of people who started Cal: 100% > 86.5% > 68.7% > about 30%',
-            aspect: '16 / 7',
-          },
+          kind: 'funnel',
+          steps: [
+            { label: 'Started Cal', share: 100 },
+            { label: 'Finished', share: 86.5 },
+            { label: 'Clicked through to a career hub', share: 68.7 },
+            { label: 'Started the full assessment', share: 30, value: 'about 30%' },
+          ],
+          caption: 'Share of people who started Cal. What happened, not what Cal caused.',
         },
       ],
     },

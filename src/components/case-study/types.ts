@@ -81,8 +81,9 @@ export type Block =
   | { kind: 'cards'; items: { text: string; visual: Visual }[] }
   // Several short quotes together, quieter than a single pull quote.
   | { kind: 'quotes'; items: { text: string; cite?: string }[] }
-  // A funnel drawn from real counts: each step's bar is its share of the first step.
-  | { kind: 'funnel'; steps: { label: string; count: number }[]; caption?: string }
+  // A funnel of shares, not counts (case studies show percentages and ratios only). share is % of
+  // the first step and sets the bar; value is what's printed when it isn't exact, like "about 30%".
+  | { kind: 'funnel'; steps: { label: string; share: number; value?: string }[]; caption?: string }
   | { kind: 'visual'; visual: Visual }
   // A character's style kit laid out as one stacked sheet (Cal chapter 6).
   | { kind: 'kit'; kit: Kit }
