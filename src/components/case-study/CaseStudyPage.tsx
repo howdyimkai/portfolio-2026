@@ -4,6 +4,7 @@
 // then chapters with a chapter bar on the left. Everything is driven by a CaseStudy in src/content/.
 // Backdrop and chapter bar: design-intent/case-study-exploration/NOTES.md (2026-10-20).
 import { useEffect, useState, type CSSProperties } from 'react'
+import CalKit from './CalKit'
 import StepFrame from './StepFrame'
 import Strip from './Strip'
 import Toggle from './Toggle'
@@ -210,6 +211,8 @@ function BlockView({ b }: { b: Block }) {
       )
     case 'funnel':
       return <Funnel steps={b.steps} caption={b.caption} />
+    case 'kit':
+      return <CalKit kit={b.kit} />
     case 'visual':
       return (
         <div className="mt-2">

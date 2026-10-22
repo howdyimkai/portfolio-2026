@@ -167,6 +167,16 @@
   outline-offset: 2px;
 }
 
+/* CalKit's click-to-load video: the play badge presses in. */
+.kit-play > span:not(.sr-only) {
+  transition: transform 160ms var(--ease-out-strong);
+}
+.kit-play:active > span:not(.sr-only) { scale: 0.94; }
+.kit-play:focus-visible {
+  outline: 2px solid var(--color-accent-washi-blue);
+  outline-offset: -4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .st-tile,
   .st-tile:hover,

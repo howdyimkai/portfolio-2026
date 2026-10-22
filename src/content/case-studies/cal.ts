@@ -1,4 +1,4 @@
-import type { CaseStudy, Flow } from '@/components/case-study/types'
+import type { CaseStudy, Flow, Kit } from '@/components/case-study/types'
 
 // The live Tallo career quiz, behind "Take the real quiz" under the hero.
 const TALLO_QUIZ_URL = 'https://tallo.com/talent/career/career-quiz'
@@ -77,6 +77,72 @@ const quizFlow: Flow = {
 // cropped off and set as captions, word for word. Before public: paint out the scribbles on Cal's
 // right glove cuff (an AI artifact).
 const F = '/works/cal/finding'
+
+// Chapter 6's Cal Kit, from Kai's Paper layout (Cal-Visuals/06-into-product/Cal Kit-reference
+// layout.png, 1352px wide), stacked for the column (Kai, 2026-10-22: personas live here, not in
+// chapter 3; name and type only; specimen and palette as live text and color). The art in
+// public/works/cal/kit is cut from that 1x reference as a stand-in until Kai's Paper exports
+// land: same names, so swapping is a file copy. Personas and expressions go through
+// kit-build/normalize_cal.py (sprint folder) so every Cal's dial is the same width with the feet
+// on one baseline (Kai, 2026-10-22); run it on the Paper exports too. Panel grey (#F2F2F2) is
+// lifted to white so the art multiplies onto the page. The recap header has its "his first birthday" line filled out.
+// Before public: the intern's name in the In use note.
+const K = '/works/cal/kit'
+const calKit: Kit = {
+  label: 'Cal Kit',
+  intro: 'Every outfit, pose and phrase has a name, so anyone on the team can use Cal without redrawing Cal.',
+  personas: [
+    { name: 'The Builder', type: 'Realistic', src: `${K}/p-builder.webp`, alt: 'Cal as the Builder, in a yellow hard hat, flannel and overalls, holding a wrench.' },
+    { name: 'The Researcher', type: 'Investigative', src: `${K}/p-researcher.webp`, alt: 'Cal as the Researcher, in a fedora and trench coat, holding a magnifying glass.' },
+    { name: 'The Creator', type: 'Artistic', src: `${K}/p-creator.webp`, alt: 'Cal as the Creator, in a beret and striped sweater, holding a paintbrush.' },
+    { name: 'The Guide', type: 'Social', src: `${K}/p-guide.webp`, alt: 'Cal as the Guide, in round glasses and a plaid scarf, holding an open book.' },
+    { name: 'The Leader', type: 'Enterprising', src: `${K}/p-leader.webp`, alt: 'Cal as the Leader, in a white shirt and tie, gesturing forward with one hand.' },
+    { name: 'The Organizer', type: 'Conventional', src: `${K}/p-organizer.webp`, alt: 'Cal as the Organizer, in a grey blazer, holding a clipboard and waving.' },
+  ],
+  specimen: [
+    { scale: '1.1x', text: 'Welcome, Explorer!', face: 'adamina', note: 'Adamina · headlines' },
+    { scale: '1.3x', text: 'the best trails are the ones where', face: 'hubballi', note: "Hubballi · Cal's voice" },
+    { scale: '1.3x', text: 'nobody gets left behind', face: 'hubballi', note: 'Speech bubbles only' },
+    { scale: '1.6x', text: 'Every great adventure begins with a single step.', face: 'inter', note: 'Inter · story + body' },
+    { scale: '1.6x', text: 'Ready to discover which path is truly yours?', face: 'inter', note: '160% leading' },
+  ],
+  expressions: ['worried', 'confused', 'ponder', 'appreciative', 'laughing', 'default'].map((name) => ({ name, src: `${K}/e-${name}.webp` })),
+  expressionsNote: 'named in the quiz spec',
+  props: [
+    ['anchor', 'Anchor'],
+    ['chain', 'Chain links'],
+    ['clipboard', 'Clipboard'],
+    ['star-map', 'Star map'],
+    ['glasses', 'Round glasses'],
+    ['lightbulb', 'Lightbulb'],
+    ['magnifier', 'Magnifying glass'],
+    ['megaphone', 'Megaphone'],
+    ['tie', 'Striped tie'],
+    ['paintbrush', 'Paintbrush'],
+    ['snorkel', 'Snorkel mask'],
+    ['wrench', 'Wrench'],
+  ].map(([file, name]) => ({ name, src: `${K}/x-${file}.webp` })),
+  propsNote: '12 objects',
+  palette: [
+    { name: 'Dial', hex: '#F8EFCC' },
+    { name: 'Rim', hex: '#79679B' },
+    { name: 'Pack', hex: '#8F9F7B' },
+    { name: 'Boots', hex: '#E29B47' },
+    { name: 'Win', hex: '#BDF184' },
+    { name: 'Ink', hex: '#201F1F' },
+  ],
+  paletteNote: 'Purple over corporate blue, lime for the moment something good happens',
+  inUse: {
+    note: 'Same kit, outside the quiz: a community recap, and a Minecraft build by our intern.',
+    image: {
+      src: `${K}/recap.webp`,
+      width: 1055,
+      height: 498,
+      alt: "Community recap header: an \"August recap\" tag above the headline \"Cal's Birthday Challenge: Community Roundup,\" beside Cal laughing in a striped party hat.",
+    },
+    video: { youtubeId: 'aYcAXaAlExM', title: 'Happy Birthday, Cal!', poster: `${K}/minecraft.webp` },
+  },
+}
 
 // Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/Final Drafts/CaseStudy_Cal_V4.md, Part 1
 // (locked 2026-10-21). Paste as written: don't edit copy here, edit the doc. Every visual but the hero is
@@ -209,14 +275,6 @@ export const cal: CaseStudy = {
             cols: [2, 4],
           },
         },
-        {
-          kind: 'visual',
-          visual: {
-            label: 'Six persona variants, each with its career hub',
-            tiles: Array.from({ length: 6 }, () => ({ aspect: '4 / 5' })),
-            cols: [2, 3],
-          },
-        },
       ],
     },
     {
@@ -292,17 +350,7 @@ export const cal: CaseStudy = {
           kind: 'p',
           text: "Meanwhile I turned Cal into a kit, so Cal could leave the quiz too: community posts, social, even Cal's first birthday.",
         },
-        {
-          kind: 'visual',
-          visual: {
-            label: 'Cal Kit panel; Minecraft birthday video',
-            tiles: [
-              { aspect: '3 / 4', label: 'Cal Kit panel' },
-              { aspect: '16 / 9', label: 'Minecraft birthday video' },
-            ],
-            cols: [1, 1],
-          },
-        },
+        { kind: 'kit', kit: calKit },
       ],
     },
     {

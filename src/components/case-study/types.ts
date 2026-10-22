@@ -81,6 +81,30 @@ export type Block =
   // A funnel drawn from real counts: each step's bar is its share of the first step.
   | { kind: 'funnel'; steps: { label: string; count: number }[]; caption?: string }
   | { kind: 'visual'; visual: Visual }
+  // A character's style kit laid out as one stacked sheet (Cal chapter 6).
+  | { kind: 'kit'; kit: Kit }
+
+// A mascot's kit: who it can be, how it talks, how it feels, what it carries, its colors, and where
+// it showed up. Character art is on white or flat panel grey and multiplies onto the page.
+export type Kit = {
+  label: string
+  intro: string
+  personas: { name: string; type: string; src: string; alt: string }[]
+  // One line per row of the type specimen. scale is the line height, as the spec names it.
+  specimen: { scale: string; text: string; face: 'adamina' | 'hubballi' | 'inter'; note: string }[]
+  expressions: { name: string; src: string }[]
+  expressionsNote: string
+  props: { name: string; src: string }[]
+  propsNote: string
+  palette: { name: string; hex: string }[]
+  paletteNote: string
+  inUse: {
+    note: string
+    image: { src: string; alt: string; width: number; height: number }
+    // Click to load: nothing from YouTube loads until it's asked for.
+    video: { youtubeId: string; title: string; poster: string }
+  }
+}
 
 export type Chapter = {
   id: string
