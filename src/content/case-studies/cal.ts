@@ -111,8 +111,9 @@ const rewrite = [
 // Chapter 8's months, one capture each in a browser frame (Kai, 2026-10-22), from
 // Cal-Visuals/08-what-cal-started, all cut to 16:9 at 1280x720. October is cut above the first
 // "Median Pay" row (x 160 to 1484, y 0 to 745 of the 1667 page) so no dollar figures show.
-// Captions are Kai's, confirmed 2026-10-22. Before public: the August result card calls Cal "he"
-// ("Cal started his year... he wasn't sure about"). Each month links its live challenge page.
+// August is a real Growth Reflection question (growthquiz-weekend.png, x 126 to 1626, y 100 to 944,
+// trimming Typeform's progress bar and arrows), replacing the result card that called Cal "he".
+// Captions are Kai's, confirmed 2026-10-22. Each month links its live challenge page.
 const LANDING = {
   jul: 'https://tallo.com/rcrj-entrepreneurship/',
   aug: 'https://tallo.com/august-community-challenge-cals-birthday/',
@@ -133,7 +134,7 @@ const months = [
     src: `${M}/2-aug-growth-reflection.webp`,
     caption: 'Questions about things that happened to you, not hypotheticals.',
     link: { label: 'See the landing page', href: LANDING.aug },
-    alt: 'Growth Reflection result card: a lightbulb on a lime circle beside "The Completionist, Discovered + Powered Through. New ground, all the way through," a short reflection on pushing through unfamiliar territory, and a "Tallo Career Hub" button.',
+    alt: 'Growth Reflection question 2: "A free weekend with nothing planned. What actually happens?" over a "Happy Weekend" sky illustration, with two answers: "I end up doing five different things because something new always pulls my attention" (picked) and "I get pulled into one thing and lose track of time."',
   },
   {
     label: 'Sep · Creative Career Fit',
@@ -460,7 +461,7 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'Cal\'s quiz became the template for the community\'s monthly challenge quizzes, and each month added a twist. Founder Fit scored you, and a "Developing" result counted as a real answer, with no fail state. Growth Reflection added a tiebreaker that only shows up when your answers disagree, plus one open question to check if it landed. I designed the branching, and an intern built it from my setup guide. In September few people came back to comment, so October\'s Build Style quiz drops the community post, ends on real trades with pay, and asks for one sentence on the badge page. Completion across the Typeform quizzes held between 76% and 88%.',
+          text: 'Cal\'s quiz became the template for the community\'s monthly challenge quizzes, and each month added a twist. Founder Fit scored you, and a "Developing" result counted as a real answer, with no fail state. Growth Reflection added a tiebreaker that only shows up when your answers disagree, plus one open question to check if it landed. I designed the branching, and my intern, Jae Stokes, built it from my setup guide. In September few people came back to comment, so October\'s Build Style quiz drops the community post, ends on real trades with pay, and asks for one sentence on the badge page. Completion across the Typeform quizzes held between 76% and 88%.',
         },
         {
           kind: 'visual',
@@ -472,7 +473,11 @@ export const cal: CaseStudy = {
             cols: [1, 2],
           },
         },
-        { kind: 'quote', text: 'About how you were able to find who I am with some very simple questions.' },
+        {
+          kind: 'quote',
+          text: "I got Strong. I've always liked making things myself, there's a reason I fell in love with coding.",
+          cite: 'Participant of the Founder Fit challenge',
+        },
       ],
     },
     {
