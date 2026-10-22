@@ -62,6 +62,10 @@
   color: rgba(244, 240, 230, 0.5);
   transition: color 150ms ease-out;
 }
+.cs-chalk-rule {
+  margin: 0.5em 0;
+  border-top: 1px solid rgba(244, 240, 230, 0.25);
+}
 .cs-chalk a[aria-current] { color: rgba(244, 240, 230, 0.95); }
 @media (hover: hover) and (pointer: fine) {
   .cs-chalk a:hover { color: rgba(244, 240, 230, 0.85); }
@@ -111,4 +115,10 @@
 .cs-body {
   font-size: clamp(1rem, 0.954rem + 0.19vw, 1.125rem);
   line-height: 1.75;
+}
+
+/* A placeholder laid out as several tiles: --cols on phones, --cols-md from md up. */
+.cs-tiles { grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); }
+@media (min-width: 768px) {
+  .cs-tiles { grid-template-columns: repeat(var(--cols-md), minmax(0, 1fr)); }
 }

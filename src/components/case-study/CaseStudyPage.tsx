@@ -3,7 +3,7 @@
 // The one case study template (sprint plan, 2026-10-20): header, hero, a stat strip of three,
 // then chapters with a chapter bar on the left. Everything is driven by a CaseStudy in src/content/.
 // Backdrop and chapter bar: design-intent/case-study-exploration/NOTES.md (2026-10-20).
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import type { Block, CaseStudy, Visual } from './types'
 import './case-study.css'
 
@@ -17,6 +17,9 @@ const BODY = 'cs-body font-mono text-ink-body [text-wrap:pretty]'
 
 export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
   const active = useActiveChapter(s.chapters.map((c) => c.id))
+  // Chapter numbers skip unnumbered chapters, so a TL;DR can sit ahead of chapter 01.
+  let n = 0
+  const labels = s.chapters.map((c) => (c.unnumbered ? '' : num(n++)))
 
   return (
     <article className="mx-auto max-w-[1280px] px-4 pb-32 pt-12 md:px-10 md:pt-24">
@@ -34,11 +37,19 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
               {s.chapters.map((c, i) => (
                 <li key={c.id}>
                   <a href={`#${c.id}`} aria-current={c.id === active ? 'location' : undefined}>
-                    <span className="tabular-nums">{num(i)}</span>
+                    {/* An unnumbered chapter (the TL;DR) counts as 00 on the bar, but stays unnumbered on the page. */}
+                    <span className="tabular-nums">{labels[i] || '00'}</span>
                     <span>{c.title}</span>
                   </a>
                 </li>
               ))}
+              <li className="cs-chalk-rule" aria-hidden="true" />
+              <li>
+                <a href="#">
+                  <span className="invisible tabular-nums" aria-hidden="true">00</span>
+                  <span>Back to Top</span>
+                </a>
+              </li>
             </ol>
           </div>
         </nav>
@@ -52,6 +63,7 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
                 {s.coldOpen.text}
               </p>
             )}
+            {s.eyebrow && <p className="mb-3 font-mono text-[12px] text-ink-faint">{s.eyebrow}</p>}
             <h1 className="font-display text-[44px] font-semibold leading-[1.02] tracking-[-0.015em] md:text-[68px]">{s.title}</h1>
             <p className="mt-5 max-w-[640px] font-display text-[20px] leading-[1.35] text-ink-body [text-wrap:balance] md:text-[26px]">{s.hook}</p>
             <dl className="mt-12 grid grid-cols-1 gap-x-10 gap-y-5 border-t border-hairline pt-6 font-mono text-[13px] leading-[1.6] sm:grid-cols-2">
@@ -69,12 +81,17 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
           </div>
 
           <StatStrip stats={s.stats} />
+          {s.quote && (
+            <div className="mt-12">
+              <BlockView b={{ kind: 'quote', ...s.quote }} />
+            </div>
+          )}
 
           {s.chapters.map((c, i) => (
             <section key={c.id} id={c.id} className="mt-[77px] scroll-mt-12 md:mt-[104px]">
               {/* Chapter number as a quiet label above, so the title alone carries the weight. */}
-              <p className="font-mono text-[13px] tabular-nums text-ink-faint">{num(i)}</p>
-              <h2 className="mt-2 font-display text-[28px] font-medium leading-[1.15] tracking-[-0.01em] md:text-[36px]">{c.title}</h2>
+              {labels[i] && <p className="mb-2 font-mono text-[13px] tabular-nums text-ink-faint">{labels[i]}</p>}
+              <h2 className="font-display text-[28px] font-medium leading-[1.15] tracking-[-0.01em] md:text-[36px]">{c.title}</h2>
               <div className="mt-7 flex flex-col gap-7">
                 {c.blocks.map((b, j) => (
                   <BlockView key={j} b={b} />
@@ -149,9 +166,20 @@ function BlockView({ b }: { b: Block }) {
     case 'callout':
       return (
         <p className="my-2 border-y border-hairline py-7 font-display text-[23px] leading-[1.3] tracking-[-0.005em] text-ink-primary [text-wrap:balance] md:py-8 md:text-[30px]">
-          <span className="mb-2 block font-mono text-[12px] text-ink-faint">{b.label}</span>
+          {b.label && <span className="mb-2 block font-mono text-[12px] text-ink-faint">{b.label}</span>}
           {b.text}
         </p>
+      )
+    case 'rules':
+      return (
+        <ul className={`${PROSE} cs-body flex flex-col gap-5 font-mono text-ink-body [text-wrap:pretty]`}>
+          {b.items.map((r, i) => (
+            <li key={i} className="border-l border-hairline pl-5">
+              <span className="block font-semibold text-ink-primary">{r.title}</span>
+              <span className="mt-1 block">{r.text}</span>
+            </li>
+          ))}
+        </ul>
       )
     case 'cards':
       return (
@@ -200,15 +228,43 @@ function VisualBlock({ v }: { v: Visual }) {
           </picture>
         </div>
       ) : (
-        <div
-          className="cs-placeholder flex items-center justify-center rounded-[14px] border border-dashed border-chip-line p-6 text-center font-mono text-[12px] leading-[1.6] text-ink-muted"
-          style={{ aspectRatio: v.aspect ?? '16 / 10' }}
-        >
-          <span className="max-w-[420px]">visual: {v.label}</span>
-        </div>
+        <Placeholder v={v} />
       )}
       {v.caption && <figcaption className="mt-4 font-mono text-[12px] leading-[1.6] text-ink-faint">{v.caption}</figcaption>}
     </figure>
+  )
+}
+
+// A visual that isn't made yet, shaped roughly like the planned one. data-placeholder carries the
+// label, so every slot left on a page can be found with [data-placeholder].
+function Placeholder({ v }: { v: Visual }) {
+  const slot = 'cs-placeholder flex items-center justify-center rounded-[14px] border border-dashed border-chip-line p-4 text-center font-mono text-[12px] leading-[1.6] text-ink-muted'
+  if (!v.tiles) {
+    return (
+      <div data-placeholder={v.label} className={`${slot} relative overflow-hidden ${v.frame === 'browser' ? 'pt-12' : ''}`} style={{ aspectRatio: v.aspect ?? '16 / 10' }}>
+        {v.frame === 'browser' && (
+          <span className="absolute inset-x-0 top-0 flex h-8 items-center gap-1.5 border-b border-dashed border-chip-line bg-white/70 px-3" aria-hidden="true">
+            {[0, 1, 2].map((d) => (
+              <span key={d} className="size-2 rounded-full bg-chip-line" />
+            ))}
+          </span>
+        )}
+        <span className="max-w-[420px]">visual: {v.label}</span>
+      </div>
+    )
+  }
+  const [base, md] = v.cols ?? [v.tiles.length, v.tiles.length]
+  return (
+    <div data-placeholder={v.label}>
+      <p className="mb-3 font-mono text-[12px] leading-[1.6] text-ink-muted">visual: {v.label}</p>
+      <div className="cs-tiles grid items-start gap-3 md:gap-4" style={{ '--cols': base, '--cols-md': md } as CSSProperties}>
+        {v.tiles.map((t, i) => (
+          <div key={i} className={slot} style={{ aspectRatio: t.aspect }}>
+            {t.label && <span>{t.label}</span>}
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 

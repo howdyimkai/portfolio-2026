@@ -1,35 +1,47 @@
 import type { CaseStudy } from '@/components/case-study/types'
 
-// Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/Final Drafts/
-// CaseStudy_Cal_ChapterOutline_v2.md (2026-10-19) and CardCopy_Locked_2026-10-19.md.
-// Private working draft: nothing here is approved by Tallo yet, so the page is unlisted (see
-// src/app/works/cal/page.tsx). Never put 1 in 13 next to 1 in 3 as a comparison: different groups.
+// Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/Final Drafts/CaseStudy_Cal_V4.md, Part 1
+// (locked 2026-10-21). Paste as written: don't edit copy here, edit the doc. Every visual is still a
+// placeholder named after its *[...]* marker; Part 2 of the doc specs each one.
+// Private working draft: names teammates and nothing is signed off by Tallo yet, so the page is
+// unlisted and noindex (see src/app/works/cal/page.tsx). Never frame 3 in 100 → 1 in 3 as a lift.
 export const cal: CaseStudy = {
+  eyebrow: 'Case study · Product design',
   title: "Cal's Career Quiz",
-  hook: 'Helping young people start career discovery with a three minute story instead of a ten minute test.',
+  hook: 'A three minute story quiz that gets young people started on career discovery.',
   meta: [
-    { label: 'Status', value: 'Shipped' },
-    { label: 'Role', value: 'Character, concept, quiz design, the Typeform build, sound, production wireframes' },
-    { label: 'Team', value: 'Me, plus a content writer, a product manager and our developer for the in product build' },
-    { label: 'Timeline', value: 'Jul 2025 to May 2026' },
-    { label: 'Context', value: 'Tallo, a career platform for people 13 to 30' },
+    { label: 'Role', value: 'Product designer' },
+    {
+      label: 'Team',
+      value: 'Me (design, brand and story), Kae Burdo (copywriting), Julia Domino (product management), Dominic Pace (engineering)',
+    },
+    { label: 'Timeline', value: "Jul 2025 to May 2026 (quiz shipped). Cal's format still running through Oct 2026." },
+    {
+      label: 'Context',
+      value: 'Tallo, a career platform for people 13 to 30. Cal is built for the youngest group, Early Explorers, ages 13 to 17.',
+    },
   ],
   hero: {
-    label: 'Cal and one navigator result screen, animated (the motion study)',
+    label: 'Hero: Cal and one result screen, animated',
   },
   stats: [
     { value: '86.5%', label: 'finish it in product' },
-    { value: '68.7%', label: 'of starters land in a career hub' },
-    { value: '1 in 3', label: 'go on to start the full assessment' },
+    { value: '68.7%', label: 'of starters click through to a career hub' },
+    { value: '~1 in 3', label: 'finishers go on to start the full assessment' },
   ],
+  quote: {
+    cite: 'Julia, Product Manager at Tallo',
+    text: 'Kai is deeply passionate about helping young people discover their future careers and that passion shows up in her work every day. [...] At Tallo, she led and contributed to multiple creative quizzes that made career exploration feel fun and approachable and helped drive meaningful engagement on our platform.',
+  },
   chapters: [
     {
       id: 'tldr',
       title: 'TL;DR',
+      unnumbered: true,
       blocks: [
         {
           kind: 'p',
-          text: "Tallo's career assessment worked once people started it, but almost nobody got there. I created Cal, a compass mascot, and a three minute story quiz that sorts you into one of six navigators and drops you into a real career hub. It ran in Typeform, then product built it in.",
+          text: "Tallo's career assessment is built on RIASEC, a well-known career interest model, but almost nobody got there. I created Cal, a compass mascot, and a three minute story quiz that sorts you into one of six RIASEC types and sends you to a matching career hub, one of Tallo's 24 industry hubs, like construction or design. It ran in Typeform first, then product built it in.",
         },
       ],
     },
@@ -40,9 +52,9 @@ export const cal: CaseStudy = {
         {
           kind: 'owned',
           items: [
-            'Cal: the character, the six navigator variants, and the rules that keep Cal consistent',
-            'The quiz: RIASEC rewritten as trail scenarios, the story arc, the soundscape, the Typeform build',
-            'The handoff: wireframes, production copy, a launch checklist with the analytics events we needed',
+            'Cal: character, six persona variants (one per career type), usage rules',
+            'The quiz: story arc, trail scenarios, and the Typeform build (scoring, result routing, logic jumps), embedded on WordPress pages',
+            'The handoff: dev-ready specs, production copy, analytics launch checklist',
           ],
         },
       ],
@@ -53,42 +65,18 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: "1 in 13 people who visited the career hub ever reached the assessment. The page literally said \"10 minute assessment,\" and ten minutes is a lot to ask of a 15 year old who doesn't know why they should care yet. Moving the button wasn't going to fix that. It needed a front door.",
+          text: "Almost nobody started Tallo's career assessment: in spring 2025, about 3 in 100 career hub visits reached its intro page. I redesigned the homepage to put it first, but better placement only puts a big ask in front of more people. The assessment is 60 questions about mundane tasks like \"keep inventory records,\" a lot to ask of a 15 year old who doesn't know yet why they should care. So I built a shorter, friendlier way in: 9 questions, each a moment on a trail.",
         },
         {
           kind: 'visual',
           visual: {
-            label: 'The old "Start my 10 min assessment" page, cropped, with the 1 in 13 stat overlaid',
+            label: 'Before/after toggle: old homepage with three equal buttons, new homepage with one button, "Start Your Free Career Quiz"',
+            frame: 'browser',
           },
         },
         {
           kind: 'callout',
-          label: 'How might we',
-          text: 'How might we make career discovery feel like something a teenager chooses to do?',
-        },
-      ],
-    },
-    {
-      id: 'who',
-      title: "Who it's for",
-      blocks: [
-        {
-          kind: 'p',
-          text: "Early Explorers, 13 to 17, the largest group of people who finish Cal's quiz (about 42%).",
-        },
-      ],
-    },
-    {
-      id: 'rules',
-      title: "Cal's rules",
-      blocks: [
-        {
-          kind: 'cards',
-          items: [
-            { text: "Cal is a compass. Cal doesn't carry one.", visual: { label: 'Cal pose' } },
-            { text: 'Cal guides, never decides.', visual: { label: 'Cal pose' } },
-            { text: "Cal is not AI. (Tallo's AI is COACH.)", visual: { label: 'Cal pose' } },
-          ],
+          text: 'How might we make the first step of career discovery feel like something a teenager wants to do?',
         },
       ],
     },
@@ -98,13 +86,59 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: "Cal started as Orion, a constellation guide, with a full set of space scenarios. It was fun and it was wrong. Careers aren't a galaxy you get beamed into. They're trails you walk, so Orion came down to earth as a compass. I sketched Cal by hand and used AI to develop the final character and six variants.",
+          text: 'Cal started as Orion, a compass named after the constellation, with a full set of space scenarios. Then the logic broke. A compass doesn\'t work in space, because there\'s no north to point to. The theme was off too. Space says "reach for the stars," and Tallo stays away from dream careers. Young people want the next real step. So Orion came down to earth. On a trail, a compass makes sense, and careers are trails you walk. I sketched Cal by hand, chose the styles for a mascot test our product manager ran (a retro sticker look shaped the final texture), and used AI to develop the final character and six persona variants.',
         },
         {
           kind: 'visual',
           visual: {
-            label: 'Orion concept, hand sketch, final Cal, left to right',
-            caption: 'From constellation to compass.',
+            label: 'Calvolution strip: first idea · my sketch · Orion, rendered from my sketch · Cal, down to earth',
+            tiles: [
+              { aspect: '3 / 4', label: 'First idea' },
+              { aspect: '3 / 4', label: 'My sketch' },
+              { aspect: '3 / 4', label: 'Orion' },
+              { aspect: '3 / 4', label: 'Cal' },
+            ],
+            cols: [2, 4],
+          },
+        },
+        {
+          kind: 'visual',
+          visual: {
+            label: 'Six persona variants, each with its career hub',
+            tiles: Array.from({ length: 6 }, () => ({ aspect: '4 / 5' })),
+            cols: [2, 3],
+          },
+        },
+      ],
+    },
+    {
+      id: 'rules',
+      title: "Cal's rules",
+      blocks: [
+        {
+          kind: 'rules',
+          items: [
+            { title: 'The trailhead looks scarier than the trail.', text: 'Drove: 9 questions, told as a story.' },
+            {
+              title: "Cal doesn't pick your path. Cal helps you find it.",
+              text: 'Drove: every result ends on a button into a career hub, a cluster of related careers, so people keep exploring.',
+            },
+            {
+              title: 'Your result can change.',
+              text: 'Drove: no percent match, which felt too definitive for a short intro quiz, and every result page ends with "it can evolve as you explore more."',
+            },
+          ],
+        },
+        {
+          kind: 'visual',
+          visual: {
+            label: 'Three cards, each with a Cal pose',
+            tiles: [
+              { aspect: '4 / 3', label: 'Worried' },
+              { aspect: '4 / 3', label: 'Ponder' },
+              { aspect: '4 / 3', label: 'Excited or pointing' },
+            ],
+            cols: [1, 2],
           },
         },
       ],
@@ -115,12 +149,31 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'Each RIASEC item became a moment on the trail from the Valley of Confusion to the Peak of Clarity, with four options, one per type. Cal reacts between questions like an older friend. Rain, wooden planks and birds at a lake play underneath, so it feels like a place instead of a form.',
+          text: 'I rewrote each RIASEC item as a moment on the trail from the Valley of Confusion to the Peak of Clarity. When we tried it out at an all-hands, people said six options per question was too many, so we cut it to four. Each type still shows up exactly six times across the nine questions, so no path gets a head start. Cal reacts between questions like an older friend, so the quiz feels like a hike.',
         },
         {
           kind: 'visual',
           visual: {
-            label: '3 quiz screens and 1 result screen, or the rebuilt prototype with sound on',
+            label: "Four phones: Welcome, a question, Cal's response, the result",
+            tiles: [
+              { aspect: '9 / 19.5', label: 'Welcome' },
+              { aspect: '9 / 19.5', label: 'A question' },
+              { aspect: '9 / 19.5', label: "Cal's response" },
+              { aspect: '9 / 19.5', label: 'The result' },
+            ],
+            cols: [2, 4],
+          },
+        },
+        {
+          kind: 'visual',
+          visual: {
+            label: 'Rewrite strip: survey item "Keep inventory records" → Orion version → Cal version',
+            tiles: [
+              { aspect: '3 / 2', label: 'Survey item' },
+              { aspect: '3 / 2', label: 'Orion version' },
+              { aspect: '3 / 2', label: 'Cal version' },
+            ],
+            cols: [1, 3],
           },
         },
       ],
@@ -131,12 +184,21 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'The Typeform did well enough that product adopted it. My job changed from building the quiz to getting it built well: wireframes, production copy, and a launch checklist that named the analytics events before code freeze. After launch I noticed "completed" firing more often than "started," switched us to a unique user funnel, and flagged it to our product manager.',
+          text: "Product adopted the Typeform, and my job changed from building the quiz to getting it built well: dev-ready specs, production copy, and a launch checklist asking for the analytics we'd need.",
+        },
+        {
+          kind: 'p',
+          text: "Meanwhile I turned Cal into a kit, so Cal could leave the quiz too: community posts, social, even Cal's first birthday.",
         },
         {
           kind: 'visual',
           visual: {
-            label: 'A wireframe next to the shipped screen',
+            label: 'Cal Kit panel; Minecraft birthday video',
+            tiles: [
+              { aspect: '3 / 4', label: 'Cal Kit panel' },
+              { aspect: '16 / 9', label: 'Minecraft birthday video' },
+            ],
+            cols: [1, 1],
           },
         },
       ],
@@ -147,17 +209,14 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'Cal finishes at about the same rate as the full assessment, 86.5% to 88.1%, without the $2,500 scholarship or the ad spend. About 1 in 3 people who start Cal go on to start the full assessment.',
+          text: "Most people who start Cal finish it. Most who finish click through into a career hub, and about 1 in 3 go on to start the full assessment. I can't say how many would have gone to the assessment anyway, since there's no comparison group.",
         },
         {
-          kind: 'funnel',
-          steps: [
-            { label: 'Started Cal', count: 2695 },
-            { label: 'Finished', count: 2332 },
-            { label: 'Landed in a career hub', count: 1851 },
-            { label: 'Started the full assessment', count: 810 },
-          ],
-          caption: 'Unique people at each step, in product. Percentages are of everyone who started.',
+          kind: 'visual',
+          visual: {
+            label: 'Funnel chart, share of people who started Cal: 100% > 86.5% > 68.7% > about 30%',
+            aspect: '16 / 7',
+          },
         },
       ],
     },
@@ -167,25 +226,22 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: "Cal turned into a format. Tallo's community ran a challenge most months, and four of them needed a career fit quiz, so I wrote down what made Cal feel like Cal and built each one on it. Completion stayed between 75.6% and 82.1%.",
-        },
-        {
-          kind: 'quotes',
-          items: [
-            {
-              text: 'Love the gamification you all are doing to get people engaged.',
-              cite: "Brandon Wasserburger, Netflix producer turned marketer, on Cal's Passport Challenge",
-            },
-            { text: "I'd choose the quiz because it told me about myself at the end.", cite: 'Tallo member' },
-            { text: 'It really sounds like me.', cite: 'Tallo member' },
-          ],
+          text: 'Cal\'s quiz became the template for the community\'s monthly challenge quizzes, and each month added a twist. Founder Fit scored you, and a "Developing" result counted as a real answer, with no fail state. Growth Reflection added a tiebreaker that only shows up when your answers disagree, plus one open question to check if it landed. I designed the branching, and an intern built it from my setup guide. In September few people came back to comment, so October\'s Build Style quiz drops the community post, ends on real trades with pay, and asks for one sentence on the badge page. Completion across the Typeform quizzes held between 76% and 88%.',
         },
         {
           kind: 'visual',
           visual: {
-            label: 'Four quiz covers in a row, same family, different topics',
+            label: 'Strip: what changed each month, Founder Fit > Growth Reflection > Creative Career Fit > Build Style',
+            tiles: [
+              { aspect: '3 / 4', label: 'Founder Fit' },
+              { aspect: '3 / 4', label: 'Growth Reflection' },
+              { aspect: '3 / 4', label: 'Creative Career Fit' },
+              { aspect: '3 / 4', label: 'Build Style' },
+            ],
+            cols: [2, 4],
           },
         },
+        { kind: 'quote', text: 'About how you were able to find who I am with some very simple questions.' },
       ],
     },
     {
@@ -194,11 +250,51 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: "In August a quiz built like Cal pulled 135 people. In September the same format pulled 8. Two things changed at once, the prize and its spot on the home page, and I still can't say which one did it.",
+          text: 'In August a quiz built like Cal pulled in almost half of our challenge entries. In September each quiz in the same format drew less than a sixth of that. The prize went away, the community lost its home page spot, and the topic narrowed, all at once, so I can\'t say which one did it.',
         },
         {
           kind: 'p',
-          text: 'What I can say: a quiz is only half the design. The other half is where it lives. That\'s why Cal belongs inside the product, where people already show up looking for direction.',
+          text: 'A quiz is only half the design. The other half is where it lives. That\'s why I wanted Cal in the product, where people already show up looking for direction.',
+        },
+        {
+          kind: 'p',
+          text: 'A quiz result is a draft of a person, and people tell you whether it fits. One member wrote "It really sounds like me." A 15 year old wrote "All work wise nothing to apply to life im 15 no job." Our questions assumed a job they didn\'t have, so some of October\'s questions now ask about things like group projects and favorite classes.',
+        },
+        {
+          kind: 'visual',
+          visual: {
+            label: 'Build Style Q1 and Q4, cropped: "A group project starts..." and "Which one actually held your attention in school?"',
+            tiles: [
+              { aspect: '4 / 3', label: 'Q1' },
+              { aspect: '4 / 3', label: 'Q4' },
+            ],
+            cols: [1, 2],
+          },
+        },
+        {
+          kind: 'p',
+          text: 'Plenty of kids find their path because one adult puts something in front of them. I wanted Cal to be that mentor for the kids who don\'t have one.',
+        },
+      ],
+    },
+    {
+      id: 'next',
+      title: "What's next",
+      blocks: [
+        {
+          kind: 'p',
+          text: "Cal's Passport challenge was a test run for stamps. I took its results to product and art directed the stamps, which a product designer built into Tallo. Earning them teaches you how to use the platform. The next step I pitched builds on that: the homepage as Cal's trail, with your stamps showing how far you've come. The trail homepage hasn't shipped.",
+        },
+        {
+          kind: 'visual',
+          visual: {
+            label: 'Stamps in product; Mascot Core image labeled "Exploration, not shipped"',
+            tiles: [
+              { aspect: '16 / 9', label: 'Stamps in product' },
+              { aspect: '16 / 9', label: 'Mascot Core image' },
+            ],
+            cols: [1, 1],
+          },
         },
       ],
     },
