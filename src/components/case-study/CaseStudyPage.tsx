@@ -4,6 +4,7 @@
 // then chapters with a chapter bar on the left. Everything is driven by a CaseStudy in src/content/.
 // Backdrop and chapter bar: design-intent/case-study-exploration/NOTES.md (2026-10-20).
 import { useEffect, useState, type CSSProperties } from 'react'
+import BrowserFrame from './BrowserFrame'
 import CalKit, { CAL, CAL_ASPECT } from './CalKit'
 import StepFrame from './StepFrame'
 import Strip from './Strip'
@@ -242,6 +243,8 @@ function VisualBlock({ v }: { v: Visual }) {
     <figure>
       {v.flow ? (
         <StepFrame flow={v.flow} />
+      ) : v.browsers ? (
+        <Browsers items={v.browsers} aspect={v.aspect ?? '16 / 9'} cols={v.cols ?? [1, 2]} />
       ) : v.strip ? (
         <Strip items={v.strip} aspect={v.aspect ?? '1 / 1'} cols={v.cols ?? [v.strip.length, v.strip.length]} screens={v.frame === 'screen'} />
       ) : v.compare ? (
@@ -259,6 +262,29 @@ function VisualBlock({ v }: { v: Visual }) {
       )}
       {v.caption && <figcaption className="mt-4 font-mono text-[12px] leading-[1.6] text-ink-faint">{v.caption}</figcaption>}
     </figure>
+  )
+}
+
+// Captures in browser frames, a label over each and a caption under, in a grid.
+function Browsers({ items, aspect, cols }: { items: NonNullable<Visual['browsers']>; aspect: string; cols: [number, number] }) {
+  return (
+    <ol className="cs-tiles grid items-start gap-x-5 gap-y-9 md:gap-y-10" style={{ '--cols': cols[0], '--cols-md': cols[1] } as CSSProperties}>
+      {items.map((it) => (
+        <li key={it.src}>
+          <p className="mb-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-primary">{it.label}</p>
+          <BrowserFrame>
+            <img src={it.src} alt={it.alt} draggable={false} loading="lazy" className="block w-full" style={{ aspectRatio: aspect }} />
+          </BrowserFrame>
+          <p className="mt-3 font-mono text-[13px] leading-[1.55] text-ink-body [text-wrap:pretty]">{it.caption}</p>
+          {it.note && <p className="mt-1.5 font-mono text-[12px] leading-[1.5] text-ink-faint [text-wrap:pretty]">{it.note}</p>}
+          {it.link && (
+            <a href={it.link.href} target="_blank" rel="noopener noreferrer" className="sf-link press-scale mt-2 inline-block font-mono text-[12px] text-ink-primary">
+              {it.link.label} <span aria-hidden="true">↗</span>
+            </a>
+          )}
+        </li>
+      ))}
+    </ol>
   )
 }
 

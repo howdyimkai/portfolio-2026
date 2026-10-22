@@ -108,6 +108,50 @@ const rewrite = [
   },
 ]
 
+// Chapter 8's months, one capture each in a browser frame (Kai, 2026-10-22), from
+// Cal-Visuals/08-what-cal-started, all cut to 16:9 at 1280x720. October is cut above the first
+// "Median Pay" row (x 160 to 1484, y 0 to 745 of the 1667 page) so no dollar figures show.
+// Captions are Kai's, confirmed 2026-10-22. Before public: the August result card calls Cal "he"
+// ("Cal started his year... he wasn't sure about"). Each month links its live challenge page.
+const LANDING = {
+  jul: 'https://tallo.com/rcrj-entrepreneurship/',
+  aug: 'https://tallo.com/august-community-challenge-cals-birthday/',
+  sep: 'https://tallo.com/september-community-challenge-creative-careers/',
+  oct: 'https://tallo.com/all-articles/tallo-community-october-challenge-careers-in-construction/',
+}
+const M = '/works/cal/started'
+const months = [
+  {
+    label: 'Jul · Founder Fit',
+    src: `${M}/1-jul-founder-fit.webp`,
+    caption: 'Weekly video drops with real entrepreneur interviews, then a quiz.',
+    link: { label: 'See the landing page', href: LANDING.jul },
+    alt: 'Founder Fit video thumbnail: "Real Careers, Real Journeys. Explore Entrepreneurship, Part One," with Cal in a shirt and tie beside a photo of a woman on the phone at a laptop, and a speech bubble asking "Would you actually want this kind of life?"',
+  },
+  {
+    label: 'Aug · Growth Reflection',
+    src: `${M}/2-aug-growth-reflection.webp`,
+    caption: 'Questions about things that happened to you, not hypotheticals.',
+    link: { label: 'See the landing page', href: LANDING.aug },
+    alt: 'Growth Reflection result card: a lightbulb on a lime circle beside "The Completionist, Discovered + Powered Through. New ground, all the way through," a short reflection on pushing through unfamiliar territory, and a "Tallo Career Hub" button.',
+  },
+  {
+    label: 'Sep · Creative Career Fit',
+    src: `${M}/3-sep-creative-career-fit.webp`,
+    caption: 'Each week built toward a project submission, and the quiz came right before it.',
+    link: { label: 'See the landing page', href: LANDING.sep },
+    alt: 'Creative Careers week 4 page, "Final Submission": tips for a final submission and a "Take Quiz + Submit" button, beside a poster of Cal in a beret reading "Final Submission! It\'s been a long journey! Time to submit your work and claim your badge!"',
+  },
+  {
+    label: 'Oct · Build Style',
+    src: `${M}/4-oct-build-style.webp`,
+    caption: "Real-world career data and examples closer to a teenager's life.",
+    note: "Data from Tallo's Career Navigator, which draws on O*NET, the Bureau of Labor Statistics and Lightcast.",
+    link: { label: 'See the landing page', href: LANDING.oct },
+    alt: 'Build Style landing page: "All twelve jobs on this quiz," four build styles (Hands-on Builder, Problem-Solver, Planner, Crew Lead), then "If you\'re a Hands-On Builder," the Realistic interest area, with photos of a carpenter, an iron and steel worker and a solar installer.',
+  },
+]
+
 // Chapter 2's homepage before and after: Cal-Visuals/02-problem/Tallo-LP-*.png whole, Safari window
 // and all (Kai, 2026-10-22: the tight crops lost too much). Each is trimmed to its window and shadow,
 // scaled to 980px tall, and centered on a shared 1604x980 transparent canvas, so the toggle swaps
@@ -423,13 +467,9 @@ export const cal: CaseStudy = {
           visual: {
             label:
               'Strip: what changed each month with a caption each, Jul Founder Fit > Aug Growth Reflection > Sep Creative Career Fit > Oct Build Style, October step links the landing page',
-            tiles: [
-              { aspect: '3 / 4', label: 'Jul, Founder Fit' },
-              { aspect: '3 / 4', label: 'Aug, Growth Reflection' },
-              { aspect: '3 / 4', label: 'Sep, Creative Career Fit' },
-              { aspect: '3 / 4', label: 'Oct, Build Style' },
-            ],
-            cols: [2, 4],
+            aspect: '16 / 9',
+            browsers: months,
+            cols: [1, 2],
           },
         },
         { kind: 'quote', text: 'About how you were able to find who I am with some very simple questions.' },

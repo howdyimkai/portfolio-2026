@@ -28,6 +28,9 @@ export type Visual = {
   // 'screen' they're product screens instead: a second caption line (note), and a mark that rings
   // a part of the screen.
   strip?: { src: string; alt: string; caption: string; note?: string; mark?: Box }[]
+  // Several captures, each in its own browser frame with a label above and a caption under (Cal
+  // chapter 8, one per month). Laid out by cols; a link or a small note can follow a caption.
+  browsers?: { label: string; src: string; alt: string; caption: string; note?: string; link?: { label: string; href: string } }[]
 }
 
 // A box on a screen image as % of the image: [left, top, width, height]. Percentages, so hotspots
