@@ -4,7 +4,7 @@
 .cs-backdrop {
   position: absolute;
   z-index: 0;
-  inset: -32px -8px -48px;
+  inset: -72px -8px -48px;
   pointer-events: none;
   background-color: rgb(255 255 255 / 0.85);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent), linear-gradient(to bottom, transparent, #000 56px, #000 calc(100% - 56px), transparent);
@@ -12,8 +12,9 @@
   mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent), linear-gradient(to bottom, transparent, #000 56px, #000 calc(100% - 56px), transparent);
   mask-composite: intersect;
 }
+/* The top runs past the 56px fade, so the header sits on solid white with room above it. */
 @media (min-width: 768px) {
-  .cs-backdrop { inset: -48px -56px -64px; }
+  .cs-backdrop { inset: -112px -56px -64px; }
 }
 
 /* A visual that isn't made yet: striped tag paper, so it reads as "goes here", not broken. */
