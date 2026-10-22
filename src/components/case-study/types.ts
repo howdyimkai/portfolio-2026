@@ -17,7 +17,7 @@ export type Visual = {
   // cols is [phones, md and up]. frame: 'browser' draws a toolbar on the slot.
   tiles?: { aspect: string; label?: string }[]
   cols?: [number, number]
-  frame?: 'browser' | 'screen'
+  frame?: 'browser' | 'screen' | 'device'
   // A product flow you can step through by tapping, in place of a still (the Cal quiz hero).
   flow?: Flow
   // Captures of one page in a browser frame with a switch between them (a before and after). They
@@ -27,6 +27,7 @@ export type Visual = {
   // pieces share the visual's aspect and lay out by cols, like placeholder tiles. With frame
   // 'screen' they're product screens instead: a second caption line (note), and a mark that rings
   // a part of the screen.
+  // With frame 'device' they're screens in their own mockup bezel, shown as they are.
   strip?: { src: string; alt: string; caption: string; note?: string; mark?: Box }[]
   // Several captures, each in its own browser frame with a label above and a caption under (Cal
   // chapter 8, one per month). Laid out by cols; a link or a small note can follow a caption.

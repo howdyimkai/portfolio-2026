@@ -246,7 +246,7 @@ function VisualBlock({ v }: { v: Visual }) {
       ) : v.browsers ? (
         <Browsers items={v.browsers} aspect={v.aspect ?? '16 / 9'} cols={v.cols ?? [1, 2]} />
       ) : v.strip ? (
-        <Strip items={v.strip} aspect={v.aspect ?? '1 / 1'} cols={v.cols ?? [v.strip.length, v.strip.length]} screens={v.frame === 'screen'} />
+        <Strip items={v.strip} aspect={v.aspect ?? '1 / 1'} cols={v.cols ?? [v.strip.length, v.strip.length]} look={v.frame === 'screen' || v.frame === 'device' ? v.frame : 'art'} />
       ) : v.compare ? (
         <Toggle views={v.compare} aspect={v.aspect ?? '16 / 10'} framed={v.frame === 'browser'} />
       ) : v.src ? (

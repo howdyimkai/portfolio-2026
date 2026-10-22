@@ -153,6 +153,22 @@ const months = [
   },
 ]
 
+// Chapter 9's Build Style questions, Kai's phone mockups (Cal-Visuals/09-reflection, 2026-10-22),
+// trimmed to the bezel (x 15 to 597, y 14 to 1044) with the transparent corners kept. The intro
+// screen (01-construction.png) is left out: it isn't a question, and it shows a $50 prize entry.
+const buildStyle = [
+  {
+    src: '/works/cal/reflection/build-style-q1.webp',
+    caption: 'Build Style, question 1',
+    alt: 'Build Style quiz, question 1: "A group project starts. Nobody assigns roles. You end up..." over a photo of students crowding around a laptop. Four answers: "Doing the part where something actually gets built" (picked), "Figuring out the thing nobody can get to work," "Mapping out what has to happen and in what order," "Making sure everyone knows what they\'re doing."',
+  },
+  {
+    src: '/works/cal/reflection/build-style-q4.webp',
+    caption: 'Build Style, question 4',
+    alt: 'Build Style quiz, question 4: "Which one actually held your attention in school?" over a photo of an apple on a stack of books beside ABC blocks. Four answers: "Sports, clubs, anything where I ran the group," "Shop, welding, art, anything you make with your hands," "Drafting, CAD, or games where you build a whole system," "Science labs, taking electronics apart, puzzles."',
+  },
+]
+
 // Chapter 2's homepage before and after: Cal-Visuals/02-problem/Tallo-LP-*.png whole, Safari window
 // and all (Kai, 2026-10-22: the tight crops lost too much). Each is trimmed to its window and shadow,
 // scaled to 980px tall, and centered on a shared 1604x980 transparent canvas, so the toggle swaps
@@ -500,11 +516,10 @@ export const cal: CaseStudy = {
           kind: 'visual',
           visual: {
             label: 'Build Style Q1 and Q4, cropped: "A group project starts..." and "Which one actually held your attention in school?"',
-            tiles: [
-              { aspect: '4 / 3', label: 'Q1' },
-              { aspect: '4 / 3', label: 'Q4' },
-            ],
-            cols: [1, 2],
+            frame: 'device',
+            aspect: '582 / 1030',
+            strip: buildStyle,
+            cols: [2, 2],
           },
         },
         {
