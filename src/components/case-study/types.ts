@@ -20,6 +20,9 @@ export type Visual = {
   frame?: 'browser'
   // A product flow you can step through by tapping, in place of a still (the Cal quiz hero).
   flow?: Flow
+  // Captures of one page in a browser frame with a switch between them (a before and after). They
+  // share the visual's aspect, so crop them to the same size and zoom.
+  compare?: { label: string; src: string; alt: string }[]
 }
 
 // A box on a screen image as % of the image: [left, top, width, height]. Percentages, so hotspots

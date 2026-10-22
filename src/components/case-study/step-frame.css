@@ -82,6 +82,34 @@
   .sf-link:hover { text-decoration: underline; }
 }
 
+/* Toggle's segmented control: the shown capture's segment is filled ink. */
+.tg-seg {
+  color: var(--color-ink-muted);
+  transition: background-color 150ms ease-out, color 150ms ease-out;
+}
+.tg-seg[aria-pressed='true'] {
+  background-color: var(--color-ink-primary);
+  color: white;
+}
+@media (hover: hover) and (pointer: fine) {
+  .tg-seg[aria-pressed='false']:hover { color: var(--color-ink-primary); }
+}
+.tg-seg:focus-visible {
+  outline: 2px solid var(--color-accent-washi-blue);
+  outline-offset: 2px;
+}
+/* The incoming capture fades in on top of the outgoing one, which holds until it's covered: no
+   double exposure halfway, and nothing slides, so the eye can compare what stayed put. */
+.tg-view {
+  opacity: 0;
+  transition: opacity 0s linear 200ms;
+}
+.tg-view[data-active='true'] {
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 200ms var(--ease-out-strong);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sf-screen,
   .sf-screen[data-active='true'] {
@@ -89,4 +117,6 @@
     transition: none;
   }
   .sf-float { animation: none; }
+  .tg-view,
+  .tg-view[data-active='true'] { transition: none; }
 }

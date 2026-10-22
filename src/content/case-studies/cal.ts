@@ -65,6 +65,12 @@ const quizFlow: Flow = {
   link: { label: 'Take the real quiz', href: TALLO_QUIZ_URL },
 }
 
+// Chapter 2's homepage before and after: Cal-Visuals/02-problem/Tallo-LP-*.png whole, Safari window
+// and all (Kai, 2026-10-22: the tight crops lost too much). Each is trimmed to its window and shadow,
+// scaled to 980px tall, and centered on a shared 1604x980 transparent canvas, so the toggle swaps
+// in place. Before public: the new one still shows the unverified "2+ Million Users" badge, and the
+// old one the CBS News bar.
+
 // Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/Final Drafts/CaseStudy_Cal_V4.md, Part 1
 // (locked 2026-10-21). Paste as written: don't edit copy here, edit the doc. Every visual but the hero is
 // still a placeholder named after its *[...]* marker; Part 2 of the doc specs each one.
@@ -137,7 +143,19 @@ export const cal: CaseStudy = {
           kind: 'visual',
           visual: {
             label: 'Before/after toggle: old homepage with three equal buttons, new homepage with one button, "Start Your Free Career Quiz"',
-            frame: 'browser',
+            aspect: '1604 / 980',
+            compare: [
+              {
+                label: 'Before',
+                src: '/works/cal/problem/homepage-before.webp',
+                alt: "Before: Tallo's old homepage offered three equal buttons, Explore Careers, Build Skills and Find a Job.",
+              },
+              {
+                label: 'After',
+                src: '/works/cal/problem/homepage-after.webp',
+                alt: 'After: the redesigned homepage has one button, Start Your Free Career Quiz.',
+              },
+            ],
           },
         },
         {
@@ -220,20 +238,14 @@ export const cal: CaseStudy = {
         {
           kind: 'visual',
           visual: {
-            label: "Four phones: Welcome, a question, Cal's response, the result",
-            tiles: [
-              { aspect: '9 / 19.5', label: 'Welcome' },
-              { aspect: '9 / 19.5', label: 'A question' },
-              { aspect: '9 / 19.5', label: "Cal's response" },
-              { aspect: '9 / 19.5', label: 'The result' },
-            ],
-            cols: [2, 4],
+            label: 'Interactive result → hub, desktop and mobile versions: The Creator result → Design and Media career hub',
+            frame: 'browser',
           },
         },
         {
           kind: 'visual',
           visual: {
-            label: 'Rewrite strip: survey item "Keep inventory records" → Orion version → Cal version',
+            label: 'Rewrite strip: survey item "Study the movement of planets" → Orion version → Cal version',
             tiles: [
               { aspect: '3 / 2', label: 'Survey item' },
               { aspect: '3 / 2', label: 'Orion version' },
@@ -297,12 +309,13 @@ export const cal: CaseStudy = {
         {
           kind: 'visual',
           visual: {
-            label: 'Strip: what changed each month, Founder Fit > Growth Reflection > Creative Career Fit > Build Style',
+            label:
+              'Strip: what changed each month with a caption each, Jul Founder Fit > Aug Growth Reflection > Sep Creative Career Fit > Oct Build Style, October step links the landing page',
             tiles: [
-              { aspect: '3 / 4', label: 'Founder Fit' },
-              { aspect: '3 / 4', label: 'Growth Reflection' },
-              { aspect: '3 / 4', label: 'Creative Career Fit' },
-              { aspect: '3 / 4', label: 'Build Style' },
+              { aspect: '3 / 4', label: 'Jul, Founder Fit' },
+              { aspect: '3 / 4', label: 'Aug, Growth Reflection' },
+              { aspect: '3 / 4', label: 'Sep, Creative Career Fit' },
+              { aspect: '3 / 4', label: 'Oct, Build Style' },
             ],
             cols: [2, 4],
           },
@@ -324,7 +337,7 @@ export const cal: CaseStudy = {
         },
         {
           kind: 'p',
-          text: 'A quiz result is a draft of a person, and people tell you whether it fits. One member wrote "It really sounds like me." A 15 year old wrote "All work wise nothing to apply to life im 15 no job." Our questions assumed a job they didn\'t have, so some of October\'s questions now ask about things like group projects and favorite classes.',
+          text: 'A quiz result is a mere draft of a person, and people tell you whether it fits. One member wrote "It really sounds like me." A 15 year old wrote "All work wise nothing to apply to life im 15 no job." Our questions assumed a job they didn\'t have, so some of October\'s questions now ask about things like group projects and favorite classes.',
         },
         {
           kind: 'visual',

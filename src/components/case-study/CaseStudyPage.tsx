@@ -5,6 +5,7 @@
 // Backdrop and chapter bar: design-intent/case-study-exploration/NOTES.md (2026-10-20).
 import { useEffect, useState, type CSSProperties } from 'react'
 import StepFrame from './StepFrame'
+import Toggle from './Toggle'
 import type { Block, CaseStudy, Visual } from './types'
 import './case-study.css'
 
@@ -222,6 +223,8 @@ function VisualBlock({ v }: { v: Visual }) {
     <figure>
       {v.flow ? (
         <StepFrame flow={v.flow} />
+      ) : v.compare ? (
+        <Toggle views={v.compare} aspect={v.aspect ?? '16 / 10'} framed={v.frame === 'browser'} />
       ) : v.src ? (
         <div className="overflow-hidden rounded-[14px] border border-hairline bg-white" style={{ aspectRatio: v.aspect ?? '16 / 10' }}>
           {/* A plain <picture>, not next/image: the optimizer would flatten animated WebPs. */}

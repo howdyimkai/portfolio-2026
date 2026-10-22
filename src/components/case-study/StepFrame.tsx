@@ -6,6 +6,7 @@
 // Nothing autoplays. Plan and measurements: Claude-Workspace .../2026-10-PortfolioSprint/HERO-PLAN.md
 // and hero-build/HERO-MEASUREMENTS.md (measured off the Paper artboards, 2026-10-22).
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import BrowserFrame from './BrowserFrame'
 import type { Box, Flow, ScreenSet } from './types'
 import './step-frame.css'
 
@@ -45,14 +46,7 @@ export default function StepFrame({ flow }: { flow: Flow }) {
 
   return (
     <div ref={root} className="rounded-[14px] bg-tag px-5 pb-5 pt-6 md:px-10 md:pb-7 md:pt-10">
-      <div className="hidden overflow-hidden rounded-[12px] border border-hairline bg-white shadow-[0_1px_2px_rgba(58,50,38,0.06),0_8px_24px_rgba(58,50,38,0.08)] md:block">
-        <div className="flex h-8 items-center gap-1.5 border-b border-hairline px-3" aria-hidden="true">
-          {[0, 1, 2].map((d) => (
-            <span key={d} className="size-2 rounded-full bg-chip-line" />
-          ))}
-        </div>
-        {screens(flow.desktop)}
-      </div>
+      <BrowserFrame className="hidden md:block">{screens(flow.desktop)}</BrowserFrame>
       <div className="mx-auto max-w-[320px] rounded-[44px] bg-[#211e1a] p-2 shadow-[0_8px_24px_rgba(58,50,38,0.18)] md:hidden">
         <div className="overflow-hidden rounded-[36px]">{screens(flow.mobile)}</div>
       </div>
