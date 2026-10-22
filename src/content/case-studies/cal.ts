@@ -1,7 +1,7 @@
 import type { CaseStudy, Flow } from '@/components/case-study/types'
 
-// TODO before the page goes public: the live Tallo career quiz.
-const TALLO_QUIZ_URL = 'https://example.com/tallo-career-quiz-TODO'
+// The live Tallo career quiz, behind "Take the real quiz" under the hero.
+const TALLO_QUIZ_URL = 'https://tallo.com/talent/career/career-quiz'
 
 // The hero: four of the quiz's nine paths, rebuilt in Paper (Tallo Brand System › Cal Art) from the
 // live quiz. Desktop screens are cropped to 960x832 out of the 1703x952 artboards: x 371 to 1331
