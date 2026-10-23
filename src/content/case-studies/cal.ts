@@ -170,9 +170,10 @@ const buildStyle = [
 ]
 
 // Chapter 2's homepage before and after: Cal-Visuals/02-problem/Tallo-LP-*.png whole, Safari window
-// and all (Kai, 2026-10-22: the tight crops lost too much). Each is trimmed to its window and shadow,
-// scaled to 980px tall, and centered on a shared 1604x980 transparent canvas, so the toggle swaps
-// in place. Before public: the new one still shows the unverified "2+ Million Users" badge, and the
+// and all (Kai, 2026-10-22: the tight crops lost too much). The before window was 59px wider, so
+// plain columns are cut out of it until both windows match, then each is trimmed to its window and
+// shadow and scaled to exactly 1579x980, so the toggle swaps in place with no edge jump (Kai,
+// 2026-10-23; script in the sprint folder's problem-build/). Before public: the new one still shows the unverified "2+ Million Users" badge, and the
 // old one the CBS News bar.
 
 // Chapter 3's Calvolution, from Kai's Paper export Cal-Visuals/03-finding-cal/03-findingcal.png
@@ -326,7 +327,7 @@ export const cal: CaseStudy = {
           kind: 'visual',
           visual: {
             label: 'Before/after toggle: old homepage with three equal buttons, new homepage with one button, "Start Your Free Career Quiz"',
-            aspect: '1604 / 980',
+            aspect: '1579 / 980',
             compare: [
               {
                 label: 'Before',
