@@ -109,6 +109,16 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
               </div>
             </section>
           ))}
+
+          {/* Phones have no chapter frame or X, so the way back sits at the end of the read. */}
+          <nav aria-label="More work" className="mt-[77px] border-t border-hairline pt-6 text-center lg:hidden">
+            <a
+              href="/works"
+              className="press-scale inline-flex min-h-11 items-center px-3 font-mono text-[13px] text-ink-primary underline decoration-hairline underline-offset-4"
+            >
+              Back to More Work
+            </a>
+          </nav>
         </div>
       </div>
     </article>
