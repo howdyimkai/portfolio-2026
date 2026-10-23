@@ -180,6 +180,16 @@ function BlockView({ b }: { b: Block }) {
           <p className={`mt-2 ${BODY}`}>{b.text}</p>
         </div>
       )
+    case 'photoQuote':
+      // The quote's bar and type, without quote marks: these are Kai's own closing lines.
+      return (
+        <div className="mt-2 grid gap-8 md:grid-cols-2 md:items-center md:gap-10">
+          <VisualBlock v={b.visual} />
+          <blockquote className="border-l-2 border-ink-primary pl-6 font-display text-[20px] leading-[1.4] text-ink-primary [text-wrap:pretty]">
+            {b.text}
+          </blockquote>
+        </div>
+      )
     case 'quote':
       return (
         <figure className={`my-3 ${PROSE} border-l-2 border-ink-primary pl-6`}>

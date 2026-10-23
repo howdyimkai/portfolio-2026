@@ -428,7 +428,7 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'I rewrote each RIASEC item as a moment on the trail from the Valley of Confusion to the Peak of Clarity. When we tried it out at an all-hands, people said six options per question was too many, so we cut it to four. Each type still shows up exactly six times across the nine questions, so no path gets a head start. Cal reacts between questions like an older friend, so the quiz feels like a hike.',
+          text: 'I rewrote each RIASEC item as a moment on the trail from the Valley of Confusion to the Peak of Clarity. When we tried it out at an all-hands, people said six options per question was too many, so we cut it to four. Each type still shows up exactly six times across the nine questions, so no path gets a head start. If your top types tie, a tenth question breaks the tie. Cal reacts between questions like an older friend, so the quiz feels like a hike.',
         },
         {
           kind: 'visual',
@@ -489,7 +489,7 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'Cal\'s quiz became the template for the community\'s monthly challenge quizzes, and each month added a twist. Founder Fit scored you, and a "Developing" result counted as a real answer, with no fail state. Growth Reflection added a tiebreaker that only shows up when your answers disagree, plus one open question to check if it landed. I designed the branching, and my intern, Jae Stokes, built it from my setup guide. In September few people came back to comment, so October\'s Build Style quiz drops the community post, ends on real trades with pay, and asks for one sentence on the badge page. Completion across the Typeform quizzes held between 76% and 88%.',
+          text: 'Cal\'s quiz became the template for the community\'s monthly challenge quizzes, and each month added a twist. Founder Fit scored you, and a "Developing" result counted as a real answer, with no fail state. Growth Reflection tracked two scores at once, each with Cal\'s tiebreaker, plus one open question to check if it landed. I designed the branching, and my intern, Jae Stokes, built it from my setup guide. In September few people came back to comment, so October\'s Build Style quiz drops the community post, ends on real trades with pay, and asks for one sentence on the badge page. Completion across the Typeform quizzes held between 76% and 88%.',
         },
         {
           kind: 'visual',
@@ -575,8 +575,19 @@ export const cal: CaseStudy = {
           },
         },
         {
-          kind: 'p',
-          text: 'Plenty of kids find their path because one adult puts something in front of them. I wanted Cal to be that mentor for the kids who don\'t have one.',
+          // Kai, 2026-10-23: the photo full width felt too big, so it sits beside the closing lines,
+          // set in the quote style.
+          kind: 'photoQuote',
+          visual: {
+            // Kai's Cal-Visuals/09-reflection/TalloSelfieReflect.jpeg (1280x720), as WebP at its own size.
+            // A photo, not a screen, so no frame.
+            label: 'Photo: Kai with Cal and two award badges',
+            src: '/works/cal/reflection/tallies-selfie.webp',
+            aspect: '1280 / 720',
+            alt: 'Kai in headphones, smiling, with Cal making a heart and two badges: I Won The Tallies 2025, Voice of the User Award, and Mentor of the Year Award.',
+            caption: "The Tallies 2025, Tallo's team awards: Voice of the User and Mentor of the Year.",
+          },
+          text: "Plenty of kids find their path because one adult puts something in front of them. I wanted Cal to be that mentor for the kids who don't have one. Cal taught me to start where people are. I still design that way.",
         },
       ],
     },
