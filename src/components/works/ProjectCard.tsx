@@ -13,7 +13,8 @@ export type Project = {
   year?: string
   // Animated cover plus its first frame for reduced motion. No cover → a quiet empty window,
   // labeled "coming soon" only when there's no case study to link to either.
-  cover?: { anim: string; still: string; alt: string }
+  // `float` is a layer that bobs over the cover, placed by [left, top, width, height] in % of it.
+  cover?: { anim: string; still: string; alt: string; float?: { src: string; box: [number, number, number, number] } }
   // No href → the card is a "coming soon" placeholder and isn't a link.
   href?: string
   cta?: string
@@ -43,10 +44,26 @@ export default function ProjectCard({ project: p }: { project: Project }) {
         <div ref={windowRef} className="wk-window absolute">
           {p.cover ? (
             <>
-              <picture>
-                <source media="(prefers-reduced-motion: reduce)" srcSet={p.cover.still} />
-                <img src={p.cover.anim} alt={p.cover.alt} draggable={false} className="wk-gif block w-full rounded-[5px]" />
-              </picture>
+              <div className="wk-gif relative">
+                <picture>
+                  <source media="(prefers-reduced-motion: reduce)" srcSet={p.cover.still} />
+                  <img src={p.cover.anim} alt={p.cover.alt} draggable={false} className="block w-full rounded-[5px]" />
+                </picture>
+                {p.cover.float && (
+                  <img
+                    src={p.cover.float.src}
+                    alt=""
+                    draggable={false}
+                    className="wk-float absolute"
+                    style={{
+                      left: `${p.cover.float.box[0]}%`,
+                      top: `${p.cover.float.box[1]}%`,
+                      width: `${p.cover.float.box[2]}%`,
+                      height: `${p.cover.float.box[3]}%`,
+                    }}
+                  />
+                )}
+              </div>
               <img src="/garden/tool-blossom.webp" alt="" draggable={false} className="wk-blossom wk-blossom-a" />
               <img src="/garden/tool-blossom.webp" alt="" draggable={false} className="wk-blossom wk-blossom-b" />
             </>

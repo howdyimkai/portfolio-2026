@@ -40,6 +40,15 @@
 .wk-gif {
   transition: transform 500ms var(--ease-out-strong);
 }
+/* Cal's idle bob from the case study hero (sf-float): 5.5 design px over 3.5s, which is 2.06% of
+   Cal's own height, so it keeps the same proportion at card size. */
+@keyframes wk-float {
+  50% { transform: translateY(-2.06%); }
+}
+.wk-float {
+  pointer-events: none;
+  animation: wk-float 3.5s ease-in-out infinite;
+}
 /* Blossoms float in front of the window (translateZ), so the tilt slides them more than the GIF.
    On hover they lift further off it and drift outward with a small turn. */
 .wk-blossom {
@@ -125,5 +134,8 @@ a.wk-card:active .wk-frost {
   .wk-gif,
   .wk-blossom {
     transition: none;
+  }
+  .wk-float {
+    animation: none;
   }
 }

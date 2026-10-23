@@ -1,7 +1,7 @@
 import ProjectCard, { type Project } from '@/components/works/ProjectCard'
 
 // Design Garden leads, then Tallo (positioning, 2026-10-10). Tallo links to the Cal quiz case
-// study but has no cover yet; apolloED is still a "coming soon" card.
+// study; apolloED is still a "coming soon" card.
 const PROJECTS: Project[] = [
   {
     name: 'design garden',
@@ -23,6 +23,16 @@ const PROJECTS: Project[] = [
     hook: 'A career quiz teens finish, with a mascot to guide them.',
     story: 'I created Cal, a compass mascot, and a three minute story quiz that gets teenagers started on career discovery. I built it with our community, tested it, and product adopted it into the core experience.',
     role: 'brand and product',
+    // The Cal hero's Welcome screen, center cut to Design Garden's 480x501 window: the plate
+    // (a still, so it serves as both frames) with the hero's own Cal layer bobbing on top.
+    // Box is the hero's Cal box remapped to the cut (plate x 135..1464 of 1600), then grown 20%
+    // from the feet so Cal stands off the screen (Kai, 2026-10-22).
+    cover: {
+      anim: '/works/tallo-cover-plate.webp',
+      still: '/works/tallo-cover-plate.webp',
+      float: { src: '/works/cal/hero/desktop-1-cal.webp', box: [33.11, 24.83, 39.12, 38.51] },
+      alt: 'Cal\'s Career Quiz welcome screen: Cal the compass waving in front of a mountain trail, above a Begin Expedition button',
+    },
     href: '/works/cal',
     cta: 'meet cal',
   },
