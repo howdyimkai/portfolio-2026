@@ -20,8 +20,8 @@ const PROJECTS: Project[] = [
   },
   {
     name: 'tallo',
-    hook: 'A career quiz students finish, with a mascot to guide them.',
-    story: 'I created a mascot for a career exploration platform for gen z and tested it with our community. It led a quiz I built for marketing, and product adopted it into the core experience.',
+    hook: 'A career quiz teens finish, with a mascot to guide them.',
+    story: 'I created Cal, a compass mascot, and a three minute story quiz that gets teenagers started on career discovery. I built it with our community, tested it, and product adopted it into the core experience.',
     role: 'brand and product',
     href: '/works/cal',
     cta: 'meet cal',
