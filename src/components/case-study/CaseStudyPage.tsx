@@ -182,13 +182,21 @@ function BlockView({ b }: { b: Block }) {
         </div>
       )
     case 'photoQuote':
-      // The quote's bar and type, without quote marks: these are Kai's own closing lines.
+      // The quote's bar and type, without quote marks: these are Kai's own closing lines. The lines
+      // lead and the photo follows, both as wide as the device strip above it
+      // (600px, left aligned).
       return (
-        <div className="mt-2 grid gap-8 md:grid-cols-2 md:items-center md:gap-10">
-          <VisualBlock v={b.visual} />
-          <blockquote className="border-l-2 border-ink-primary pl-6 font-display text-[20px] leading-[1.4] text-ink-primary [text-wrap:pretty]">
-            {b.text}
-          </blockquote>
+        <div className="mt-2 flex flex-col gap-8 md:gap-10">
+          <div className="max-w-[600px]">
+            {/* The same uppercase label the device and browser rows use ("SHIPPED, IN TALLO"). */}
+            {b.label && <p className="mb-2.5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-ink-primary">{b.label}</p>}
+            <blockquote className="border-l-2 border-ink-primary pl-6 font-display text-[20px] leading-[1.4] text-ink-primary [text-wrap:pretty] md:text-[22px]">
+              {b.text}
+            </blockquote>
+          </div>
+          <div className="max-w-[600px]">
+            <VisualBlock v={b.visual} />
+          </div>
         </div>
       )
     case 'quote':

@@ -575,9 +575,10 @@ export const cal: CaseStudy = {
           },
         },
         {
-          // Kai, 2026-10-23: the photo full width felt too big, so it sits beside the closing lines,
-          // set in the quote style.
+          // Kai, 2026-10-23: the photo full width felt too big. The closing lines lead in the quote
+          // style, and the photo sits under them at the device strip's width.
           kind: 'photoQuote',
+          label: 'Final takeaway',
           visual: {
             // Kai's Cal-Visuals/09-reflection/TalloSelfieReflect.jpeg (1280x720), as WebP at its own size.
             // A photo, not a screen, so no frame.

@@ -96,7 +96,7 @@ export type Block =
   | { kind: 'funnel'; steps: { label: string; share: number; value?: string }[]; caption?: string }
   | { kind: 'visual'; visual: Visual }
   // A photo with closing lines beside it in the quote style (Cal's last chapter); stacked on phones.
-  | { kind: 'photoQuote'; visual: Visual; text: string }
+  | { kind: 'photoQuote'; visual: Visual; text: string; label?: string }
   // A character's style kit laid out as one stacked sheet (Cal chapter 6).
   | { kind: 'kit'; kit: Kit }
 
