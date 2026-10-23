@@ -16,7 +16,7 @@ export default function Footer() {
           <a href="https://www.linkedin.com/in/uxdesignerkai/" target="_blank" rel="noreferrer" className="press-scale">
             LinkedIn
           </a>
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="press-scale">
+          <a href="https://github.com/howdyimkai" target="_blank" rel="noreferrer" className="press-scale">
             GitHub
           </a>
           <a href="mailto:uxdesignerkaitran@gmail.com" className="press-scale">
