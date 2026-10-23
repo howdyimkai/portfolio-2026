@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import BrowserFrame from './BrowserFrame'
 import CalKit, { CAL, CAL_ASPECT } from './CalKit'
+import ChapterSheet from './ChapterSheet'
 import StepFrame from './StepFrame'
 import Strip from './Strip'
 import Toggle from './Toggle'
@@ -101,7 +102,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
           )}
 
           {s.chapters.map((c, i) => (
-            <section key={c.id} id={c.id} className="mt-[77px] scroll-mt-12 md:mt-[104px]">
+            <section key={c.id} id={c.id} className="mt-[77px] scroll-mt-[72px] md:mt-[104px] md:scroll-mt-12">
               {/* Chapter number as a quiet label above, so the title alone carries the weight. With a
                   hook, the label takes the short title ("02 THE PROBLEM") and the hook is the h2. */}
               {labels[i] && (
@@ -119,7 +120,8 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             </section>
           ))}
 
-          {/* Phones have no chapter frame or X, so the way back sits at the end of the read. */}
+          {/* Below lg there's no chapter frame or X: the chapters ride a chalk chip, and the way back
+              also sits at the end of the read. */}
           <nav aria-label="More work" className="mt-[77px] border-t border-hairline pt-6 text-center lg:hidden">
             <Link
               href="/works"
@@ -130,6 +132,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
           </nav>
         </div>
       </div>
+      <ChapterSheet chapters={s.chapters} labels={labels} active={active} />
     </article>
   )
 }

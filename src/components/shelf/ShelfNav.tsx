@@ -13,7 +13,7 @@ import './shelf-nav.css'
 
 type Toy = { label: string; href: string; src: string; w: number; h: number; x0: number; x1: number; floor: number; width: number; tic: Tic }
 
-const TOYS: Toy[] = [
+export const TOYS: Toy[] = [
   { label: 'selected works', href: '/works', src: '/nav/shelf/cloud.webp', w: 183, h: 111, x0: 25.5, x1: 81.5, floor: 85, width: 50, tic: 'puff' },
   { label: 'play ground', href: '/play', src: '/nav/shelf/pony.webp', w: 385, h: 395, x0: 95.5, x1: 157, floor: 87, width: 38, tic: 'prance' },
   { label: 'humble abode', href: '/', src: '/nav/shelf/hat.webp', w: 139, h: 84, x0: 164, x1: 230, floor: 82, width: 50, tic: 'tip' },

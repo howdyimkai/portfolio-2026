@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Bricolage_Grotesque } from 'next/font/google'
 import localFont from 'next/font/local'
 import '../styles/globals.css'
@@ -39,6 +39,15 @@ export const metadata: Metadata = {
     title: 'Kai Tran | Designer and tinkerer',
     description: 'Designer and tinkerer. I make learning feel like play.',
   },
+}
+
+// viewport-fit=cover lets the phone bar and chapter chip pad themselves clear of the notch and
+// home indicator (env(safe-area-inset-*) is 0 without it). The status bar takes the paper color.
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#F2EBE1',
 }
 
 export default function RootLayout({

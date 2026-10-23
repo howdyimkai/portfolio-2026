@@ -117,7 +117,9 @@ About copy draft lives in the Positioning Brainstorm doc.
   `overflow-hidden`, and `SandboxHome` (`src/components/SandboxHome.tsx`) brings
   its own floating `ShelfNav` over `SandGarden layout="bleed"`. No footer on `/`.
   `/pieces/*` renders bare (one piece of the site on its own, for recordings).
-  `/works` uses `ShelfNav` + `Footer` on white grid paper. Every other route
+  `/works` uses `ShelfNav` + `Footer` on white grid paper; below md the shelf gives way to
+  `PhoneMenu` (paper bar + hamburger opening a one-column shelf) and case studies get a chalk
+  `ChapterSheet` chip. Every other route
   uses `Navigation` + `Footer` with normal scrolling.
 - **`Navigation`** — route-aware: homepage renders 4 items edge-to-edge with
   no wordmark ("hello world" = home); other routes show the "Kai Tran"

@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import ShelfNav from '@/components/shelf/ShelfNav'
+import PhoneMenu from '@/components/shelf/PhoneMenu'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -20,14 +21,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   // /works and its case studies share the homepage's shelf nav, on white grid paper (Kai, 2026-10-16). The wordmark
-  // and broom are inked like the homepage's: black at 85%.
+  // and broom are inked like the homepage's: black at 85%. On phones the shelf gives way to a
+  // paper bar whose hamburger opens it as one column (PhoneMenu, 2026-10-23).
   if (pathname === '/works' || pathname.startsWith('/works/')) {
     return (
       <div className="grid-sheet flex min-h-screen flex-col">
-        <div className="[&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark]:[filter:brightness(0)]!">
+        <PhoneMenu />
+        <div className="max-md:hidden [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark]:[filter:brightness(0)]!">
           <ShelfNav />
         </div>
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow max-md:pt-14">{children}</main>
         <Footer />
       </div>
     )

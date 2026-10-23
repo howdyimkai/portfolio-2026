@@ -1,47 +1,36 @@
-/* Phone menu prototypes. Phones only (< 768px): the real shelf header hides and a slim bar holds
-   the top. Desktop and tablet are untouched. */
+/* Phone menu (PhoneMenu.tsx). Phones only (< 768px); AppShell hides the shelf header at the same
+   width, so tablet and desktop keep the shelf. */
 .pm-bar, .pm-overlay { display: none; }
 
 @media (max-width: 767px) {
-  .grid-sheet > div > .shelf-nav { display: none; }
-
   /* Controls, not content: no gray tap flash, no long-press text selection or callout.
      The email address stays selectable (people long-press to copy it). */
-  .pm-bar a, .pm-bar button, .pm-overlay a, .pm-overlay button, .pn-chip {
+  .pm-bar a, .pm-bar button, .pm-overlay a, .pm-overlay button {
     -webkit-tap-highlight-color: transparent; touch-action: manipulation;
     user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
   }
   .pm-email-addr { user-select: text; -webkit-user-select: text; }
-  .grid-sheet > main { padding-top: 56px; }
 
   .pm-bar {
     position: fixed; z-index: 45; top: 0; left: 0; right: 0;
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
     height: calc(56px + env(safe-area-inset-top, 0px));
     padding: env(safe-area-inset-top, 0px) max(8px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
     background: color-mix(in srgb, var(--color-page) 90%, transparent);
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--color-hairline);
   }
-  .pm-mark { display: flex; align-items: center; min-height: 44px; flex-shrink: 0; touch-action: manipulation; }
-  .pm-mark img { height: 34px; width: auto; filter: brightness(0); opacity: 0.85; }
-  .pm-bar-mid { flex: 1; min-width: 0; display: flex; justify-content: center; }
+  .pm-mark { display: flex; align-items: center; min-height: 44px; flex-shrink: 0; }
+  .pm-mark img, .pm-mark-img { height: 34px; width: auto; filter: brightness(0); opacity: 0.85; }
 
   .pm-burger, .pm-close {
     display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0;
-    color: var(--color-ink-primary); border-radius: 10px; touch-action: manipulation;
+    color: var(--color-ink-primary); border-radius: 10px;
     transition: scale 150ms ease-out;
   }
   .pm-burger svg, .pm-close svg { width: 24px; height: 24px; }
   .pm-burger:active, .pm-close:active { scale: 0.96; }
-  .pm-burger:focus-visible, .pm-close:focus-visible, .pm-where:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: -2px; }
-
-  .pm-where {
-    display: flex; align-items: center; gap: 0.6em; max-width: 100%; min-height: 44px; padding: 0 10px;
-    font-family: var(--font-mono); font-size: 13px; color: var(--color-ink-primary); white-space: nowrap;
-    touch-action: manipulation; transition: scale 150ms ease-out;
-  }
-  .pm-where:active { scale: 0.97; }
+  .pm-burger:focus-visible, .pm-close:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: -2px; }
 
   /* Overlay: fades up a few px, paper with the grid, page locked behind it. */
   .pm-overlay {
@@ -58,19 +47,15 @@
     height: calc(56px + env(safe-area-inset-top, 0px));
     padding: env(safe-area-inset-top, 0px) max(8px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
   }
-  .pm-mark-img { height: 34px; width: auto; filter: brightness(0); opacity: 0.85; }
+  /* The shelf fills whatever height the contact block leaves. */
   .pm-overlay-body {
-    flex: 1; overflow-y: auto; overscroll-behavior: contain;
-    padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(80px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); /* clears the proto picker */
+    flex: 1; display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain;
+    padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
   }
-  .pm-section { margin: 28px 0 10px; font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-ink-faint); }
 
-  /* One-column shelf: each row is one cubby of the real shelf art, stretched across. */
-  .pm-column { display: flex; flex-direction: column; max-width: 400px; margin: 0 auto; }
-  /* On its own, the column fills the phone: rows share whatever height is left. */
-  .pm-overlay-body:has(> .pm-column-fill) { display: flex; flex-direction: column; }
-  .pm-overlay-body > .pm-column-fill { flex: 1; width: 100%; }
-  .pm-column-fill .pm-cubby { flex: 1 1 0; min-height: 88px; }
+  /* One-column shelf: each row is one cubby of the real shelf art, stretched across, and rows
+     share the phone's height. */
+  .pm-column { flex: 1; display: flex; flex-direction: column; width: 100%; max-width: 400px; margin: 0 auto; }
   /* Kai's top board (source 821x27 at the column's 0.44 scale); each cubby's art comes in
      inline from ToyColumn. */
   .pm-column-top {
@@ -79,18 +64,14 @@
   }
   .pm-cubby {
     position: relative; display: flex; align-items: flex-end; justify-content: center;
-    min-height: 112px; border-style: solid;
-    padding: 0 12px; touch-action: manipulation;
+    flex: 1 1 0; min-height: 88px; border-style: solid; padding: 0 12px;
   }
-  .pm-column-compact .pm-cubby { min-height: 84px; }
-  /* The label sits level with the toy's middle. The toy hovers
-     8px over the board with a soft floor shadow under it, like the desktop shelf's toys. */
   /* Every row's group is the same width, so the set centers as one column: toys share one
      center line (an 88px slot fits the widest, the cloud at 85px) and labels share one left
-     edge (14ch holds the longest, "selected works", in the mono). */
+     edge (14ch holds the longest, "selected works", in the mono). The label sits level with
+     the toy's middle; the toy hovers 8px over the board with a soft floor shadow under it. */
   .pm-group { display: flex; align-items: center; gap: 16px; }
   .pm-slot { position: relative; flex-shrink: 0; width: 88px; display: flex; justify-content: center; padding-bottom: 8px; }
-  .pm-column-compact .pm-slot { width: 64px; }
   .pm-toy { flex-shrink: 0; display: block; }
   .pm-toy img { display: block; width: 100%; height: auto; }
   .pm-shadow {
@@ -119,7 +100,7 @@
   .pm-email-copy {
     display: inline-flex; align-items: center; gap: 10px; min-height: 44px; max-width: 100%;
     font-family: var(--font-mono); font-size: 14px; color: var(--color-ink-body);
-    touch-action: manipulation; transition: scale 150ms ease-out;
+    transition: scale 150ms ease-out;
   }
   .pm-email-copy:active { scale: 0.97; }
   .pm-email-addr { overflow-wrap: anywhere; text-decoration: underline; text-decoration-color: var(--color-hairline); text-underline-offset: 4px; }
@@ -127,7 +108,7 @@
     flex-shrink: 0; min-width: 6ch; padding: 3px 8px; border-radius: 6px; text-align: center;
     border: 1px solid var(--color-hairline); font-size: 12px; color: var(--color-ink-primary);
   }
-  .pm-email-open { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-mono); font-size: 12px; color: var(--color-ink-faint); touch-action: manipulation; }
+  .pm-email-open { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-mono); font-size: 12px; color: var(--color-ink-faint); }
   .pm-socials { display: flex; gap: 8px; margin-top: 8px; }
   /* Social tiles: plain chalk cut from Kai's shelf (public/nav/shelf-column/chalk-tile.webp)
      with the icon in the chalk label color. #ECE8E0 on this chalk is 9.2:1 on average and 3.2:1
@@ -136,28 +117,12 @@
     display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px;
     background: #3B3937 url('/nav/shelf-column/chalk-tile.webp') center / cover;
     box-shadow: 0 1px 2px rgba(40, 30, 20, 0.25);
-    color: #ECE8E0;
-    touch-action: manipulation; transition: scale 150ms ease-out;
+    color: #ECE8E0; transition: scale 150ms ease-out;
   }
   .pm-social svg { width: 22px; height: 22px; }
   .pm-social:active { scale: 0.96; }
 
   .pm-email-copy:focus-visible, .pm-email-open:focus-visible, .pm-social:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: 2px; border-radius: 6px; }
-
-  /* The chapters, on the desktop's birch chalk frame. */
-  .pm-frame {
-    max-width: 400px; margin: 0 auto;
-    border-style: solid; border-width: 20px 28px 35px 16px;
-    border-image: url('/about/frame.webp') 60 85 105 47 fill / 20px 28px 35px 16px stretch;
-  }
-  .pm-board .cs-chalk { padding: 14px 14px; }
-
-  /* Variant 3 keeps the original five-across shelf; its wordmark sits over it here, so the
-     overlay's own mark steps aside, and the broom stays on the page header only. */
-  .pm-overlay:has(.pm-shelf-row) .pm-mark-img { visibility: hidden; }
-  .pm-shelf-row .shelf-broom { display: none; }
-  .pm-shelf-row .shelf-nav { display: flex; justify-content: center; }
-  .pm-shelf-row .shelf-wordmark { filter: brightness(0); opacity: 0.85; }
 }
 
 @keyframes pm-bob { from { translate: 0 0; } to { translate: 0 -3px; } }

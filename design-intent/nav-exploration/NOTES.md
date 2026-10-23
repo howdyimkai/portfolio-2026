@@ -98,7 +98,7 @@ Decided from `/proto/nav-shelf` (Tic) + `/proto/nav-shelf-tidy` (Sweep). Built a
   (text only, no sweep), Unboxed (toys without box), Suspend (box hoisted on strings),
   Elevator (box sinks into the floor).
 
-## Decision — Phone menu: Split (2026-10-23, not built yet)
+## Decision — Phone menu: Split (2026-10-23, built)
 
 Decided from `/works/proto-phone-menu` (Split, with contact added). Phones only (< 768px);
 desktop and tablet keep the shelf header and the chalk chapter frame.
@@ -139,7 +139,10 @@ smudge). Brand marks are Central's filled set (source: `Cal-Visuals/icon-svg.md`
 as `currentColor` paths at 22px. Toys are the
 5-across row's art at 1.7x; check them on a real phone.
 
-When promoting: add the root `viewport` export (`viewportFit: 'cover'`, `themeColor` =
-page `#F2EBE1`) so the `env(safe-area-inset-*)` paddings take effect; give case study sections
-`scroll-mt` of at least 72px on phones so anchors clear the bar; then delete
-`src/app/works/proto-phone-menu` and `src/app/works/proto-chapter-nav`.
+Built 2026-10-23: `src/components/shelf/PhoneMenu.tsx` (+ `phone-menu.css`), rendered by AppShell
+on `/works` and its case studies, which hides the shelf header below md and pads `<main>` 56px.
+Chapters are `src/components/case-study/ChapterSheet.tsx` (below lg, like the desktop frame);
+sections carry `scroll-mt-[72px]` on phones and the sheet scrolls with `scrollIntoView`, so the
+margin is the one number. Root `viewport` export: `viewportFit: 'cover'`, `themeColor` #F2EBE1.
+Both proto routes deleted. Not yet: the homepage (its floating shelf, mobile deferred) and
+`/about`, `/play`, `/resume` (still `Navigation`) don't use the phone bar.
