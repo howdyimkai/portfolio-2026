@@ -1,0 +1,75 @@
+/* Phone chapter nav prototypes. Chalk colors match .cs-chalk; board is frame.webp's slate. */
+:root { --pn-board: #353532; --pn-chalk: rgba(244, 240, 230, 0.92); --pn-ease: cubic-bezier(0.32, 0.72, 0, 1); }
+
+/* Shared: 44px chalk rows inside the frames. */
+.pn-chalk { font-size: 14px; }
+.pn-chalk a { min-height: 44px; align-items: center; padding: 0; touch-action: manipulation; }
+.pn-chalk-label { padding-bottom: 0.4em; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(244, 240, 230, 0.5); }
+
+/* 1 · Chalk sheet */
+.pn-chip {
+  position: fixed; z-index: 40; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 0.75em; min-height: 44px; padding: 0 18px;
+  border-radius: 10px; background: var(--pn-board); color: var(--pn-chalk);
+  box-shadow: 0 0 0 3px #c9a57a, 0 0 0 4px rgba(61, 50, 38, 0.35), 0 8px 20px rgba(40, 30, 20, 0.22);
+  font-family: var(--font-mono); font-size: 13px; white-space: nowrap; touch-action: manipulation;
+  translate: -50% calc(100% + 32px); opacity: 0;
+  transition: translate 240ms var(--pn-ease), opacity 240ms var(--pn-ease), scale 150ms ease-out;
+}
+.pn-chip[data-shown] { translate: -50% 0; opacity: 1; }
+.pn-chip:active { scale: 0.97; }
+.pn-chip:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: 4px; }
+
+.pn-scrim { position: fixed; inset: 0; z-index: 50; background: rgba(40, 32, 22, 0.32); opacity: 0; pointer-events: none; transition: opacity 280ms var(--pn-ease); }
+.pn-scrim[data-open] { opacity: 1; pointer-events: auto; transition-duration: 280ms; }
+.pn-sheet {
+  position: fixed; z-index: 51; left: 0; right: 0; bottom: 0;
+  padding: 0 16px calc(16px + env(safe-area-inset-bottom));
+  translate: 0 100%; transition: translate 200ms cubic-bezier(0.4, 0, 1, 1); will-change: translate;
+}
+.pn-sheet[data-open] { translate: 0 0; transition: translate 280ms var(--pn-ease); }
+.pn-sheet-frame { max-width: 360px; margin: 0 auto; }
+.pn-scrim:not([data-open]) { transition-duration: 200ms; }
+
+/* 2 · Trail rail */
+.pn-rail {
+  position: fixed; z-index: 40; top: 0; left: 0; right: 0;
+  padding-top: env(safe-area-inset-top);
+  background: color-mix(in srgb, var(--color-page) 90%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  translate: 0 -100%; transition: translate 240ms var(--pn-ease);
+}
+.pn-rail[data-shown] { translate: 0 0; }
+.pn-rail-row {
+  display: flex; gap: 4px; overflow-x: auto; padding: 0 16px; scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 32px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 32px), transparent);
+}
+.pn-rail-row::-webkit-scrollbar { display: none; }
+.pn-rail-row a {
+  display: flex; align-items: center; gap: 0.6em; min-height: 44px; padding: 0 10px;
+  font-family: var(--font-mono); font-size: 12px; white-space: nowrap; color: var(--color-ink-faint);
+  touch-action: manipulation; transition: color 150ms ease-out;
+}
+.pn-rail-row a[aria-current] { color: var(--color-ink-primary); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 6px; }
+.pn-rail-row a:focus-visible { outline: 1px solid var(--color-ink-primary); outline-offset: -4px; border-radius: 4px; }
+.pn-rail-track { height: 1px; background: var(--color-hairline); }
+.pn-rail-fill { height: 1px; background: var(--color-ink-primary); transform-origin: 0 50%; transform: scaleX(0); }
+
+/* 3 · Contents in flow */
+.pn-back {
+  position: fixed; z-index: 40; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px;
+  background: var(--pn-board); color: var(--pn-chalk);
+  box-shadow: 0 0 0 3px #c9a57a, 0 0 0 4px rgba(61, 50, 38, 0.35), 0 8px 20px rgba(40, 30, 20, 0.22);
+  touch-action: manipulation; opacity: 0; scale: 0.9;
+  transition: opacity 200ms var(--pn-ease), scale 200ms var(--pn-ease);
+}
+.pn-back[data-shown] { opacity: 1; scale: 1; }
+.pn-back:active { scale: 0.96; }
+.pn-back:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pn-chip, .pn-scrim, .pn-sheet, .pn-sheet[data-open], .pn-rail, .pn-back, .pn-rail-row a { transition: none; }
+}
+.pn-sheet:focus { outline: none; }

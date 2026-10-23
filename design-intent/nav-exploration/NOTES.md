@@ -97,3 +97,49 @@ Decided from `/proto/nav-shelf` (Tic) + `/proto/nav-shelf-tidy` (Sweep). Built a
 - Rejected: Hop, Float (hover); 3D thick-felt star turn (kept only the glint); Chalk line
   (text only, no sweep), Unboxed (toys without box), Suspend (box hoisted on strings),
   Elevator (box sinks into the floor).
+
+## Decision — Phone menu: Split (2026-10-23, not built yet)
+
+Decided from `/works/proto-phone-menu` (Split, with contact added). Phones only (< 768px);
+desktop and tablet keep the shelf header and the chalk chapter frame.
+- The shelf header goes away on phones. A 56px paper bar holds the top: wordmark (home) left,
+  hamburger right (44px).
+- The hamburger opens a full-screen menu on grid paper: a one-column shelf, one cubby per toy,
+  rows sharing the phone's height (min 88px), toys on one shared center line (88px slot) and
+  chalk labels on one shared left edge (14ch, the longest label), the whole set centered in the
+  shelf, each label level with its toy's middle. Toys hover 8px over the board with the desktop
+  shelf's soft floor shadow under them, bobbing 3px on a 2.8s ease-in-out loop, each toy
+  0.55s apart, the shadow tightening as it rises (off under reduced motion). Current page underlined with a soft light in its cubby.
+- Under the shelf: "Come play. Say howdy." The email address is a button that copies it
+  (Copy → Copied for 2s, announced to screen readers), with a small "Open in mail" mailto
+  beside it. Then LinkedIn, GitHub, TikTok, X as 44px icon chips (Contra left out for now).
+- Case study chapters stay separate: the chalk chip at the bottom, opening the chalk frame as a
+  sheet (from `/works/proto-chapter-nav`, Sheet).
+- Overlay: 240ms fade + 8px rise in, 180ms out, none under reduced motion. Body pinned at its
+  scroll offset while open (iOS ignores overflow hidden), Escape closes, focus returns to the
+  hamburger by ref (Safari doesn't focus buttons on tap).
+- Rejected: **Merged** (chapters board on top of the toy column in one menu: on a phone the
+  toys sit below 11 chapters, a long scroll), **Context** (the bar names the current chapter
+  and opens chapters + the original 5-across shelf: keeps the art, but isn't the one-column
+  shelf, and the toys stay tiny). From the chapter round: **Rail** (sticky chapter row, the
+  most chrome), **Contents** (in-flow board, almost a full screen tall).
+
+Shelf art in (2026-10-23): Kai's generated 4-cubby birch shelf (`Cal-Visuals/11-navigation/
+Mobile-Birch plywood shelf.png`, 821x582) sliced into `public/nav/shelf-column/` (top board +
+one image per cubby, 20KB): rows a, b, c, then b mirrored, then the last chalk closed on a
+regular board instead of the export's thick base. Each row is a border-image (6 51 board 51,
+drawn at 0.44), so only the chalk stretches, vertically. Rows share the phone's height, min
+88px: fits a 393x852 phone with the contact block; on a 375x667 phone the socials scroll ~47px.
+Generators wouldn't give 5 cubbies; slicing makes the count not matter.
+
+Icons (2026-10-23): Central Icons (centralicons.com, line / 1.5px / medium / 24px), Twitter as
+the X logo; Contra left out for now (not in Central either). Social tiles are chalk cut from the shelf
+(`shelf-column/chalk-tile.webp`) with icons in #ECE8E0 (9.2:1 average, 3.2:1 on the brightest
+smudge). Brand marks are Central's filled set (source: `Cal-Visuals/icon-svg.md`), inlined
+as `currentColor` paths at 22px. Toys are the
+5-across row's art at 1.7x; check them on a real phone.
+
+When promoting: add the root `viewport` export (`viewportFit: 'cover'`, `themeColor` =
+page `#F2EBE1`) so the `env(safe-area-inset-*)` paddings take effect; give case study sections
+`scroll-mt` of at least 72px on phones so anchors clear the bar; then delete
+`src/app/works/proto-phone-menu` and `src/app/works/proto-chapter-nav`.
