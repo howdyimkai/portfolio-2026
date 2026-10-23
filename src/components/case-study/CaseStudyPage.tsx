@@ -306,7 +306,7 @@ function Pair({ items }: { items: NonNullable<Visual['pair']> }) {
     <ul className="grid gap-x-5 gap-y-8 sm:[grid-template-columns:var(--pair-cols)]" style={{ '--pair-cols': cols } as CSSProperties}>
       {items.map((it) => (
         <li key={it.src} className="min-w-0">
-          <p className="mb-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-primary">{it.label}</p>
+          <p className="mb-2.5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-ink-primary">{it.label}</p>
           <img
             src={it.src}
             alt={it.alt}
@@ -328,7 +328,7 @@ function Browsers({ items, aspect, cols }: { items: NonNullable<Visual['browsers
     <ol className="cs-tiles grid items-start gap-x-5 gap-y-9 md:gap-y-10" style={{ '--cols': cols[0], '--cols-md': cols[1] } as CSSProperties}>
       {items.map((it) => (
         <li key={it.src}>
-          <p className="mb-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-primary">{it.label}</p>
+          <p className="mb-2.5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-ink-primary">{it.label}</p>
           <BrowserFrame>
             <img src={it.src} alt={it.alt} draggable={false} loading="lazy" className="block w-full" style={{ aspectRatio: aspect }} />
           </BrowserFrame>

@@ -9,8 +9,10 @@
   --color-page: #F2EBE1;
   --color-ink-primary: #3A3226;
   --color-ink-body: #6B6152;
-  --color-ink-muted: #8A8074;
-  --color-ink-faint: #A99A7F;
+  /* Muted and faint darkened 2026-10-23 to pass WCAG AA (4.5:1) on white for small captions:
+     faint was #A99A7F (2.8:1), muted #8A8074 (3.9:1). Muted moved too so it stays above faint. */
+  --color-ink-muted: #73695D;
+  --color-ink-faint: #7F725D;
 
   --color-sand-light: #DED1B3;
   --color-sand-dark: #C9B992;
@@ -73,6 +75,8 @@ body {
   background-color: var(--color-page);
   color: var(--color-ink-body);
   font-family: var(--font-mono);
+  /* A weight that isn't loaded shows as a regression, not a browser-thickened fake bold. */
+  font-synthesis: none;
 }
 
 h1, h2, h3 {
@@ -86,7 +90,8 @@ h1, h2, h3 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-ink-faint);
+  /* The old faint tone: a scrollbar isn't text, so it stays light. */
+  background-color: #A99A7F;
   border-radius: 9999px;
 }
 

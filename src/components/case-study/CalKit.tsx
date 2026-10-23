@@ -21,7 +21,7 @@ const FACE = {
 } as const
 
 const CAPS = 'font-mono font-semibold uppercase tracking-[0.08em] text-ink-primary'
-const LABEL = `${CAPS} text-[11px]`
+const LABEL = `${CAPS} text-[12px]`
 const NOTE = 'font-mono text-[12px] leading-[1.5] text-ink-faint'
 const PANEL = 'rounded-[14px] bg-tag/55'
 
@@ -44,8 +44,9 @@ export default function CalKit({ kit }: { kit: Kit }) {
           {kit.personas.map((p) => (
             <li key={p.name} className="flex flex-col items-center text-center">
               <img src={p.src} alt={p.alt} draggable={false} className={CAL} style={{ aspectRatio: CAL_ASPECT }} />
-              <p className={`mt-3 ${CAPS} text-[10px] md:text-[11px]`}>{p.name}</p>
-              <p className="mt-1 font-mono text-[11px] text-ink-muted">{p.type}</p>
+              {/* No tracking on phones, so the longest names (THE RESEARCHER, THE ORGANIZER) stay on one line at 12px. */}
+              <p className={`mt-3 ${CAPS} text-[12px] max-md:tracking-normal`}>{p.name}</p>
+              <p className="mt-1 font-mono text-[12px] text-ink-muted">{p.type}</p>
             </li>
           ))}
         </ul>
@@ -96,8 +97,8 @@ export default function CalKit({ kit }: { kit: Kit }) {
             <li key={c.name} className="overflow-hidden rounded-[10px] border border-hairline bg-white">
               <div className="h-14 md:h-16" style={{ backgroundColor: c.hex }} />
               <div className="flex items-baseline justify-between gap-2 px-2.5 py-2">
-                <span className={`${CAPS} text-[10px]`}>{c.name}</span>
-                <span className="font-mono text-[11px] uppercase text-ink-faint">{c.hex}</span>
+                <span className={`${CAPS} text-[12px]`}>{c.name}</span>
+                <span className="font-mono text-[12px] uppercase text-ink-faint">{c.hex}</span>
               </div>
             </li>
           ))}

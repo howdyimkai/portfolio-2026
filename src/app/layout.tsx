@@ -11,7 +11,11 @@ const bricolage = Bricolage_Grotesque({
 })
 
 const commitMono = localFont({
-  src: '../../public/fonts/CommitMono-400-Regular.otf',
+  // 700 too, so font-semibold/bold on mono (case study labels and rule titles) is the drawn bold, not a faked one.
+  src: [
+    { path: '../../public/fonts/CommitMono-400-Regular.otf', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/CommitMono-700-Regular.otf', weight: '700', style: 'normal' },
+  ],
   variable: '--font-commit-mono',
   display: 'swap',
 })

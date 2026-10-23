@@ -36,7 +36,7 @@ export default function Strip({ items, aspect, cols, look = 'art' }: { items: It
               <span className="sr-only">, enlarge</span>
             </button>
             <p className="mt-2 text-center font-mono text-[12px] leading-[1.5] text-ink-muted [text-wrap:balance]">{it.caption}</p>
-            {it.note && <p className="text-center font-mono text-[11px] leading-[1.5] text-ink-faint [text-wrap:balance]">{it.note}</p>}
+            {it.note && <p className="text-center font-mono text-[12px] leading-[1.5] text-ink-faint [text-wrap:balance]">{it.note}</p>}
           </li>
         ))}
       </ol>
