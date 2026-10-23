@@ -140,7 +140,8 @@ function StatStrip({ stats }: { stats: CaseStudy['stats'] }) {
           <div key={st.label} className={`py-6 md:py-8 ${i > 0 ? 'border-l border-hairline pl-4 md:pl-8' : ''}`}>
             <dt className="sr-only">{st.label}</dt>
             <dd>
-              <span className="block font-display text-[32px] font-semibold leading-none tracking-[-0.01em] text-ink-primary md:text-[52px]">
+              <span className="block font-display text-[28px] font-semibold leading-none tracking-[-0.01em] text-ink-primary min-[400px]:text-[32px] md:text-[52px]">
+                {/* 28px under 400px wide: at 32px, "68.7%" filled 94 of a 97px column at 375. */}
                 {st.value}
                 {st.note && <span className="ml-1 align-top font-mono text-[13px] font-normal text-ink-faint">*</span>}
               </span>
@@ -337,6 +338,8 @@ function Browsers({ items, aspect, cols }: { items: NonNullable<Visual['browsers
           {it.link && (
             <a href={it.link.href} target="_blank" rel="noopener noreferrer" className="sf-link press-scale mt-2 inline-block font-mono text-[12px] text-ink-primary">
               {it.link.label} <span aria-hidden="true">↗</span>
+              {/* Every capture's link reads the same, so a screen reader's link list says which one. */}
+              <span className="sr-only">: {it.label}</span>
             </a>
           )}
         </li>

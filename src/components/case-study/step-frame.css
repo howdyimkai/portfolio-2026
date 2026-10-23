@@ -74,9 +74,16 @@
   background: radial-gradient(circle, #1e0f41 0 26%, #b4ec76 30%);
 }
 
-/* Start over and the real quiz link: plain text, underlined on hover. */
+/* Start over and the real quiz link: plain text, underlined on hover. The text is 18px tall, so
+   the hit area reaches 13px above and below to make 44px on a phone. */
 .sf-link {
+  position: relative;
   text-underline-offset: 3px;
+}
+.sf-link::after {
+  content: '';
+  position: absolute;
+  inset: -13px 0;
 }
 @media (hover: hover) and (pointer: fine) {
   .sf-link:hover { text-decoration: underline; }
@@ -84,8 +91,15 @@
 
 /* Toggle's segmented control: the shown capture's segment is filled ink. */
 .tg-seg {
+  position: relative;
   color: var(--color-ink-muted);
   transition: background-color 150ms ease-out, color 150ms ease-out;
+}
+/* The segments draw 24px tall; the hit area grows to 44px up and down only, so neighbors don't overlap. */
+.tg-seg::after {
+  content: '';
+  position: absolute;
+  inset: -10px 0;
 }
 .tg-seg[aria-pressed='true'] {
   background-color: var(--color-ink-primary);

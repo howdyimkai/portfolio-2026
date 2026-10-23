@@ -42,7 +42,9 @@
   transition: rotate 400ms var(--ease-out-strong);
 }
 @media (hover: hover) and (pointer: fine) {
-  .cs-frame:hover { rotate: -2deg; }
+  /* -0.75deg, not -2deg: at the frame's ~500px height, 2deg slid the bottom links 17px out from
+     under the cursor. This moves them about 6px. */
+  .cs-frame:hover { rotate: -0.75deg; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cs-frame { transition: none; }
