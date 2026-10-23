@@ -3,12 +3,14 @@
 // The one case study template (sprint plan, 2026-10-20): header, hero, a stat strip of three,
 // then chapters with a chapter bar on the left. Everything is driven by a CaseStudy in src/content/.
 // Backdrop and chapter bar: design-intent/case-study-exploration/NOTES.md (2026-10-20).
-import { useEffect, useState, type CSSProperties } from 'react'
+import Link from 'next/link'
+import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import BrowserFrame from './BrowserFrame'
 import CalKit, { CAL, CAL_ASPECT } from './CalKit'
 import StepFrame from './StepFrame'
 import Strip from './Strip'
 import Toggle from './Toggle'
+import { smartQuotes } from './smartQuotes'
 import type { Block, CaseStudy, Visual } from './types'
 import './case-study.css'
 
@@ -20,7 +22,8 @@ const num = (i: number) => String(i + 1).padStart(2, '0')
 const PROSE = 'max-w-[62ch]'
 const BODY = 'cs-body font-mono text-ink-body [text-wrap:pretty]'
 
-export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
+export default function CaseStudyPage({ study }: { study: CaseStudy }) {
+  const s = useMemo(() => smartQuotes(study), [study])
   const active = useActiveChapter(s.chapters.map((c) => c.id))
   // Chapter numbers skip unnumbered chapters, so a TL;DR can sit ahead of chapter 01.
   let n = 0
@@ -33,15 +36,15 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
             whole page. The chip on its corner closes the case study back to /works. */}
         <nav aria-label="Chapters" className="relative z-10 hidden lg:block">
           <div className="cs-frame sticky top-10">
-            <a href="/works" aria-label="Back to selected works" className="cs-close">
+            <Link href="/works" aria-label="Back to selected works" className="cs-close">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4.75 4.75L19.25 19.25M19.25 4.75L4.75 19.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
-            </a>
+            </Link>
             <ol className="cs-chalk">
               {/* Says in words what the X chip does; hovering either lights up both. */}
               <li>
-                <a href="/works" className="cs-chalk-back">Back to More Work</a>
+                <Link href="/works" className="cs-chalk-back">Back to More Work</Link>
               </li>
               <li className="cs-chalk-rule" aria-hidden="true" />
               {s.chapters.map((c, i) => (
@@ -118,12 +121,12 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
 
           {/* Phones have no chapter frame or X, so the way back sits at the end of the read. */}
           <nav aria-label="More work" className="mt-[77px] border-t border-hairline pt-6 text-center lg:hidden">
-            <a
+            <Link
               href="/works"
               className="press-scale inline-flex min-h-11 items-center px-3 font-mono text-[13px] text-ink-primary underline decoration-hairline underline-offset-4"
             >
               Back to More Work
-            </a>
+            </Link>
           </nav>
         </div>
       </div>

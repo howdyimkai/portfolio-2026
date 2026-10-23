@@ -48,7 +48,7 @@ export default function RootLayout({
 }) {
   return (
     // Font variables live on <html> so the @theme tokens (resolved at :root) can see them.
-    <html lang="en" className={`${bricolage.variable} ${commitMono.variable}`}>
+    <html lang="en" className={`${bricolage.variable} ${commitMono.variable} antialiased`}>
       <body>
         <AppShell>{children}</AppShell>
       </body>
