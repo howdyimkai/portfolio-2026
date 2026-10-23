@@ -99,9 +99,15 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
 
           {s.chapters.map((c, i) => (
             <section key={c.id} id={c.id} className="mt-[77px] scroll-mt-12 md:mt-[104px]">
-              {/* Chapter number as a quiet label above, so the title alone carries the weight. */}
-              {labels[i] && <p className="mb-2 font-mono text-[13px] tabular-nums text-ink-faint">{labels[i]}</p>}
-              <h2 className="font-display text-[28px] font-medium leading-[1.15] tracking-[-0.01em] md:text-[36px]">{c.title}</h2>
+              {/* Chapter number as a quiet label above, so the title alone carries the weight. With a
+                  hook, the label takes the short title ("02 THE PROBLEM") and the hook is the h2. */}
+              {labels[i] && (
+                <p className={`mb-2 font-mono text-[13px] tabular-nums text-ink-faint ${c.hook ? 'uppercase' : ''}`}>
+                  {c.hook ? `${labels[i]} ${c.title}` : labels[i]}
+                </p>
+              )}
+              {/* Hooks run long enough to wrap on phones; balance keeps a word from hanging alone. */}
+              <h2 className={`font-display text-[28px] font-medium leading-[1.15] tracking-[-0.01em] md:text-[36px] ${c.hook ? '[text-wrap:balance]' : ''}`}>{c.hook ?? c.title}</h2>
               <div className="mt-7 flex flex-col gap-7">
                 {c.blocks.map((b, j) => (
                   <BlockView key={j} b={b} />

@@ -3,7 +3,7 @@
 // A row of pieces on one baseline, a caption under each, and tap to see one larger. Three looks:
 // character art (Cal chapter 3's Calvolution), on white, so it multiplies onto the page instead of
 // sitting in white boxes; product screens (chapter 5's rewrite strip), each a rounded screen with
-// a hairline edge, where a mark can ring the part to look at; and devices (chapter 9), screens that
+// a hairline edge, where a mark can ring the part to look at; and devices (chapter 10), screens that
 // bring their own bezel on a transparent ground, drawn as they are, in a narrower row (left
 // aligned with the text) so a pair of phones doesn't stand taller than the screen. For art the blend is on the button, not the <img>:
 // the hover lift's transform isolates the button, and a blended child would then show its white.

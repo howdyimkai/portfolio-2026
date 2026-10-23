@@ -153,7 +153,7 @@ const months = [
   },
 ]
 
-// Chapter 9's Build Style questions, Kai's phone mockups (Cal-Visuals/09-reflection, 2026-10-22),
+// Chapter 10's Build Style questions, Kai's phone mockups (Cal-Visuals/09-reflection, 2026-10-22),
 // trimmed to the bezel (x 15 to 597, y 14 to 1044) with the transparent corners kept. The intro
 // screen (01-construction.png) is left out: it isn't a question, and it shows a $50 prize entry.
 const buildStyle = [
@@ -304,6 +304,7 @@ export const cal: CaseStudy = {
     {
       id: 'owned',
       title: 'What I owned',
+      hook: 'One mascot, one quiz, one handoff',
       blocks: [
         {
           kind: 'owned',
@@ -318,6 +319,7 @@ export const cal: CaseStudy = {
     {
       id: 'problem',
       title: 'The problem',
+      hook: 'Only 3 in 100 made it to the starting line',
       blocks: [
         {
           kind: 'p',
@@ -331,11 +333,13 @@ export const cal: CaseStudy = {
             compare: [
               {
                 label: 'Before',
+                caption: '3 equal buttons. No clear first step.',
                 src: '/works/cal/problem/homepage-before.webp',
                 alt: "Before: Tallo's old homepage offered three equal buttons, Explore Careers, Build Skills and Find a Job.",
               },
               {
                 label: 'After',
+                caption: 'One first step.',
                 src: '/works/cal/problem/homepage-after.webp',
                 alt: 'After: the redesigned homepage has one button, Start Your Free Career Quiz.',
               },
@@ -351,6 +355,7 @@ export const cal: CaseStudy = {
     {
       id: 'finding',
       title: 'Finding Cal',
+      hook: "A compass doesn't work in space",
       blocks: [
         {
           kind: 'p',
@@ -391,6 +396,7 @@ export const cal: CaseStudy = {
     {
       id: 'rules',
       title: "Cal's rules",
+      hook: "Cal doesn't pick your path",
       blocks: [
         {
           kind: 'rules',
@@ -417,6 +423,8 @@ export const cal: CaseStudy = {
     {
       id: 'quiz',
       title: 'The quiz',
+      // No-break space keeps the 9 with its word when the hook wraps on phones.
+      hook: '60 survey questions became 9\u00a0moments on a trail',
       blocks: [
         {
           kind: 'p',
@@ -437,6 +445,7 @@ export const cal: CaseStudy = {
     {
       id: 'product',
       title: 'Into the product',
+      hook: 'The Typeform got a permanent home',
       blocks: [
         {
           kind: 'p',
@@ -452,6 +461,7 @@ export const cal: CaseStudy = {
     {
       id: 'happened',
       title: 'What happened',
+      hook: '86.5% made it to the Peak',
       blocks: [
         {
           kind: 'p',
@@ -475,6 +485,7 @@ export const cal: CaseStudy = {
     {
       id: 'started',
       title: 'What Cal started',
+      hook: 'One quiz became a monthly format',
       blocks: [
         {
           kind: 'p',
@@ -498,40 +509,9 @@ export const cal: CaseStudy = {
       ],
     },
     {
-      id: 'reflection',
-      title: 'Reflection',
-      blocks: [
-        {
-          kind: 'p',
-          text: 'In August a quiz built like Cal pulled in almost half of our challenge entries. In September each quiz in the same format drew less than a sixth of that. The prize went away, the community lost its home page spot, and the topic narrowed, all at once, so I can\'t say which one did it.',
-        },
-        {
-          kind: 'p',
-          text: 'A quiz is only half the design. The other half is where it lives. That\'s why I wanted Cal in the product, where people already show up looking for direction.',
-        },
-        {
-          kind: 'p',
-          text: 'A quiz result is a mere draft of a person, and people tell you whether it fits. One member wrote "It really sounds like me." A 15 year old wrote "All work wise nothing to apply to life im 15 no job." Our questions assumed a job they didn\'t have, so some of October\'s questions now ask about things like group projects and favorite classes.',
-        },
-        {
-          kind: 'visual',
-          visual: {
-            label: 'Build Style Q1 and Q4, cropped: "A group project starts..." and "Which one actually held your attention in school?"',
-            frame: 'device',
-            aspect: '582 / 1030',
-            strip: buildStyle,
-            cols: [2, 2],
-          },
-        },
-        {
-          kind: 'p',
-          text: 'Plenty of kids find their path because one adult puts something in front of them. I wanted Cal to be that mentor for the kids who don\'t have one.',
-        },
-      ],
-    },
-    {
       id: 'next',
       title: "What's next",
+      hook: "The trail isn't finished",
       blocks: [
         {
           kind: 'p',
@@ -564,6 +544,39 @@ export const cal: CaseStudy = {
               },
             ],
           },
+        },
+      ],
+    },
+    {
+      id: 'reflection',
+      title: 'Reflection',
+      hook: 'A 15 year old told us we got it wrong',
+      blocks: [
+        {
+          kind: 'p',
+          text: 'Back to the monthly challenges. In August, a challenge quiz built like Cal pulled in almost half of our entries. In September each quiz in the same format drew less than a sixth of that. The prize went away, the community lost its home page spot, and the topic narrowed, all at once, so I can\'t say which one did it.',
+        },
+        {
+          kind: 'p',
+          text: 'A quiz is only half the design. The other half is where it lives. That\'s why I wanted Cal in the product, where people already show up looking for direction.',
+        },
+        {
+          kind: 'p',
+          text: 'A quiz result is a mere draft of a person, and people tell you whether it fits. One member wrote "It really sounds like me." A 15 year old wrote "All work wise nothing to apply to life im 15 no job." Our questions assumed a job they didn\'t have, so some of October\'s questions now ask about things like group projects and favorite classes.',
+        },
+        {
+          kind: 'visual',
+          visual: {
+            label: 'Build Style Q1 and Q4, cropped: "A group project starts..." and "Which one actually held your attention in school?"',
+            frame: 'device',
+            aspect: '582 / 1030',
+            strip: buildStyle,
+            cols: [2, 2],
+          },
+        },
+        {
+          kind: 'p',
+          text: 'Plenty of kids find their path because one adult puts something in front of them. I wanted Cal to be that mentor for the kids who don\'t have one.',
         },
       ],
     },

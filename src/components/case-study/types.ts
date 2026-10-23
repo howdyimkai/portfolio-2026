@@ -21,8 +21,9 @@ export type Visual = {
   // A product flow you can step through by tapping, in place of a still (the Cal quiz hero).
   flow?: Flow
   // Captures of one page in a browser frame with a switch between them (a before and after). They
-  // share the visual's aspect, so crop them to the same size and zoom.
-  compare?: { label: string; src: string; alt: string }[]
+  // share the visual's aspect, so crop them to the same size and zoom. A caption under the frame
+  // swaps with the tab.
+  compare?: { label: string; src: string; alt: string; caption?: string }[]
   // A row of art on one baseline, each with a caption, that opens larger on tap (Calvolution). The
   // pieces share the visual's aspect and lay out by cols, like placeholder tiles. With frame
   // 'screen' they're product screens instead: a second caption line (note), and a mark that rings
@@ -32,7 +33,7 @@ export type Visual = {
   // Several captures, each in its own browser frame with a label above and a caption under (Cal
   // chapter 8, one per month). Laid out by cols; a link or a small note can follow a caption.
   browsers?: { label: string; src: string; alt: string; caption: string; note?: string; link?: { label: string; href: string } }[]
-  // Two or so pieces side by side at one height, each with a label over it (Cal chapter 10: what
+  // Two or so pieces side by side at one height, each with a label over it (Cal chapter 9: what
   // shipped beside what didn't). width and height are the image's own, which set each column's
   // share. 'device' is a screen in its own bezel, drawn as is; 'card' gets a hairline edge. credit
   // is a small line under the piece.
@@ -121,7 +122,11 @@ export type Kit = {
 
 export type Chapter = {
   id: string
+  // The short label: the chapter bar, and the label above the heading.
   title: string
+  // The big heading, when it's a hook rather than the label ("Only 3 in 100 made it to the starting
+  // line"). The label above then reads "02 THE PROBLEM".
+  hook?: string
   // Leaves the chapter out of the 01, 02, 03 count (a TL;DR ahead of chapter 1).
   unnumbered?: boolean
   blocks: Block[]
