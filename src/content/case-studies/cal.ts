@@ -539,12 +539,29 @@ export const cal: CaseStudy = {
         {
           kind: 'visual',
           visual: {
+            // Kai's files in Cal-Visuals/10-whats-next (2026-10-22): the shipped Stamps page in a phone
+            // mockup, trimmed to its bezel, and the Career Passport exploration (2000x1510, at 1400).
+            // Jennifer Stout built the stamps in product (credit from Kai, 2026-10-22).
             label: 'Stamps in product; Mascot Core image labeled "Exploration, not shipped"',
-            tiles: [
-              { aspect: '16 / 9', label: 'Stamps in product' },
-              { aspect: '16 / 9', label: 'Mascot Core image' },
+            pair: [
+              {
+                label: 'Shipped, in Tallo',
+                src: '/works/cal/next/stamps-shipped.webp',
+                width: 600,
+                height: 1029,
+                look: 'device',
+                credit: 'Built in Tallo by Jennifer Stout, product designer.',
+                alt: 'Tallo\'s Stamps page on a phone: "Collect stamps by completing activities on Tallo." Getting Started, 5 of 5 collected, each with an illustrated stamp and date: Account Created, First Step (complete the career assessment), Update Your Profile, Join a Group and First Post.',
+              },
+              {
+                label: 'Exploration, not shipped',
+                src: '/works/cal/next/passport-exploration.webp',
+                width: 1400,
+                height: 1057,
+                look: 'card',
+                alt: 'Career Passport exploration: "Collect stamps as you explore. Every trailhead you explore, every milestone you hit, marked in your Career Passport." Six stamp cards, Trail Starter and Arts Explorer earned; Career Compass, First Steps, Gear Check and Pathfinder not yet earned.',
+              },
             ],
-            cols: [1, 1],
           },
         },
       ],

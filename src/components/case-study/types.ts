@@ -32,6 +32,11 @@ export type Visual = {
   // Several captures, each in its own browser frame with a label above and a caption under (Cal
   // chapter 8, one per month). Laid out by cols; a link or a small note can follow a caption.
   browsers?: { label: string; src: string; alt: string; caption: string; note?: string; link?: { label: string; href: string } }[]
+  // Two or so pieces side by side at one height, each with a label over it (Cal chapter 10: what
+  // shipped beside what didn't). width and height are the image's own, which set each column's
+  // share. 'device' is a screen in its own bezel, drawn as is; 'card' gets a hairline edge. credit
+  // is a small line under the piece.
+  pair?: { label: string; src: string; alt: string; width: number; height: number; look: 'device' | 'card'; credit?: string }[]
 }
 
 // A box on a screen image as % of the image: [left, top, width, height]. Percentages, so hotspots

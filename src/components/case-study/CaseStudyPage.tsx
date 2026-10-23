@@ -243,6 +243,8 @@ function VisualBlock({ v }: { v: Visual }) {
     <figure>
       {v.flow ? (
         <StepFrame flow={v.flow} />
+      ) : v.pair ? (
+        <Pair items={v.pair} />
       ) : v.browsers ? (
         <Browsers items={v.browsers} aspect={v.aspect ?? '16 / 9'} cols={v.cols ?? [1, 2]} />
       ) : v.strip ? (
@@ -262,6 +264,30 @@ function VisualBlock({ v }: { v: Visual }) {
       )}
       {v.caption && <figcaption className="mt-4 font-mono text-[12px] leading-[1.6] text-ink-faint">{v.caption}</figcaption>}
     </figure>
+  )
+}
+
+// Pieces side by side at one height from sm up (each column's share is its image's aspect ratio),
+// stacked on phones with a device kept to phone width.
+function Pair({ items }: { items: NonNullable<Visual['pair']> }) {
+  const cols = items.map((it) => `${it.width / it.height}fr`).join(' ')
+  return (
+    <ul className="grid gap-x-5 gap-y-8 sm:[grid-template-columns:var(--pair-cols)]" style={{ '--pair-cols': cols } as CSSProperties}>
+      {items.map((it) => (
+        <li key={it.src} className="min-w-0">
+          <p className="mb-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-primary">{it.label}</p>
+          <img
+            src={it.src}
+            alt={it.alt}
+            draggable={false}
+            loading="lazy"
+            className={`block w-full ${it.look === 'card' ? 'rounded-[12px] border border-hairline' : 'max-w-[260px] sm:max-w-none'}`}
+            style={{ aspectRatio: `${it.width} / ${it.height}` }}
+          />
+          {it.credit && <p className="mt-2.5 font-mono text-[12px] leading-[1.5] text-ink-faint [text-wrap:pretty]">{it.credit}</p>}
+        </li>
+      ))}
+    </ul>
   )
 }
 
