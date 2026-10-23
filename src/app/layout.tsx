@@ -18,22 +18,22 @@ const commitMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Kai Tran | Interdisciplinary Product Designer',
+    default: 'Kai Tran | Designer and tinkerer',
     template: '%s | Kai Tran'
   },
-  description: 'Making learning feel like play - A portfolio showcasing innovative design solutions',
-  keywords: ['product design', 'UX', 'UI', 'design', 'learning', 'innovation'],
+  description: 'Designer and tinkerer. I make learning feel like play.',
+  keywords: ['product design', 'UX', 'UI', 'design', 'learning', 'play'],
   openGraph: {
-    title: 'Kai Tran - Interdisciplinary Product Designer',
-    description: 'Making learning feel like play',
+    title: 'Kai Tran | Designer and tinkerer',
+    description: 'Designer and tinkerer. I make learning feel like play.',
     url: 'https://www.kaitran.design',
     siteName: 'Kai Tran Portfolio',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Kai Tran - Interdisciplinary Product Designer',
-    description: 'Making learning feel like play',
+    title: 'Kai Tran | Designer and tinkerer',
+    description: 'Designer and tinkerer. I make learning feel like play.',
   },
 }
 
