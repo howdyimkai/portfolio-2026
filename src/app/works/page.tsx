@@ -31,6 +31,7 @@ const PROJECTS: Project[] = [
       anim: '/works/tallo-cover-plate.webp',
       still: '/works/tallo-cover-plate.webp',
       float: { src: '/works/cal/hero/desktop-1-cal.webp', box: [33.11, 24.83, 39.12, 38.51] },
+      device: 'tablet',
       alt: 'Cal\'s Career Quiz welcome screen: Cal the compass waving in front of a mountain trail, above a Begin Expedition button',
     },
     href: '/works/cal',
