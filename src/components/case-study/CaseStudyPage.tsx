@@ -39,6 +39,11 @@ export default function CaseStudyPage({ study: s }: { study: CaseStudy }) {
               </svg>
             </a>
             <ol className="cs-chalk">
+              {/* Says in words what the X chip does; hovering either lights up both. */}
+              <li>
+                <a href="/works" className="cs-chalk-back">Back to More Work</a>
+              </li>
+              <li className="cs-chalk-rule" aria-hidden="true" />
               {s.chapters.map((c, i) => (
                 <li key={c.id}>
                   <a href={`#${c.id}`} aria-current={c.id === active ? 'location' : undefined}>

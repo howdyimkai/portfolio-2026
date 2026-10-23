@@ -68,8 +68,11 @@
   border-top: 1px solid rgba(244, 240, 230, 0.25);
 }
 .cs-chalk a[aria-current] { color: rgba(244, 240, 230, 0.95); }
+/* The X chip's words, centered under its own rule. */
+.cs-chalk a.cs-chalk-back { justify-content: center; }
 @media (hover: hover) and (pointer: fine) {
-  .cs-chalk a:hover { color: rgba(244, 240, 230, 0.85); }
+  .cs-chalk a:hover,
+  .cs-frame:has(.cs-close:hover) .cs-chalk-back { color: rgba(244, 240, 230, 0.85); }
 }
 .cs-chalk a:focus-visible {
   outline: 1px solid rgba(244, 240, 230, 0.6);
@@ -103,8 +106,10 @@
 .cs-close:active { scale: 0.96; }
 .cs-close:focus-visible { outline: 1px solid rgb(0 0 0 / 0.85); outline-offset: 2px; }
 @media (hover: hover) and (pointer: fine) {
-  .cs-close:hover { background-color: color-mix(in srgb, var(--color-sand-light) 40%, color-mix(in srgb, var(--color-page) 85%, transparent)); }
-  .cs-close:hover svg { rotate: -10deg; }
+  .cs-close:hover,
+  .cs-frame:has(.cs-chalk-back:hover) .cs-close { background-color: color-mix(in srgb, var(--color-sand-light) 40%, color-mix(in srgb, var(--color-page) 85%, transparent)); }
+  .cs-close:hover svg,
+  .cs-frame:has(.cs-chalk-back:hover) .cs-close svg { rotate: -10deg; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cs-close svg { transition: none; }
