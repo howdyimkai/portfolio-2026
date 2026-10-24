@@ -200,9 +200,7 @@ function BlockView({ b }: { b: Block }) {
               {b.text}
             </blockquote>
           </div>
-          <div className="max-w-[600px]">
-            <VisualBlock v={b.visual} />
-          </div>
+          <Print v={b.visual} />
         </div>
       )
     case 'quote':
@@ -334,6 +332,22 @@ function Pair({ items }: { items: NonNullable<Visual['pair']> }) {
         </li>
       ))}
     </ul>
+  )
+}
+
+// The closing photo as a taped print, like the photos on /about (Kai, 2026-10-24): aged paper, a
+// strip of washi tape, a slight tilt that straightens and lifts on hover. Caption under the print.
+function Print({ v }: { v: Visual }) {
+  return (
+    <figure className="max-w-[600px]">
+      <div className="cs-print-wrap">
+        <div className="cs-print">
+          <img src={v.src} alt={v.alt ?? ''} draggable={false} style={{ aspectRatio: v.aspect }} />
+          <span className="cs-tape" aria-hidden="true" />
+        </div>
+      </div>
+      {v.caption && <figcaption className="mt-5 font-mono text-[12px] leading-[1.6] text-ink-faint">{v.caption}</figcaption>}
+    </figure>
   )
 }
 
