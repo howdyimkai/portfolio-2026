@@ -20,10 +20,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     )
   }
 
-  // /works and its case studies share the homepage's shelf nav, on white grid paper (Kai, 2026-10-16). The wordmark
-  // and broom are inked like the homepage's: black at 85%. On phones the shelf gives way to a
-  // paper bar whose hamburger opens it as one column (PhoneMenu, 2026-10-23).
-  if (pathname === '/works' || pathname.startsWith('/works/')) {
+  // /works, its case studies and /about share the homepage's shelf nav, on white grid paper (Kai,
+  // 2026-10-16; /about joined 2026-10-18). The wordmark and broom are inked like the homepage's:
+  // black at 85%. On phones the shelf gives way to a paper bar whose hamburger opens it as one
+  // column (PhoneMenu, 2026-10-23).
+  if (pathname === '/works' || pathname.startsWith('/works/') || pathname === '/about') {
     return (
       <div className="grid-sheet flex min-h-screen flex-col">
         <PhoneMenu />

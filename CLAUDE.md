@@ -6,8 +6,9 @@ Next 16 / React 19 / Tailwind v4 / TypeScript.
 
 The homepage and `/works` are being rebuilt in a design direction called
 **K-Zen** on the `explore/k-zen` branch (not merged to `main`). `main` holds
-the pre-K-Zen baseline. `/about`, `/play`, `/resume` are intentionally
-untouched — out of scope for this exploration.
+the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
+`explore/proto-about` (2026-10-18, see `AboutPage` below). `/play` and
+`/resume` are intentionally untouched — out of scope for this exploration.
 
 ## Taste (read first)
 
@@ -131,6 +132,16 @@ About copy draft lives in the Positioning Brainstorm doc.
   `shelfMotion.ts`; the broom button sweeps the toys off and leaves a plain text row.
   Taller than the old bar, so `Hero.tsx` shrinks the garden on short desktop screens to
   keep the tool cards at the fold. Decision record: `design-intent/nav-exploration/NOTES.md`.
+- **`AboutPage`** (`src/components/about/`) — `/about`, the "Shadow box" picked
+  from `/proto/about` (decision + rejected options:
+  `design-intent/about-exploration/NOTES.md`). Three floating birch planks of
+  felt objects (`AboutShelf`, driven by `data.ts`; moving an object is changing
+  its `shelf`; the principles frame hangs on the wall above the shelves on desktop, beside them at md) to the right of a docked panel (left, sticky) that starts as the bio and swaps to an
+  object's "currently into" card when picked. Every hover moment is CSS over a
+  single image (no paired on/off exports) and fires on mouse hover or keyboard
+  focus only, via `data-on`. AppShell gives `/about` the same chrome as `/works`
+  (shelf nav, `PhoneMenu` below md, footer, white grid paper `.grid-sheet`). Cards marked `draft: true` still have placeholder copy.
+  Sources: `design-intent/about-shelf/` (Paper exports), WebPs in `public/about/`.
 - **`ZenGarden`** — self-contained canvas-based tool system (teeth rake,
   eraser rake, blossom stamp). Rake/eraser act on **hover alone** — drawing
   starts on `pointerenter` and continues on every `pointermove`, no
