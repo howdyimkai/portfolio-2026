@@ -150,12 +150,15 @@ function Video({ youtubeId, title, poster }: Kit['inUse']['video']) {
           className="absolute inset-0 h-full w-full"
         />
       ) : (
-        <button type="button" onClick={() => setOn(true)} className="kit-play group absolute inset-0 block w-full">
-          <img src={poster} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" />
-          <span className="absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#211e1a] shadow-[0_4px_16px_rgba(0,0,0,0.25)]">
+        <button type="button" onClick={() => setOn(true)} className="kit-play group absolute inset-0 block w-full cursor-pointer">
+          <img src={poster} alt="" draggable={false} className="kit-poster absolute inset-0 h-full w-full object-cover" />
+          <span className="kit-play-btn absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#211e1a] shadow-[0_4px_16px_rgba(0,0,0,0.25)]">
             <svg viewBox="0 0 24 24" className="ml-0.5 size-6" fill="currentColor" aria-hidden="true">
               <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" />
             </svg>
+          </span>
+          <span aria-hidden="true" className="kit-play-chip absolute inset-x-0 bottom-4 mx-auto w-max rounded-full bg-[#211e1a]/80 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.06em] text-white">
+            Watch the build
           </span>
           <span className="sr-only">Play: {title}</span>
         </button>

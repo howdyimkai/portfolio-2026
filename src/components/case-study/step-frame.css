@@ -187,16 +187,37 @@
 }
 
 /* CalKit's click-to-load video: the play badge presses in. */
-.kit-play > span:not(.sr-only) {
-  transition: transform 160ms var(--ease-out-strong);
+/* The video poster invites the click on hover (or keyboard focus): the play button grows and
+   fills with Cal's win lime, the still eases in and dims a touch, and a "watch the build" chip
+   rises at the bottom. Touch never sees hover, so it keeps the plain play button. */
+.kit-poster {
+  transition: scale 600ms var(--ease-out-strong), filter 300ms ease-out;
 }
-.kit-play:active > span:not(.sr-only) { scale: 0.94; }
+.kit-play-btn {
+  transition: scale 240ms var(--ease-out-strong), background-color 200ms ease-out;
+}
+.kit-play-chip {
+  opacity: 0;
+  translate: 0 6px;
+  transition: opacity 200ms ease-out, translate 240ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .kit-play:hover .kit-poster { scale: 1.04; filter: brightness(0.9); }
+  .kit-play:hover .kit-play-btn { scale: 1.1; background-color: #bdf184; }
+  .kit-play:hover .kit-play-chip { opacity: 1; translate: 0 0; }
+}
+.kit-play:focus-visible .kit-play-btn { scale: 1.1; background-color: #bdf184; }
+.kit-play:focus-visible .kit-play-chip { opacity: 1; translate: 0 0; }
+.kit-play:active .kit-play-btn { scale: 0.94; }
 .kit-play:focus-visible {
   outline: 2px solid var(--color-accent-washi-blue);
   outline-offset: -4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .kit-poster,
+  .kit-play-chip { transition: opacity 200ms ease-out; scale: none !important; translate: none !important; }
+  .kit-play-btn { transition: background-color 200ms ease-out; scale: none !important; }
   .st-tile,
   .st-tile:hover,
   .st-tile:active { transform: none; transition: none; }
