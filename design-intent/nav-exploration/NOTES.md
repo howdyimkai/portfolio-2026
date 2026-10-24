@@ -140,9 +140,12 @@ as `currentColor` paths at 22px. Toys are the
 5-across row's art at 1.7x; check them on a real phone.
 
 Built 2026-10-23: `src/components/shelf/PhoneMenu.tsx` (+ `phone-menu.css`), rendered by AppShell
-on `/works` and its case studies, which hides the shelf header below md and pads `<main>` 56px.
+on `/works`, its case studies and `/about` (added 2026-10-24 with the About merge), which hides the shelf header below md and pads `<main>` 56px.
 Chapters are `src/components/case-study/ChapterSheet.tsx` (below lg, like the desktop frame);
 sections carry `scroll-mt-[72px]` on phones and the sheet scrolls with `scrollIntoView`, so the
 margin is the one number. Root `viewport` export: `viewportFit: 'cover'`, `themeColor` #F2EBE1.
 Both proto routes deleted. Not yet: the homepage (its floating shelf, mobile deferred) and
-`/about`, `/play`, `/resume` (still `Navigation`) don't use the phone bar.
+`/play`, `/resume` (still `Navigation`) don't use the phone bar.
+
+2026-10-24: the desktop shelf's "howdy im Kai" wordmark is now a link home (press scale 0.97),
+matching the phone bar's wordmark.

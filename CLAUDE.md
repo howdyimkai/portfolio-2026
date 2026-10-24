@@ -7,7 +7,8 @@ Next 16 / React 19 / Tailwind v4 / TypeScript.
 The homepage and `/works` are being rebuilt in a design direction called
 **K-Zen** on the `explore/k-zen` branch (not merged to `main`). `main` holds
 the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
-`explore/proto-about` (2026-10-18, see `AboutPage` below). `/play` and
+`explore/proto-about` (2026-10-18, see `AboutPage` below) and merged into
+`explore/cal-v4-copy` on 2026-10-24. `/play` and
 `/resume` are intentionally untouched — out of scope for this exploration.
 
 ## Taste (read first)
@@ -118,9 +119,10 @@ About copy draft lives in the Positioning Brainstorm doc.
   `overflow-hidden`, and `SandboxHome` (`src/components/SandboxHome.tsx`) brings
   its own floating `ShelfNav` over `SandGarden layout="bleed"`. No footer on `/`.
   `/pieces/*` renders bare (one piece of the site on its own, for recordings).
-  `/works` uses `ShelfNav` + `Footer` on white grid paper; below md the shelf gives way to
-  `PhoneMenu` (paper bar + hamburger opening a one-column shelf) and case studies get a chalk
-  `ChapterSheet` chip. Every other route
+  `/works`, its case studies and `/about` use `ShelfNav` + `Footer` on white grid paper; below
+  md the shelf gives way to `PhoneMenu` (paper bar + hamburger opening a one-column shelf) and
+  case studies get a chalk `ChapterSheet` chip. The black-ink wordmark overrides in AppShell and
+  `SandboxHome` target `.shelf-wordmark img`, since `.shelf-wordmark` is now the link. Every other route
   uses `Navigation` + `Footer` with normal scrolling.
 - **`Navigation`** — route-aware: homepage renders 4 items edge-to-edge with
   no wordmark ("hello world" = home); other routes show the "Kai Tran"
@@ -131,7 +133,8 @@ About copy draft lives in the Positioning Brainstorm doc.
   units and scaled by `--zoom` (0.86 phones, 1.4 md+). Hover runs the "Tic" motion in
   `shelfMotion.ts`; the broom button sweeps the toys off and leaves a plain text row.
   Taller than the old bar, so `Hero.tsx` shrinks the garden on short desktop screens to
-  keep the tool cards at the fold. Decision record: `design-intent/nav-exploration/NOTES.md`.
+  keep the tool cards at the fold. The "howdy im Kai" wordmark links home on every shelf page
+  (2026-10-24), like `PhoneMenu`'s. Decision record: `design-intent/nav-exploration/NOTES.md`.
 - **`AboutPage`** (`src/components/about/`) — `/about`, the "Shadow box" picked
   from `/proto/about` (decision + rejected options:
   `design-intent/about-exploration/NOTES.md`). Three floating birch planks of
