@@ -9,7 +9,7 @@ import Image from 'next/image'
 type Tool = 'rake' | 'eraser' | 'blossom'
 
 type Point = { x: number; y: number }
-type TinePath = { light: Path2D; dark: Path2D; lastLight: Point | null; lastDark: Point | null }
+type TinePath = { light: Path2D; valley: Path2D; lastLight: Point | null; lastValley: Point | null }
 // A gesture is one continuous rake hover (pointerenter to pointerleave, or until the
 // tool switches away). It owns the hold/fade clock: while `active` is true every chunk
 // belonging to it renders at full alpha no matter how long the hover lasts; the clock
@@ -31,29 +31,34 @@ type Stroke = {
 type Blossom = { id: number; x: number; y: number; rotation: number; scale: number }
 type Rect = { left: number; top: number; width: number; height: number }
 
-// Groove anatomy: one dark stroke and one light stroke per tine, each offset ±1px
-// diagonally (light toward top-left, dark toward bottom-right) so the pair reads as a
-// thin embossed pinstripe rather than a hard outline — the subtle pre-video mark,
-// restored from the last committed version (884bd59) in place of the heavier
-// trench+ridge stack built while chasing GardenRakeStudy.mov realism.
+// Groove anatomy: a soft valley down each tine's center plus a faint light lip offset
+// 1px toward the top-left. The valley is a faint wide halo under a darker core, so it
+// reads as a shallow dip pressed into the sand rather than the old crisp dark pinstripe
+// (Kai picked it from /proto/groove, 2026-10-24, after studying
+// design-intent/zenvideorake-example.mp4; notes in design-intent/groove-exploration/).
+// Still well short of the heavy trench+ridge stack reverted on 2026-07-13.
 //
 // TINES/TINE_PITCH/CARVE_WIDTH stay from that carve-over iteration: the mark must look
 // like it was made by the ~40px 4-prong cursor asset (design-intent/Teethrake4prongs-2x.png,
 // 198x348 @2x). That asset has 4 prongs; at the cursor's 40x40 object-contain box
 // (scale ≈ 40/348 ≈ 0.115) the outer prong centers land ≈13.4px apart, hence 4 tines at
 // a 4.4px pitch (3 * 4.4 ≈ 13.2px outer span). Values are fixed CSS px at every
-// breakpoint because the cursor is too.
+// breakpoint because the cursor is too. Rake and eraser were scaled up 20% (Kai,
+// 2026-10-24): the cursor box is 48px for them (blossom stays 40px), so the pitch and
+// erase radius carry the same 1.2x.
 const TINES = 4
-const TINE_PITCH = 4.4 // outer tine centers ≈ 3 * 4.4 = 13.2px apart, matching the asset
-const GROOVE_OFFSET = 1 // light shifts -x/-y, dark shifts +x/+y (884bd59 emboss offset)
-const DARK_COLOR = 'rgba(70,55,38,0.32)'
-// 884bd59 used 2.2/1.8 at a 7px (desktop) tine pitch. At this scale's tighter 4.4px
-// pitch those widths bridge clear across the gap between tines under a real drag — a
-// pixel cross-section of a drawn stroke showed the 4 ribs fused into one solid band
-// with no dips back to zero alpha. Narrowed here (colors/alphas unchanged) until a
-// cross-section shows 4 distinct peaks separated by near-zero valleys.
-const DARK_WIDTH = 1.5
-const LIGHT_COLOR = 'rgba(255,248,232,0.5)'
+const RAKE_SCALE = 1.2
+const TINE_PITCH = 4.4 * RAKE_SCALE // outer tine centers ≈ 3 * 5.28 ≈ 15.8px apart, matching the 48px asset
+const GROOVE_OFFSET = 1 // the light lip shifts -x/-y off the tine center
+// Valley: core width, peak darkness and halo spread (px either side of the core). The
+// halo and core overlap to about VALLEY_DEPTH at the center. Two plain strokes, not a
+// canvas blur filter: blur redrawn for every live chunk every frame made the rake lag.
+const VALLEY_WIDTH = 1.6
+const VALLEY_DEPTH = 0.24
+const VALLEY_SOFTNESS = 0.8
+const VALLEY_HALO_COLOR = `rgba(70,55,38,${VALLEY_DEPTH * 0.45})`
+const VALLEY_CORE_COLOR = `rgba(70,55,38,${VALLEY_DEPTH * 0.6})`
+const LIGHT_COLOR = 'rgba(255,248,232,0.21)'
 const LIGHT_WIDTH = 1.2
 // The rake head flattens a band slightly wider than the tine span as it carves,
 // erasing whatever pattern it crosses (the carve-over moment in the study video).
@@ -74,7 +79,7 @@ const FADE_MS = 3000
 // instead of growing with how long the page has been open.
 const CHUNK_COMMIT_LEN = 120
 
-const ERASE_RADIUS = 28
+const ERASE_RADIUS = 28 * RAKE_SCALE
 const BLOSSOM_ERASE_RADIUS = 34
 // Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
 const CURSOR_ANGLE_LERP = 0.35
@@ -342,9 +347,9 @@ function createStroke(gesture: Gesture): Stroke {
   return {
     tines: Array.from({ length: TINES }, () => ({
       light: new Path2D(),
-      dark: new Path2D(),
+      valley: new Path2D(),
       lastLight: null,
-      lastDark: null,
+      lastValley: null,
     })),
     center: new Path2D(),
     lastCenter: null,
@@ -382,7 +387,7 @@ function pushRakePoint(stroke: Stroke, p: Point, prev: Point) {
     const cy = p.y + perpy * tineOff
     const tine = stroke.tines[i]
     tine.lastLight = extendPath(tine.light, tine.lastLight, { x: cx - GROOVE_OFFSET, y: cy - GROOVE_OFFSET })
-    tine.lastDark = extendPath(tine.dark, tine.lastDark, { x: cx + GROOVE_OFFSET, y: cy + GROOVE_OFFSET })
+    tine.lastValley = extendPath(tine.valley, tine.lastValley, { x: cx, y: cy })
   }
   stroke.lastCenter = extendPath(stroke.center, stroke.lastCenter, p)
   stroke.points.push(p)
@@ -395,7 +400,7 @@ function pushRakePoint(stroke: Stroke, p: Point, prev: Point) {
 function finalizeStroke(stroke: Stroke) {
   stroke.tines.forEach((tine) => {
     if (tine.lastLight) tine.light.lineTo(tine.lastLight.x, tine.lastLight.y)
-    if (tine.lastDark) tine.dark.lineTo(tine.lastDark.x, tine.lastDark.y)
+    if (tine.lastValley) tine.valley.lineTo(tine.lastValley.x, tine.lastValley.y)
   })
   if (stroke.lastCenter) stroke.center.lineTo(stroke.lastCenter.x, stroke.lastCenter.y)
 }
@@ -403,7 +408,7 @@ function finalizeStroke(stroke: Stroke) {
 // Carve-over + grooves for one chunk. First flattens the sand under the rake head
 // (destination-out along the center path, butt cap so the erase can't reach backward
 // past a chunk seam), erasing any older chunk it crosses, then draws each tine's paired
-// dark/light stroke at the gesture's current alpha. The carve pass always runs at full
+// valley and light lip at the gesture's current alpha. The carve pass always runs at full
 // strength regardless of alpha — every chunk only ever draws over strictly older chunks
 // (strokesRef is chronological), so a fading chunk carving at full strength can never
 // wipe something newer.
@@ -420,15 +425,19 @@ function drawStroke(ctx: CanvasRenderingContext2D, stroke: Stroke, alpha: number
 
   ctx.lineCap = 'round'
   ctx.globalAlpha = alpha
-  stroke.tines.forEach((tine) => {
-    ctx.strokeStyle = DARK_COLOR
-    ctx.lineWidth = DARK_WIDTH
-    ctx.stroke(tine.dark)
+  // All four tines in one path so the valley is two stroke calls per chunk, not eight.
+  const valleys = new Path2D()
+  stroke.tines.forEach((tine) => valleys.addPath(tine.valley))
+  ctx.strokeStyle = VALLEY_HALO_COLOR
+  ctx.lineWidth = VALLEY_WIDTH + VALLEY_SOFTNESS * 2
+  ctx.stroke(valleys)
+  ctx.strokeStyle = VALLEY_CORE_COLOR
+  ctx.lineWidth = VALLEY_WIDTH
+  ctx.stroke(valleys)
 
-    ctx.strokeStyle = LIGHT_COLOR
-    ctx.lineWidth = LIGHT_WIDTH
-    ctx.stroke(tine.light)
-  })
+  ctx.strokeStyle = LIGHT_COLOR
+  ctx.lineWidth = LIGHT_WIDTH
+  stroke.tines.forEach((tine) => ctx.stroke(tine.light))
   ctx.restore()
 }
 
@@ -1348,10 +1357,10 @@ export default function Garden({ layout }: { layout: Layout }) {
           <div
             ref={cursorRef}
             aria-hidden
-            className="garden-cursor pointer-events-none absolute left-0 top-0 z-30 h-10 w-10 opacity-0"
+            className={`garden-cursor pointer-events-none absolute left-0 top-0 z-30 opacity-0 ${tool === 'blossom' ? 'h-10 w-10' : 'h-12 w-12'}`}
             style={{ transition: 'opacity 150ms ease' }}
           >
-            <Image src={activeToolIcon!} alt="" fill draggable={false} sizes="40px" className="object-contain" />
+            <Image src={activeToolIcon!} alt="" fill draggable={false} sizes="48px" className="object-contain" />
           </div>
         )}
       </div>

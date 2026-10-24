@@ -19,6 +19,7 @@ node_modules/
 
 # Large local-only design references (see CLAUDE.md — design source of truth)
 design-intent/*.mov
+design-intent/zenvideorake-example.mp4
 design-intent/sand2.png
 
 # IDE

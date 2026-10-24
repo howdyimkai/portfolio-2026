@@ -83,7 +83,8 @@ About copy draft lives in the Positioning Brainstorm doc.
   the pointer leaves, which needs `animation-play-state`. Kai, 2026-10-08:
   auto-boiling on load / garden entry "feels kinda abrupt". Current tool art:
   `Teethrake4prongs-2x.png` (teeth rake — also the groove SCALE truth: 4
-  tines, drawn band ≈ its prong span at the 40px cursor, ~13.4px between
+  tines, drawn band ≈ its prong span at the cursor. Rake and eraser cursors
+  are 48px since 2026-10-24, 20% up, while blossom stays 40px; ~15.8px between
   outer tine centers) and `cherryblossomstampNEW@2x.png` (blossom).
   `teethrake@2x.png` / `blossomstamp@2x.png` are superseded originals.
 - `design-intent/GardenRakeStudy.mov` — 176MB real-raking study video,
