@@ -1,10 +1,10 @@
 import ProjectCard, { type Project } from '@/components/works/ProjectCard'
 
 // Design Garden leads, then Tallo (positioning, 2026-10-10). Tallo links to the Cal quiz case
-// study; apolloED is still a "coming soon" card.
+// study; ApolloEd is still a "coming soon" card.
 const PROJECTS: Project[] = [
   {
-    name: 'design garden',
+    name: 'Design Garden',
     hook: 'Helping designers ship the project they keep putting off, with a partner and a deadline.',
     story: 'A four week sprint platform I built and run. Designers pair up, check in weekly, and end on showcase night with real progress on their next move.',
     role: 'founder',
@@ -19,7 +19,7 @@ const PROJECTS: Project[] = [
     cta: 'see how it grew',
   },
   {
-    name: 'tallo',
+    name: 'Tallo',
     hook: 'A career quiz teens finish, with a mascot to guide them.',
     story: 'I created Cal, a compass mascot, and a three minute story quiz that gets teenagers started on career discovery. I built it with our community, tested it, and product adopted it into the core experience.',
     role: 'brand and product',
@@ -38,7 +38,7 @@ const PROJECTS: Project[] = [
     cta: 'meet cal',
   },
   {
-    name: 'apolloED',
+    name: 'ApolloEd',
     hook: 'An edtech dashboard.',
     story: 'The story behind this dashboard is on its way.',
     role: 'product design',
