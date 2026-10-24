@@ -8,8 +8,8 @@ import './project-card.css'
 export type Project = {
   name: string
   hook: string
-  // Words in the hook to mark with Kai's blue brush stroke (the nav's hover stroke). Must appear in
-  // the hook exactly.
+  // Words in the hook a yellow highlighter sweeps across when the card is hovered or focused. Must
+  // appear in the hook exactly.
   mark?: string
   story: string
   role: string

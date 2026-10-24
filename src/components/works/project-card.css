@@ -148,16 +148,30 @@ a.wk-card:active .wk-frost {
   color: rgb(240 236 226 / 0.9);
   text-shadow: 0 0 1px rgb(240 236 226 / 0.35);
 }
-/* A hook's marked words sit on Kai's blue brush stroke (the nav's hover-helloworld), in the board's
-   slate so they read on the pale blue. The nav file is ~60% opaque and goes muddy on the board, so
-   mark-stroke.webp is that stroke as it reads on white, at 1.7x its alpha (grain kept at the
-   edges). One piece, never split across lines; the padding reaches past the stroke's transparent
-   edges and the margin gives it all back, so the words keep their place on the line. */
+/* A hook's marked words: a highlighter sweeps left to right under them on hover or keyboard focus,
+   in the lit face of the nav's felt star (#E4B163, sampled from star.webp). The words turn the
+   board's slate as it passes so they read on the yellow. One piece, never split across lines; the
+   padding reaches a little past the words and the margin gives it back, so nothing moves. */
 .wk-mark {
   white-space: nowrap;
-  margin: 0 -0.28em;
-  padding: 0.08em 0.28em 0.12em;
-  background: url('/works/mark-stroke.webp') center / 100% 100% no-repeat;
+  margin: 0 -0.12em;
+  padding: 0 0.12em;
+  border-radius: 2px;
+  background: linear-gradient(#e4b163, #e4b163) left 0 bottom 0.08em / 0% 82% no-repeat;
+  transition:
+    background-size 420ms var(--ease-out-strong),
+    color 220ms ease-out,
+    text-shadow 220ms ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  a.wk-card:hover .wk-mark {
+    background-size: 100% 82%;
+    color: #262626;
+    text-shadow: none;
+  }
+}
+a.wk-card:focus-visible .wk-mark {
+  background-size: 100% 82%;
   color: #262626;
   text-shadow: none;
 }
@@ -183,5 +197,8 @@ a.wk-card:active .wk-frost {
   }
   .wk-float {
     animation: none;
+  }
+  .wk-mark {
+    transition: none;
   }
 }
