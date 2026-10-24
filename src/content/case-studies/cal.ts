@@ -593,7 +593,7 @@ export const cal: CaseStudy = {
             alt: 'Kai in headphones, smiling, with Cal making a heart and two badges: I Won The Tallies 2025, Voice of the User Award, and Mentor of the Year Award.',
             caption: "The Tallies 2025, Tallo's team awards: Voice of the User and Mentor of the Year.",
           },
-          text: "Plenty of kids find their path because one adult puts something in front of them. I wanted Cal to be that mentor for the kids who don't have one. Cal taught me to start where people are. I still design that way.",
+          text: "Plenty of kids find their path because one adult puts something in front of them. I wanted Cal to be that mentor for the kids who don't have one. Cal taught me to start where people are. This is an approach I take to heart in every design decision I make.",
         },
       ],
     },
