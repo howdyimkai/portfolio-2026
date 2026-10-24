@@ -23,16 +23,16 @@ const PROJECTS: Project[] = [
     hook: 'A career quiz teens finish, with a mascot to guide them.',
     story: 'I created Cal, a compass mascot, and a three minute story quiz that gets teenagers started on career discovery. I built it with our community, tested it, and product adopted it into the core experience.',
     role: 'brand and product',
-    // The Cal hero's Welcome screen, center cut to Design Garden's 480x501 window: the plate
-    // (a still, so it serves as both frames) with the hero's own Cal layer bobbing on top.
-    // Box is the hero's Cal box remapped to the cut (plate x 135..1464 of 1600), then grown 20%
-    // from the feet so Cal stands off the screen (Kai, 2026-10-22).
+    // The Cal hero's desktop Welcome in the hero's browser window (Kai, 2026-10-24, matching the case
+    // study hero): the plate at 800 wide (a still, so it serves as both frames) with the hero's own
+    // Cal layer bobbing on top. Box is the hero's Cal box grown 20% from the feet, as the tablet
+    // cover did, so Cal stands off the screen (Kai, 2026-10-22).
     cover: {
-      anim: '/works/tallo-cover-plate.webp',
-      still: '/works/tallo-cover-plate.webp',
-      float: { src: '/works/cal/hero/desktop-1-cal.webp', box: [33.11, 24.83, 39.12, 38.51] },
-      device: 'tablet',
-      alt: 'Cal\'s Career Quiz welcome screen: Cal the compass waving in front of a mountain trail, above a Begin Expedition button',
+      anim: '/works/tallo-cover-browser.webp',
+      still: '/works/tallo-cover-browser.webp',
+      float: { src: '/works/cal/hero/desktop-1-cal.webp', box: [42.07, 27.95, 18.32, 33.66] },
+      device: 'browser',
+      alt: 'Cal\'s Career Quiz welcome screen on desktop: Cal the compass waving in front of a mountain trail, above a Begin Expedition button',
     },
     href: '/works/cal',
     cta: 'meet cal',

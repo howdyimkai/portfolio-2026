@@ -40,20 +40,38 @@
 .wk-gif {
   transition: transform 500ms var(--ease-out-strong);
 }
-/* A plain tablet drawn around a screen that has no edge of its own (Tallo's welcome is off white
-   and got lost on the white card). Bezel in the chalkboard's slate so it ties to the panel below;
-   flat, no glare or buttons, so it reads as a frame, not a product photo. */
-.wk-tablet {
-  padding: 3.825%; /* 4.5% less 15% (Kai, 2026-10-22) */
-  border-radius: 9% / 8.6%;
-  background-color: #262626;
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.08),
-    0 1px 2px rgb(58 50 38 / 0.12),
-    0 10px 24px -6px rgb(58 50 38 / 0.28);
+/* A full desktop screen in the case study hero's window: white, a hairline, three dots, no address
+   bar. Wide, so it gets a wider window than the portrait covers, centered under the header. */
+.wk-window-wide {
+  left: 8%;
+  top: 29%;
+  width: 84%;
 }
-.wk-tablet .wk-screen {
-  border-radius: 3px;
+.wk-browser {
+  overflow: hidden;
+  border: 1px solid var(--color-hairline);
+  border-radius: 8px;
+  background-color: white;
+  box-shadow:
+    0 1px 2px rgb(58 50 38 / 0.06),
+    0 10px 24px -6px rgb(58 50 38 / 0.2);
+}
+.wk-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 16px;
+  padding: 0 7px;
+  border-bottom: 1px solid var(--color-hairline);
+}
+.wk-browser-bar span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--color-chip-line);
+}
+.wk-browser .wk-screen {
+  border-radius: 0;
 }
 /* Cal's idle bob from the case study hero (sf-float): 5.5 design px over 3.5s, which is 2.06% of
    Cal's own height, so it keeps the same proportion at card size. */

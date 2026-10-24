@@ -14,13 +14,14 @@ export type Project = {
   // Animated cover plus its first frame for reduced motion. No cover → a quiet empty window,
   // labeled "coming soon" only when there's no case study to link to either.
   // `float` is a layer that bobs over the cover, placed by [left, top, width, height] in % of it.
-  // `device: 'tablet'` puts a screen without its own edge in a drawn tablet so it holds on white.
+  // `device: 'browser'` puts a full desktop screen in the case study's three dot window, in a wider
+  // window than the portrait covers get.
   cover?: {
     anim: string
     still: string
     alt: string
     float?: { src: string; box: [number, number, number, number] }
-    device?: 'tablet'
+    device?: 'browser'
   }
   // No href → the card is a "coming soon" placeholder and isn't a link.
   href?: string
@@ -48,10 +49,17 @@ export default function ProjectCard({ project: p }: { project: Project }) {
       <div onPointerMove={tilt} onPointerLeave={settle} className="wk-frost relative aspect-[333/328] overflow-hidden rounded-t-[22px]">
         {/* The window plus two of the garden's blossoms perched on opposite corners. A plain
             <picture>, not next/image: the optimizer would flatten the animation. */}
-        <div ref={windowRef} className="wk-window absolute">
+        <div ref={windowRef} className={`wk-window absolute ${p.cover?.device === 'browser' ? 'wk-window-wide' : ''}`}>
           {p.cover ? (
             <>
-              <div className={`wk-gif ${p.cover.device === 'tablet' ? 'wk-tablet' : ''}`}>
+              <div className={`wk-gif ${p.cover.device ? `wk-${p.cover.device}` : ''}`}>
+                {p.cover.device === 'browser' && (
+                  <div className="wk-browser-bar" aria-hidden="true">
+                    {[0, 1, 2].map((d) => (
+                      <span key={d} />
+                    ))}
+                  </div>
+                )}
                 <div className="relative">
                   <picture>
                     <source media="(prefers-reduced-motion: reduce)" srcSet={p.cover.still} />
