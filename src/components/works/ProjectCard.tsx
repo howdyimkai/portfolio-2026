@@ -8,6 +8,9 @@ import './project-card.css'
 export type Project = {
   name: string
   hook: string
+  // Words in the hook to mark with Kai's blue brush stroke (the nav's hover stroke). Must appear in
+  // the hook exactly.
+  mark?: string
   story: string
   role: string
   year?: string
@@ -97,7 +100,17 @@ export default function ProjectCard({ project: p }: { project: Project }) {
 
       {/* The hook leads, the story supports it, and the one action sits at the bottom. */}
       <div className="wk-raised wk-chalkboard flex flex-1 flex-col rounded-b-[22px] px-6 pb-6 pt-[calc(7.6%+22px)]">
-        <h2 className="wk-chalk-ink font-display text-[19px] font-medium leading-[1.3] [text-wrap:balance]">{p.hook}</h2>
+        <h2 className="wk-chalk-ink font-display text-[19px] font-medium leading-[1.3] [text-wrap:balance]">
+          {p.mark && p.hook.includes(p.mark) ? (
+            <>
+              {p.hook.slice(0, p.hook.indexOf(p.mark))}
+              <span className="wk-mark">{p.mark}</span>
+              {p.hook.slice(p.hook.indexOf(p.mark) + p.mark.length)}
+            </>
+          ) : (
+            p.hook
+          )}
+        </h2>
         <p className="wk-chalk-ink mt-2 font-mono text-[13px] leading-[1.6] opacity-70 [text-wrap:pretty]">{p.story}</p>
         {p.href && (
           <span className="wk-chalk-ink mt-auto flex items-center gap-2 self-start pt-6 font-mono text-[13px]">

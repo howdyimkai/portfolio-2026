@@ -148,6 +148,19 @@ a.wk-card:active .wk-frost {
   color: rgb(240 236 226 / 0.9);
   text-shadow: 0 0 1px rgb(240 236 226 / 0.35);
 }
+/* A hook's marked words sit on Kai's blue brush stroke (the nav's hover-helloworld), in the board's
+   slate so they read on the pale blue. The nav file is ~60% opaque and goes muddy on the board, so
+   mark-stroke.webp is that stroke as it reads on white, at 1.7x its alpha (grain kept at the
+   edges). One piece, never split across lines; the padding reaches past the stroke's transparent
+   edges and the margin gives it all back, so the words keep their place on the line. */
+.wk-mark {
+  white-space: nowrap;
+  margin: 0 -0.28em;
+  padding: 0.08em 0.28em 0.12em;
+  background: url('/works/mark-stroke.webp') center / 100% 100% no-repeat;
+  color: #262626;
+  text-shadow: none;
+}
 .wk-link {
   text-decoration: underline;
   text-decoration-color: rgb(240 236 226 / 0.35);
