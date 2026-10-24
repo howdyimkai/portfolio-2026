@@ -67,7 +67,15 @@
   width: 152px; /* sized up for legibility (Kai, 2026-10-10) */
   height: auto;
   transform: translateX(-46%);
-  pointer-events: none;
+  border-radius: 6px;
+  transition: scale 150ms ease-out;
+}
+/* The wordmark is the way home. */
+.shelf-wordmark:active { scale: 0.97; }
+.shelf-wordmark img {
+  display: block;
+  width: 100%;
+  height: auto;
   /* The source asset is grey; Kai's mock inks it maroon. */
   filter: brightness(0) saturate(100%) invert(9%) sepia(46%) saturate(2400%) hue-rotate(315deg);
 }

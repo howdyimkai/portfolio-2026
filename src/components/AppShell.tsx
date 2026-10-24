@@ -27,7 +27,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="grid-sheet flex min-h-screen flex-col">
         <PhoneMenu />
-        <div className="max-md:hidden [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark]:[filter:brightness(0)]!">
+        <div className="max-md:hidden [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark_img]:[filter:brightness(0)]!">
           <ShelfNav />
         </div>
         <main className="flex-grow max-md:pt-14">{children}</main>

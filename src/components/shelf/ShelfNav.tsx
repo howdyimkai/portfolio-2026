@@ -186,7 +186,9 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
   return (
     <header className="shelf-nav">
       <div ref={drawRef} className="shelf-nav-draw" data-tidy={tidy ? '' : undefined} data-compact={compact ? '' : undefined}>
-        <Image src="/nav/shelf/wordmark.webp" alt="howdy im Kai" width={309} height={130} className="shelf-wordmark" draggable={false} priority unoptimized />
+        <Link href="/" className="shelf-wordmark" aria-label="howdy im Kai, home">
+          <Image src="/nav/shelf/wordmark.webp" alt="" width={309} height={130} draggable={false} priority unoptimized />
+        </Link>
 
         <button ref={broomRef} type="button" className="shelf-broom" aria-pressed={tidy} aria-label="Tidy up navigation" onClick={toggle}>
           <Broom />
