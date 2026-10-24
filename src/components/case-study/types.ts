@@ -73,6 +73,8 @@ export type Flow = {
   mobile: ScreenSet
   // Opens the real thing in a new tab, under the frame.
   link?: { label: string; href: string }
+  // Says what the demo leaves out, under the frame until the last step (in place of "Tap to try it").
+  note?: string
 }
 
 export type Block =

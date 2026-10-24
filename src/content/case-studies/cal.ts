@@ -5,22 +5,20 @@ const TALLO_QUIZ_URL = 'https://tallo.com/talent/career/career-quiz'
 
 // The hero: the quiz's welcome, one path, Cal's reaction and the result, then where the result's
 // button goes, Tallo's Design and Media career hub (moved up from chapter 5, Kai 2026-10-22, so the
-// result isn't shown twice). The hub is Kai's captures at Tallo's own margins (Cal-Visuals/05-quiz,
-// 2026-10-22): "Tallo-Results.png" (982px page at 2x) cut to the hero's 960:832 shape centered on
-// the header (x 243 to 1706, y 0 to 1268, ending under the first career row), so the logo keeps its
-// clear space; "DesignMedia-Results-Mobile.png" (393pt at 2x) under a white 59pt status bar, like an
-// iPhone's, so the logo clears the phone's rounded corner, ending under "33 Careers".
-// The desktop result is looser than the other quiz screens (Kai, 2026-10-22, more room above and
-// below): the full quiz column, x 311 to 1391 and y 12 to 948, so its type draws about 11% smaller;
-// its back arrow and Exit are patched with the paper texture beside them. The welcome waits on a
-// taller Paper export, since its content already fills the 952 artboard.
-// The quiz screens were rebuilt in Paper (Tallo Brand System › Cal Art) from the live quiz. Desktop
-// screens are cropped to 960x832 out of the 1703x952 artboards: x 371 to 1331
-// (the middle of the quiz column, which keeps the type readable in the case study and trims the back
-// arrow and Exit off the welcome and result), and y 60 to 892, except the welcome at y 112 to 944 so
-// Begin Expedition keeps its margin (that drops its "Takes ~7 min" line). Boxes are % of each
-// cropped screen, from hero-build/HERO-MEASUREMENTS.md (1080px column space: x minus 60, y minus
-// the screen's top).
+// result isn't shown twice).
+// Desktop shows the whole 1703x952 desktop screen in the browser frame, not a crop of the quiz
+// column (Kai, 2026-10-24, picked "Browser, full" over the column crop and a laptop mockup: the
+// forest and paper on both sides are what read as desktop; a device frame doesn't say "demo", the
+// caption does). Kai's 2x exports in Cal-Visuals/00-hero/Hero-Desktop2x, saved at 1600 wide. The
+// welcome is rebuilt from its layers so Cal can bob: "bg only" with both clouds at their spots in the
+// composite (cloud illustration at 1236,771 and cloud shapes at 1850,679, 2x px) is the plate, Cal
+// floats on top at 1485,639 (Cal sits over both clouds in the composite). Every button spans x 586.5
+// to 1117 of 1703, found by scanning the exports for the lime; option rows are the old crop's rows
+// moved back into artboard space.
+// The hub on a phone is Kai's capture (Cal-Visuals/05-quiz, "DesignMedia-Results-Mobile.png", 393pt
+// at 2x) under a white 59pt status bar, like an iPhone's, so the logo clears the phone's rounded
+// corner, ending under "33 Careers". Phone boxes are % of each screen, from
+// hero-build/HERO-MEASUREMENTS.md.
 const H = '/works/cal/hero'
 const alt = {
   welcome:
@@ -38,22 +36,22 @@ const options = ['Show practical techniques', 'Research and share', 'Offer emoti
 
 const quizFlow: Flow = {
   desktop: {
-    width: 960,
-    height: 832,
+    width: 1703,
+    height: 952,
     select: { radius: 12, radio: { right: 21, size: 18 } },
     screens: [
-      { name: 'Welcome', src: `${H}/desktop-1-plate.webp`, alt: alt.welcome, float: { src: `${H}/desktop-1-cal.webp`, box: [38.65, 31.25, 27.08, 32.09] }, targets: [{ label: 'Begin Expedition', box: [22.4, 92.79, 55.31, 5.53], does: 'next' }] },
+      { name: 'Welcome', src: `${H}/desktop-1-plate.webp`, alt: alt.welcome, float: { src: `${H}/desktop-1-cal.webp`, box: [43.6, 33.56, 15.27, 28.05] }, targets: [{ label: 'Begin Expedition', box: [34.44, 87.39, 31.18, 4.78], does: 'next' }] },
       {
         name: 'Path 3 question',
         src: `${H}/desktop-2-question.webp`,
         alt: alt.question,
         targets: [
-          ...options.map((label, i) => ({ label, box: [22.4, [46.15, 55.77, 65.5, 75.12][i], 55.31, 7.57] as [number, number, number, number], does: 'select' as const })),
-          { label: 'Continue', box: [22.4, 85.46, 55.31, 5.53], does: 'next' },
+          ...options.map((label, i) => ({ label, box: [34.44, [46.64, 55.04, 63.55, 71.95][i], 31.18, 6.62] as [number, number, number, number], does: 'select' as const })),
+          { label: 'Continue', box: [34.44, 80.99, 31.18, 4.78], does: 'next' },
         ],
       },
-      { name: "Cal's reaction", src: `${H}/desktop-3-response.webp`, alt: alt.response, targets: [{ label: 'Continue', box: [22.4, 60.58, 55.31, 5.53], does: 'next' }] },
-      { name: 'Result, The Creator', src: `${H}/desktop-4-result.webp`, alt: alt.result, targets: [{ label: 'Explore Creator Careers', box: [25.46, 83.76, 49.17, 4.91], does: 'next' }] },
+      { name: "Cal's reaction", src: `${H}/desktop-3-response.webp`, alt: alt.response, targets: [{ label: 'Continue', box: [34.44, 59.24, 31.18, 4.78], does: 'next' }] },
+      { name: 'Result, The Creator', src: `${H}/desktop-4-result.webp`, alt: alt.result, targets: [{ label: 'Explore Creator Careers', box: [34.44, 83.61, 31.18, 4.78], does: 'next' }] },
       { name: 'Design and Media career hub', src: `${H}/desktop-5-hub.webp`, alt: alt.hub },
     ],
   },
@@ -78,6 +76,8 @@ const quizFlow: Flow = {
     ],
   },
   link: { label: 'Take the real quiz', href: TALLO_QUIZ_URL },
+  // Kai, 2026-10-24: make clear this is a condensed happy path, not the whole quiz.
+  note: 'A short demo of one path. The real quiz has 9 questions.',
 }
 
 const Q = '/works/cal/quiz'

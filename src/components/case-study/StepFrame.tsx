@@ -54,16 +54,15 @@ export default function StepFrame({ flow }: { flow: Flow }) {
       <p className="sr-only" aria-live="polite">
         Step {step + 1} of {last + 1}: {flow.mobile.screens[step].name}
       </p>
-      <div className="mt-4 flex min-h-6 items-center justify-between gap-4 font-mono text-[12px] leading-[1.5] md:mt-5">
-        {step === 0 && <span className="text-ink-faint">Tap to try it</span>}
-        {step > 0 && step < last && <span />}
+      <div className="mt-4 flex min-h-6 flex-wrap items-center justify-between gap-x-4 gap-y-3 font-mono text-[12px] leading-[1.5] md:mt-5">
+        {step < last && <span className="text-ink-faint">{flow.note ?? (step === 0 ? 'Tap to try it' : '')}</span>}
         {step === last && (
           <button type="button" data-start-over onClick={() => go(0)} className="sf-link press-scale text-ink-primary">
             Start over
           </button>
         )}
         {flow.link && (
-          <a href={flow.link.href} target="_blank" rel="noopener noreferrer" className="sf-link press-scale text-ink-primary">
+          <a href={flow.link.href} target="_blank" rel="noopener noreferrer" className="sf-link press-scale shrink-0 text-ink-primary">
             {flow.link.label} <span aria-hidden="true">↗</span>
           </a>
         )}
