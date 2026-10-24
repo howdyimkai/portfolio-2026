@@ -87,6 +87,13 @@ const BLOSSOM_ERASE_RADIUS = 34
 // Notes: design-intent/tool-exit-exploration/NOTES.md.
 const QUIET_ZONE_PAD = 32
 const QUIET_ZONE_SELECTOR = '.shelf-wordmark, .shelf-cubby, .shelf-broom'
+// Principles hint (Kai, 2026-10-24, "Whisper" from /proto/hint): after this long on the
+// page a caption fades in under the title pointing at the erase reveal, and it leaves for
+// good the first time the eraser touches the title. Desktop only, like the reveal.
+// Notes: design-intent/hint-exploration/NOTES.md.
+const HINT_DELAY_MS = 4000
+// Single-key tool shortcuts. Pressing the held tool's key puts it down, like clicking it.
+const TOOL_KEYS: Record<string, Tool> = { r: 'rake', e: 'eraser', b: 'blossom' }
 // Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
 const CURSOR_ANGLE_LERP = 0.35
 
@@ -487,6 +494,13 @@ export default function Garden({ layout }: { layout: Layout }) {
 
   // Erase-the-name reveal state (desktop only — see PRINCIPLES block above).
   const titleElRef = useRef<HTMLDivElement>(null)
+  const [hintOn, setHintOn] = useState(false)
+  const hintDoneRef = useRef(false)
+  const endHint = useCallback(() => {
+    if (hintDoneRef.current) return
+    hintDoneRef.current = true
+    setHintOn(false)
+  }, [])
 
   // Title boil (see BOIL_* above). Tracked apart from hoveringRef, which only follows
   // hover while a tool is armed — the title wiggles under a bare pointer too.
@@ -722,6 +736,7 @@ export default function Garden({ layout }: { layout: Layout }) {
         const ink = titleInkRef.current
         if (!ink || ink.total === 0) return
         if (sweepInkCells(titleGridRef.current, ink, titleRectRef.current, prev, p, ERASE_RADIUS) === 0) return
+        endHint()
         titleCoveredCountRef.current = titleGridRef.current.filter(Boolean).length
         const coverage = Math.min(1, titleCoveredCountRef.current / ink.total / TITLE_ERASE_THRESHOLD)
         const el = titleElRef.current
@@ -752,7 +767,7 @@ export default function Garden({ layout }: { layout: Layout }) {
         scheduleAutoReturn(PRINCIPLE_IDLE_MS)
       }
     },
-    [triggerReveal, beginReturn, scheduleAutoReturn]
+    [triggerReveal, beginReturn, scheduleAutoReturn, endHint]
   )
 
   // Read which grid cells hold ink, once: the title from its alpha, each principle from
@@ -1211,14 +1226,23 @@ export default function Garden({ layout }: { layout: Layout }) {
     )
   }, [expanded])
 
+  // The hint waits HINT_DELAY_MS in each idle state, and hides while a principle plays.
   useEffect(() => {
-    if (!tool) return
-    // Escape puts the tool down, back to the regular cursor.
+    setHintOn(false)
+    if (hintDoneRef.current || !isDesktopRef.current || sequencePhase !== 'idle') return
+    const id = window.setTimeout(() => setHintOn(true), HINT_DELAY_MS)
+    return () => window.clearTimeout(id)
+  }, [tool, sequencePhase])
+
+  useEffect(() => {
+    // R, E and B pick (or put down) a tool; Escape puts the held tool down.
     const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey) return
+      if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return
       const t = e.target as HTMLElement
       if (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable) return
-      if (e.key === 'Escape') pickTool(null)
+      const picked = TOOL_KEYS[e.key.toLowerCase()]
+      if (picked) pickTool(picked)
+      else if (e.key === 'Escape' && tool) pickTool(null)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -1330,6 +1354,13 @@ export default function Garden({ layout }: { layout: Layout }) {
             className={`relative aspect-[900/436] ${mode === 'bleed' ? 'w-[calc(var(--u)*58.3)] min-w-[278px]' : 'w-[calc(var(--u)*53)] min-w-[253px]'} transition-[opacity,filter] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]`}
           >
             <TitleArt boiling={titleBoiling} />
+            {/* ink-primary at 12px: 7.7:1 on the sand (ink-muted at 10px was 3.3:1). */}
+            <p
+              aria-hidden={!hintOn}
+              className={`absolute left-1/2 top-full mt-4 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] uppercase tracking-[0.08em] text-ink-primary transition-opacity duration-500 ease-out ${hintOn ? 'opacity-100' : 'opacity-0'}`}
+            >
+              psst, try the erase above
+            </p>
           </div>
 
           <div
@@ -1440,6 +1471,7 @@ export default function Garden({ layout }: { layout: Layout }) {
 const FEATHER_TOP = 'calc((var(--bleed-top, 36px) - 3px + 56px * var(--shelf-zoom, 0.86) - 7.9dvh) / 0.921)'
 
 const SHORT_LABEL: Record<Tool, string> = { rake: 'rake', eraser: 'eraser', blossom: 'blossom' }
+const SHORTCUT: Record<Tool, string> = { rake: 'r', eraser: 'e', blossom: 'b' }
 
 // Compact tool picker for the full-screen layouts. Floating = a panel sitting on the sand
 // (left edge on desktop, bottom on phones); otherwise it sits on the page beside the tray.
@@ -1470,6 +1502,7 @@ function ToolRail({
           type="button"
           onClick={() => onPick(t.key)}
           aria-pressed={tool === t.key}
+          aria-keyshortcuts={SHORTCUT[t.key].toUpperCase()}
           className={`press-scale flex w-[76px] flex-col items-center gap-1.5 rounded-2xl px-2 pb-2 pt-2.5 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-body transition-[background-color,box-shadow] duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink-primary [touch-action:manipulation] ${
             tool === t.key
               ? 'bg-sand-light/70 shadow-[inset_0_0_0_1px_var(--color-accent-washi-blue)]'
@@ -1479,7 +1512,12 @@ function ToolRail({
           <span className="relative h-11 w-11">
             <Image src={t.icon} alt="" fill sizes="44px" className="object-contain" />
           </span>
-          {SHORT_LABEL[t.key]}
+          <span className="flex items-center gap-1">
+            {SHORT_LABEL[t.key]}
+            <kbd className="hidden rounded border border-hairline px-1 font-mono text-[9px] leading-[14px] text-ink-muted [@media(hover:hover)_and_(pointer:fine)]:inline">
+              {SHORTCUT[t.key]}
+            </kbd>
+          </span>
         </button>
       ))}
       {onDone && (

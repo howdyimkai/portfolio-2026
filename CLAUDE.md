@@ -153,7 +153,8 @@ About copy draft lives in the Positioning Brainstorm doc.
   was hard to use). Putting a tool down (2026-10-24): click it again, press
   Escape, or use the rail's "put down" button; within 32px of the shelf
   the held tool goes quiet so the nav can be reached
-  (`design-intent/tool-exit-exploration/NOTES.md`). Blossom is still click-to-stamp (a discrete placement,
+  (`design-intent/tool-exit-exploration/NOTES.md`). R, E and B pick the
+  rake, eraser and blossom (the held tool's key puts it down). Blossom is still click-to-stamp (a discrete placement,
   not a drag gesture). Desktop and mobile have separate element positions
   (measured off the two `00_*` frames) since the plot is landscape on
   desktop and portrait on mobile (`sand.webp` vs `sand-portrait.webp`).
@@ -211,7 +212,9 @@ About copy draft lives in the Positioning Brainstorm doc.
   only cells holding title ink count (mask read from the asset's alpha), hit
   by the head's swept SEGMENT, not its sample points — both fixes for "fast
   straight wipes erase weaker than turning" (2026-09-29); 80% of inked cells
-  triggers. The 4s read clock starts when the video ends; the returns use an
+  triggers. A caption under the title ("psst, try the erase above") fades in
+  after 4s and leaves for good once the eraser first touches the title
+  (`design-intent/hint-exploration/NOTES.md`). The 4s read clock starts when the video ends; the returns use an
   even ease-in-out, since the shared strong ease-out made a 900ms fade look
   like a snap.
   Videos live in `public/principles/` (`.mp4` + final-frame `.webp` poster,
