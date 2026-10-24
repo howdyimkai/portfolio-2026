@@ -81,6 +81,12 @@ const CHUNK_COMMIT_LEN = 120
 
 const ERASE_RADIUS = 28 * RAKE_SCALE
 const BLOSSOM_ERASE_RADIUS = 34
+// Quiet zone (Kai, 2026-10-24, from /proto/tool-exit): within this many px of a shelf
+// piece the held tool goes quiet (normal cursor, no raking/erasing/stamping), so the nav
+// floating over the sand can be reached without raking the gaps between cubbies.
+// Notes: design-intent/tool-exit-exploration/NOTES.md.
+const QUIET_ZONE_PAD = 32
+const QUIET_ZONE_SELECTOR = '.shelf-wordmark, .shelf-cubby, .shelf-broom'
 // Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
 const CURSOR_ANGLE_LERP = 0.35
 
@@ -983,8 +989,19 @@ export default function Garden({ layout }: { layout: Layout }) {
     return { x: e.clientX - rect.left, y: e.clientY - rect.top }
   }
 
+  // Read live rather than cached, so the shelf's hover motion and resizes never go stale.
+  const quietRef = useRef(false)
+  const inQuietZone = (x: number, y: number) => {
+    for (const el of document.querySelectorAll(QUIET_ZONE_SELECTOR)) {
+      const r = el.getBoundingClientRect()
+      if (x >= r.left - QUIET_ZONE_PAD && x <= r.right + QUIET_ZONE_PAD && y >= r.top - QUIET_ZONE_PAD && y <= r.bottom + QUIET_ZONE_PAD) return true
+    }
+    return false
+  }
+
   const handlePointerDown = (e: React.PointerEvent) => {
     if (!toolRef.current) return
+    if (inQuietZone(e.clientX, e.clientY)) return
     const p = getPoint(e)
     // Rake/eraser act on hover alone; only the blossom stamp is a discrete click.
     if (toolRef.current === 'blossom') {
@@ -1029,6 +1046,18 @@ export default function Garden({ layout }: { layout: Layout }) {
   const handlePointerMove = (e: React.PointerEvent) => {
     updateTitleHover(getPoint(e))
     if (!toolRef.current) return
+
+    // Entering the quiet zone ends the gesture like leaving the plot; leaving it re-arms
+    // like entering. The tool stays selected throughout.
+    const inZone = inQuietZone(e.clientX, e.clientY)
+    if (inZone !== quietRef.current) {
+      quietRef.current = inZone
+      ;(e.currentTarget as HTMLElement).style.cursor = inZone ? 'auto' : ''
+      if (inZone) handlePointerLeave()
+      else handlePointerEnter(e)
+      return
+    }
+    if (inZone) return
 
     // Use getCoalescedEvents when available so fast strokes get every intermediate
     // sample the OS actually captured, instead of just one point per rendered frame.
@@ -1151,7 +1180,9 @@ export default function Garden({ layout }: { layout: Layout }) {
   const mode: 'home' | 'bleed' | 'tray' = layout === 'expand' ? (expanded ? 'bleed' : 'home') : layout
   const flipFromRef = useRef<DOMRect | null>(null)
 
-  const pickTool = (t: Tool | null) => {
+  // Picking the held tool again puts it down.
+  const pickTool = (picked: Tool | null) => {
+    const t = picked === tool ? null : picked
     if (layout === 'expand' && (t === null) !== (tool === null)) {
       flipFromRef.current = wrapRef.current?.getBoundingClientRect() ?? null
       // Blossoms are placed in plot pixels; a new plot size would strand them.
@@ -1181,8 +1212,14 @@ export default function Garden({ layout }: { layout: Layout }) {
   }, [expanded])
 
   useEffect(() => {
-    if (!expanded) return
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && pickTool(null)
+    if (!tool) return
+    // Escape puts the tool down, back to the regular cursor.
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+      const t = e.target as HTMLElement
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable) return
+      if (e.key === 'Escape') pickTool(null)
+    }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   })
@@ -1389,7 +1426,7 @@ export default function Garden({ layout }: { layout: Layout }) {
           floating={mode === 'bleed'}
           tool={tool}
           onPick={pickTool}
-          onDone={layout === 'expand' ? () => pickTool(null) : undefined}
+          onDone={() => pickTool(null)}
         />
       )}
     </div>
@@ -1447,14 +1484,25 @@ function ToolRail({
       ))}
       {onDone && (
         <>
-          <span aria-hidden className="mx-1 h-8 w-px bg-hairline md:mx-0 md:my-1 md:h-px md:w-8" />
+          {/* Always laid out and only shown while a tool is held, so the tools never
+              shift under the cursor when it appears (31px on desktop otherwise). */}
+          <span aria-hidden className={`mx-1 h-8 w-px bg-hairline md:mx-0 md:my-1 md:h-px md:w-8 ${tool ? '' : 'invisible'}`} />
           <button
             type="button"
-            onClick={onDone}
-            aria-label="Done playing, back to the page"
-            className="press-scale flex h-11 w-[76px] items-center justify-center rounded-2xl font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted transition-[background-color,color] duration-150 ease-out hover:bg-sand-light/40 hover:text-ink-body focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink-primary [touch-action:manipulation]"
+            onClick={(e) => {
+              // The button hides itself; hand focus back to the tool it put down, not <body>.
+              const held = e.currentTarget.parentElement?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]')
+              onDone()
+              held?.focus()
+            }}
+            aria-label="Put the tool down"
+            aria-keyshortcuts="Escape"
+            className={`${tool ? '' : 'invisible'} press-scale flex h-11 w-[76px] flex-col items-center justify-center gap-1 rounded-2xl font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted transition-[background-color,color] duration-150 ease-out hover:bg-sand-light/40 hover:text-ink-body focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink-primary [touch-action:manipulation]`}
           >
-            done
+            put down
+            <kbd className="hidden rounded border border-hairline px-1 font-mono text-[9px] leading-[14px] text-ink-muted [@media(hover:hover)_and_(pointer:fine)]:block">
+              esc
+            </kbd>
           </button>
         </>
       )}

@@ -150,7 +150,10 @@ About copy draft lives in the Positioning Brainstorm doc.
   eraser rake, blossom stamp). Rake/eraser act on **hover alone** — drawing
   starts on `pointerenter` and continues on every `pointermove`, no
   click-and-drag required (this was changed after user feedback that drag
-  was hard to use). Blossom is still click-to-stamp (a discrete placement,
+  was hard to use). Putting a tool down (2026-10-24): click it again, press
+  Escape, or use the rail's "put down" button; within 32px of the shelf
+  the held tool goes quiet so the nav can be reached
+  (`design-intent/tool-exit-exploration/NOTES.md`). Blossom is still click-to-stamp (a discrete placement,
   not a drag gesture). Desktop and mobile have separate element positions
   (measured off the two `00_*` frames) since the plot is landscape on
   desktop and portrait on mobile (`sand.webp` vs `sand-portrait.webp`).
