@@ -189,11 +189,11 @@ const F = '/works/cal/finding'
 // Chapter 6's Cal Kit, from Kai's Paper layout (Cal-Visuals/06-into-product/Cal Kit-reference
 // layout.png, 1352px wide), stacked for the column (Kai, 2026-10-22: personas live here, not in
 // chapter 3; name and type only; specimen and palette as live text and color). The art in
-// public/works/cal/kit is cut from that 1x reference as a stand-in until Kai's Paper exports
-// land: same names, so swapping is a file copy. Personas and expressions go through
-// kit-build/normalize_cal.py (sprint folder) so every Cal's dial is the same width with the feet
-// on one baseline (Kai, 2026-10-22); run it on the Paper exports too. Panel grey (#F2F2F2) is
-// lifted to white so the art multiplies onto the page. The recap header has its "his first birthday" line filled out.
+// public/works/cal/kit is Kai's 2x transparent Paper exports (Cal-Visuals/06-into-product/
+// cal-kit-final, 2026-10-24), run through kit-build/normalize_exports.py (sprint folder): every
+// Cal on one 400x392 canvas with the same dial width and the feet on one baseline (the dial rule
+// from normalize_cal.py, at 2x like the rules cards), props on a 224px square at 78% fill. The
+// recap header is the full export, trimmed 2px a side to the 1055:498 slot.
 // The Minecraft Short is by Gavin Han, an intern (credit OK'd by Kai, 2026-10-22).
 const K = '/works/cal/kit'
 const calKit: Kit = {
@@ -244,8 +244,8 @@ const calKit: Kit = {
     note: 'Same kit, outside the quiz: a community recap, and a Minecraft build by our intern, Gavin Han.',
     image: {
       src: `${K}/recap.webp`,
-      width: 1055,
-      height: 498,
+      width: 2110,
+      height: 996,
       alt: "Community recap header: an \"August recap\" tag above the headline \"Cal's Birthday Challenge: Community Roundup,\" beside Cal laughing in a striped party hat.",
     },
     video: { youtubeId: 'aYcAXaAlExM', title: 'Happy Birthday, Cal!', poster: `${K}/minecraft.webp` },
