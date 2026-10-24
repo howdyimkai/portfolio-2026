@@ -213,8 +213,9 @@ About copy draft lives in the Positioning Brainstorm doc.
   by the head's swept SEGMENT, not its sample points — both fixes for "fast
   straight wipes erase weaker than turning" (2026-09-29); 80% of inked cells
   triggers. A caption under the title ("psst, try the erase above") fades in
-  after 4s and leaves for good once the eraser first touches the title
-  (`design-intent/hint-exploration/NOTES.md`). The 4s read clock starts when the video ends; the returns use an
+  after 4s and leaves for good once the eraser first touches the title; halfway
+  to the reveal it says "keep going, try an infinity pattern"
+  until the reveal fires (`design-intent/hint-exploration/NOTES.md`). The 4s read clock starts when the video ends; the returns use an
   even ease-in-out, since the shared strong ease-out made a 900ms fade look
   like a snap.
   Videos live in `public/principles/` (`.mp4` + final-frame `.webp` poster,

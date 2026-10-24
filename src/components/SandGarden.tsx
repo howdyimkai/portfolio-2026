@@ -92,6 +92,11 @@ const QUIET_ZONE_SELECTOR = '.shelf-wordmark, .shelf-cubby, .shelf-broom'
 // good the first time the eraser touches the title. Desktop only, like the reveal.
 // Notes: design-intent/hint-exploration/NOTES.md.
 const HINT_DELAY_MS = 4000
+// Second hint, in the same spot: once an erase gets this far toward the reveal (halfway,
+// 40% of the title's ink; 0.75 felt too late, Kai 2026-10-24) without finishing, nudge the visitor on with the stroke that
+// clears it best (Kai, 2026-10-24). Leaves for good once the reveal fires.
+const KEEP_GOING_AT = 0.5
+const HINT_COPY = { start: 'psst, try the erase above', keep: 'keep going, try an infinity pattern' } // keep renders with InfinityTrace before "infinity"
 // Single-key tool shortcuts. Pressing the held tool's key puts it down, like clicking it.
 const TOOL_KEYS: Record<string, Tool> = { r: 'rake', e: 'eraser', b: 'blossom' }
 // Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
@@ -305,6 +310,18 @@ function sweepInkCells(covered: boolean[], ink: InkGrid, rect: Rect, prev: Point
 // Still first, then the sprite strip over it once loaded (the still is hidden then, or its
 // ink would show through the other frames). The strip is 7 cells wide, so one cell fills
 // the box; title-boil steps it across them. Reduced motion: the strip rests on cell 1.
+// A small figure eight drawn inline in the keep-going hint, tracing the stroke it asks
+// for. Line-height sized so it sits on the caption's text line.
+function InfinityTrace() {
+  const d = 'M12 6C9.5 2.2 3 2.2 3 6s6.5 3.8 9 0 9-3.8 9 0-6.5 3.8-9 0Z'
+  return (
+    <svg aria-hidden viewBox="0 0 24 12" className="inline-block h-[10px] w-[20px] -translate-y-px align-middle">
+      <path d={d} pathLength={100} fill="none" stroke="currentColor" strokeWidth={1.4} opacity={0.3} />
+      <path d={d} pathLength={100} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" className="infinity-trace" />
+    </svg>
+  )
+}
+
 function TitleArt({ boiling }: { boiling: boolean }) {
   const [stripReady, setStripReady] = useState(false)
   const markReady = useCallback(() => setStripReady(true), [])
@@ -496,6 +513,9 @@ export default function Garden({ layout }: { layout: Layout }) {
   const titleElRef = useRef<HTMLDivElement>(null)
   const [hintOn, setHintOn] = useState(false)
   const hintDoneRef = useRef(false)
+  const [keepGoing, setKeepGoing] = useState(false)
+  const [hintCopy, setHintCopy] = useState<keyof typeof HINT_COPY>('start')
+  const keepGoingShownRef = useRef(false)
   const endHint = useCallback(() => {
     if (hintDoneRef.current) return
     hintDoneRef.current = true
@@ -655,6 +675,8 @@ export default function Garden({ layout }: { layout: Layout }) {
   const triggerReveal = useCallback(() => {
     if (sequenceActiveRef.current) return
     sequenceActiveRef.current = true
+    keepGoingShownRef.current = true
+    setKeepGoing(false)
     if (titleElRef.current) {
       titleElRef.current.style.opacity = '0'
       titleElRef.current.style.filter = 'blur(3px)'
@@ -745,6 +767,11 @@ export default function Garden({ layout }: { layout: Layout }) {
           el.style.filter = `blur(${coverage * 3}px)`
         }
         if (coverage >= 1) triggerReveal()
+        else if (coverage >= KEEP_GOING_AT && !keepGoingShownRef.current) {
+          keepGoingShownRef.current = true
+          setHintCopy('keep')
+          setKeepGoing(true)
+        }
         return
       }
 
@@ -1349,17 +1376,28 @@ export default function Garden({ layout }: { layout: Layout }) {
         )}
 
         <div className="pointer-events-none absolute inset-0 hidden flex-col items-center justify-center md:flex">
-          <div
-            ref={titleElRef}
-            className={`relative aspect-[900/436] ${mode === 'bleed' ? 'w-[calc(var(--u)*58.3)] min-w-[278px]' : 'w-[calc(var(--u)*53)] min-w-[253px]'} transition-[opacity,filter] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]`}
-          >
-            <TitleArt boiling={titleBoiling} />
-            {/* ink-primary at 12px: 7.7:1 on the sand (ink-muted at 10px was 3.3:1). */}
-            <p
-              aria-hidden={!hintOn}
-              className={`absolute left-1/2 top-full mt-4 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] uppercase tracking-[0.08em] text-ink-primary transition-opacity duration-500 ease-out ${hintOn ? 'opacity-100' : 'opacity-0'}`}
+          {/* The caption sits beside the title, not inside it, so it doesn't fade as the
+              title is erased. */}
+          <div className="relative">
+            <div
+              ref={titleElRef}
+              className={`relative aspect-[900/436] ${mode === 'bleed' ? 'w-[calc(var(--u)*58.3)] min-w-[278px]' : 'w-[calc(var(--u)*53)] min-w-[253px]'} transition-[opacity,filter] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]`}
             >
-              psst, try the erase above
+              <TitleArt boiling={titleBoiling} />
+            </div>
+            {/* ink-primary at 12px: 7.7:1 on the sand (ink-muted at 10px was 3.3:1). Only
+                one of the two hints is ever on: the first ends when erasing starts. */}
+            <p
+              aria-hidden={!(hintOn || keepGoing)}
+              className={`absolute left-1/2 top-full mt-4 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] uppercase tracking-[0.08em] text-ink-primary transition-opacity duration-500 ease-out ${hintOn || keepGoing ? 'opacity-100' : 'opacity-0'}`}
+            >
+              {hintCopy === 'keep' ? (
+                <>
+                  keep going, try an <InfinityTrace /> infinity pattern
+                </>
+              ) : (
+                HINT_COPY.start
+              )}
             </p>
           </div>
 

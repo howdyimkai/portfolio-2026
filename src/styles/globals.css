@@ -199,6 +199,28 @@ h1, h2, h3 {
   animation: title-boil 980ms steps(7) infinite;
 }
 
+/* Keep-going hint: a bright segment travels round a faint figure eight, tracing the
+   stroke the hint asks for (see InfinityTrace in SandGarden). pathLength is 100. */
+@keyframes infinity-trace {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.infinity-trace {
+  stroke-dasharray: 28 72;
+  animation: infinity-trace 1.8s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Still: the whole figure eight at full strength instead of a moving segment. */
+  .infinity-trace {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
