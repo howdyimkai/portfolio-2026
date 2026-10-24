@@ -15,9 +15,12 @@ const TALLO_QUIZ_URL = 'https://tallo.com/talent/career/career-quiz'
 // floats on top at 1485,639 (Cal sits over both clouds in the composite). Every button spans x 586.5
 // to 1117 of 1703, found by scanning the exports for the lime; option rows are the old crop's rows
 // moved back into artboard space.
-// The hub on a phone is Kai's capture (Cal-Visuals/05-quiz, "DesignMedia-Results-Mobile.png", 393pt
-// at 2x) under a white 59pt status bar, like an iPhone's, so the logo clears the phone's rounded
-// corner, ending under "33 Careers". Phone boxes are % of each screen, from
+// Phone screens are Kai's 2x exports in Cal-Visuals/00-hero/Mobile-Desktop2x (2026-10-24). The
+// welcome plate is "bgonly" plus the composite's clouds, with the old plate under Cal's silhouette
+// (Cal sits over the clouds; no mobile cloud layers), and the old Cal float, which lands exactly on
+// the composite's Cal. The hub ("hub-live") sits under a white 59pt status bar, like an iPhone's, so
+// the logo clears the phone's rounded corner; its bottom is cut and the "Compare Careers" bar pinned
+// back on, as it sits on a phone. Phone boxes are % of each screen, from
 // hero-build/HERO-MEASUREMENTS.md.
 const H = '/works/cal/hero'
 const alt = {
