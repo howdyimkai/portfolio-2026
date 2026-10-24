@@ -6,6 +6,7 @@ const PROJECTS: Project[] = [
   {
     name: 'Design Garden',
     hook: 'Helping designers ship the project they keep putting off, with a partner and a deadline.',
+    mark: 'ship the project',
     story: 'A four week sprint platform I built and run. Designers pair up, check in weekly, and end on showcase night with real progress on their next move.',
     role: 'founder',
     year: '2026',
