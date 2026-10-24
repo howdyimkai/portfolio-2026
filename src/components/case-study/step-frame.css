@@ -154,6 +154,13 @@
   cursor: zoom-out;
   box-shadow: 0 24px 64px rgb(58 50 38 / 0.22);
 }
+/* The Kit's video in the same viewer: a 9:16 player as tall as the screen allows, with the
+   dialog shrinking to it instead of the strip's 720px. */
+.st-dialog-video { width: fit-content; }
+.kit-video {
+  height: min(72dvh, calc((92vw - 48px) * 16 / 9));
+  aspect-ratio: 9 / 16;
+}
 .st-dialog[open] {
   animation: st-in 200ms var(--ease-out-strong);
 }
