@@ -195,6 +195,8 @@ const F = '/works/cal/finding'
 // from normalize_cal.py, at 2x like the rules cards), props on a 224px square at 78% fill. The
 // recap header is the full export, trimmed 2px a side to the 1055:498 slot.
 // The Minecraft Short is by Gavin Han, an intern (credit OK'd by Kai, 2026-10-22).
+// Its poster is Kai's frame of the finished build (06-into-product/Cal-Video-Screen.png, 2026-10-24),
+// 24px of sky trimmed off the top to make it 9:16.
 const K = '/works/cal/kit'
 const calKit: Kit = {
   label: 'Cal Kit',
