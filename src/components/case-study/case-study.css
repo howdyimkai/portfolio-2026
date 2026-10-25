@@ -203,3 +203,15 @@
 @media (prefers-reduced-motion: reduce) {
   .cs-print { transition: none; }
 }
+
+/* Setup walkthrough (brand-system/SetupWalkthrough.tsx): the script's output lines stagger in,
+   150ms apart, each time their step opens. Reduced motion shows them all at once. */
+.sw-line {
+  animation: sw-in 160ms var(--ease-out-strong) both;
+}
+@keyframes sw-in {
+  from { opacity: 0; translate: 0 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sw-line { animation: none; }
+}

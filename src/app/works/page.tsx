@@ -1,7 +1,7 @@
 import ProjectCard, { type Project } from '@/components/works/ProjectCard'
 
-// Design Garden leads, then Tallo (positioning, 2026-10-10). Tallo links to the Cal quiz case
-// study; ApolloEd is still a "coming soon" card.
+// Design Garden leads, then Tallo (positioning, 2026-10-10), then Tallo Brand System. Tallo links to
+// the Cal quiz case study. ApolloEd is hidden for now (see HIDDEN below).
 const PROJECTS: Project[] = [
   {
     name: 'Design Garden',
@@ -40,12 +40,33 @@ const PROJECTS: Project[] = [
     cta: 'meet cal',
   },
   {
-    name: 'ApolloEd',
-    hook: 'An edtech dashboard.',
-    story: 'The story behind this dashboard is on its way.',
-    role: 'product design',
+    name: 'Tallo Brand System',
+    hook: 'Brand guidelines our AI tools read before they write.',
+    mark: 'read before they write',
+    story: 'I rebuilt Tallo\'s brand as data, gave each role its own AI context, and built a linter and an eval to check the drafts. Invented stats in testing went from 31% to zero.',
+    role: 'brand systems',
+    year: '2026',
+    // V1 hero export at 800 wide, in the case study's browser window like the Tallo card.
+    cover: {
+      anim: '/works/brand-system/cover.webp',
+      still: '/works/brand-system/cover.webp',
+      device: 'browser',
+      alt: 'The same AI request answered twice: without brand context, three drafts with different invented user counts; with it, three drafts using the approved figure',
+    },
+    href: '/works/brand-system',
+    cta: 'see the system',
   },
 ]
+
+// Hidden 2026-10-24 (Kai) to keep /works at three cards. Move back into PROJECTS to bring it back.
+// const HIDDEN: Project[] = [
+//   {
+//     name: 'ApolloEd',
+//     hook: 'An edtech dashboard.',
+//     story: 'The story behind this dashboard is on its way.',
+//     role: 'product design',
+//   },
+// ]
 
 // White grid paper, the same shelf nav as the homepage, and the three cards.
 export default function WorksPage() {

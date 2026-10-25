@@ -161,6 +161,12 @@
   height: min(72dvh, calc((92vw - 48px) * 16 / 9));
   aspect-ratio: 9 / 16;
 }
+/* A 16:9 episode (Brand System): as wide as the screen allows, held to a height that fits. */
+.kit-video-wide {
+  height: auto;
+  width: min(calc(92vw - 48px), calc(72dvh * 16 / 9), 1040px);
+  aspect-ratio: 16 / 9;
+}
 .st-dialog[open] {
   animation: st-in 200ms var(--ease-out-strong);
 }

@@ -7,7 +7,9 @@ import Link from 'next/link'
 import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import BrowserFrame from './BrowserFrame'
 import CalKit, { CAL, CAL_ASPECT } from './CalKit'
+import { CUSTOM_VISUALS } from './brand-system'
 import ChapterSheet from './ChapterSheet'
+import Inline from './Inline'
 import StepFrame from './StepFrame'
 import Strip from './Strip'
 import Toggle from './Toggle'
@@ -141,9 +143,15 @@ function StatStrip({ stats }: { stats: CaseStudy['stats'] }) {
   const notes = stats.filter((st) => st.note)
   return (
     <div className="mt-14">
-      <dl className="grid grid-cols-3 border-y border-hairline">
+      {/* Equal thirds, unless a value runs long ("80% → 31%" filled its third and touched the
+          divider): that column takes a bigger share, so it keeps the gap the others get from their
+          left padding. */}
+      <dl
+        className="grid border-y border-hairline [grid-template-columns:var(--stat-cols)]"
+        style={{ '--stat-cols': stats.map((st) => (st.value.length > 7 ? '1.5fr' : '1fr')).join(' ') } as CSSProperties}
+      >
         {stats.map((st, i) => (
-          <div key={st.label} className={`py-6 md:py-8 ${i > 0 ? 'border-l border-hairline pl-4 md:pl-8' : ''}`}>
+          <div key={st.label} className={`min-w-0 py-6 md:py-8 ${i > 0 ? 'border-l border-hairline pl-4 md:pl-8' : 'pr-3 md:pr-0'}`}>
             <dt className="sr-only">{st.label}</dt>
             <dd>
               <span className="block font-display text-[28px] font-semibold leading-none tracking-[-0.01em] text-ink-primary min-[400px]:text-[32px] md:text-[52px]">
@@ -168,7 +176,22 @@ function StatStrip({ stats }: { stats: CaseStudy['stats'] }) {
 function BlockView({ b }: { b: Block }) {
   switch (b.kind) {
     case 'p':
-      return <p className={`${PROSE} ${BODY}`}>{b.text}</p>
+      return (
+        <p className={`${PROSE} ${BODY}`}>
+          {b.lead && <span className="font-semibold text-ink-primary">{b.lead} </span>}
+          <Inline text={b.text} />
+        </p>
+      )
+    case 'code':
+      return (
+        <pre
+          tabIndex={0}
+          aria-label={b.lang ? `${b.lang} excerpt` : 'Code excerpt'}
+          className="max-w-[62ch] overflow-x-auto rounded-[12px] border border-hairline bg-tag/55 p-4 font-mono text-[13px] leading-[1.6] text-ink-primary"
+        >
+          <code>{b.text}</code>
+        </pre>
+      )
     case 'owned':
       return (
         <ol className={`${PROSE} cs-body flex flex-col gap-4 font-mono text-ink-body`}>
@@ -285,7 +308,12 @@ function BlockView({ b }: { b: Block }) {
 function VisualBlock({ v }: { v: Visual }) {
   return (
     <figure>
-      {v.flow ? (
+      {v.custom && CUSTOM_VISUALS[v.custom] ? (
+        (() => {
+          const Custom = CUSTOM_VISUALS[v.custom!]
+          return <Custom visual={v} />
+        })()
+      ) : v.flow ? (
         <StepFrame flow={v.flow} />
       ) : v.pair ? (
         <Pair items={v.pair} />

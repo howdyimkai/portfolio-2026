@@ -22,6 +22,10 @@ export function smartQuotes<T>(v: T): T {
   if (typeof v === 'string') return curl(v) as T
   if (Array.isArray(v)) return v.map(smartQuotes) as T
   if (v && typeof v === 'object') {
+    // Code is verbatim: the JSON keeps its straight quotes.
+    if ((v as { kind?: unknown }).kind === 'code') return v
+    // The eval hero's excerpts (Phase 2) live in its component, not in content, so they never
+    // pass through here; captions on custom visuals still do.
     return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, smartQuotes(x)])) as T
   }
   return v

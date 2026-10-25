@@ -48,9 +48,11 @@ case, no em dashes or hyphens in creative copy, no buzzwords).
 This replaces the 2026-10-10 plan to make the homepage scroll. The homepage
 stays one full-bleed screen with no footer; the shelf's "selected works" toy
 is the way in. `/works` uses the same `ShelfNav` on white grid paper
-(`.grid-sheet`) with three cards: Design Garden, Tallo, ApolloEd. Tallo links to
-the Cal case study (`/works/cal`, still noindex) but has no cover yet;
-ApolloEd is "coming soon". Cards are
+(`.grid-sheet`) with three cards: Design Garden, Tallo, Tallo Brand System.
+Tallo links to the Cal case study (`/works/cal`, still noindex); Tallo Brand
+System links to `/works/brand-system` (noindex, built on `explore/brand-system`
+from `BUILD-PLAN_BrandSystem_ClaudeCode.md`). ApolloEd is hidden since
+2026-10-24 (Kai), parked in a commented `HIDDEN` const in `works/page.tsx`. Cards are
 `src/components/works/ProjectCard.tsx`, promoted from `/proto/project-card`'s
 Chalkboard variant.
 

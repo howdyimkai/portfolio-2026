@@ -38,6 +38,9 @@ export type Visual = {
   // share. 'device' is a screen in its own bezel, drawn as is; 'card' gets a hairline edge. credit
   // is a small line under the piece.
   pair?: { label: string; src: string; alt: string; width: number; height: number; look: 'device' | 'card'; credit?: string }[]
+  // A built component from the registry in brand-system/ (the Brand System case study's hero and
+  // visuals). Until its key has a component, the visual renders as a labeled placeholder.
+  custom?: string
 }
 
 // A box on a screen image as % of the image: [left, top, width, height]. Percentages, so hotspots
@@ -78,7 +81,10 @@ export type Flow = {
 }
 
 export type Block =
-  | { kind: 'p'; text: string }
+  // lead is a semibold first sentence. text takes `code` spans and [text](url) links.
+  | { kind: 'p'; text: string; lead?: string }
+  // Verbatim code, straight quotes kept.
+  | { kind: 'code'; lang?: string; text: string }
   // "What I owned": numbered 01, 02, 03.
   | { kind: 'owned'; items: string[] }
   // A place and year heading, like a slug line in a script.

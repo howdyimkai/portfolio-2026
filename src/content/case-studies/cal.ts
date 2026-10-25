@@ -304,6 +304,10 @@ export const cal: CaseStudy = {
           kind: 'p',
           text: "Tallo's career assessment is built on RIASEC, a well-known career interest model, but almost nobody got there. I created Cal, a compass mascot, and a three minute story quiz that sorts you into one of six RIASEC types and sends you to a matching career hub, one of Tallo's 24 industry hubs, like construction or design. It ran in Typeform first, then product built it in.",
         },
+        {
+          kind: 'p',
+          text: 'See also: [Tallo Brand System](/works/brand-system), how I made our brand guidelines readable by AI tools.',
+        },
       ],
     },
     {
