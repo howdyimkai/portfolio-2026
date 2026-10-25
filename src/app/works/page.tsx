@@ -1,7 +1,7 @@
 import ProjectCard, { type Project } from '@/components/works/ProjectCard'
 
-// Design Garden leads, then Tallo (positioning, 2026-10-10), then Tallo Brand System. Tallo links to
-// the Cal quiz case study. ApolloEd is hidden for now (see HIDDEN below).
+// Design Garden leads, then Tallo's Cal Quiz (positioning, 2026-10-10), then Tallo Brand System. The
+// Cal Quiz card links to the Cal case study. ApolloEd is hidden for now (see HIDDEN below).
 const PROJECTS: Project[] = [
   {
     name: 'Design Garden',
@@ -20,11 +20,12 @@ const PROJECTS: Project[] = [
     cta: 'see how it grew',
   },
   {
-    name: 'Tallo',
+    name: "Tallo's Cal Quiz",
     hook: 'A career quiz teens actually want to finish, with a mascot to guide them.',
     mark: 'actually want',
     story: 'I created Cal, a compass mascot, and a three minute story quiz that gets teenagers started on career discovery. I built it with our community, tested it, and product adopted it into the core experience.',
     role: 'brand and product',
+    year: '2026',
     // The Cal hero's desktop Welcome in the hero's browser window (Kai, 2026-10-24, matching the case
     // study hero): the plate at 800 wide (a still, so it serves as both frames) with the hero's own
     // Cal layer bobbing on top. Box is the hero's Cal box grown 20% from the feet, as the tablet
@@ -46,12 +47,14 @@ const PROJECTS: Project[] = [
     story: 'I rebuilt Tallo\'s brand as data, gave each role its own AI context, and built a linter and an eval to check the drafts. Invented stats in testing went from 31% to zero.',
     role: 'brand systems',
     year: '2026',
-    // V1 hero export at 800 wide, in the case study's browser window like the Tallo card.
+    // The case study's setup walkthrough on its role step (Kai, 2026-10-24: the role you pick is the
+    // system's point), captured from the live card at 2x without its border and saved 800 wide, in
+    // the browser window like the Tallo card.
     cover: {
-      anim: '/works/brand-system/cover.webp',
-      still: '/works/brand-system/cover.webp',
+      anim: '/works/brand-system/cover-setup.webp',
+      still: '/works/brand-system/cover-setup.webp',
       device: 'browser',
-      alt: 'The same AI request answered twice: without brand context, three drafts with different invented user counts; with it, three drafts using the approved figure',
+      alt: 'The brand system setup asking "What do you do?" with eight roles to pick from, from social media to executive',
     },
     href: '/works/brand-system',
     cta: 'see the system',

@@ -91,10 +91,11 @@ export default function ProjectCard({ project: p }: { project: Project }) {
             <div className="wk-window-empty flex items-center justify-center font-mono text-[12px] text-ink-faint">{!p.href && 'coming soon'}</div>
           )}
         </div>
-        {/* Header: what it is, then my part in it, on the chalkboard's 24px gutter. */}
-        <div className="absolute inset-x-6 top-5 flex items-baseline justify-between gap-4 font-mono text-[13px]">
-          <span className="text-ink-primary">{p.name}</span>
-          <span className="text-ink-faint">{[p.role, p.year].filter(Boolean).join(' · ')}</span>
+        {/* Header: what it is, then my part in it, on the chalkboard's 24px gutter. Each half stays
+            whole; when both don't fit on a phone, the role and year drop to their own line. */}
+        <div className="absolute inset-x-6 top-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 font-mono text-[13px]">
+          <span className="whitespace-nowrap text-ink-primary">{p.name}</span>
+          <span className="whitespace-nowrap text-ink-faint">{[p.role, p.year].filter(Boolean).join(' · ')}</span>
         </div>
       </div>
 
