@@ -139,7 +139,7 @@ export const CARDS: Card[] = [
 export const cardById = (id: string) => CARDS.find((c) => c.id === id)!
 
 // Kai, 2026-10-18: the intro and hero sentence open the bio panel, the paragraphs follow.
-export const INTRO = ["I'm Kai Tran, product designer and creative lead.", 'Chronically tinkering and daydreaming in St. Louis.']
+export const INTRO = ["I'm Kai Tran, product designer and Head of Creative at Tallo.", 'Chronically tinkering and daydreaming in St. Louis.']
 export const HERO = 'I design learning experiences where brand & product play a duet.'
 
 export const BIO = [

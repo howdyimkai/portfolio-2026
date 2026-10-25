@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Kai Tran Portfolio',
     short_name: 'Kai Tran',
-    description: 'Designer and tinkerer. I make learning feel like play.',
+    description: 'Product designer and tinkerer. I make learning feel like play.',
     start_url: '/',
     display: 'standalone',
     background_color: '#f4f4f4',

@@ -96,6 +96,11 @@ const HINT_DELAY_MS = 4000
 // 40% of the title's ink; 0.75 felt too late, Kai 2026-10-24) without finishing, nudge the visitor on with the stroke that
 // clears it best (Kai, 2026-10-24). Leaves for good once the reveal fires.
 const KEEP_GOING_AT = 0.5
+// Typed sub line under the drawn title (Kai, 2026-10-25): the drawing says who Kai is, this
+// line gives a skimming recruiter the job title. Static on purpose, and it sits outside the
+// title element so erasing the title leaves it alone. After Nov 2, 2026: "Formerly Head of
+// Creative at Tallo."
+const TITLE_SUBLINE = 'Product designer. Head of Creative at Tallo.'
 const HINT_COPY = { start: 'psst, try the erase above', keep: 'keep going, try an infinity pattern' } // keep renders with InfinityTrace before "infinity"
 // Single-key tool shortcuts. Pressing the held tool's key puts it down, like clicking it.
 const TOOL_KEYS: Record<string, Tool> = { r: 'rake', e: 'eraser', b: 'blossom' }
@@ -205,7 +210,7 @@ const PRINCIPLES = [
 const TITLE_STILL_SRC = '/hero/kai-hero-october-still.webp'
 const TITLE_BOIL_SRC = '/hero/kai-hero-october-boil.webp'
 const TITLE_BOIL_FRAMES = 7
-const TITLE_ALT = 'Kai Tran — designer and tinkerer. I make learning feel like play.'
+const TITLE_ALT = 'Kai Tran, designer and tinkerer. I make learning feel like play.'
 const TITLE_GRID_COLS = 16
 const TITLE_GRID_ROWS = 6
 
@@ -1372,6 +1377,9 @@ export default function Garden({ layout }: { layout: Layout }) {
         {mode !== 'home' && (
           <div className={`pointer-events-none absolute left-1/2 z-10 aspect-[900/436] w-[90%] max-w-[368px] -translate-x-1/2 md:hidden ${D.mobileTitle}`}>
             <TitleArt boiling={titleBoiling} />
+            <p className="absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] text-ink-primary">
+              {TITLE_SUBLINE}
+            </p>
           </div>
         )}
 
@@ -1385,6 +1393,7 @@ export default function Garden({ layout }: { layout: Layout }) {
             >
               <TitleArt boiling={titleBoiling} />
             </div>
+            <p className="mt-3 text-center font-mono text-[13px] text-ink-primary">{TITLE_SUBLINE}</p>
             {/* ink-primary at 12px: 7.7:1 on the sand (ink-muted at 10px was 3.3:1). Only
                 one of the two hints is ever on: the first ends when erasing starts. */}
             <p

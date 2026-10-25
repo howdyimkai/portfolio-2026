@@ -179,7 +179,7 @@ const PRINCIPLES = [
 const TITLE_STILL_SRC = '/hero/kai-hero-october-still.webp'
 const TITLE_BOIL_SRC = '/hero/kai-hero-october-boil.webp'
 const TITLE_BOIL_FRAMES = 7
-const TITLE_ALT = 'Kai Tran — designer and tinkerer. I make learning feel like play.'
+const TITLE_ALT = 'Kai Tran, designer and tinkerer. I make learning feel like play.'
 const TITLE_GRID_COLS = 16
 const TITLE_GRID_ROWS = 6
 
