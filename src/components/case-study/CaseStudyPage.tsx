@@ -297,11 +297,7 @@ function BlockView({ b }: { b: Block }) {
     case 'kit':
       return <CalKit kit={b.kit} />
     case 'visual':
-      return (
-        <div className="mt-2">
-          <VisualBlock v={b.visual} />
-        </div>
-      )
+      return <div className="mt-2">{b.visual.print ? <Print v={b.visual} /> : <VisualBlock v={b.visual} />}</div>
   }
 }
 

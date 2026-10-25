@@ -252,6 +252,19 @@ export const brandSystem: CaseStudy = {
           kind: 'p',
           text: 'In "[Brand as Software](https://pauljun.substack.com/p/brand-as-software)," Paul Jun of Ramp argues that a brand should run like a product, with owners, maintenance, and a roadmap. The line I mentally highlighted is "Taste remains human. Repetition becomes software." This system took on the repetition, and the flyer showed what still needs a person. What it becomes next belongs to the team: give product a seat at it, so both sides draw from one set of decisions. That\'s when brand and product can play a stellar duet.',
         },
+        {
+          kind: 'visual',
+          visual: {
+            // Kai's photo, V10_BrandDuet_crop.jpg (already cropped clear of the bookmarks and menu
+            // bars; the uncropped brand-duet.jpg never ships), at 1600 wide as WebP.
+            label: 'Photo: the Cal postcard held up to the achievement stamps in the product',
+            src: '/works/brand-system/brand-duet.webp',
+            aspect: '3015 / 1950',
+            print: true,
+            alt: 'A hand holds a Tallo postcard in front of a laptop. The postcard shows Cal, a compass character making a heart shape, beside the line "Start where you are. Get where you\'re going." and a speech bubble reading "your bright future is waiting to be discovered." Behind it, the Tallo profile page shows illustrated achievement stamps: Account Created, First Step, Update Your Profile, and Join a Group.',
+            caption: "Cal's postcard from our swag boxes, held up to the stamps in the product. Brand and product, in one frame.",
+          },
+        },
       ],
     },
   ],
