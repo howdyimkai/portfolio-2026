@@ -10,6 +10,7 @@ import CalKit, { CAL, CAL_ASPECT } from './CalKit'
 import { CUSTOM_VISUALS } from './brand-system'
 import ChapterSheet from './ChapterSheet'
 import Inline from './Inline'
+import QuoteDoc from './QuoteDoc'
 import StepFrame from './StepFrame'
 import Strip from './Strip'
 import Toggle from './Toggle'
@@ -97,11 +98,18 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
           </div>
 
           <StatStrip stats={s.stats} />
-          {s.quote && (
-            <div className="mt-12">
-              <BlockView b={{ kind: 'quote', ...s.quote }} />
-            </div>
-          )}
+          {s.quote &&
+            (s.quote.doc ? (
+              // The doc leads, then the quote under it.
+              <div className="mt-12 flex flex-col gap-6">
+                <QuoteDoc item={s.quote.doc} />
+                <BlockView b={{ kind: 'quote', text: s.quote.text, cite: s.quote.cite }} />
+              </div>
+            ) : (
+              <div className="mt-12">
+                <BlockView b={{ kind: 'quote', ...s.quote }} />
+              </div>
+            ))}
 
           {s.chapters.map((c, i) => (
             <section key={c.id} id={c.id} className="mt-[77px] scroll-mt-[72px] md:mt-[104px] md:scroll-mt-12">

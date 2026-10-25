@@ -135,6 +135,43 @@
   .st-tile:hover { transform: translateY(-3px); }
 }
 .st-tile:active { transform: scale(0.97); }
+/* A piece that links out (a video cover) doesn't enlarge, so no zoom cursor. */
+.st-tile-link { cursor: pointer; }
+/* A feature strip from md: the first piece spans both rows and fills them, so its bottom meets the
+   second piece on the right. The image leaves the flow (it would set the height otherwise) and is
+   contained, never cropped: the box is within a few px of its shape at 1440 but narrower where the
+   right column's captions wrap, and the item's fill (its own edge color) hides the bars. */
+@media (min-width: 768px) {
+  .st-feature > li:first-child {
+    grid-row: span 2;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+  }
+  .st-feature > li:first-child > .st-tile { flex: 1; display: flex; }
+  .st-feature > li:first-child .st-piece { flex: 1; width: 100%; }
+  .st-feature > li:first-child .st-piece > img {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    object-fit: contain;
+    aspect-ratio: auto !important;
+  }
+}
+/* The testimonial's one-pager: the top reads, the lower part goes soft, since it's there to show
+   the piece exists rather than to be read in full. A blurred copy of the image, masked in, rather
+   than backdrop-filter, which not every renderer draws. */
+/* The sharp copy fades out under the blur, so the blur's soft edge shows the card, not crisp text. */
+.qd-sharp {
+  mask-image: linear-gradient(to bottom, black 42%, transparent 60%);
+  -webkit-mask-image: linear-gradient(to bottom, black 42%, transparent 60%);
+}
+.qd-veil {
+  filter: blur(3px);
+  mask-image: linear-gradient(to bottom, transparent 42%, black 60%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 42%, black 60%);
+  pointer-events: none;
+}
 .st-tile:focus-visible {
   outline: 2px solid var(--color-accent-washi-blue);
   outline-offset: 4px;

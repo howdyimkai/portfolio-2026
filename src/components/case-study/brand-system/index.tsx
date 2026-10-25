@@ -5,6 +5,7 @@ import ChallengeVideo from './ChallengeVideo'
 import EvalBars from './EvalBars'
 import EvalHero from './EvalHero'
 import FolderTree from './FolderTree'
+import Outputs from './Outputs'
 import Palette from './Palette'
 import SetupWalkthrough from './SetupWalkthrough'
 import Social from './Social'
@@ -21,4 +22,5 @@ export const CUSTOM_VISUALS: Record<string, ComponentType<{ visual: Visual }>> =
   'challenge-video': ChallengeVideo,
   'eval-bars': EvalBars,
   'setup-walkthrough': SetupWalkthrough,
+  outputs: Outputs,
 }

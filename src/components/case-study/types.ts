@@ -31,7 +31,10 @@ export type Visual = {
   // 'screen' they're product screens instead: a second caption line (note), and a mark that rings
   // a part of the screen.
   // With frame 'device' they're screens in their own mockup bezel, shown as they are.
-  strip?: { src: string; alt: string; caption: string; note?: string; mark?: Box }[]
+  // An item's own aspect overrides the visual's, for a row of different shapes (Brand System's
+  // outputs). An href makes the piece a link out with a play badge (a video cover) instead of an
+  // enlarge. fill is the piece's own edge color, behind it where a feature strip letterboxes it.
+  strip?: { src: string; alt: string; caption: string; note?: string; mark?: Box; aspect?: string; href?: string; fill?: string }[]
   // Several captures, each in its own browser frame with a label above and a caption under (Cal
   // chapter 8, one per month). Laid out by cols; a link or a small note can follow a caption.
   browsers?: { label: string; src: string; alt: string; caption: string; note?: string; link?: { label: string; href: string } }[]
@@ -161,7 +164,8 @@ export type CaseStudy = {
   meta: { label: string; value: string }[]
   hero: Visual
   stats: [Stat, Stat, Stat]
-  // A pull quote under the stat strip. Optional.
-  quote?: { text: string; cite?: string }
+  // A pull quote under the stat strip. Optional. doc is a piece the quoted person made, shown above
+  // the quote with its lower part blurred.
+  quote?: { text: string; cite?: string; doc?: NonNullable<Visual['strip']>[number] }
   chapters: Chapter[]
 }

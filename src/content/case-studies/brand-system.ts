@@ -30,6 +30,18 @@ export const brandSystem: CaseStudy = {
   quote: {
     text: "Kai walked me through installing a template in Claude that makes it easy to apply Tallo brand guidelines to presentations and documents. While it doesn't replace the expertise and oversight of our marketing team, it helps me create client-facing content with limited editing required.",
     cite: 'Work-Based Learning Manager, Tallo',
+    // The quoted manager's partner one-pager, made with the template the quote is about (Kai,
+    // 2026-10-25: moved here from the Ch 5 outputs strip). Source
+    // visuals/05-Adoption/V11d_PartnerOnePager.png.
+    doc: {
+      src: '/works/brand-system/output-one-pager.webp',
+      // The shown crop, not the page: it ends in the white band under the session table (y 1166 of
+      // the 1440-wide WebP), so the blur fades out into paper instead of a cut row.
+      aspect: '1440 / 1166',
+      alt: 'Partner one-pager titled "RCRJ Skill Builder: Partner With Tallo," subtitled "Give students a real taste of your industry in 45 minutes, with zero prep for your team," with a session timeline, ways to partner, and reasons to partner.',
+      caption: 'Partner one-pager · for industry partners',
+      note: 'Made by our Work-Based Learning Manager',
+    },
   },
   chapters: [
     {
@@ -39,7 +51,7 @@ export const brandSystem: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'Stakeholders were drafting copy with AI that had never seen our brand, and we spent our time fixing it. I rebuilt the brand as structured data, generated context files for each role (the instructions an AI reads before it writes), and built Claude workflows, a brand linter, and an eval on top, so the first draft starts on brand. About 15 people across the company use it, and it was built to keep running after I left.',
+          text: 'Tallo\'s brand has to land with a 14-year-old figuring out what careers exist and with the district administrator who brought Tallo to their school. Stakeholders were drafting that copy with AI that had never seen our brand, and we spent our time fixing it. I rebuilt the brand as structured data, generated context files for each role (the instructions an AI reads before it writes), and built Claude workflows, a brand linter, and an eval on top, so the first draft starts on brand. About 15 people across the company use it, and it was built to keep running after I left.',
         },
         {
           kind: 'p',
@@ -54,7 +66,7 @@ export const brandSystem: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'Tallo is free for young people and built with schools, employers, and workforce partners. So one brand talks to a 14-year-old on TikTok and a district administrator in an email, and the right word changes by room. "Students" works for educators and is wrong in consumer copy. Some of the audience are minors, so every photo and clip carries consent rules too.',
+          text: 'The right word changes by room. "Students" works for educators and is wrong in consumer copy. "Emerging talent" belongs in an employer pitch and nowhere else. Some of the audience are minors, so every photo and clip carries consent rules too.',
         },
         {
           kind: 'p',
@@ -82,24 +94,18 @@ export const brandSystem: CaseStudy = {
     {
       id: 'decisions',
       title: 'Decisions',
-      hook: "Five calls the AI follows but couldn't have made",
+      hook: "Three calls the AI follows but couldn't have made",
       blocks: [
         {
           kind: 'p',
           lead: 'I gave a flat palette a hierarchy.',
-          text: 'I inherited a condensed guide: 38 swatches at equal weight, an invitation to "feel free to explore creative color combinations," and a pairing chart that put two failing pairs in its approved column. I sorted the palette into primary, secondary, and tertiary tiers, gave each color family a job, built light and dark ramps, and tested every pairing I documented.',
+          text: 'I inherited 38 swatches at equal weight and a pairing chart with two failing pairs in its approved column. I sorted them into three tiers, gave each color family a job, built light and dark ramps, and tested every pairing I documented.',
         },
         { kind: 'visual', visual: { label: 'Before and after: the inherited swatch page next to the tiered palette', custom: 'palette', caption: '38 equal swatches became three tiers, each with a job.' } },
         {
           kind: 'p',
-          lead: 'I made the brand louder for social without forking it.',
-          text: 'With our social media strategist, I built a social-only layer on top of the master palette. Social Purple came from five candidates, after we ruled out one that sat too close to Instagram\'s own color. The runner-up display font lost partly because it wouldn\'t upload into CapCut, where our video gets finished. Every pairing became a rule: the caption cream passes at 16.76:1 on our darkest color and fails on white, so it always sits on dark.',
-        },
-        { kind: 'visual', visual: { label: 'Before and after: an Instagram feed', custom: 'social', caption: 'Two primaries, turned up for the feed. Same brand, louder.' } },
-        {
-          kind: 'p',
           lead: 'Every stat has a paper trail.',
-          text: '`value-points.json` is the only approved source for a number. Pulled stats move to a `retired` block with what replaced them and why. When an employer count turned out to be months out of date, with the real figure nearly double, the fix happened once and every tool picked it up.',
+          text: '`value-points.json` is the only approved source for a number. Pulled stats move to a `retired` block with what replaced them. When an employer count turned out to be months out of date, the fix happened once and every tool picked it up.',
         },
         {
           kind: 'code',
@@ -111,11 +117,6 @@ export const brandSystem: CaseStudy = {
     "retired": "2026-08-05"
   }
 ]`,
-        },
-        {
-          kind: 'p',
-          lead: 'I asked how people worked before writing their template.',
-          text: 'When I interviewed our exec about how the partnerships team builds decks, formatting turned out never to be the bottleneck. Research and recall were. So her template tells Claude to help gather and remember, and to leave the narrative to her.',
         },
         {
           kind: 'p',
@@ -146,12 +147,52 @@ export const brandSystem: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: "Most of the team doesn't use a terminal, so the hardest part was getting started. `setup.sh` asks your role and scaffolds a working setup in about 15 minutes. Teammates who use Claude Cowork get a separate quickstart that covers the same ground with no terminal.",
+          text: "Most of the team doesn't use a terminal, so getting started was the hard part. `setup.sh` asks your role and scaffolds a working setup in about 15 minutes. Claude Cowork users get the same setup with no terminal.",
         },
         { kind: 'visual', visual: { label: 'Interactive setup walkthrough: pick Claude Code or Claude Cowork, a work style, and a role', custom: 'setup-walkthrough', caption: 'Pick a role. Each one gets its own brand context.' } },
         {
           kind: 'p',
-          text: 'Process templates carry work that used to live only in my head. Our in-depth community challenges follow a fixed four-week arc: three episodes, then a closing reflection question. After running it twice, I wrote it up as a step-by-step guide. A writer used that guide to plan a new month\'s series on their own, and I built the challenge from their documentation.',
+          text: 'Then the work started coming back. Two of these three pieces were made by teammates, for three different audiences, and all of them read as Tallo.',
+        },
+        {
+          kind: 'visual',
+          visual: {
+            // Pieces made with the system, youngest audience first (handoff 2026-10-25). The partner
+            // one-pager sits above the testimonial instead (Kai, 2026-10-25). Sources in
+            // visuals/05-Adoption, at 1440 wide max as WebP. Roles only, never names. No caption
+            // under the strip: the paragraph above says it.
+            label: 'Outputs strip: Instagram post, LinkedIn ad, educator video cover',
+            custom: 'outputs',
+            strip: [
+              {
+                src: '/works/brand-system/output-instagram.webp',
+                aspect: '1080 / 1350',
+                fill: '#f8f8f8',
+                alt: 'Instagram post on a cream background: "Thinking about it helps. Trying it tells you more," with a pale green highlight, the question "What\'s one thing you learned by trying?" and Cal, Tallo\'s compass mascot, in hiking gear with a hand on its chin.',
+                caption: 'Instagram post · for young people',
+                note: 'Made by our social media manager',
+              },
+              {
+                src: '/works/brand-system/output-linkedin.webp',
+                aspect: '1200 / 628',
+                alt: 'LinkedIn ad: a Tallo career card for Data Scientist (median salary $114,994, growth +24.08%) next to the headline "Find Career Clarity Now" and "Take our 10-minute assessment and discover which of 1,800+ careers match your unique interests and skills."',
+                caption: 'LinkedIn ad · for job seekers',
+                note: 'Made by our social media manager',
+              },
+              {
+                src: '/works/brand-system/output-video-cover.webp',
+                aspect: '1920 / 1080',
+                href: 'https://www.youtube.com/watch?v=CvS0BOaQW-w',
+                alt: 'Video cover for Real Careers, Real Journeys for Educators: "Zero prep. We find the speaker, host the session, and run the Q&A," beside a laptop showing a live session question, "What was your favorite project you have created and why?" Opens on YouTube.',
+                caption: 'Educator video · for educators',
+                note: 'Started by our social media manager, finished by me',
+              },
+            ],
+          },
+        },
+        {
+          kind: 'p',
+          text: 'Process templates carry work that used to live only in my head. Our community challenges follow a four-week arc: three episodes, then a closing reflection question. After running it twice, I wrote it up as a guide. A writer used it to plan a new month\'s series on their own, and I built the challenge from their plan.',
         },
         {
           kind: 'visual',
@@ -164,7 +205,7 @@ export const brandSystem: CaseStudy = {
         },
         {
           kind: 'p',
-          text: 'The same source files power smaller tools. My alt text kit, a Claude project, writes image descriptions that are accessible first and search-friendly second. It keeps them under 125 characters, spells out acronyms because screen readers read "WIOA" letter by letter, and always describes Cal as a compass, never as holding one.',
+          text: 'The same files power smaller tools. My alt text kit, a Claude project, writes descriptions that are accessible first and search-friendly second. It stays under 125 characters, spells out acronyms so a screen reader says "Workforce Innovation and Opportunity Act" instead of "W-I-O-A," and always describes Cal as a compass, never as holding one.',
         },
       ],
     },
@@ -246,11 +287,11 @@ export const brandSystem: CaseStudy = {
         { kind: 'p', text: 'Next time, every stat carries what was asked, where it came from, and who it\'s for.' },
         {
           kind: 'p',
-          text: "The second lesson is about where brand and product meet. Tallo's marketing and product grew up as two systems, each solving its own problems. On social, purple filled so much of the frame that a purple button disappeared, so our posts follow a 60-30-10 split: lilac for the background, purple for structure, and green, one of our own primaries, for the one thing to act on. Lessons like that lived in marketing's files, while product made its own calls in its own system.",
+          text: "The second lesson is about where brand and product meet. Tallo's marketing and product grew up as two systems. On social, we learned a purple button disappears in a purple frame, so green marks the one thing to act on. Lessons like that lived in marketing's files, and product made its own calls in its own system.",
         },
         {
           kind: 'p',
-          text: 'In "[Brand as Software](https://pauljun.substack.com/p/brand-as-software)," Paul Jun of Ramp argues that a brand should run like a product, with owners, maintenance, and a roadmap. The line I mentally highlighted is "Taste remains human. Repetition becomes software." This system took on the repetition, and the flyer showed what still needs a person. What it becomes next belongs to the team: give product a seat at it, so both sides draw from one set of decisions. That\'s when brand and product can play a stellar duet.',
+          text: 'In "[Brand as Software](https://pauljun.substack.com/p/brand-as-software)," Paul Jun of Ramp argues a brand should run like a product. The line I mentally highlighted is "Taste remains human. Repetition becomes software." This system took on the repetition, and the flyer showed what still needs a person. What it becomes next belongs to the team: give product a seat at it, so both sides draw from one set of decisions. That\'s when brand and product can play a stellar duet.',
         },
         {
           kind: 'visual',
