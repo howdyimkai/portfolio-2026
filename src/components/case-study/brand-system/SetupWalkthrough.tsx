@@ -305,7 +305,7 @@ export default function SetupWalkthrough() {
         ref={root}
         aria-label="Interactive demo: brand system setup"
         onKeyDown={onKeyDown}
-        className="sw-card mx-auto max-w-[640px] rounded-[14px] border border-hairline bg-white p-5 print:hidden md:p-7"
+        className="sw-card max-w-[640px] rounded-[14px] border border-hairline bg-white p-5 print:hidden md:p-7"
       >
         <div className="flex items-center gap-3" aria-hidden="true">
           <div className="flex flex-1 gap-1">

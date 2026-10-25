@@ -10,8 +10,6 @@ export type Visual = {
   still?: string
   alt?: string
   caption?: string
-  // Centers the caption, for a visual that sits narrower than the column and centered.
-  captionCenter?: boolean
   // Renders a photo (src) as the closing taped print, like Cal's, without photoQuote's closing lines.
   print?: boolean
   // CSS aspect ratio, e.g. '16 / 10'. Defaults to 16 / 10.

@@ -330,9 +330,7 @@ function VisualBlock({ v }: { v: Visual }) {
       ) : (
         <Placeholder v={v} />
       )}
-      {v.caption && (
-        <figcaption className={`mt-4 font-mono text-[12px] leading-[1.6] text-ink-faint ${v.captionCenter ? 'text-center' : ''}`}>{v.caption}</figcaption>
-      )}
+      {v.caption && <figcaption className="mt-4 font-mono text-[12px] leading-[1.6] text-ink-faint">{v.caption}</figcaption>}
     </figure>
   )
 }
