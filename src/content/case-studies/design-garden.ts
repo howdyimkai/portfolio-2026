@@ -1,7 +1,7 @@
 import type { CaseStudy } from '@/components/case-study/types'
 
-// Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/Final Drafts/
-// CaseStudy_DesignGarden_ChapterOutline_v1.md (2026-10-19) and CardCopy_Locked_2026-10-19.md.
+// Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/case-studies/design-garden/
+// CaseStudy_DesignGarden_ChapterOutline_v1.md (2026-10-19) and strategy/CardCopy_Locked_2026-10-19.md.
 // Visuals without a src are placeholders named after the outline's [VISUAL] notes.
 export const designGarden: CaseStudy = {
   title: 'Design Garden',

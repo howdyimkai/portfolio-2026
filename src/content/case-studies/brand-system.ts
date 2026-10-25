@@ -1,7 +1,7 @@
 import type { CaseStudy } from '@/components/case-study/types'
 
 // Tallo Brand System. Copy is locked: CaseStudy_BrandSystem_AIForward_v3.md in the sprint folder
-// (Final Drafts/2026-10-24_Portfolio-BrandSystemCaseStudy), with the changes in
+// (case-studies/brand-system), with the changes in
 // BUILD-PLAN_BrandSystem_ClaudeCode.md section 1 (Kai, 2026-10-24): the Ch 6 table became a bar
 // chart, visual 8 is a YouTube episode, and the draft's Notes block is not page content.
 // Straight quotes here; the template curls them. Every `custom` key is a visual built in

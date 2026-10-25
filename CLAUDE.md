@@ -28,7 +28,7 @@ the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
 
 ## Positioning & copy (locked 2026-10-10)
 
-Copy source of truth: `~/Desktop/Claude-Workspace/projects/2026-10-PortfolioSprint/Positioning Brainstorm.md`.
+Copy source of truth: `~/Desktop/Claude-Workspace/projects/2026-10-PortfolioSprint/strategy/Positioning Brainstorm.md`.
 Voice rules: `~/Desktop/Claude-Workspace/context/brand-voice.md` (sentence
 case, no em dashes or hyphens in creative copy, no buzzwords).
 

@@ -3,8 +3,8 @@
 // A product flow you step through by tapping (the Cal quiz hero, reused for chapter 5's result to
 // hub). Screens are images with hotspots over their buttons: a browser frame with desktop captures
 // from md up, a phone frame with mobile captures under md, sharing one step so a resize keeps it.
-// Nothing autoplays. Plan and measurements: Claude-Workspace .../2026-10-PortfolioSprint/HERO-PLAN.md
-// and hero-build/HERO-MEASUREMENTS.md (measured off the Paper artboards, 2026-10-22).
+// Nothing autoplays. Plan and measurements: Claude-Workspace .../2026-10-PortfolioSprint/case-studies/cal/HERO-PLAN.md
+// and case-studies/cal/build/hero-build/HERO-MEASUREMENTS.md (measured off the Paper artboards, 2026-10-22).
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import BrowserFrame from './BrowserFrame'
 import type { Box, Flow, ScreenSet } from './types'

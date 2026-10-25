@@ -260,7 +260,7 @@ const calKit: Kit = {
 // size here as in the Kit. Before public: the scribbles on the ponder pose's glove cuff.
 const R = '/works/cal/rules'
 
-// Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/Final Drafts/CaseStudy_Cal_V4.md, Part 1
+// Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/case-studies/cal/CaseStudy_Cal_V4.md, Part 1
 // (locked 2026-10-21). Paste as written: don't edit copy here, edit the doc. Every visual but the hero is
 // still a placeholder named after its *[...]* marker; Part 2 of the doc specs each one.
 // Private working draft: names teammates and nothing is signed off by Tallo yet, so the page is
