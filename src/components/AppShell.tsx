@@ -13,6 +13,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   // /pieces/* show one part of the site on its own, so no site chrome around it.
   if (pathname.startsWith('/pieces/')) return <main>{children}</main>
 
+  // The case study password page sits alone on white grid paper (src/proxy.ts sends people here).
+  if (pathname === '/unlock') return <main className="grid-sheet">{children}</main>
+
   if (isHome) {
     return (
       // The sandbox fills the screen and brings its own floating shelf nav (SandboxHome).
