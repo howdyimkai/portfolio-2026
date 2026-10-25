@@ -10,6 +10,8 @@ export type Visual = {
   still?: string
   alt?: string
   caption?: string
+  // Centers the caption, for a visual that sits narrower than the column and centered.
+  captionCenter?: boolean
   // CSS aspect ratio, e.g. '16 / 10'. Defaults to 16 / 10.
   aspect?: string
   // Placeholder shape only, ignored once there's a src. tiles lays the slot out as several pieces

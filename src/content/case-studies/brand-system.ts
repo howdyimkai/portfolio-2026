@@ -148,7 +148,7 @@ export const brandSystem: CaseStudy = {
           kind: 'p',
           text: "Most of the team doesn't use a terminal, so the hardest part was getting started. `setup.sh` asks your role and scaffolds a working setup in about 15 minutes. Teammates who use Claude Cowork get a separate quickstart that covers the same ground with no terminal.",
         },
-        { kind: 'visual', visual: { label: 'Interactive setup walkthrough: pick Claude Code or Claude Cowork, a work style, and a role', custom: 'setup-walkthrough', caption: 'Pick a role. Each one gets its own brand context.' } },
+        { kind: 'visual', visual: { label: 'Interactive setup walkthrough: pick Claude Code or Claude Cowork, a work style, and a role', custom: 'setup-walkthrough', captionCenter: true, caption: 'Pick a role. Each one gets its own brand context.' } },
         {
           kind: 'p',
           text: 'Process templates carry work that used to live only in my head. Our in-depth community challenges follow a fixed four-week arc: three episodes, then a closing reflection question. After running it twice, I wrote it up as a step-by-step guide. A writer used that guide to plan a new month\'s series on their own, and I built the challenge from their documentation.',
