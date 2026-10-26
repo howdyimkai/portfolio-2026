@@ -192,6 +192,10 @@ export const brandSystem: CaseStudy = {
         },
         {
           kind: 'p',
+          text: "Most needed only small tweaks, a quick review where drafts used to mean starting over. The video took more work to finish for YouTube, but I didn't start from scratch, and the social media manager's cut already worked for a student hackathon showcase on a tight deadline.",
+        },
+        {
+          kind: 'p',
           text: 'Process templates carry work that used to live only in my head. Our community challenges follow a four-week arc: three episodes, then a closing reflection question. After running it twice, I wrote it up as a guide. A writer used it to plan a new month\'s series on their own, and I built the challenge from their plan.',
         },
         {
