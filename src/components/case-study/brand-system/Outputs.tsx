@@ -10,7 +10,7 @@ import type { Visual } from '../types'
 export default function Outputs({ visual }: { visual: Visual }) {
   return (
     <div className="rounded-[14px] bg-tag px-5 pb-6 pt-6 md:px-10 md:pb-10 md:pt-10">
-      <Strip items={visual.strip ?? []} aspect="1 / 1" cols={[1, 2]} look="screen" feature />
+      <Strip items={visual.strip ?? []} aspect="1 / 1" cols={[1, 2]} look="screen" feature panel />
     </div>
   )
 }

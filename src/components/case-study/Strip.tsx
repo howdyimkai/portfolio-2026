@@ -10,6 +10,8 @@
 // Larger opens in a native <dialog>: Escape, a tap anywhere, or the button closes it.
 // feature (Brand System's outputs): from md the first piece fills the left column, as tall as the
 // two stacked on the right, so the three read as one rectangle.
+// panel: the strip sits on the tag panel, where ink-muted and ink-faint drop under AA at 12px, so
+// the caption steps up to ink-primary and the note to ink-body.
 import { useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react'
 import type { Box, Visual } from './types'
 import './step-frame.css'
@@ -24,12 +26,14 @@ export default function Strip({
   cols,
   look = 'art',
   feature = false,
+  panel = false,
 }: {
   items: Item[]
   aspect: string
   cols: [number, number]
   look?: Look
   feature?: boolean
+  panel?: boolean
 }) {
   const blend = look === 'art' ? 'mix-blend-multiply' : ''
   const dialog = useRef<HTMLDialogElement>(null)
@@ -60,8 +64,8 @@ export default function Strip({
                 <span className="sr-only">, enlarge</span>
               </button>
             )}
-            <p className="mt-2 text-center font-mono text-[12px] leading-[1.5] text-ink-muted [text-wrap:balance]">{it.caption}</p>
-            {it.note && <p className="text-center font-mono text-[12px] leading-[1.5] text-ink-faint [text-wrap:balance]">{it.note}</p>}
+            <p className={`mt-2 text-center font-mono text-[12px] leading-[1.5] ${panel ? 'text-ink-primary' : 'text-ink-muted'} [text-wrap:balance]`}>{it.caption}</p>
+            {it.note && <p className={`text-center font-mono text-[12px] leading-[1.5] ${panel ? 'text-ink-body' : 'text-ink-faint'} [text-wrap:balance]`}>{it.note}</p>}
           </li>
         ))}
       </ol>

@@ -45,7 +45,7 @@ export default function Toggle({ views, aspect, framed }: { views: NonNullable<V
       {/* Every caption sits in the same grid cell, so the panel keeps the tallest one's height and
           doesn't jump when the tab switches. Only the current one shows. */}
       {views.some((v) => v.caption) && (
-        <div aria-live="polite" className="mt-4 grid font-mono text-[12px] leading-[1.6] text-ink-faint md:mt-5">
+        <div aria-live="polite" className="mt-4 grid font-mono text-[12px] leading-[1.6] text-ink-body md:mt-5">
           {views.map((v, i) => (
             <p key={v.label} aria-hidden={i !== on} className={`col-start-1 row-start-1 ${i === on ? '' : 'invisible'}`}>
               {v.caption}
