@@ -122,6 +122,37 @@ h1, h2, h3 {
   transform: scale(0.97);
 }
 
+/* Footer links: washi blue fails AA as text on the page (1.86:1), so hover darkens the text to ink
+   primary for contrast and the blue moves to a decorative underline. Focus gets the same underline. */
+.footer-link {
+  border-radius: 2px;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition:
+    transform 160ms var(--ease-out-strong),
+    color 160ms var(--ease-out-strong),
+    text-decoration-color 160ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .footer-link:hover {
+    color: var(--color-ink-primary);
+    text-decoration-color: var(--color-accent-washi-blue);
+  }
+}
+.footer-link:focus-visible {
+  color: var(--color-ink-primary);
+  text-decoration-color: var(--color-accent-washi-blue);
+  outline: 2px solid var(--color-ink-primary);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-link {
+    transition: none;
+  }
+}
+
 /* Mobile nav overlay entrance/exit */
 .nav-overlay {
   opacity: 0;
