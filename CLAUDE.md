@@ -11,6 +11,25 @@ the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
 `explore/cal-v4-copy` on 2026-10-24. `/play` and
 `/resume` are intentionally untouched — out of scope for this exploration.
 
+## Review preview and the case study gate (2026-10-25)
+
+- `explore/brand-system` (carries cal-v4-copy, K-Zen, /works, /about) is
+  pushed and deploys to Vercel project `howdyimkais-projects/kai-portfolio-2026`.
+  Reviewers get the branch alias
+  `kai-portfolio-2026-git-explore-bran-428c65-howdyimkais-projects.vercel.app/works/cal`.
+  howdyimkai.com is a **Framer** site, not this repo. Never push or merge to `main`.
+- Kai runs `git push` (auto mode blocks Claude's push). Each push rebuilds the preview.
+- `src/proxy.ts` (Next 16's middleware) gates `/works/cal` and
+  `/works/brand-system`: no valid cookie → `/unlock?next=<path>`. `/unlock`
+  (`src/app/unlock/`) checks `CASE_STUDY_PASSWORD` in a server action and sets
+  a 30 day httpOnly cookie holding a hash of the password (`src/lib/unlock.ts`),
+  so changing the password signs everyone out. Unset password = locked.
+  Locally the value is a placeholder in `.env.local` (gitignored); the real one
+  is in Vercel, Preview only. Vercel env changes need a Redeploy.
+- Vercel refuses to deploy vulnerable Next versions (16.0.1 was blocked). The
+  branch is on 16.0.11; npm audit still flags advisories up to 16.4.0, so bump
+  before going public.
+
 ## Taste (read first)
 
 - **Calm page, playful touch.** Zen garden for structure: one sand tray,
