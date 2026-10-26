@@ -51,8 +51,8 @@ const PROJECTS: Project[] = [
     // system's point), captured from the live card at 2x without its border and saved 800 wide, in
     // the browser window like the Tallo card.
     cover: {
-      anim: '/works/brand-system/cover-setup.webp',
-      still: '/works/brand-system/cover-setup.webp',
+      anim: '/works/brand-system-cover-setup.webp',
+      still: '/works/brand-system-cover-setup.webp',
       device: 'browser',
       alt: 'The brand system setup asking "What do you do?" with eight roles to pick from, from social media to executive',
     },
