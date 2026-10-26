@@ -101,7 +101,7 @@ const KEEP_GOING_AT = 0.5
 // title element so erasing the title leaves it alone. After Nov 2, 2026: "Formerly Head of
 // Creative at Tallo."
 const TITLE_SUBLINE = 'Product designer. Head of Creative at Tallo.'
-const HINT_COPY = { start: 'psst, try the erase above', keep: 'keep going, try an infinity pattern' } // keep renders with InfinityTrace before "infinity"
+const HINT_COPY = { start: 'psst, try the eraser above', keep: 'keep going, try an infinity pattern' } // keep renders with InfinityTrace before "infinity"
 // Single-key tool shortcuts. Pressing the held tool's key puts it down, like clicking it.
 const TOOL_KEYS: Record<string, Tool> = { r: 'rake', e: 'eraser', b: 'blossom' }
 // Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
@@ -1398,7 +1398,7 @@ export default function Garden({ layout }: { layout: Layout }) {
                 one of the two hints is ever on: the first ends when erasing starts. */}
             <p
               aria-hidden={!(hintOn || keepGoing)}
-              className={`absolute left-1/2 top-full mt-4 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] uppercase tracking-[0.08em] text-ink-primary transition-opacity duration-500 ease-out ${hintOn || keepGoing ? 'opacity-100' : 'opacity-0'}`}
+              className={`absolute left-1/2 top-full mt-4 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] text-ink-primary transition-opacity duration-500 ease-out ${hintOn || keepGoing ? 'opacity-100' : 'opacity-0'}`}
             >
               {hintCopy === 'keep' ? (
                 <>

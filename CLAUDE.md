@@ -214,7 +214,7 @@ About copy draft lives in the Positioning Brainstorm doc.
   only cells holding title ink count (mask read from the asset's alpha), hit
   by the head's swept SEGMENT, not its sample points — both fixes for "fast
   straight wipes erase weaker than turning" (2026-09-29); 80% of inked cells
-  triggers. A caption under the title ("psst, try the erase above") fades in
+  triggers. A caption under the title ("psst, try the eraser above") fades in
   after 4s and leaves for good once the eraser first touches the title; halfway
   to the reveal it says "keep going, try an infinity pattern"
   until the reveal fires (`design-intent/hint-exploration/NOTES.md`). The 4s read clock starts when the video ends; the returns use an
