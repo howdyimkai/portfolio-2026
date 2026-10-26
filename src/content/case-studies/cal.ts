@@ -194,7 +194,7 @@ const F = '/works/cal/finding'
 // Cal on one 400x392 canvas with the same dial width and the feet on one baseline (the dial rule
 // from normalize_cal.py, at 2x like the rules cards), props on a 224px square at 78% fill. The
 // recap header is the full export, trimmed 2px a side to the 1055:498 slot.
-// The Minecraft Short is by Gavin Han, an intern (credit OK'd by Kai, 2026-10-22).
+// The Minecraft Short is by an intern.
 // Its poster is Kai's frame of the finished build (06-into-product/Cal-Video-Screen.png, 2026-10-24),
 // 24px of sky trimmed off the top to make it 9:16.
 const K = '/works/cal/kit'
@@ -243,7 +243,7 @@ const calKit: Kit = {
   ],
   paletteNote: 'Purple over corporate blue, lime for the moment something good happens',
   inUse: {
-    note: 'Same kit, outside the quiz: a community recap, and a Minecraft build by our intern, Gavin Han.',
+    note: 'Same kit, outside the quiz: a community recap, and a Minecraft build by our intern.',
     image: {
       src: `${K}/recap.webp`,
       width: 2110,
@@ -273,7 +273,7 @@ export const cal: CaseStudy = {
     { label: 'Role', value: 'Product designer' },
     {
       label: 'Team',
-      value: 'Me (design, brand and story), Kae Burdo (copywriting), Julia Domino (product management), Dominic Pace (engineering)',
+      value: 'Me (design, brand and story), a copywriter, a product manager, an engineer',
     },
     { label: 'Timeline', value: "Jul 2025 to May 2026 (quiz shipped). Cal's format still running through Oct 2026." },
     {
@@ -498,7 +498,7 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'Cal\'s quiz became the template for the community\'s monthly challenge quizzes, and each month added a twist. Founder Fit scored you, and a "Developing" result counted as a real answer, with no fail state. Growth Reflection tracked two scores at once, each with Cal\'s tiebreaker, plus one open question to check if it landed. I designed the branching, and my intern, Jae Stokes, built it from my setup guide. In September few people came back to comment, so October\'s Build Style quiz drops the community post, ends on real trades with pay, and asks for one sentence on the badge page. Completion across the Typeform quizzes held between 76% and 88%.',
+          text: 'Cal\'s quiz became the template for the community\'s monthly challenge quizzes, and each month added a twist. Founder Fit scored you, and a "Developing" result counted as a real answer, with no fail state. Growth Reflection tracked two scores at once, each with Cal\'s tiebreaker, plus one open question to check if it landed. I designed the branching, and my intern built it from my setup guide. In September few people came back to comment, so October\'s Build Style quiz drops the community post, ends on real trades with pay, and asks for one sentence on the badge page. Completion across the Typeform quizzes held between 76% and 88%.',
         },
         {
           kind: 'visual',
