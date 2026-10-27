@@ -53,7 +53,8 @@ export default function ResumeBookmark() {
   return (
     <div className="rb-root">
       {/* STANDIN: the three felt pieces are SVG stand-ins (public/resume-bookmark/*-standin.svg);
-          Kai's Paper art drops in 1:1 as 2x WebP, drawn at the 80px maximum width. */}
+          Kai's Paper art drops in 1:1 as 2x WebP, drawn at the 80px maximum width,
+          with the tail 40/56 as tall as it is wide. */}
       <button
         ref={trigger}
         type="button"

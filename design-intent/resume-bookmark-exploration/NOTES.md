@@ -18,6 +18,10 @@ résumé on a paper sheet over the current page. No navigation; closing leaves y
   the line of their first row. The ribbon is sized from the label plus 12px of felt each
   side: 35px × zoom + 24px, so 68px at 1440×900 and 80px at the 1.6 zoom cap
 - Bookmark keeps 56px clear of the open sheet and never goes off screen
+- Shortened the same day: with the shelf tidied by the broom, the /works cards move up to
+  92px + 96px·zoom and the ribbon ran 64px into them. The felt now ends 10px under the label
+  and the V tail is 40/56 as tall as it is wide (was 64/56), about 197px long at 1440×900
+  instead of 277px. The homepage shelf also took /works' size and top on desktop
 - Phones: a 40px ribbon hangs from the PhoneMenu bar, left of the hamburger; the sheet is
   full screen
 - Reduced motion: no curl, dip or travel, just a fade
@@ -35,4 +39,4 @@ Rejected:
 
 Still stand-ins: the three felt pieces (`public/resume-bookmark/*-standin.svg`) and the
 lettered label. Kai's Paper art drops in 1:1 as 2x WebP, drawn at the 80px maximum
-width (160px at 2x). The PDF (`public/resume/Kai-Tran-Resume.pdf`) isn't exported yet.
+width (160px at 2x), with the tail 40/56 as tall as it is wide. The PDF (`public/resume/Kai-Tran-Resume.pdf`) isn't exported yet.

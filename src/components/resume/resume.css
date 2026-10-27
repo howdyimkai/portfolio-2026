@@ -18,8 +18,11 @@
   /* Wide enough for the label (~3.66em at 9.5px·zoom) plus 12px of felt each side, so it never
      feels cramped as the shelf scales: 68px at 1440×900, 80px at the 1.6 zoom cap. */
   --rb-w: calc(35px * var(--rb-zoom) + 24px);
-  --rb-body: 208px; /* 200 + 8 tucked above the top edge, so the hover dip never shows a gap */
-  --rb-tail: calc(var(--rb-w) * 64 / 56);
+  /* Short enough to clear the cards once the broom tidies the shelf (cards then start at
+     92px + 96px·zoom): the felt ends 10px under the label (whose bottom is 36px + 81px·zoom, plus
+     the 8px tucked above the top edge) and the V tail is 40/56 of the width (Kai, 2026-10-27). */
+  --rb-body: calc(54px + 81px * var(--rb-zoom));
+  --rb-tail: calc(var(--rb-w) * 40 / 56);
   --paper: #f6f1e7;
   --paper-under: #e9e0cf;
   /* Where the shelf sits: 36px down at --shelf-zoom on every shelf page. */
