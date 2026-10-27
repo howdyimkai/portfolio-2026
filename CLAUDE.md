@@ -8,8 +8,8 @@ The homepage and `/works` are being rebuilt in a design direction called
 **K-Zen** on the `explore/k-zen` branch (not merged to `main`). `main` holds
 the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
 `explore/proto-about` (2026-10-18, see `AboutPage` below) and merged into
-`explore/cal-v4-copy` on 2026-10-24. `/play` and
-`/resume` are intentionally untouched — out of scope for this exploration.
+`explore/cal-v4-copy` on 2026-10-24. `/play` is intentionally untouched — out of scope
+for this exploration. `/resume` became a plain résumé page with the bookmark (2026-10-27).
 
 ## Review preview and the case study gate (2026-10-25)
 
@@ -167,6 +167,16 @@ About copy draft lives in the Positioning Brainstorm doc.
   focus only, via `data-on`. AppShell gives `/about` the same chrome as `/works`
   (shelf nav, `PhoneMenu` below md, footer, white grid paper `.grid-sheet`). Cards marked `draft: true` still have placeholder copy.
   Sources: `design-intent/about-shelf/` (Paper exports), WebPs in `public/about/`.
+- **`ResumeBookmark`** (`src/components/resume/`) — a red felt ribbon hanging from the top
+  edge right of the shelf on every shelf page (home, `/works*`, `/about`; AppShell mounts it),
+  opening the résumé on paper over the page ("Tug", from `/proto/resume-bookmark`, decision record
+  `design-intent/resume-bookmark-exploration/NOTES.md`). Its label matches the shelf's cubby
+  labels and its width follows the label, both read from the shelf's top (36px) and `--shelf-zoom`.
+  Since 2026-10-27 the homepage shelf uses the same size and top as /works on desktop. It's in the tools' quiet zone (`.rb`).
+  `Resume.tsx` is the one copy of the résumé text (from `Resume_2026-10_Draft.md`, site header
+  without email or city); `/resume` renders it with `online` for the longer speaking section.
+  Felt art and paper are SVG stand-ins (`public/resume-bookmark/*-standin.svg`); the PDF at
+  `public/resume/Kai-Tran-Resume.pdf` is Kai's export and doesn't exist yet.
 - **`ZenGarden`** — self-contained canvas-based tool system (teeth rake,
   eraser rake, blossom stamp). Rake/eraser act on **hover alone** — drawing
   starts on `pointerenter` and continues on every `pointermove`, no

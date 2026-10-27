@@ -1,0 +1,348 @@
+/* Résumé bookmark (ResumeBookmark.tsx) and the résumé's type (Resume.tsx, shared with /resume).
+   Picked from /proto/resume-bookmark (Tug, 2026-10-27); decision record in
+   design-intent/resume-bookmark-exploration/NOTES.md. */
+
+.rb-root {
+  --curl: 44deg;
+  --hover-dur: 340ms;
+  --hover-ease: var(--ease-out-strong);
+  --open-dur: 780ms;
+  --close-dur: 360ms;
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --under-x: -7px;
+  --under-y: -13px;
+  --under-rot: -1.7deg;
+  --under-lag: 1.15;
+  --scrim-blur: 7px;
+  --scrim-grain: 0.2;
+  /* Wide enough for the label (~3.66em at 9.5px·zoom) plus 12px of felt each side, so it never
+     feels cramped as the shelf scales: 68px at 1440×900, 80px at the 1.6 zoom cap. */
+  --rb-w: calc(35px * var(--rb-zoom) + 24px);
+  --rb-body: 208px; /* 200 + 8 tucked above the top edge, so the hover dip never shows a gap */
+  --rb-tail: calc(var(--rb-w) * 64 / 56);
+  --paper: #f6f1e7;
+  --paper-under: #e9e0cf;
+  /* Where the shelf sits: 36px down at --shelf-zoom on every shelf page. */
+  --rb-shelf-top: 36px;
+  --rb-zoom: var(--shelf-zoom, 1.4);
+  --sheet-w: min(864px, calc(100vw - 32px));
+}
+
+/* ── Bookmark ─────────────────────────────────────────────── */
+
+.rb {
+  position: fixed;
+  z-index: 50;
+  top: -8px;
+  /* Hangs to the right of the shelf (394px·zoom wide, centered), and at least 56px clear of the
+     open sheet's right edge, but never off screen. */
+  left: min(
+    max(calc(50% + 197px * var(--rb-zoom) + 56px), calc(50% + var(--sheet-w) / 2 + 56px)),
+    calc(100vw - var(--rb-w) - 24px)
+  );
+  width: var(--rb-w);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.rb:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: 3px; }
+
+.rb-hang {
+  display: block;
+  position: relative;
+  filter: drop-shadow(0 1px 1px rgba(61, 50, 38, 0.22)) drop-shadow(0 4px 6px rgba(61, 50, 38, 0.14));
+  transition: translate var(--hover-dur) var(--hover-ease);
+}
+.rb-body {
+  display: block;
+  width: 100%;
+  height: var(--rb-body);
+  object-fit: cover;
+  object-position: bottom;
+}
+/* Same chalk type as the shelf's cubby labels (.shelf-label: 9.5px in shelf units, scaled by the
+   shelf zoom), on the same line as their first row: shelf pad + 72·zoom, plus the 8px tuck. */
+.rb-label {
+  position: absolute;
+  top: calc(var(--rb-shelf-top) + 8px + 72px * var(--rb-zoom));
+  inset-inline: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: calc(9.5px * var(--rb-zoom));
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  color: rgba(246, 236, 224, 0.9);
+  text-shadow: 0 0 0.6px rgba(246, 236, 224, 0.5);
+  pointer-events: none;
+}
+/* The V tail pivots from its top edge; past 90° its darker back would show. */
+.rb-tail {
+  display: block;
+  position: relative;
+  height: var(--rb-tail);
+  margin-top: -1px; /* no seam between body and tail */
+  perspective: 420px; /* lower = more flare as the tips come toward you */
+}
+.rb-flip {
+  display: block;
+  position: relative;
+  height: 100%;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  transition: transform var(--hover-dur) var(--hover-ease);
+}
+.rb-front, .rb-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rb-back { transform: rotateY(180deg); }
+
+/* Tug: hover (real pointers) or keyboard focus dips the ribbon and curls the tips toward you. */
+@media (hover: hover) and (pointer: fine) {
+  .rb:hover .rb-hang { translate: 0 6px; }
+  .rb:hover .rb-flip { transform: rotateX(var(--curl)); }
+}
+.rb:focus-visible .rb-hang { translate: 0 6px; }
+.rb:focus-visible .rb-flip { transform: rotateX(var(--curl)); }
+
+/* ── Sheet ────────────────────────────────────────────────── */
+
+.rs-scrim {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  background: rgba(58, 50, 38, 0.2);
+  /* Frosted and grainy: the page behind goes soft, then a film of noise sits over it. Fading the
+     scrim's opacity fades the blur in with it, so backdrop-filter itself never animates. */
+  -webkit-backdrop-filter: blur(var(--scrim-blur));
+  backdrop-filter: blur(var(--scrim-blur));
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--close-dur) var(--ease-in), visibility 0s linear var(--close-dur);
+}
+.rs-scrim::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: var(--scrim-grain);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+.rs-scrim[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--open-dur) var(--ease-out-strong), visibility 0s;
+}
+
+/* Rises from the bottom; the under-sheet comes along a little behind. */
+.rs-sheet, .rs-under {
+  position: fixed;
+  top: 40px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: var(--sheet-w);
+  border-radius: 3px 3px 0 0;
+  translate: 0 calc(100% + 64px);
+  will-change: translate; /* own layers, so the first and last frames don't jitter */
+  visibility: hidden;
+  transition: translate var(--close-dur) var(--ease-in), visibility 0s linear var(--close-dur);
+}
+.rs-sheet[data-open], .rs-under[data-open] {
+  translate: 0 0;
+  visibility: visible;
+  transition: translate var(--open-dur) var(--ease-out-strong), visibility 0s;
+}
+/* The under-sheet trails by running longer, not by starting later: a delayed start sat still, then
+   the ease-out's fast first frames jumped it ~300px at once (measured), which read as a stutter. */
+.rs-under[data-open] {
+  transition: translate calc(var(--open-dur) * var(--under-lag)) var(--ease-out-strong), visibility 0s;
+}
+
+.rs-sheet {
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  /* STANDIN paper after /about's prints (#f5eee1 + layered warm shadow), with a light grain. */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.2 0 0 0 0 0.15 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    var(--paper);
+  box-shadow:
+    0 0 0 1px rgba(61, 50, 38, 0.06),
+    0 1px 2px rgba(61, 50, 38, 0.08),
+    0 6px 14px rgba(61, 50, 38, 0.1),
+    0 18px 32px rgba(61, 50, 38, 0.08);
+}
+.rs-under {
+  z-index: 79;
+  background: var(--paper-under);
+  box-shadow: 0 0 0 1px rgba(61, 50, 38, 0.06), 0 4px 12px rgba(61, 50, 38, 0.08);
+  /* The offset and tilt sit in `transform`; the arrival motion uses `translate`. */
+  transform: translate(var(--under-x), var(--under-y)) rotate(var(--under-rot));
+  pointer-events: none;
+}
+
+.rs-close {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  color: var(--color-ink-primary);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  transition: scale 150ms ease-out, background-color 150ms ease-out;
+}
+.rs-close svg { width: 22px; height: 22px; }
+.rs-close:active { scale: 0.96; }
+.rs-close:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: -2px; }
+@media (hover: hover) and (pointer: fine) {
+  .rs-close:hover { background: rgba(61, 50, 38, 0.06); }
+}
+
+.rs-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 68px 76px 96px;
+}
+
+/* ── Résumé type (the sheet and /resume) ─────────────────── */
+
+.rs-doc {
+  --paper: #f6f1e7;
+  max-width: 66ch;
+  margin: 0 auto;
+  font: 15.5px/1.65 var(--font-mono);
+  color: var(--color-ink-body);
+}
+.rs-doc strong { color: var(--color-ink-primary); font-weight: 600; }
+.rs-doc a {
+  color: var(--color-ink-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent-washi-blue);
+  text-underline-offset: 3px;
+}
+.rs-name {
+  font-family: var(--font-display);
+  font-size: 41px;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-primary);
+  text-transform: uppercase;
+}
+.rs-line { margin-top: 6px; }
+.rs-name + .rs-line { margin-top: 10px; }
+.rs-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.rs-doc .rs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--color-chip-line);
+  border-radius: 10px;
+  font: inherit;
+  color: var(--color-ink-primary);
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: scale 150ms ease-out, background-color 150ms ease-out;
+}
+.rs-btn svg { width: 18px; height: 18px; margin-left: -2px; }
+.rs-doc .rs-btn-primary { background: var(--color-ink-primary); border-color: var(--color-ink-primary); color: var(--paper); }
+.rs-btn:active { scale: 0.96; }
+.rs-btn:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .rs-btn:hover { background: rgba(61, 50, 38, 0.05); }
+  .rs-doc .rs-btn-primary:hover { background: color-mix(in oklch, var(--color-ink-primary) 88%, white); }
+}
+.rs-summary { margin-top: 28px; color: var(--color-ink-primary); text-wrap: pretty; }
+.rs-h {
+  margin: 36px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-hairline);
+  font: 500 13px/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+.rs-job + .rs-job { margin-top: 24px; }
+.rs-dates { font-size: 14px; color: var(--color-ink-muted); }
+.rs-roles { margin-top: 4px; }
+.rs-list { display: grid; gap: 6px; margin-top: 8px; padding-left: 1.1em; list-style: disc; text-wrap: pretty; }
+.rs-list li::marker { color: var(--color-ink-faint); }
+.rs-earlier { margin-top: 24px; }
+.rs-doc section > p + p { margin-top: 4px; }
+.rs-skills { display: grid; gap: 8px; }
+.rs-skills div { display: grid; grid-template-columns: 134px 1fr; gap: 12px; }
+.rs-skills dt { color: var(--color-ink-primary); font-weight: 600; }
+
+/* /resume: the same paper, sitting in the page instead of over it. */
+.rs-page {
+  max-width: 864px;
+  margin: 40px auto 64px;
+  padding: 68px 76px 80px;
+  border-radius: 3px;
+  background: #f6f1e7;
+  box-shadow:
+    0 0 0 1px rgba(61, 50, 38, 0.06),
+    0 1px 2px rgba(61, 50, 38, 0.08),
+    0 6px 14px rgba(61, 50, 38, 0.1);
+}
+
+/* ── Phone: hangs off the paper bar, left of the hamburger; the sheet goes full screen. ── */
+
+@media (max-width: 767px) {
+  .rb-root { --rb-w: 40px; --rb-body: 92px; }
+  .rb { left: auto; right: 60px; }
+  .rb::before { content: ''; position: absolute; inset: 0 -2px; }
+  .rb-label { top: 30px; font-size: 9px; }
+  .rs-sheet { top: 0; width: 100%; border-radius: 0; }
+  .rs-under { display: none; }
+  .rs-scroll { padding: calc(64px + env(safe-area-inset-top, 0px)) 20px calc(48px + env(safe-area-inset-bottom, 0px)); }
+  .rs-close { top: calc(6px + env(safe-area-inset-top, 0px)); right: 8px; }
+  .rs-name { font-size: 30px; }
+  .rs-doc { font-size: 14px; }
+  .rs-skills div { grid-template-columns: 1fr; gap: 0; }
+  .rs-page { margin: 0; padding: 40px 20px 56px; border-radius: 0; box-shadow: none; }
+
+  /* Homepage phones have no paper bar, and the shelf fills the width under a 56px band, so
+     the ribbon hangs thin down the right edge beside the shelf, lettered sideways. Its tap area
+     reaches left only below the broom. */
+  :root:has(.bleed-shelf) .rb-root { --rb-w: 24px; --rb-body: 150px; }
+  :root:has(.bleed-shelf) .rb { right: 0; }
+  :root:has(.bleed-shelf) .rb::before { inset: 64px 0 0 -20px; }
+  :root:has(.bleed-shelf) .rb-label {
+    top: 26px;
+    left: 50%;
+    right: auto;
+    translate: -50% 0;
+    writing-mode: vertical-rl;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* Reduced motion: no curl, dip or travel, just a fade. */
+@media (prefers-reduced-motion: reduce) {
+  .rb .rb-flip, .rb .rb-hang { transform: none !important; translate: none !important; transition: none; }
+  .rs-sheet, .rs-under, .rs-sheet[data-open], .rs-under[data-open] { translate: none; }
+  .rs-sheet, .rs-under { opacity: 0; transition: opacity 160ms ease-out, visibility 0s linear 160ms; }
+  .rs-sheet[data-open], .rs-under[data-open] { opacity: 1; transition: opacity 200ms ease-out, visibility 0s; }
+}

@@ -86,7 +86,8 @@ const BLOSSOM_ERASE_RADIUS = 34
 // floating over the sand can be reached without raking the gaps between cubbies.
 // Notes: design-intent/tool-exit-exploration/NOTES.md.
 const QUIET_ZONE_PAD = 32
-const QUIET_ZONE_SELECTOR = '.shelf-wordmark, .shelf-cubby, .shelf-broom'
+// The résumé bookmark (.rb) hangs beside the shelf, so it gets the same room (2026-10-27).
+const QUIET_ZONE_SELECTOR = '.shelf-wordmark, .shelf-cubby, .shelf-broom, .rb'
 // Principles hint (Kai, 2026-10-24, "Whisper" from /proto/hint): after this long on the
 // page a caption fades in under the title pointing at the erase reveal, and it leaves for
 // good the first time the eraser touches the title. Desktop only, like the reveal.

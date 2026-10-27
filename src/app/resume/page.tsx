@@ -1,11 +1,16 @@
+import type { Metadata } from 'next'
+import Resume from '@/components/resume/Resume'
+import '@/components/resume/resume.css'
+
+export const metadata: Metadata = { title: 'Résumé' }
+
+// A plain, linkable copy of the résumé the bookmark opens, with the draft's longer online-only
+// section (speaking with titles and links, awards, community). The bookmark itself isn't shown
+// here; this page is the résumé.
 export default function ResumePage() {
-    return (
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-6">Career Rodeo</h1>
-        <p className="text-gray-600 mb-8">
-          A journey through design, storytelling, and creating meaningful experiences.
-        </p>
-        {/* Future: Add work experience, education, skills */}
-      </div>
-    )
-  }
+  return (
+    <div className="rs-page">
+      <Resume titleId="resume-title" online />
+    </div>
+  )
+}

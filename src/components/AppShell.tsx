@@ -5,6 +5,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import ShelfNav from '@/components/shelf/ShelfNav'
 import PhoneMenu from '@/components/shelf/PhoneMenu'
+import ResumeBookmark from '@/components/resume/ResumeBookmark'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -18,8 +19,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   if (isHome) {
     return (
-      // The sandbox fills the screen and brings its own floating shelf nav (SandboxHome).
-      <main className="h-[100dvh] overflow-hidden">{children}</main>
+      // The sandbox fills the screen and brings its own floating shelf nav (SandboxHome). The résumé
+      // bookmark hangs beside the shelf on every shelf page (2026-10-27).
+      <>
+        <main className="h-[100dvh] overflow-hidden">{children}</main>
+        <ResumeBookmark />
+      </>
     )
   }
 
@@ -36,6 +41,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </div>
         <main className="flex-grow max-md:pt-14">{children}</main>
         <Footer />
+        <ResumeBookmark />
       </div>
     )
   }
