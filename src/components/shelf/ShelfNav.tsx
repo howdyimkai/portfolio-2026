@@ -1,7 +1,8 @@
 'use client'
 
 // Homepage nav: a shadow-box shelf of felt toys (Tic hover), with a broom that sweeps the
-// toys off and leaves a plain text row behind. Picked from /proto/nav-shelf-tidy (Sweep).
+// toys off and leaves a plain text row behind. Picked from /proto/nav-shelf-tidy (Sweep); the
+// broom crossing the shelf from /proto/broom-sweep (Broom pass, 2026-10-28).
 // Coordinates are 1× shelf units (394×104, measured off design-intent/pony-test/
 // Chalk inside shelf@2x.png); .shelf-nav scales the whole drawing by --zoom.
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -81,9 +82,9 @@ function Broom() {
   )
 }
 
-// The header collapses once the swept box has faded (~500ms in), and re-expands
-// after the text row has cleared (~150ms in) on the way back.
-const COMPACT_AFTER_MS = 520
+// The header collapses as the broom leaves the shelf (~440ms in, while the wood is still
+// fading), and re-expands after the text row has cleared (~150ms in) on the way back.
+const COMPACT_AFTER_MS = 440
 const EXPAND_AFTER_MS = 150
 const GROW_MS = 460
 
@@ -110,6 +111,16 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
 
   const before = useRef<{ plot: DOMRect; tools: DOMRect } | null>(null)
   const drawBefore = useRef<number | null>(null)
+  const headerRef = useRef<HTMLElement>(null)
+  const pageBefore = useRef<{ el: HTMLElement; top: number }[]>([])
+  // Off the homepage (/works, /about) there's no garden to grow: what follows the shelf
+  // (the page and its footer) just rises into the freed space, so it gets the same FLIP.
+  const pageParts = () => {
+    const out: HTMLElement[] = []
+    let el = headerRef.current?.parentElement?.nextElementSibling
+    for (; el; el = el.nextElementSibling) if (el instanceof HTMLElement) out.push(el)
+    return out
+  }
   const parts = () => {
     const plot = document.querySelector<HTMLElement>('[data-home-hero] .garden-plot')
     const tools = document.querySelector<HTMLElement>('[data-home-tools]')
@@ -123,6 +134,7 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
     const p = parts()
     before.current = p ? { plot: p.plot.getBoundingClientRect(), tools: p.tools.getBoundingClientRect() } : null
     drawBefore.current = drawRef.current?.getBoundingClientRect().top ?? null
+    pageBefore.current = p ? [] : pageParts().map((el) => ({ el, top: el.getBoundingClientRect().top }))
     setCompact(next)
   }
 
@@ -149,16 +161,28 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
       }
     }
 
+    const timing = { duration: GROW_MS, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+    const page = pageBefore.current
+    pageBefore.current = []
+    // Only what actually moved (scroll anchoring may already have held it in place);
+    // fixed things like the bookmark don't move, so they're left alone.
+    if (!reduce)
+      for (const { el, top } of page) {
+        el.getAnimations().filter((a) => !(a instanceof CSSAnimation)).forEach((a) => a.cancel())
+        const dy = top - el.getBoundingClientRect().top
+        if (Math.abs(dy) >= 0.5) el.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], timing)
+      }
+
     const p = parts()
     const b = before.current
     before.current = null
-    if (!p || !b || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!p || !b || reduce) return
     p.plot.getAnimations().forEach((a) => a.cancel())
     p.tools.getAnimations().forEach((a) => a.cancel())
     const plot = p.plot.getBoundingClientRect()
     const tools = p.tools.getBoundingClientRect()
     if (!plot.width) return
-    const timing = { duration: GROW_MS, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
     const dx = b.plot.left - plot.left + (b.plot.width - plot.width) / 2
     p.plot.animate(
       [
@@ -184,7 +208,7 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
   }
 
   return (
-    <header className="shelf-nav">
+    <header ref={headerRef} className="shelf-nav">
       <div ref={drawRef} className="shelf-nav-draw" data-tidy={tidy ? '' : undefined} data-compact={compact ? '' : undefined}>
         <Link href="/" className="shelf-wordmark" aria-label="howdy im Kai, home">
           <Image src="/nav/shelf/wordmark.webp" alt="" width={309} height={130} draggable={false} priority unoptimized />
@@ -209,6 +233,10 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
               <Cubby key={t.label} toy={t} i={i} active={pathname === t.href} landing={landing === t.href} onSelect={onSelect} />
             ))}
           </nav>
+          {/* Crosses the shelf when the broom chip is pressed (shelf-nav.css, Sweep). */}
+          <span className="shelf-sweeper" aria-hidden>
+            <Broom />
+          </span>
           {/* Left behind once the toys are swept off. */}
           <nav className="shelf-text" aria-label="Main" inert={!tidy}>
             {TOYS.map((t, i) => (

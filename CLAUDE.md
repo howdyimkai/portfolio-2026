@@ -154,6 +154,11 @@ About copy draft lives in the Positioning Brainstorm doc.
   instead of `Navigation` on `/`). A shadow-box shelf of felt toys drawn at 1× shelf
   units and scaled by `--zoom` (0.86 phones, 1.4 md+). Hover runs the "Tic" motion in
   `shelfMotion.ts`; the broom button sweeps the toys off and leaves a plain text row.
+  Since 2026-10-28 a broom crosses the shelf (528ms): one animated `@property --tip`
+  (bristle x) drives the broom, pushes each toy off and masks each chalk label away behind
+  it; the per-cubby `--right`/`--hit`/`--lx` values in `shelf-nav.css` are solved from
+  `TOYS`, so moving a toy means redoing them. The swept broom is a stand-in (the chip's
+  glyph, straw); it wants felt art (`design-intent/broom-sweep-exploration/NOTES.md`).
   Taller than the old bar, so `Hero.tsx` shrinks the garden on short desktop screens to
   keep the tool cards at the fold. The "howdy im Kai" wordmark links home on every shelf page
   (2026-10-24), like `PhoneMenu`'s. Decision record: `design-intent/nav-exploration/NOTES.md`.
@@ -236,14 +241,19 @@ About copy draft lives in the Positioning Brainstorm doc.
   without touching the groove rendering system described above.
 
   **Erase-the-name reveal (desktop only, 2026-09-29):** sweeping the eraser
-  over the hero title fades it by swept coverage, then — after a 1s beat of
+  over the hero title wipes it away, then — after a 1s beat of
   bare sand (`REVEAL_DELAY_MS`, 2026-10-08) — plays one of Kai's five
   hand-written principles as a write-on video, holds, and fades back to the
-  title (shuffled bag, no repeat at the seam). Coverage is a 16×6 grid where
-  only cells holding title ink count (mask read from the asset's alpha), hit
-  by the head's swept SEGMENT, not its sample points — both fixes for "fast
-  straight wipes erase weaker than turning" (2026-09-29); 80% of inked cells
-  triggers. A caption under the title ("psst, try the eraser above") fades in
+  title (shuffled bag, no repeat at the seam). **Pixel erase** (2026-10-28,
+  `design-intent/eraser-reveal-exploration/NOTES.md`): the title is drawn in
+  an `EraseCanvas` (same still + boil strip, stepped in JS) and the eraser cuts
+  out only what the towed head's swept SEGMENT passes over, with a soft grainy
+  dab; erased strokes live on their own layer so the rest keeps boiling.
+  Progress is real ink gone (alpha × erase on a 96px copy); 60% triggers
+  (`ERASE_THRESHOLD`). This replaced a 16×6 grid that faded the whole title at
+  once. Title and principles are 15% larger since (title 67u, principle 77u). A
+  returning title isn't erasable until the eraser has left its box once, or the
+  stroke that cleared the principle carves into it. A caption under the title ("psst, try the eraser above") fades in
   after 4s and leaves for good once the eraser first touches the title; halfway
   to the reveal it says "keep going, try an infinity pattern"
   until the reveal fires (`design-intent/hint-exploration/NOTES.md`). The 4s read clock starts when the video ends; the returns use an
@@ -255,11 +265,11 @@ About copy draft lives in the Positioning Brainstorm doc.
   wrapper's opacity isolates it, so a child blend leaves a white box.
   `filter: blur` over a `<video>` draws a dark frame at the layer edges
   (multiply makes it visible), so when the write-on ends the video is swapped
-  for its identical `.webp` still, and blur is only ever applied to the still.
-  The principle is **erasable** like the title (same swept-segment coverage
-  over an ink-only 20×8 grid read from the still, scrubbed opacity + blur) —
-  but only once its writing has finished, because the wipe that erased the
-  title is usually still moving over the same spot. Fully erased → title
+  for its identical still (an `EraseCanvas` of the `.webp`, ink measured as
+  darkness), and blur is only ever applied to the still.
+  The principle is **erasable** like the title (pixel erase) — but only once
+  its writing has finished, because the wipe that erased the title is usually
+  still moving over the same spot. 60% erased → title
   returns; partly erased then left alone for 2.5s → finishes on its own;
   never touched → the 4s read timer returns it.
   Sources are `design-intent/principles-v2/*` (bolder brush, two lines,

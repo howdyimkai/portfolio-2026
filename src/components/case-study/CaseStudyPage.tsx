@@ -37,16 +37,14 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
     <article className="mx-auto max-w-[1280px] px-4 pb-32 pt-12 md:px-10 md:pt-24">
       <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-20">
         {/* Chapter bar: desktop only, chalked on the birch frame from /about and sticky beside the
-            whole page. The chip on its corner closes the case study back to /works. */}
+            whole page. The ways out head the list in words (no X chip: an X reads as closing a
+            dialog, 2026-10-28 review). */}
         <nav aria-label="Chapters" className="relative z-10 hidden lg:block">
           <div className="cs-frame sticky top-10">
-            <Link href="/works" aria-label="Back to selected works" className="cs-close">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4.75 4.75L19.25 19.25M19.25 4.75L4.75 19.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-            </Link>
             <ol className="cs-chalk">
-              {/* Says in words what the X chip does; hovering either lights up both. */}
+              <li>
+                <Link href="/" className="cs-chalk-back">Back to Home</Link>
+              </li>
               <li>
                 <Link href="/works" className="cs-chalk-back">Back to More Work</Link>
               </li>
@@ -130,9 +128,15 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             </section>
           ))}
 
-          {/* Below lg there's no chapter frame or X: the chapters ride a chalk chip, and the way back
-              also sits at the end of the read. */}
-          <nav aria-label="More work" className="mt-[77px] border-t border-hairline pt-6 text-center lg:hidden">
+          {/* Below lg there's no chapter frame: the chapters ride a chalk chip, and the ways back
+              also sit at the end of the read. */}
+          <nav aria-label="More work" className="mt-[77px] flex justify-center gap-2 border-t border-hairline pt-6 lg:hidden">
+            <Link
+              href="/"
+              className="press-scale inline-flex min-h-11 items-center px-3 font-mono text-[13px] text-ink-primary underline decoration-hairline underline-offset-4"
+            >
+              Back to Home
+            </Link>
             <Link
               href="/works"
               className="press-scale inline-flex min-h-11 items-center px-3 font-mono text-[13px] text-ink-primary underline decoration-hairline underline-offset-4"

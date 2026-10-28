@@ -64,6 +64,7 @@ export default function ChapterSheet({ chapters, labels, active }: { chapters: C
       <div ref={sheet} tabIndex={-1} role="dialog" aria-modal="true" aria-label="Chapters" inert={!open} data-open={open ? '' : undefined} className="cs-sheet">
         <div className="cs-frame cs-sheet-frame">
           <ol className="cs-chalk cs-chalk-roomy">
+            <li><Link href="/" className="cs-chalk-back">Back to Home</Link></li>
             <li><Link href="/works" className="cs-chalk-back">Back to More Work</Link></li>
             <li className="cs-chalk-rule" aria-hidden="true" />
             {chapters.map((c, j) => (

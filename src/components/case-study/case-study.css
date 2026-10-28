@@ -70,51 +70,15 @@
   border-top: 1px solid rgba(244, 240, 230, 0.25);
 }
 .cs-chalk a[aria-current] { color: rgba(244, 240, 230, 0.95); }
-/* The X chip's words, centered under its own rule. */
+/* The ways out, centered above their own rule. */
 .cs-chalk a.cs-chalk-back { justify-content: center; }
 @media (hover: hover) and (pointer: fine) {
-  .cs-chalk a:hover,
-  .cs-frame:has(.cs-close:hover) .cs-chalk-back { color: rgba(244, 240, 230, 0.85); }
+  .cs-chalk a:hover { color: rgba(244, 240, 230, 0.85); }
 }
 .cs-chalk a:focus-visible {
   outline: 1px solid rgba(244, 240, 230, 0.6);
   outline-offset: 2px;
   border-radius: 2px;
-}
-
-/* Close, back to /works: the nav's broom chip (shelf-nav.css .shelf-broom at desktop zoom),
-   pinned over the frame's top right wood corner (positioned from the border edge). */
-.cs-close {
-  position: absolute;
-  z-index: 1;
-  top: -30px;
-  right: -33px;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--color-hairline);
-  border-radius: 12px;
-  background-color: color-mix(in srgb, var(--color-page) 85%, transparent);
-  box-shadow: 0 1px 1.5px rgba(58, 50, 38, 0.06), 0 5px 14px rgba(58, 50, 38, 0.12);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  color: rgb(0 0 0 / 0.85);
-  transition: scale 150ms var(--ease-out-strong), background-color 150ms ease-out;
-  -webkit-tap-highlight-color: transparent;
-}
-.cs-close::after { content: ''; position: absolute; inset: -6px; }
-.cs-close svg { width: 16px; height: 16px; transition: rotate 200ms var(--ease-out-strong); }
-.cs-close:active { scale: 0.96; }
-.cs-close:focus-visible { outline: 1px solid rgb(0 0 0 / 0.85); outline-offset: 2px; }
-@media (hover: hover) and (pointer: fine) {
-  .cs-close:hover,
-  .cs-frame:has(.cs-chalk-back:hover) .cs-close { background-color: color-mix(in srgb, var(--color-sand-light) 40%, color-mix(in srgb, var(--color-page) 85%, transparent)); }
-  .cs-close:hover svg,
-  .cs-frame:has(.cs-chalk-back:hover) .cs-close svg { rotate: -10deg; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cs-close svg { transition: none; }
 }
 
 /* Reading text only: fluid from 16px at 390px wide to 18px at 1440px (Kai, 2026-10-20, after

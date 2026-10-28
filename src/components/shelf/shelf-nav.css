@@ -1,7 +1,7 @@
 /* Homepage shelf nav. Drawn at 1× shelf units (394×160: wordmark band + 394×104 box)
    and scaled by --zoom; the header reserves the scaled footprint so layout stays honest.
-   Tidy/untidy are CSS transitions so a double-tap on the broom reverses mid-flight:
-   [data-tidy] rules = leaving (ease-in, quick), default rules = coming back (ease-out).
+   Tidying is the broom pass (a one-shot animation, see Sweep below); untidying is CSS
+   transitions: [data-tidy] rules = leaving, default rules = coming back.
    Once the box has gone, ShelfNav sets [data-compact]: the header collapses to the
    wordmark + text row and the garden grows into the space (FLIP-animated in ShelfNav). */
 
@@ -172,33 +172,103 @@
   filter: drop-shadow(0 0.5px 0.5px rgba(0, 0, 0, 0.35));
 }
 
-/* ---- Sweep: toys knocked off right→left, the box fades, the text row writes in ---- */
+/* ---- Sweep: a broom crosses the shelf right→left, pushing the toys off and wiping the chalk ----
+   Picked from /proto/broom-sweep (Broom pass, 2026-10-28; design-intent/broom-sweep-exploration/).
+   One animated length, --tip (the bristle tip's x in shelf units), drives everything so nothing can
+   drift apart: the broom rides it, each label is masked away right of it, and each toy is pushed
+   along by it once the bristles reach the toy's right edge. The collapse (ShelfNav, 440ms) starts
+   while the wood is still fading, and the text row writes in as the header settles. */
+@property --tip {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 387px;
+}
+.shelf-nav-draw {
+  --pass: 528ms; /* Kai, 2026-10-28: 10% slower than the first 480ms on the way out */
+  --pass-ease: cubic-bezier(0.33, 0, 0.25, 1); /* quick start (answers the click), long brake */
+}
+/* 387 → −53: from the broom chip's edge to past the left wall. */
+.shelf-nav-draw[data-tidy] { animation: sweep-tip var(--pass) var(--pass-ease) forwards; }
+@keyframes sweep-tip { from { --tip: 387px; } to { --tip: -53px; } }
+
+/* STAND-IN: the chip's broom glyph, inked straw so it reads on the slate (maroon vanishes there).
+   Should become a felt broom like the toys. Its bristle tip sits 8 units in from its left; new
+   art changes that 8 and the --tip range. */
+.shelf-sweeper {
+  position: absolute;
+  left: 0;
+  top: 47px; /* bristles on the floor (~86) */
+  width: 42px;
+  height: 42px;
+  color: #e2bf7e;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
+  opacity: 0;
+  pointer-events: none;
+  translate: calc(var(--tip) - 8px) 0;
+  transform-origin: 83% 10%; /* the hand on the handle */
+}
+.shelf-sweeper svg { display: block; width: 100%; height: 100%; }
+.shelf-sweeper .shelf-spark { display: none; }
+[data-tidy] .shelf-sweeper {
+  animation:
+    sweep-fade var(--pass) linear forwards,
+    sweep-tilt var(--pass) cubic-bezier(0.37, 0, 0.63, 1) forwards;
+}
+@keyframes sweep-fade { 0% { opacity: 0; } 8%, 82% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes sweep-tilt { 0% { rotate: 6deg; } 35% { rotate: -10deg; } 100% { rotate: -4deg; } }
+
+/* Each toy's right edge (where the bristles meet it), when that happens on the pass's curve, and
+   where each label starts (cubby x0 + 6). Solved from TOYS in ShelfNav: move a toy, redo these. */
+a.shelf-cubby:nth-of-type(1) { --right: 78.5px; --hit: 239ms; --lx: 31.5px; }
+a.shelf-cubby:nth-of-type(2) { --right: 145px; --hit: 194ms; --lx: 101.5px; }
+a.shelf-cubby:nth-of-type(3) { --right: 222px; --hit: 152ms; --lx: 170px; }
+a.shelf-cubby:nth-of-type(4) { --right: 293px; --hit: 116ms; --lx: 243px; }
+a.shelf-cubby:nth-of-type(5) { --right: 357px; --hit: 69ms; --lx: 318.5px; }
+
+/* Tidy. Swept: pushed along at the bristles once they arrive (a toy can't be ahead of them),
+   leaning back against the push, and gone as the pile goes off the end (tip ≈ 0 at ~300ms). */
+[data-tidy] .shelf-toy,
+[data-tidy] .shelf-shadow {
+  translate: min(0px, var(--tip) - var(--right)) 0;
+  opacity: 0;
+  transition: opacity 132ms ease-in max(var(--hit), 275ms);
+}
+[data-tidy] .shelf-toy {
+  rotate: 12deg;
+  scale: 0.92; /* applied once it's out of sight, so the way back can grow from it */
+  transition:
+    rotate 200ms cubic-bezier(0.23, 1, 0.32, 1) var(--hit),
+    opacity 132ms ease-in max(var(--hit), 275ms),
+    scale 0ms linear 440ms;
+}
+/* The wipe: kept (opaque) left of the edge, erased right of it, edge at 394 in a 788 wide mask.
+   Position = tip − 394 − the label's own x, so all five edges sit at the bristles. Hidden for real
+   as the wipe ends, so the mask can come off on the way back. */
+.shelf-label { mask-size: 788px 104px; mask-repeat: no-repeat; }
+[data-tidy] .shelf-label {
+  mask-image: linear-gradient(to right, #000 calc(50% - 10px), transparent calc(50% + 10px));
+  mask-position: calc(var(--tip) - 394px - var(--lx)) -16px;
+  opacity: 0;
+  transition: opacity 160ms ease-out calc(var(--pass) - 120ms), color 300ms ease-out;
+}
+/* The empty box goes as the broom leaves it, overlapping the collapse. */
+[data-tidy] .shelf-wood {
+  opacity: 0;
+  scale: 0.98;
+  transition: opacity 240ms ease-in 396ms, scale 240ms ease-in 396ms;
+}
+
+/* Untidy: the box is back while the header re-expands; the toys don't slide back from the wall.
+   Unseen, they jump home, then fade and grow in place left to right from ~430ms. */
+.shelf-wood,
+.shelf-label { transition: opacity 240ms ease-out 330ms, scale 240ms var(--shelf-out) 330ms, color 300ms ease-out 260ms; }
 .shelf-toy,
 .shelf-shadow {
   transition:
-    translate 280ms var(--shelf-out) calc(720ms + var(--i) * 45ms),
-    rotate 280ms var(--shelf-out) calc(720ms + var(--i) * 45ms),
-    opacity 200ms ease-out calc(720ms + var(--i) * 45ms);
-}
-[data-tidy] .shelf-toy { translate: -34px 0; rotate: -28deg; opacity: 0; }
-[data-tidy] .shelf-shadow { opacity: 0; }
-[data-tidy] .shelf-toy,
-[data-tidy] .shelf-shadow {
-  transition:
-    translate 200ms var(--shelf-in) calc((4 - var(--i)) * 45ms),
-    rotate 200ms var(--shelf-in) calc((4 - var(--i)) * 45ms),
-    opacity 160ms var(--shelf-in) calc(40ms + (4 - var(--i)) * 45ms);
-}
-.shelf-wood,
-.shelf-label {
-  /* Coming back waits ~600ms: text out, then the header re-expands, then the box. */
-  transition: opacity 240ms ease-out 600ms, scale 240ms var(--shelf-out) 600ms;
-}
-[data-tidy] .shelf-wood,
-[data-tidy] .shelf-label {
-  opacity: 0;
-  scale: 0.98;
-  transition: opacity 200ms var(--shelf-in) 300ms, scale 200ms var(--shelf-in) 300ms;
+    translate 0ms,
+    rotate 0ms,
+    opacity 220ms ease-out calc(430ms + var(--i) * 45ms),
+    scale 300ms var(--shelf-out) calc(430ms + var(--i) * 45ms);
 }
 
 .shelf-text {
@@ -235,8 +305,8 @@
   transition:
     /* Each word drifts down and sinks a hair past its line before settling, like the
        toys landing on their hover height. */
-    opacity 320ms ease-out calc(180ms + var(--i) * 45ms),
-    translate 600ms cubic-bezier(0.37, 0, 0.4, 1.6) calc(180ms + var(--i) * 45ms),
+    opacity 260ms ease-out calc(60ms + var(--i) * 40ms),
+    translate 440ms cubic-bezier(0.37, 0, 0.4, 1.3) calc(60ms + var(--i) * 40ms),
     color 150ms ease;
 }
 .shelf-text a:focus-visible { outline: 1px solid var(--color-ink-primary); outline-offset: -1px; border-radius: 2px; }
@@ -252,6 +322,8 @@
 @media (prefers-reduced-motion: reduce) {
   .shelf-nav *,
   .shelf-nav [data-tidy] * { transition: none !important; }
+  .shelf-sweeper { display: none; }
+  .shelf-nav-draw[data-tidy] { animation: none; }
 }
 
 /* ---- You are here: a spotlight on the active cubby, its toy idling just off the floor ---- */
@@ -274,8 +346,7 @@
     width 560ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 .shelf-spot[data-on] { opacity: 1; }
-[data-tidy] .shelf-spot { opacity: 0; transition: opacity 200ms var(--shelf-in) 300ms; }
-.shelf-label { transition: opacity 240ms ease-out 600ms, scale 240ms var(--shelf-out) 600ms, color 300ms ease-out 260ms; }
+[data-tidy] .shelf-spot { opacity: 0; transition: opacity 176ms ease-out 220ms; }
 .shelf-cubby[aria-current='page'] .shelf-label { color: rgba(250, 244, 230, 0.95); }
 
 /* The idle float lives on the img and shadow's own `translate`/`scale`, so it composes
