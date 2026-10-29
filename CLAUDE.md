@@ -24,6 +24,8 @@ for this exploration. `/resume` became a plain résumé page with the bookmark (
   (`src/app/unlock/`) checks `CASE_STUDY_PASSWORD` in a server action and sets
   a 30 day httpOnly cookie holding a hash of the password (`src/lib/unlock.ts`),
   so changing the password signs everyone out. Unset password = locked.
+  The matcher also catches files in `public/works/cal/` and `public/works/brand-system/`, so
+  anything shown on /works (card covers, Cal's float) must live outside those folders.
   Locally the value is a placeholder in `.env.local` (gitignored); the real one
   is in Vercel, Preview only. Vercel env changes need a Redeploy.
 - Vercel refuses to deploy vulnerable Next versions (16.0.1 was blocked). The
@@ -280,6 +282,24 @@ About copy draft lives in the Positioning Brainstorm doc.
   frame centered on each ink bbox so the handwriting scale matches. Verifying
   with synthetic events: React's `onPointerEnter` is driven by `pointerover`,
   not `pointerenter`.
+
+## Case study content (source of record, 2026-10-28)
+
+`src/content/case-studies/<case>.ts` **is** the shipped copy. The drafts in
+`~/Desktop/Claude-Workspace/projects/2026-10-PortfolioSprint/case-studies/<case>/`
+are the reading copy, the build plan and the reasoning behind each decision.
+Change the `.ts` first; if the two disagree, the `.ts` wins.
+
+- Every stat on a page is backed by that folder's `data/DATA-SUMMARY.md`. Don't
+  add or change a number here without it being there first.
+- Reviewer notes and sign-offs live in that folder's `FEEDBACK.md`.
+- Case study images are published with
+  `python3 tools/publish-visual.py <src> --chapter <slug>` from the sprint folder,
+  which writes webp into `public/works/<case>/<chapter>/` and prints the `src`,
+  width and height. Don't hand-copy art in.
+- `public/works/cal/` and `public/works/brand-system/` are inside the password
+  gate's matcher (`src/proxy.ts`), so nothing in them can be used on `/works` or
+  the homepage.
 
 ## Assets
 

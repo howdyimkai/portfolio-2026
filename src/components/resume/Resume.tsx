@@ -12,10 +12,12 @@ const EXPERIENCE = [
     roles: (
       <>
         <strong>Head of Creative</strong>, Aug 2026 to Nov 2026 · <strong>Multimedia Designer</strong>, May 2025 to Aug 2026
+        <br />
+        <em>Role eliminated when the parent company closed the marketing department, Nov 2026.</em>
       </>
     ),
     bullets: [
-      'Designed Cal, a compass mascot and three-minute story quiz that gets teens started on career discovery. On Typeform, 78% of people who saw it started it and 76% of starters finished: 9,400+ people in 6 months. Tallo’s product team then built it into the platform.',
+      'Designed Cal, a compass mascot and three-minute story quiz that gets teens started on career discovery. 9,400+ people finished it on Typeform in 6 months. Once Tallo’s product team built it in, 72% of starters finished, and about half of finishers went on to complete the full 60-question assessment.',
       'Rebuilt the brand as structured data that AI reads before it writes, with Claude workflows, a brand linter and an eval. In testing, drafts that broke a brand rule fell from 80% to 31%. Drafts with made-up stats went from 31% to zero. 14 teammates use it.',
       'Redesigned a scholarships application drive mid-campaign. Completion rose from 29.9% to 63.9%.',
       'Ran the monthly community challenges for 14 months, with 1,321 submissions. Took the results of Cal’s Passport Challenge, a back-to-school campaign where students earned stamps for profile tasks, to product, and art directed the Stamps feature that shipped in Feb 2026.',

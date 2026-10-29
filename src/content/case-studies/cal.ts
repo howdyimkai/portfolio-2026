@@ -286,9 +286,9 @@ export const cal: CaseStudy = {
     flow: quizFlow,
   },
   stats: [
-    { value: '86.5%', label: 'finish it in product' },
-    { value: '68.7%', label: 'of starters click through to a career hub' },
-    { value: '~1 in 3', label: 'finishers go on to start the full assessment' },
+    { value: '72%', label: 'of people who start Cal finish it' },
+    { value: '35%', label: 'take another career step, like choosing a career' },
+    { value: '52%', label: 'of finishers complete the full assessment' },
   ],
   quote: {
     cite: 'Julia, Product Manager at Tallo',
@@ -470,22 +470,22 @@ export const cal: CaseStudy = {
     {
       id: 'happened',
       title: 'What happened',
-      hook: '86.5% made it to the Peak',
+      hook: '72% made it to the Peak',
       blocks: [
         {
           kind: 'p',
-          text: "Most people who start Cal finish it. Most who finish click through into a career hub, and about 1 in 3 go on to start the full assessment. Without a comparison group, I can't say how many would have started it anyway.",
+          text: "Most people who start Cal finish it, and about half of those who finish go on to complete the full assessment. Others take a different next step, like choosing a career. Without a comparison group, I can't say how many would have taken the assessment anyway.",
         },
-        // Shares as set in CaseStudy_Cal_V4.md Part 2 (86.5% and 34.5% also in the quiz system
-        // DATA-SUMMARY.md). The last step is 34.5% of finishers, 29.8% of starters, so "about 30%".
-        // Never a count on the page.
+        // Natalie's Snowflake report (cal/data/DATA-SUMMARY.md, 2026-10-28), which supersedes the
+        // Heap 86.5% / 68.7% / 34.5%. Steps must nest: the last one is people who finished Cal AND
+        // completed the assessment (1,408 of 3,750, 37.5%), not the 50% of all starters, which
+        // includes people who never finished Cal. Never a count on the page.
         {
           kind: 'funnel',
           steps: [
             { label: 'Started Cal', share: 100 },
-            { label: 'Finished', share: 86.5 },
-            { label: 'Clicked through to a career hub', share: 68.7 },
-            { label: 'Started the full assessment', share: 30, value: 'about 30%' },
+            { label: 'Finished', share: 72 },
+            { label: 'Finished and completed the full assessment', share: 38 },
           ],
           caption: 'Share of people who started Cal. What happened, not what Cal caused.',
         },
@@ -553,6 +553,13 @@ export const cal: CaseStudy = {
               },
             ],
           },
+        },
+        {
+          // Kai, 2026-10-29: trimmed from Jennifer's recommendation. Her "while she was Head of
+          // Creative" line is left out, since Stamps shipped Feb 2026, before the Aug 2026 promotion.
+          kind: 'quote',
+          text: 'I designed the stamps, but Kai shaped the vision behind them. She set the creative direction, gave thoughtful feedback, and helped me use AI prompting as a real creative tool rather than a shortcut.',
+          cite: 'Jennifer Stout, Product Designer at Tallo',
         },
       ],
     },
