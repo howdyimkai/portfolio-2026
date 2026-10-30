@@ -173,6 +173,12 @@ About copy draft lives in the Positioning Brainstorm doc.
   single image (no paired on/off exports) and fires on mouse hover or keyboard
   focus only, via `data-on`. AppShell gives `/about` the same chrome as `/works`
   (shelf nav, `PhoneMenu` below md, footer, white grid paper `.grid-sheet`). Cards marked `draft: true` still have placeholder copy.
+  The cowboy hat on the top shelf (under the "what I'm into" label) opens **my career rodeo**
+  (`CareerRodeo.tsx` + `RodeoTrail.tsx`, "Reel", 2026-10-30, decision record
+  `design-intent/career-rodeo-exploration/NOTES.md`): the résumé's paper sheet with four era cards on
+  a rope. The sheet never scrolls by itself; the hat holds a line ~42% down and drag, wheel and swipe
+  all move it along the rope, so the photos reveal as it reaches each pin. Era copy, labels and the
+  closing line are `ERAS` / `RODEO_*` in `data.ts`; art in `public/about/rodeo/`. Hat and rope are stand-ins.
   Sources: `design-intent/about-shelf/` (Paper exports), WebPs in `public/about/`.
 - **`ResumeBookmark`** (`src/components/resume/`) — a red felt ribbon hanging from the top
   edge right of the shelf on every shelf page (home, `/works*`, `/about`; AppShell mounts it),

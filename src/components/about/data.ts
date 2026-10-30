@@ -163,3 +163,80 @@ export const PRINCIPLES = [
 
 export const YOUNG_PHOTO = { src: p('kai-horse-flat'), w: 215, h: 292, alt: 'Kai as a kid in a cowboy hat, sitting on a saddle' }
 export const PHOTO = { src: p('kai-focus-flat'), w: 368, h: 522, alt: 'Kai smiling under blossoming trees' }
+
+// ── My career rodeo ──────────────────────────────────────────────────────────────────────
+// Four eras on a rope, opened from the cowboy hat on the top shelf ("Reel", picked from
+// /proto/career-rodeo 2026-10-30; design-intent/career-rodeo-exploration/NOTES.md). Copy of record:
+// about-me/ABOUT_Final.md, "My career rodeo". Labels and the title are Kai's handwriting.
+
+const r = (n: string) => `/about/rodeo/${n}`
+
+export type RodeoImage = { src: string; w: number; h: number; alt: string }
+export type RodeoArt =
+  | { kind: 'video'; webm: string; mp4: string; poster: string; w: number; h: number; alt: string }
+  | ({ kind: 'image' } & RodeoImage)
+  | { kind: 'pair'; back: RodeoImage; front: RodeoImage }
+
+export type Era = {
+  id: string
+  name: string
+  label: { src: string; w: number; h: number }
+  line: string
+  art: RodeoArt
+}
+
+export const ERAS: Era[] = [
+  {
+    id: 'story',
+    name: 'Story',
+    label: { src: r('hand-story.webp'), w: 246, h: 150 },
+    line: 'I started in film school and cut cinematics for BioWare and Trion Worlds. I learned how to make someone feel something in under a minute.',
+    art: {
+      kind: 'video',
+      webm: r('swtor.webm'),
+      mp4: r('swtor.mp4'),
+      poster: r('swtor-poster.webp'),
+      w: 640,
+      h: 640,
+      alt: 'A Star Wars: The Old Republic cinematic: an armored Sith warrior in a red lit hall',
+    },
+  },
+  {
+    id: 'systems',
+    name: 'Systems',
+    label: { src: r('hand-systems.webp'), w: 283, h: 128 },
+    line: "At Go! Retail one design had to work in more than 1,000 stores. That's where brand became a system for me.",
+    art: {
+      kind: 'pair',
+      back: { src: r('go-window.webp'), w: 580, h: 600, alt: 'Toys and Games window posters for Go! Retail, with two cartoon kid heroes' },
+      front: { src: r('go-fixture.webp'), w: 363, h: 714, alt: "Kai hanging a Rubik's color grid backer on a store fixture" },
+    },
+  },
+  {
+    id: 'learning',
+    name: 'Learning',
+    label: { src: r('hand-learning.webp'), w: 321, h: 151 },
+    line: 'At UT Austin and Innovare I designed for students, faculty and school leaders, and watched how people actually take in something new.',
+    art: { kind: 'image', src: r('innovare.webp'), w: 1200, h: 680, alt: 'The Innovare school data dashboard on a laptop' },
+  },
+  {
+    id: 'building',
+    name: 'Building',
+    label: { src: r('hand-building.webp'), w: 295, h: 154 },
+    line: 'Now I design the story, build the thing, and share what I learn: Cal at Tallo, and the sprint app Design Garden crews use every week.',
+    art: {
+      kind: 'image',
+      src: r('dsg.webp'),
+      w: 720,
+      h: 960,
+      alt: 'Design Garden "what I shipped, what I learned" graphic for Summer 2026: a beach shadow photo with the cowboy hat avatar and stickers',
+    },
+  },
+]
+
+export const RODEO_TITLE = { src: r('hand-my-career-rodeo.webp'), w: 610, h: 110, alt: 'My career rodeo' }
+// STANDIN: the shelf nav's felt hat (139×84). Kai's About shelf hat drops in 1:1.
+export const RODEO_HAT = { src: '/nav/shelf/hat.webp', w: 139, h: 84 }
+// Kai, 2026-10-30: the closing line grew a call to work together.
+export const RODEO_CLOSING =
+  "Along the way I've spoken at UC Berkeley Haas and UX Camp about how people learn design. If your team needs someone who makes brand and product work as one, and builds the thing to prove it, let's work together."

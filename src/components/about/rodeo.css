@@ -1,0 +1,311 @@
+/* My career rodeo (RodeoTrail.tsx, CareerRodeo.tsx). "Reel", picked from /proto/career-rodeo
+   2026-10-30; decision record design-intent/career-rodeo-exploration/NOTES.md. Rope and card numbers
+   are Kai's picks from the prototype's controls. */
+
+.rodeo {
+  --rope-outline: 15px;
+  --rope-twist: 8px;
+  --dash-on: 11px;
+  --dash-gap: 12px;
+  --card-rise: 11px;
+  --card-fade: 700ms;
+  --card-tilt: 2deg;
+  --trail-x: 2px;
+  position: relative;
+  /* Room for the rope's tail to reach the hat's line. */
+  margin-bottom: 50vh;
+}
+
+/* No JS (and print): a plain numbered list. With JS the staged trail takes over. */
+.rodeo-plain {
+  display: grid;
+  gap: 10px;
+  max-width: 62ch;
+  margin: 0 auto;
+  padding-left: 1.4em;
+  list-style: decimal;
+  font: 13px/1.6 var(--font-mono);
+  color: var(--color-ink-body);
+}
+.rodeo-plain strong { color: var(--color-ink-primary); font-weight: 600; }
+.rodeo-plain-close { list-style: none; margin-top: 8px; color: var(--color-ink-muted); }
+.rodeo[data-armed] .rodeo-plain { display: none; }
+.rodeo:not([data-armed]) .rodeo-stage { display: none; }
+
+.rodeo-stage {
+  position: absolute;
+  inset: 0;
+}
+
+/* Kai's handwritten "my career rodeo" at the top. */
+.rodeo-head { position: absolute; }
+.rodeo-title { display: block; width: 100%; height: auto; user-select: none; }
+
+/* ── Rope ─────────────────────────────────────────────────── */
+
+.rodeo-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+  translate: var(--trail-x) 0;
+}
+.rodeo-rope-outline {
+  fill: none;
+  stroke: #4a3627;
+  stroke-width: var(--rope-outline);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.rodeo-rope-twist {
+  fill: none;
+  stroke: #dcb57e;
+  stroke-width: var(--rope-twist);
+  stroke-dasharray: var(--dash-on) var(--dash-gap);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* The whole rope shows faintly, so you can see where the hat goes. */
+.rodeo-ghost { opacity: 0.22; }
+
+/* ── Era cards: a paper print with the photo, Kai's era label on a chalk tag, one line of copy ── */
+
+.rodeo-cards { margin: 0; padding: 0; list-style: none; }
+
+.rodeo-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.rodeo-card:not([data-shown]) { cursor: pointer; }
+
+.rodeo-print {
+  --tilt-dir: -1;
+  margin: 0;
+  padding: 8px 8px 14px;
+  border-radius: 4px;
+  background: #fffdf9;
+  box-shadow:
+    0 0 0 1px rgba(61, 50, 38, 0.06),
+    0 1px 2px rgba(61, 50, 38, 0.06),
+    0 8px 18px rgba(61, 50, 38, 0.1);
+  rotate: -1.2deg;
+  transition: background-color 500ms ease-out, box-shadow 500ms ease-out, outline-color 500ms ease-out, transform 240ms var(--ease-out-strong);
+}
+.rodeo-card[data-side='right'] .rodeo-print { --tilt-dir: 1; rotate: 1.4deg; }
+.rodeo-card[data-era='learning'] .rodeo-print { rotate: -0.6deg; }
+
+/* Until the hat reaches it, a card waits as a dashed outline with its label on. */
+.rodeo-card:not([data-shown]) .rodeo-print {
+  background-color: transparent;
+  box-shadow: none;
+  outline: 1.5px dashed rgba(74, 54, 39, 0.3);
+  outline-offset: -1px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rodeo-card[data-shown]:hover .rodeo-print {
+    transform: translateY(-4px) rotate(calc(var(--card-tilt) * var(--tilt-dir)));
+  }
+}
+
+.rodeo-photo { position: relative; }
+.rodeo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  user-select: none;
+  background: #efe7d8;
+}
+
+/* Systems: the Toys/Games window with the fixture photo overlapping it. */
+.rodeo-pair { position: relative; aspect-ratio: 1 / 1.04; }
+.rodeo-pair img {
+  position: absolute;
+  height: auto;
+  border-radius: 2px;
+  user-select: none;
+  box-shadow: 0 1px 2px rgba(61, 50, 38, 0.1), 0 6px 14px rgba(61, 50, 38, 0.12);
+}
+.rodeo-pair-back { top: 0; left: 0; width: 76%; rotate: -1.5deg; }
+.rodeo-pair-front { right: 0; bottom: 0; width: 44%; rotate: 3deg; }
+
+/* The reveal is a reward, so it takes its time: a gentle ease out over 700ms, the photo settling up
+   from 0.97, the line following 90ms later. */
+.rodeo-photo > :not(.rodeo-tag),
+.rodeo-line {
+  --reveal-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition:
+    opacity var(--card-fade) var(--reveal-ease),
+    translate var(--card-fade) var(--reveal-ease),
+    scale var(--card-fade) var(--reveal-ease);
+}
+.rodeo-card[data-shown] .rodeo-line { transition-delay: 90ms; }
+.rodeo-card:not([data-shown]) .rodeo-photo > :not(.rodeo-tag),
+.rodeo-card:not([data-shown]) .rodeo-line {
+  opacity: 0;
+  translate: 0 var(--card-rise);
+}
+.rodeo-card:not([data-shown]) .rodeo-photo > :not(.rodeo-tag) { scale: 0.97; }
+
+/* The era's handwritten name on a chalk tag (the shelf's own chalk, as on the phone menu's tiles),
+   at the photo's top outer corner and mostly above it, so it reads first and covers little of it. */
+.rodeo-tag {
+  position: absolute;
+  left: -10px;
+  top: -30px;
+  margin: 0;
+  padding: 3px 10px 1px;
+  border-radius: 2px;
+  background: #3b3937 url('/nav/shelf-column/chalk-tile.webp') center / cover;
+  box-shadow: 0 1px 2px rgba(40, 30, 20, 0.18), 0 3px 8px rgba(40, 30, 20, 0.2);
+  rotate: -4deg;
+  /* When the sheet opens, the tags drop in one after another as it settles. */
+  animation: rodeo-tag-in 320ms var(--ease-out-strong) calc(380ms + var(--tag-i, 0) * 90ms) both;
+}
+.rodeo-card:nth-child(2) { --tag-i: 1; }
+.rodeo-card:nth-child(3) { --tag-i: 2; }
+.rodeo-card:nth-child(4) { --tag-i: 3; }
+@keyframes rodeo-tag-in {
+  from { opacity: 0; translate: 0 -8px; scale: 0.94; }
+}
+.rodeo-card[data-side='right'] .rodeo-tag { left: auto; right: -10px; rotate: 3deg; }
+/* Phones: every label stays left, beside the pins on the rope. */
+.rodeo[data-layout='column'] .rodeo-card .rodeo-tag { left: -10px; right: auto; rotate: -4deg; }
+.rodeo-tag img {
+  display: block;
+  width: auto;
+  height: 34px;
+  user-select: none;
+  /* Kai's dark ink turned to chalk, near white like #ECE8E0 on the menu tiles. */
+  filter: brightness(0) invert(0.92);
+}
+
+/* The bio's body type (13px/1.6, primary ink), a little in from the paper's edge. */
+.rodeo-line {
+  margin-top: 12px;
+  padding: 0 4px;
+  font: 13px/1.6 var(--font-mono);
+  color: var(--color-ink-primary);
+  text-wrap: pretty;
+}
+
+.rodeo-closing {
+  position: absolute;
+  margin: 0;
+  font: 13px/1.6 var(--font-mono);
+  color: var(--color-ink-body);
+  text-wrap: balance;
+  opacity: 0;
+  transition: opacity 400ms ease-out;
+}
+.rodeo[data-done] .rodeo-closing { opacity: 1; }
+
+/* ── The hat on the rope ──────────────────────────────────── */
+
+.rodeo-hat {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 76px;
+  margin-left: var(--trail-x);
+  border-radius: 12px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.rodeo-hat img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 5px rgba(58, 40, 20, 0.22));
+  transition: scale 160ms var(--ease-out-strong);
+}
+/* A bigger grab area than the felt. */
+.rodeo-hat::before { content: ''; position: absolute; inset: -14px -10px; }
+.rodeo-hat[data-dragging] { cursor: grabbing; }
+.rodeo-hat[data-dragging] img { scale: 1.08; filter: drop-shadow(0 9px 8px rgba(58, 40, 20, 0.24)); }
+.rodeo-hat:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: 4px; }
+
+/* Until it's first moved, the hat nudges down the rope now and then. */
+.rodeo:not([data-moved]) .rodeo-hat img { animation: rodeo-nudge 2.4s var(--ease-out-strong) 1s infinite; }
+@keyframes rodeo-nudge {
+  0%, 60%, 100% { translate: 0 0; }
+  70% { translate: 0 7px; }
+  80% { translate: 0 0; }
+  88% { translate: 0 4px; }
+}
+
+/* The hint fades in once the sheet has settled, then stays. */
+.rodeo-hint {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font: 13px/1.3 var(--font-mono);
+  color: var(--color-ink-body);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  animation: rodeo-hint-in 500ms ease-out 700ms forwards;
+}
+@keyframes rodeo-hint-in {
+  to { opacity: 1; }
+}
+.rodeo[data-layout='column'] .rodeo-hint { color: var(--color-ink-primary); }
+.rodeo-hint svg { width: 10px; height: 16px; flex: none; }
+
+/* Pins are buttons that send the hat. */
+.rodeo-pin-hit {
+  position: absolute;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  translate: var(--trail-x) 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+.rodeo-pin-hit:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: -4px; }
+
+/* ── The sheet and the shelf's hat ────────────────────────── */
+
+/* The sheet only moves with the hat. */
+.rodeo-scroll { overflow: hidden; touch-action: none; padding: 64px 56px 96px; }
+
+/* The label sits above the hat on the top shelf, so they don't overlap. */
+.about-lead:has(.rodeo-lead) { padding-bottom: 0; }
+.rodeo-lead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(10 * var(--u));
+}
+
+@media (max-width: 767px) {
+  .rodeo-scroll { padding: calc(64px + env(safe-area-inset-top, 0px)) 16px calc(48px + env(safe-area-inset-bottom, 0px)); }
+  .rodeo-hat { width: 64px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rodeo-print { transition: none; }
+  .rodeo-card[data-shown]:hover .rodeo-print { transform: none; }
+  .rodeo:not([data-moved]) .rodeo-hat img { animation: none; }
+  .rodeo-hint { opacity: 1; animation: none; }
+  .rodeo-tag { animation: none; }
+  .rodeo-card:not([data-shown]) .rodeo-photo > :not(.rodeo-tag),
+  .rodeo-card:not([data-shown]) .rodeo-line { translate: none; scale: none; }
+}
+
+@media print {
+  .rodeo { height: auto !important; margin-bottom: 0; }
+  .rodeo-stage { display: none !important; }
+  .rodeo-plain { display: grid !important; }
+}

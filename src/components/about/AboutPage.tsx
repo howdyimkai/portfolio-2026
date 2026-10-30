@@ -3,11 +3,13 @@
 // The About page ("Shadow box", picked from /proto/about 2026-10-18; design-intent/about-exploration/NOTES.md).
 // The bio panel sits on the left and starts as the about statement, so the page reads without
 // touching anything; picking an object swaps the panel to that card in place, and the shelf stays
-// in view. The principles frame hangs on the wall beside the shelves.
+// in view. The principles frame hangs on the wall beside the shelves. The cowboy hat on the top shelf
+// opens my career rodeo over the page (CareerRodeo.tsx, 2026-10-30).
 import { useRef, useState } from 'react'
 import Image from 'next/image'
 import AboutShelf from './AboutShelf'
 import AboutCard from './AboutCard'
+import { RodeoHat, RodeoSheet, useCareerRodeo } from './CareerRodeo'
 import { BIO, HERO, NAME_ART, PHOTO, PRINCIPLES, YOUNG_PHOTO } from './data'
 import './about.css'
 
@@ -31,6 +33,7 @@ function PrinciplesFrame({ className = '' }: { className?: string }) {
 export default function AboutPage() {
   const [active, setActive] = useState<string | undefined>()
   const panel = useRef<HTMLElement>(null)
+  const rodeo = useCareerRodeo()
 
   const pick = (id: string) => {
     setActive((cur) => (cur === id ? undefined : id))
@@ -88,16 +91,18 @@ export default function AboutPage() {
         {/* Shelves sized to their objects, frame on the wall beside them at md. On desktop (lg+) the
             frame hangs above the shelves, and the bigger bio photo balances the taller column. */}
         <div className="grid items-center justify-center gap-12 md:grid-cols-[auto_280px] md:gap-10 lg:grid-cols-1 lg:gap-14">
-          {/* The lead is a stand-in until Kai's handwritten "what I'm into right now" asset lands. */}
+          {/* The lead is the "what I'm into" label (a stand-in until Kai's handwritten asset lands) with
+              the cowboy hat under it, which opens my career rodeo (2026-10-30). */}
           <AboutShelf
             className="justify-self-center [--zoom:1] sm:[--zoom:1.2] xl:[--zoom:1.35]"
             activeCard={active}
             onPick={pick}
-            lead={<p className="font-mono text-[11px] leading-[1.4] text-ink-muted">what I&apos;m into right now. pick anything up</p>}
+            lead={<RodeoHat open={rodeo.open} onOpen={rodeo.openSheet} trigger={rodeo.trigger} />}
           />
           <PrinciplesFrame className="mx-auto w-full max-w-[320px] md:max-w-none lg:order-first lg:max-w-[340px] xl:max-w-[370px]" />
         </div>
       </div>
+      <RodeoSheet open={rodeo.open} round={rodeo.round} close={rodeo.close} trigger={rodeo.trigger} />
     </div>
   )
 }
