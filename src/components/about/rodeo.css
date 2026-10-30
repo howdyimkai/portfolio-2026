@@ -280,7 +280,7 @@
 /* The sheet only moves with the hat. */
 .rodeo-scroll { overflow: hidden; touch-action: none; padding: 64px 56px 96px; }
 
-/* The label sits above the hat on the top shelf, so they don't overlap. */
+/* The hat rests at the left of the top shelf. (Its "what I'm into" label came out 2026-10-30.) */
 .about-lead:has(.rodeo-lead) { padding-bottom: 0; }
 .rodeo-lead {
   display: flex;

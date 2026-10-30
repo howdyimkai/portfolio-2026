@@ -18,7 +18,6 @@ export function RodeoHat({ open, onOpen, trigger }: { open: boolean; onOpen: () 
   const h = 40
   return (
     <div className="rodeo-lead">
-      <p className="font-mono text-[11px] leading-[1.4] text-ink-muted">what I&apos;m into right now. pick anything up</p>
       <button
         ref={trigger}
         type="button"

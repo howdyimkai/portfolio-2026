@@ -9,6 +9,7 @@ import { useRef, useState } from 'react'
 import Image from 'next/image'
 import AboutShelf from './AboutShelf'
 import AboutCard from './AboutCard'
+import LookAround from './LookAround'
 import { RodeoHat, RodeoSheet, useCareerRodeo } from './CareerRodeo'
 import { BIO, HERO, NAME_ART, PHOTO, PRINCIPLES, YOUNG_PHOTO } from './data'
 import './about.css'
@@ -90,16 +91,20 @@ export default function AboutPage() {
 
         {/* Shelves sized to their objects, frame on the wall beside them at md. On desktop (lg+) the
             frame hangs above the shelves, and the bigger bio photo balances the taller column. */}
-        <div className="grid items-center justify-center gap-12 md:grid-cols-[auto_280px] md:gap-10 lg:grid-cols-1 lg:gap-14">
-          {/* The lead is the "what I'm into" label (a stand-in until Kai's handwritten asset lands) with
-              the cowboy hat under it, which opens my career rodeo (2026-10-30). */}
-          <AboutShelf
-            className="justify-self-center [--zoom:1] sm:[--zoom:1.2] xl:[--zoom:1.35]"
-            activeCard={active}
-            onPick={pick}
-            lead={<RodeoHat open={rodeo.open} onOpen={rodeo.openSheet} trigger={rodeo.trigger} />}
-          />
-          <PrinciplesFrame className="mx-auto w-full max-w-[320px] md:max-w-none lg:order-first lg:max-w-[340px] xl:max-w-[370px]" />
+        <div className="grid items-center justify-center gap-12 md:grid-cols-[auto_280px] md:gap-10 lg:grid-cols-1 lg:gap-6">
+          {/* The lead is the cowboy hat, which opens my career rodeo (2026-10-30). Kai's handwritten
+              note replaced the shelf's typed "what I'm into" label the same day. */}
+          <div className="flex flex-col items-center gap-1 justify-self-center">
+            {/* Kai's handwritten "plz have a look around" sits over the top shelf, eyes in the o's (2026-10-30). */}
+            <LookAround className="w-[200px] lg:w-[240px]" />
+            <AboutShelf
+              className="[--zoom:1] sm:[--zoom:1.2] xl:[--zoom:1.35]"
+              activeCard={active}
+              onPick={pick}
+              lead={<RodeoHat open={rodeo.open} onOpen={rodeo.openSheet} trigger={rodeo.trigger} />}
+            />
+          </div>
+          <PrinciplesFrame className="mx-auto w-full max-w-[320px] md:max-w-none lg:order-first lg:max-w-[400px] xl:max-w-[440px]" />
         </div>
       </div>
       <RodeoSheet open={rodeo.open} round={rodeo.round} close={rodeo.close} trigger={rodeo.trigger} />

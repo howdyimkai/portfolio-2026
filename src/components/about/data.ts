@@ -144,6 +144,8 @@ export const cardById = (id: string) => CARDS.find((c) => c.id === id)!
 // typed intro lines are gone, so the hero follows the name, and St. Louis moved into the first bio
 // paragraph. Copy of record: about-me/ABOUT_Final.md in the workspace.
 export const NAME_ART = { src: p('name-hand'), w: 600, h: 147, alt: "I'm Kai Tran" }
+// Kai's handwritten note above the shelves, 2026-10-30.
+export const LOOK_ART = { src: p('look-around'), w: 600, h: 322, alt: 'plz have a look around' }
 export const HERO = 'I design learning experiences where brand & product play a duet.'
 
 export const BIO = [
