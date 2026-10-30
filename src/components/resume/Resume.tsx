@@ -18,7 +18,7 @@ const EXPERIENCE = [
     ),
     bullets: [
       'Designed Cal, a compass mascot and three-minute story quiz that gets teens started on career discovery. 9,400+ people finished it on Typeform in 6 months. Once Tallo’s product team built it in, 72% of starters finished, and about half of finishers went on to complete the full 60-question assessment.',
-      'Rebuilt the brand as structured data that AI reads before it writes, with Claude workflows, a brand linter and an eval. In testing, drafts that broke a brand rule fell from 80% to 31%. Drafts with made-up stats went from 31% to zero. 14 teammates use it.',
+      'Rebuilt the brand as structured data that AI reads before it writes, with Claude workflows, a brand linter and an eval. In testing, drafts that broke a brand rule fell from 80% to 31%. Drafts with made-up stats went from 31% to zero. 14 teammates used it.',
       'Redesigned a scholarships application drive mid-campaign. Completion rose from 29.9% to 63.9%.',
       'Ran the monthly community challenges for 14 months, with 1,321 submissions. Took the results of Cal’s Passport Challenge, a back-to-school campaign where students earned stamps for profile tasks, to product, and art directed the Stamps feature that shipped in Feb 2026.',
       'Built Tallo’s first design automation, a testimonial system holding 56 testimonials, and a digital asset hub.',
@@ -126,7 +126,7 @@ export default function Resume({ titleId, online = false }: { titleId: string; o
       </header>
 
       <p className="rs-summary">
-        Product designer who makes learning feel like play. I designed a three-minute career quiz that 9,400+ people finished in 6 months, and an AI brand system 14 teammates use.
+        Product designer who makes learning feel like play. I designed a three-minute career quiz that 9,400+ people finished in 6 months, and an AI brand system 14 teammates used.
       </p>
 
       <section aria-labelledby="rs-exp">
