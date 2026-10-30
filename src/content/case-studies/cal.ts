@@ -238,12 +238,12 @@ export const cal: CaseStudy = {
     flow: quizFlow,
   },
   stats: [
-    { value: '9,400+', label: 'finished it on public pages in six months' },
+    { value: '9,400+', label: 'finished it in Typeform over six months' },
     { value: '72%', label: 'of people who start it in the product finish' },
     { value: '52%', label: 'of finishers complete the full assessment' },
   ],
   quote: {
-    cite: 'Julia, Product Manager at Tallo',
+    cite: 'Julia Domino, Product Manager at Tallo',
     text: 'Kai is deeply passionate about helping young people discover their future careers and that passion shows up in her work every day. [...] At Tallo, she led and contributed to multiple creative quizzes that made career exploration feel fun and approachable and helped drive meaningful engagement on our platform.',
   },
   chapters: [
@@ -284,7 +284,7 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'The career assessment is the first thing most new Tallo members do. It works for people who already came looking for it. But it\'s 60 questions about tasks like "keep inventory records," a lot to ask of a 15 year old who just landed and doesn\'t know yet why they should care.',
+          text: 'The career assessment is the most common first career action new members take. It works for people who already came looking for it. But it\'s 60 questions about tasks like "keep inventory records," a lot to ask of a 15 year old who just landed and doesn\'t know yet why they should care.',
         },
         {
           kind: 'p',
@@ -389,13 +389,13 @@ export const cal: CaseStudy = {
     {
       id: 'test',
       title: 'The test',
-      hook: '9,400+ finished it on public pages',
+      hook: '9,400+ finished it in Typeform',
       blocks: [
         {
           // Typeform, all time: 9,489 submissions, rounded down; 76.2% completion (cal/data/DATA-SUMMARY.md).
           // Typeform can't be divided by or compared with the product's Snowflake numbers in Ch 7.
           kind: 'p',
-          text: 'The test worked. In six months, 9,400+ people finished Cal on public pages, and 76% of people who started it finished. I can\'t say how many went on to make an account.',
+          text: 'The test worked. In six months, 9,400+ people finished Cal in Typeform, and 76% of people who started it finished. I can\'t say how many went on to make an account.',
         },
       ],
     },
@@ -494,7 +494,7 @@ export const cal: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'A quiz is only half the design. The other half is where it lives.',
+          text: 'A quiz is only half the design. The other half is where it lives. In Typeform, Cal reached thousands of people, but I couldn\'t see what any of them did next. In the product, I could.',
         },
         {
           kind: 'p',
