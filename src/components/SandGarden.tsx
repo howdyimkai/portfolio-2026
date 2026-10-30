@@ -1272,7 +1272,7 @@ export default function Garden({ layout }: { layout: Layout }) {
         {mode !== 'home' && (
           <div className={`pointer-events-none absolute left-1/2 z-10 aspect-[900/436] w-[90%] max-w-[368px] -translate-x-1/2 md:hidden ${D.mobileTitle}`}>
             <TitleArt boiling={titleBoiling} />
-            <p className="absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] text-ink-primary">
+            <p className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] font-bold text-ink-primary min-[390px]:text-[13px]">
               {TITLE_SUBLINE}
             </p>
           </div>
@@ -1282,6 +1282,9 @@ export default function Garden({ layout }: { layout: Layout }) {
           {/* The caption sits beside the title, not inside it, so it doesn't fade as the
               title is erased. */}
           <div className="relative">
+            {/* Above the title in mono bold, 20% up from 13px (Kai, 2026-10-29). Phones stay 12-13px,
+                since mono at 14px is wider than a 390px screen. */}
+            <p className="mb-3 text-center font-mono text-[16px] font-bold text-ink-primary">{TITLE_SUBLINE}</p>
             <div
               ref={titleElRef}
               className={`relative aspect-[900/436] ${
@@ -1294,7 +1297,6 @@ export default function Garden({ layout }: { layout: Layout }) {
                 <EraseCanvas ref={titleCanvasRef} stillSrc={TITLE_STILL_SRC} stripSrc={TITLE_BOIL_SRC} frames={TITLE_BOIL_FRAMES} ink="alpha" boiling={titleBoiling} />
               </div>
             </div>
-            <p className="mt-3 text-center font-mono text-[13px] text-ink-primary">{TITLE_SUBLINE}</p>
             {/* ink-primary at 12px: 7.7:1 on the sand (ink-muted at 10px was 3.3:1). Only
                 one of the two hints is ever on: the first ends when erasing starts. */}
             <p
@@ -1510,14 +1512,19 @@ const DECOR: Record<'home' | 'bleed' | 'tray', { mobileTitle: string; moss: stri
   // Plot starts at the top of the screen, under the floating shelf. Desktop moss, near rock
   // and bonsai follow Kai's red-circle pass (2026-10-14): in from the corners, bigger.
   bleed: {
-    mobileTitle: 'top-[150px]',
-    moss: 'w-[calc(var(--u)*30)] left-[60%] top-[42%] md:w-[calc(var(--u)*23)] md:left-[9.6%] md:top-[15.2%]',
+    mobileTitle: 'top-[184px]', // room above for the sub line, under the shelf's 146px bottom
+    // Phones (Kai, 2026-10-29): the title ends at 184px + its width (min(90vw, 368px)) × 436/900.
+    // The moss and small rock start at least 8px under it. Below 767px tall the sand between the
+    // title and the tool tray can't hold four objects, so those two step out and the big rock and
+    // bonsai sit side by side 16px under the title.
+    moss: 'w-[calc(var(--u)*30)] left-[60%] top-[max(42%,calc(192px+min(90vw,368px)*0.4844))] [@media(max-width:767px)_and_(max-height:766px)]:hidden md:w-[calc(var(--u)*23)] md:left-[9.6%] md:top-[15.2%]',
     rocks: [
-      'w-[calc(var(--u)*34)] left-[2%] top-[58%] md:w-[calc(var(--u)*20)] md:left-[9.5%] md:top-[70.6%]',
-      'hidden md:block md:w-[calc(var(--u)*14)] md:left-[81%] md:top-[12%]',
-      'w-[calc(var(--u)*17)] left-[14%] top-[44%] md:w-[calc(var(--u)*9)] md:left-[27%] md:top-[82%]',
+      'w-[calc(var(--u)*34)] left-[2%] top-[58%] [@media(max-width:767px)_and_(max-height:766px)]:top-[calc(200px+min(90vw,368px)*0.4844)] md:w-[calc(var(--u)*20)] md:left-[9.5%] md:top-[70.6%]',
+      // Kai, 2026-10-29: down and left of 81%/12% (his circle), so the résumé ribbon never hangs over it.
+      'hidden md:block md:w-[calc(var(--u)*14)] md:left-[76.5%] md:top-[24%]',
+      'w-[calc(var(--u)*17)] left-[14%] top-[max(44%,calc(192px+min(90vw,368px)*0.4844))] [@media(max-width:767px)_and_(max-height:766px)]:hidden md:w-[calc(var(--u)*9)] md:left-[27%] md:top-[82%]',
     ],
-    bonsai: 'w-[calc(var(--u)*56)] left-[38%] top-[60%] md:w-[calc(var(--u)*48)] md:left-[69.2%] md:top-[57.2%]',
+    bonsai: 'w-[calc(var(--u)*56)] left-[38%] top-[60%] [@media(max-width:767px)_and_(max-height:766px)]:top-[calc(200px+min(90vw,368px)*0.4844)] md:w-[calc(var(--u)*48)] md:left-[69.2%] md:top-[57.2%]',
   },
   // Plot starts under the shelf, framed by the page.
   tray: {

@@ -37,12 +37,10 @@
   position: fixed;
   z-index: 50;
   top: -8px;
-  /* Hangs to the right of the shelf (394px·zoom wide, centered), and at least 56px clear of the
-     open sheet's right edge, but never off screen. */
-  left: min(
-    max(calc(50% + 197px * var(--rb-zoom) + 56px), calc(50% + var(--sheet-w) / 2 + 56px)),
-    calc(100vw - var(--rb-w) - 24px)
-  );
+  /* Same spot on every page (Kai, 2026-10-29): past the case studies' column, which ends 600px
+     right of center with a backdrop 56px wider, plus 16px. That also clears the shelf and the open
+     sheet. At the screen edge when there isn't room. */
+  left: min(calc(50% + 672px), calc(100vw - var(--rb-w) - 24px));
   width: var(--rb-w);
   padding: 0;
   border: 0;
@@ -55,7 +53,6 @@
   -webkit-touch-callout: none;
 }
 .rb:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: 3px; }
-
 .rb-hang {
   display: block;
   position: relative;
