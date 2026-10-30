@@ -15,6 +15,7 @@ export type ShelfObject = {
   alt: string
   hover: Hover
   lift?: number // nudge up off the plank, shelf units
+  flip?: boolean // mirror the art, hover moment and all
 }
 
 export type Card = {
@@ -34,7 +35,7 @@ const p = (n: string) => `/about/${n}.webp`
 
 export const OBJECTS: ShelfObject[] = [
   { id: 'tv', card: 'watching', shelf: 0, src: p('tv'), w: 345, h: 360, height: 78, alt: 'Clay TV', hover: 'flicker' },
-  { id: 'lamp', card: 'tinkering', shelf: 0, src: p('lamp'), w: 339, h: 420, height: 104, alt: 'Felt desk lamp', hover: 'lamp' },
+  { id: 'lamp', card: 'tinkering', shelf: 0, src: p('lamp'), w: 339, h: 420, height: 104, alt: 'Felt desk lamp', hover: 'lamp', flip: true },
   { id: 'archie', card: 'cats', shelf: 1, src: p('archie'), w: 165, h: 252, height: 62, alt: 'Clay figurine of Archie, a cream cat', hover: 'hop' },
   { id: 'spine', card: 'notes', shelf: 1, src: p('spine'), w: 124, h: 339, height: 84, alt: 'Sage green felt notebook', hover: 'tilt-out' },
   { id: 'book', card: 'reading', shelf: 1, src: p('book'), w: 261, h: 338, height: 80, alt: 'Cream felt book with a star', hover: 'swing' },

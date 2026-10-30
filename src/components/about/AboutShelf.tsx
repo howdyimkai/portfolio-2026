@@ -32,6 +32,7 @@ function ShelfItem({
       type="button"
       className="about-obj"
       data-hover={o.hover}
+      data-flip={o.flip ? '' : undefined}
       data-active={active ? '' : undefined}
       data-on={on ? '' : undefined}
       onPointerEnter={(e) => e.pointerType === 'mouse' && setOn(true)}
@@ -49,6 +50,7 @@ function ShelfItem({
         {o.hover === 'swing' ? (
           <span className="about-book">
             <span className="about-pages" aria-hidden="true">
+              <Image src="/about/book-page.webp" alt="" width={255} height={283} draggable={false} />
               <span>currently reading →</span>
             </span>
             <span className="about-cover">

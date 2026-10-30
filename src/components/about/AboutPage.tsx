@@ -76,8 +76,8 @@ export default function AboutPage() {
                 <Image className="about-stamp" src="/about/stamp.webp" alt="" width={188} height={201} draggable={false} />
               </div>
               <div className="flex flex-col gap-4">
-                {/* Kai's handwritten name and cat, at half the 600px export so it stays sharp at 2x. */}
-                <Image src={NAME_ART.src} alt={NAME_ART.alt} width={NAME_ART.w} height={NAME_ART.h} draggable={false} className="-mb-2 h-auto w-[260px] lg:w-[300px]" />
+                {/* Kai's handwritten name and cat, across the panel's text column (2026-10-30). */}
+                <Image src={NAME_ART.src} alt={NAME_ART.alt} width={NAME_ART.w} height={NAME_ART.h} draggable={false} className="-mb-2 h-auto w-full max-w-[340px] lg:max-w-none" />
                 <p className="font-display text-[26px] leading-[1.15] tracking-[-0.015em] text-ink-primary [text-wrap:balance] lg:text-[32px]">{HERO}</p>
               </div>
               <div className="flex flex-col gap-[1.6em] font-mono text-[13px] leading-[1.6] text-ink-primary [text-wrap:pretty]">

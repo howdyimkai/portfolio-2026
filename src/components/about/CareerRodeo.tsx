@@ -15,7 +15,7 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 // object like the others: same hover rules (mouse hover or keyboard focus, never a tap).
 export function RodeoHat({ open, onOpen, trigger }: { open: boolean; onOpen: () => void; trigger: React.RefObject<HTMLButtonElement | null> }) {
   const [on, setOn] = useState(false)
-  const h = 40
+  const h = 52
   return (
     <div className="rodeo-lead">
       <button
