@@ -139,7 +139,11 @@ export const CARDS: Card[] = [
 export const cardById = (id: string) => CARDS.find((c) => c.id === id)!
 
 // Kai, 2026-10-18: the intro and hero sentence open the bio panel, the paragraphs follow.
-export const INTRO = ["I'm Kai Tran, product designer and Head of Creative at Tallo.", 'Chronically tinkering and daydreaming in St. Louis.']
+// Kai, 2026-10-29: "I'm Kai Tran" and the cat are Kai's handwriting (NAME_ART), so the typed
+// intro starts at the title. On Nov 2, 2026: INTRO[0] becomes "Product designer for learning
+// and AI." and BIO[0] goes past tense. Copy of record: about-me/ABOUT_Final.md in the workspace.
+export const NAME_ART = { src: p('name-hand'), w: 600, h: 147, alt: "I'm Kai Tran" }
+export const INTRO = ['Product designer and Head of Creative at Tallo.', 'Chronically tinkering and daydreaming in St. Louis.']
 export const HERO = 'I design learning experiences where brand & product play a duet.'
 
 export const BIO = [

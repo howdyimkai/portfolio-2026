@@ -100,8 +100,8 @@ const HINT_DELAY_MS = 4000
 const KEEP_GOING_AT = 0.5
 // Typed sub line under the drawn title (Kai, 2026-10-25): the drawing says who Kai is, this
 // line gives a skimming recruiter the job title. Static on purpose, and it sits outside the
-// title element so erasing the title leaves it alone. After Nov 2, 2026: "Formerly Head of
-// Creative at Tallo."
+// title element so erasing the title leaves it alone. On Nov 2, 2026, swap to "Kai Tran,
+// product designer. Plant, rake, ship." (Kai, 2026-10-29: the page's tools as verbs).
 const TITLE_SUBLINE = 'Product designer. Head of Creative at Tallo.'
 const HINT_COPY = { start: 'psst, try the eraser above', keep: 'keep going, try an infinity pattern' } // keep renders with InfinityTrace before "infinity"
 // Single-key tool shortcuts. Pressing the held tool's key puts it down, like clicking it.
