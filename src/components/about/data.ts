@@ -140,14 +140,14 @@ export const cardById = (id: string) => CARDS.find((c) => c.id === id)!
 
 // Kai, 2026-10-18: the intro and hero sentence open the bio panel, the paragraphs follow.
 // Kai, 2026-10-29: "I'm Kai Tran" and the cat are Kai's handwriting (NAME_ART), so the typed
-// intro starts at the title. On Nov 2, 2026: INTRO[0] becomes "Product designer for learning
-// and AI." and BIO[0] goes past tense. Copy of record: about-me/ABOUT_Final.md in the workspace.
+// intro starts at the title. Tallo is past tense from 2026-10-29 (role ends Nov 2026; the site
+// goes public after that). Copy of record: about-me/ABOUT_Final.md in the workspace.
 export const NAME_ART = { src: p('name-hand'), w: 600, h: 147, alt: "I'm Kai Tran" }
-export const INTRO = ['Product designer and Head of Creative at Tallo.', 'Chronically tinkering and daydreaming in St. Louis.']
+export const INTRO = ['Product designer for learning and AI.', 'Chronically tinkering and daydreaming in St. Louis.']
 export const HERO = 'I design learning experiences where brand & product play a duet.'
 
 export const BIO = [
-  "I'm currently shaping brand and product at Tallo, an edtech platform for early career explorers and starters. I design brand systems, run experiments in social and content, and carry what I learn back into the product. Growth loops are my jam.",
+  'Most recently I shaped brand and product at Tallo, an edtech platform for early career explorers. I designed the brand system, created Cal and the career quiz, and ran experiments in social and content that fed back into the product. Growth loops are my jam.',
   'After hours, I tend Design Garden, a sprint platform I built and run where designers ship work together.',
   'I tinker first and write second. Most of my field notes start as something I built in code with AI as my build partner, including this site. I care about the little moments that make something feel alive: a character, a transition, a phrase that tugs at you.',
   "On teams I'm a translator. I turn technical ideas into stories people actually get, and what people say back into product decisions. Give me a problem and I'll mull it over on a Sunday night, in the grocery line, in all the boring spaces where thoughts get room to breathe.",
