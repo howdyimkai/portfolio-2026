@@ -57,6 +57,19 @@ function ShelfItem({
               <Image src={o.src} alt="" width={o.w} height={o.h} draggable={false} />
             </span>
           </span>
+        ) : o.open ? (
+          <>
+            <Image className="about-closed" src={o.src} alt="" width={o.w} height={o.h} draggable={false} />
+            <Image
+              className="about-open"
+              src={o.open.src}
+              alt=""
+              width={o.open.w}
+              height={o.open.h}
+              draggable={false}
+              style={{ left: `${o.open.box[0]}%`, top: `${o.open.box[1]}%`, width: `${o.open.box[2]}%`, height: `${o.open.box[3]}%` }}
+            />
+          </>
         ) : (
           <Image src={o.src} alt="" width={o.w} height={o.h} draggable={false} />
         )}

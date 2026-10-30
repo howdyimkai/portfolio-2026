@@ -16,6 +16,9 @@ export type ShelfObject = {
   hover: Hover
   lift?: number // nudge up off the plank, shelf units
   flip?: boolean // mirror the art, hover moment and all
+  // Art shown while the object's card is open, and where it sits as [left, top, width, height] in % of the
+  // closed art's box (registered by the body, so parts that swing out overflow it).
+  open?: { src: string; w: number; h: number; box: [number, number, number, number] }
 }
 
 export type Card = {
@@ -42,7 +45,9 @@ export const OBJECTS: ShelfObject[] = [
   { id: 'toph', card: 'cats', shelf: 1, src: p('toph'), w: 253, h: 185, height: 42, alt: 'Clay figurine of Toph, a sleepy tabby cat', hover: 'stretch' },
   { id: 'cactus', card: 'growing', shelf: 2, src: p('cactus'), w: 241, h: 356, height: 82, alt: 'Felt cactus pincushion in a clay pot', hover: 'wiggle' },
   { id: 'pumpkin', card: 'garden', shelf: 2, src: p('pumpkin'), w: 309, h: 311, height: 68, alt: 'Clay pumpkin with a smiling face', hover: 'tilt-glow' },
-  { id: 'cassette', card: 'listening', shelf: 2, src: p('cassette'), w: 361, h: 272, height: 56, alt: 'Pale blue clay cassette player', hover: 'bounce-notes' },
+  { id: 'cassette', card: 'listening', shelf: 2, src: p('cassette'), w: 361, h: 272, height: 56, alt: 'Pale blue clay cassette player', hover: 'bounce-notes',
+    // Kai's open recorder (2026-10-30), registered to the closed one by its buttons and body edges.
+    open: { src: p('cassette-open'), w: 454, h: 366, box: [-9.67, -12.35, 117.7, 125.9] } },
 ]
 
 export const CARDS: Card[] = [

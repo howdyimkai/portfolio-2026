@@ -188,6 +188,23 @@
   scale: -1 1;
 }
 
+/* Objects with an open state (the recorder, 2026-10-30) show it while their card is open. */
+.about-art .about-open {
+  position: absolute;
+  max-width: none;
+  opacity: 0;
+  transition: opacity 160ms ease-out;
+}
+.about-art .about-closed {
+  transition: opacity 160ms ease-out;
+}
+.about-obj[data-active] .about-open {
+  opacity: 1;
+}
+.about-obj[data-active] .about-closed {
+  opacity: 0;
+}
+
 /* lamp — nods and the bulb lights */
 .about-bulb {
   position: absolute;
