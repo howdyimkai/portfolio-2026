@@ -17,12 +17,12 @@ const EXPERIENCE = [
       </>
     ),
     bullets: [
-      'Designed Cal, a compass mascot and three-minute story quiz that gets teens started on career discovery. 9,400+ people finished it on Typeform in 6 months. Once Tallo’s product team built it in, 72% of starters finished, and about half of finishers went on to complete the full 60-question assessment.',
+      'Designed Cal, a compass mascot and three-minute story quiz, to test whether a smaller ask could pull teens into career discovery. 9,400+ people finished it on public pages in 6 months. Once Tallo’s product team built it in, 72% of starters finished, and about half of finishers went on to complete the full 60-question assessment.',
       'Rebuilt the brand as structured data that AI reads before it writes, with Claude workflows, a brand linter and an eval. In testing, drafts that broke a brand rule fell from 80% to 31%. Drafts with made-up stats went from 31% to zero. 14 teammates used it.',
       'Redesigned a scholarships application drive mid-campaign. Completion rose from 29.9% to 63.9%.',
       'Ran the monthly community challenges for 14 months, with 1,321 submissions. Took the results of Cal’s Passport Challenge, a back-to-school campaign where students earned stamps for profile tasks, to product, and art directed the Stamps feature that shipped in Feb 2026.',
       'Built Tallo’s first design automation, a testimonial system holding 56 testimonials, and a digital asset hub.',
-      'Hired and managed two creative interns. Won “Voice of the User” and “Best Mentor” at the 2025 Tallo Tallies.',
+      'Hired and managed two creative interns, and wrote the video production guide they and our social team used for TikTok. The account grew from 1,750 to 11,700 followers in 11 months, including a 1.4M-view video.',
     ],
   },
   {
@@ -92,7 +92,10 @@ const ONLINE = [
   {
     id: 'awards',
     title: 'Awards',
-    items: [<><a href="https://uxdesignathon.com/" target="_blank" rel="noopener noreferrer">Miami Hack Week UX Designathon</a>, winner · 2023</>],
+    items: [
+      <>“Voice of the User” and “Best Mentor” · Tallo Tallies, Tallo’s team awards · 2025</>,
+      <><a href="https://uxdesignathon.com/" target="_blank" rel="noopener noreferrer">Miami Hack Week UX Designathon</a>, winner · 2023</>,
+    ],
   },
   {
     id: 'community',
