@@ -8,7 +8,7 @@ import { useRef, useState } from 'react'
 import Image from 'next/image'
 import AboutShelf from './AboutShelf'
 import AboutCard from './AboutCard'
-import { BIO, HERO, INTRO, NAME_ART, PHOTO, PRINCIPLES, YOUNG_PHOTO } from './data'
+import { BIO, HERO, NAME_ART, PHOTO, PRINCIPLES, YOUNG_PHOTO } from './data'
 import './about.css'
 
 // The five principles, chalked on the birch frame. Real text, sized to the frame with container units.
@@ -74,11 +74,6 @@ export default function AboutPage() {
               <div className="flex flex-col gap-4">
                 {/* Kai's handwritten name and cat, at half the 600px export so it stays sharp at 2x. */}
                 <Image src={NAME_ART.src} alt={NAME_ART.alt} width={NAME_ART.w} height={NAME_ART.h} draggable={false} className="-mb-2 h-auto w-[260px] lg:w-[300px]" />
-                <p className="font-mono text-[13px] leading-[1.6] text-ink-muted">
-                  {INTRO[0]}
-                  <br />
-                  {INTRO[1]}
-                </p>
                 <p className="font-display text-[26px] leading-[1.15] tracking-[-0.015em] text-ink-primary [text-wrap:balance] lg:text-[32px]">{HERO}</p>
               </div>
               <div className="flex flex-col gap-[1.6em] font-mono text-[13px] leading-[1.6] text-ink-primary [text-wrap:pretty]">
