@@ -54,7 +54,7 @@ const EXPERIENCE = [
   },
   {
     org: 'Innovare',
-    about: 'UX Consultant, team lead (contract)',
+    about: 'UX Consultant, team lead (apprenticeship)',
     dates: 'Sep 2022 to Jan 2023',
     bullets: [
       'Led three designers to research and design self-service onboarding for a school data dashboard, where half of new clients were dropping off during setup. In usability testing, setup dropped from six to eight weeks of custom builds to under three minutes, and satisfaction rose from 3.8 to 4.13 out of 5.',
