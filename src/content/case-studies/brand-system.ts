@@ -208,6 +208,11 @@ export const brandSystem: CaseStudy = {
           },
         },
         {
+          // Numbers in case-studies/brand-system/data/DATA-SUMMARY.md (Sprout Social, Kai 2026-10-30).
+          kind: 'p',
+          text: "The oldest template is for video. I wrote our video production guide in December 2025, and our social media manager and interns have made most of our TikToks from it since. Our most-watched video reached 1.4 million views. A candid, funny moment is why it spread, but it went out in our brand's caption style, so it still read like Tallo even though it came from the intern's perspective. I made a few videos myself to learn the team's process, then folded what I learned back into the guide and template files.",
+        },
+        {
           kind: 'p',
           text: 'The same files power smaller tools. My alt text kit, a Claude project, writes descriptions that are accessible first and search-friendly second. It stays under 125 characters, spells out acronyms so a screen reader says "Workforce Innovation and Opportunity Act" instead of "W-I-O-A," and always describes Cal as a compass, never as holding one.',
         },
