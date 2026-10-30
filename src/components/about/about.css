@@ -188,7 +188,7 @@
   scale: -1 1;
 }
 
-/* Objects with an open state (the recorder, 2026-10-30) show it while their card is open. */
+/* Objects with an open state (the recorder, 2026-10-30) show it on hover and while their card is open. */
 .about-art .about-open {
   position: absolute;
   max-width: none;
@@ -198,10 +198,10 @@
 .about-art .about-closed {
   transition: opacity 160ms ease-out;
 }
-.about-obj[data-active] .about-open {
+.about-obj:is([data-on], [data-active]) .about-open {
   opacity: 1;
 }
-.about-obj[data-active] .about-closed {
+.about-obj:is([data-on], [data-active]) .about-closed {
   opacity: 0;
 }
 
