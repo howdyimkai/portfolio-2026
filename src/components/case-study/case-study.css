@@ -17,6 +17,12 @@
   .cs-backdrop { inset: -112px -56px -64px; }
 }
 
+/* A loop cut to its device frame by a still alpha mask, the same size as the video. */
+.cs-loop-mask {
+  -webkit-mask: var(--mask) center / 100% 100% no-repeat;
+  mask: var(--mask) center / 100% 100% no-repeat;
+}
+
 /* A visual that isn't made yet: striped tag paper, so it reads as "goes here", not broken. */
 .cs-placeholder {
   background: repeating-linear-gradient(

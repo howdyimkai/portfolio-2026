@@ -10,6 +10,7 @@ import CalKit, { CAL, CAL_ASPECT } from './CalKit'
 import { CUSTOM_VISUALS } from './brand-system'
 import ChapterSheet from './ChapterSheet'
 import Inline from './Inline'
+import Loop from './Loop'
 import QuoteDoc from './QuoteDoc'
 import StepFrame from './StepFrame'
 import Strip from './Strip'
@@ -219,7 +220,9 @@ function BlockView({ b }: { b: Block }) {
       return (
         <div className={PROSE}>
           <h3 className="font-mono! text-[13px] font-normal text-ink-primary">{b.slug}</h3>
-          <p className={`mt-2 ${BODY}`}>{b.text}</p>
+          <p className={`mt-2 ${BODY}`}>
+            <Inline text={b.text} />
+          </p>
         </div>
       )
     case 'photoQuote':
@@ -335,6 +338,23 @@ function VisualBlock({ v }: { v: Visual }) {
         <Strip items={v.strip} aspect={v.aspect ?? '1 / 1'} cols={v.cols ?? [v.strip.length, v.strip.length]} look={v.frame === 'screen' || v.frame === 'device' ? v.frame : 'art'} />
       ) : v.compare ? (
         <Toggle views={v.compare} aspect={v.aspect ?? '16 / 10'} framed={v.frame === 'browser'} />
+      ) : v.video && v.still ? (
+        // On the same tag panel as the Cal quiz hero, link row inside it (Kai, 2026-10-31). Browsers
+        // decode video color a shade apart, so a flat background never quite matches the panel: the
+        // mask cuts the loop to its device instead.
+        <div className="rounded-[14px] bg-tag px-5 pb-5 pt-6 md:px-10 md:pb-7 md:pt-10">
+          <div
+            className={v.video.mask ? 'cs-loop-mask' : undefined}
+            style={{ aspectRatio: v.aspect ?? '16 / 10', ...(v.video.mask ? ({ '--mask': `url(${v.video.mask})` } as CSSProperties) : {}) }}
+          >
+            <Loop webm={v.video.webm} mp4={v.video.mp4} still={v.still} alt={v.alt ?? ''} />
+          </div>
+          {v.link && (
+            <div className="mt-4 flex justify-end font-mono text-[12px] leading-[1.5] md:mt-5">
+              <VisualLink link={v.link} />
+            </div>
+          )}
+        </div>
       ) : v.src ? (
         <div className="overflow-hidden rounded-[14px] border border-hairline bg-white" style={{ aspectRatio: v.aspect ?? '16 / 10' }}>
           {/* A plain <picture>, not next/image: the optimizer would flatten animated WebPs. */}
@@ -346,8 +366,23 @@ function VisualBlock({ v }: { v: Visual }) {
       ) : (
         <Placeholder v={v} />
       )}
+      {v.link && !v.video && (
+        <div className="mt-4 font-mono text-[12px] leading-[1.5] md:mt-5">
+          <VisualLink link={v.link} />
+        </div>
+      )}
       {v.caption && <figcaption className="mt-4 font-mono text-[12px] leading-[1.6] text-ink-faint">{v.caption}</figcaption>}
     </figure>
+  )
+}
+
+// The same link as a flow's "Take the real quiz".
+function VisualLink({ link }: { link: NonNullable<Visual['link']> }) {
+  return (
+    <a href={link.href} target="_blank" rel="noopener noreferrer" className="sf-link press-scale text-ink-primary">
+      {link.label} <span aria-hidden="true">↗</span>
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
   )
 }
 

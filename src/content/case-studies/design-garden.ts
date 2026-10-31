@@ -1,7 +1,8 @@
 import type { CaseStudy } from '@/components/case-study/types'
 
-// Copy: Claude-Workspace/projects/2026-10-PortfolioSprint/case-studies/design-garden/
-// CaseStudy_DesignGarden_ChapterOutline_v1.md (2026-10-19) and strategy/CardCopy_Locked_2026-10-19.md.
+// Build plan: Claude-Workspace/projects/2026-10-PortfolioSprint/case-studies/design-garden/
+// CaseStudy_DesignGarden_Handoff.md (2026-10-31, Session 1 done: copy and hero). Copy is that folder's
+// CaseStudy_DesignGarden_ChapterOutline_v1.md as of 2026-10-31.
 // Visuals without a src are placeholders named after the outline's [VISUAL] notes.
 export const designGarden: CaseStudy = {
   title: 'Design Garden',
@@ -15,10 +16,21 @@ export const designGarden: CaseStudy = {
     { label: 'Timeline', value: 'Spring 2025 to now (app built from Jan 2026)' },
     { label: 'Status', value: 'Live' },
   ],
-  // The /works cover GIF shows Kai and Amy's real board, and the outline says seeded demo pairs,
-  // so the hero stays a placeholder until that recording exists.
+  // The landing page loop in its MacBook frame (Kai, 2026-10-31: ship it as is; a browser frame
+  // re-export would match Cal). artifacts/01-Hero/DesignGardenLPLoop.webm cropped 8px past the
+  // laptop and flattened on the tag beige; landing-mask.webp is its alpha (the laptop never moves), so
+  // no browser has to play alpha video. The still keeps real alpha. The 95% line in the screenshot stays.
   hero: {
-    label: 'The shared garden, animated: pieces landing as a pair checks in, fall art showing the season. Seeded demo pairs, not real goals.',
+    label: 'Design Garden landing page loop',
+    aspect: '1408 / 816',
+    video: {
+      webm: '/works/design-garden/hero/landing-loop.webm',
+      mp4: '/works/design-garden/hero/landing-loop.mp4',
+      mask: '/works/design-garden/hero/landing-mask.webp',
+    },
+    still: '/works/design-garden/hero/landing-still.webp',
+    alt: 'Design Garden\'s landing page: "Dig into your craft. Ship your best work, together." Crew avatars in cowboy hats float over fall leaves, around a card for the Fall Sprint, Oct 5 to Nov 13.',
+    link: { label: 'Visit Design Garden', href: 'https://designgarden.xyz' },
   },
   stats: [
     { value: '4', label: 'crews' },
@@ -29,10 +41,15 @@ export const designGarden: CaseStudy = {
     },
     { value: 'Live', label: 'app, built solo' },
   ],
+  quote: {
+    text: 'The accountability from deadlines was huge. I accomplished a lot more than I thought I could. I have two young kids and a full-time job.',
+    cite: 'Jacob, Digital Experience Manager, Summer 2026 crew',
+  },
   chapters: [
     {
       id: 'tldr',
       title: 'TL;DR',
+      unnumbered: true,
       blocks: [
         {
           kind: 'p',
@@ -43,6 +60,7 @@ export const designGarden: CaseStudy = {
     {
       id: 'owned',
       title: 'What I owned',
+      hook: 'One program, one score, one app',
       blocks: [
         {
           kind: 'owned',
@@ -57,11 +75,12 @@ export const designGarden: CaseStudy = {
     {
       id: 'started',
       title: 'Where it started',
+      hook: "I was the part that didn't scale",
       blocks: [
         {
           kind: 'scene',
           slug: 'Miami, 2023',
-          text: 'I met Angie Gonzalez at Miami Hack Week. We were both bootcamp grads with portfolios nobody was holding us to. With Rebeca Kaplan, we turned that into Sprintfolio: two week sprints for designers like us.',
+          text: 'I met cofounders Angie Gonzalez and Rebeca Kaplan at Miami Hack Week. We were fresh UX bootcamp grads with no "real world" case studies, tired of applying to endless jobs. So we became the main characters of our own problem statement. We joined Buildspace, and that turned into [Sprintfolio](https://www.linkedin.com/company/sprintfolio): two week sprints for designers like us.',
         },
         {
           kind: 'scene',
@@ -85,6 +104,7 @@ export const designGarden: CaseStudy = {
     {
       id: 'matching',
       title: 'Matching',
+      hook: 'Six hours in a spreadsheet became six\u00a0signals in code',
       blocks: [
         {
           kind: 'p',
@@ -92,16 +112,22 @@ export const designGarden: CaseStudy = {
         },
         {
           kind: 'p',
-          text: "Skills was the interesting one. Two people with the same skills don't teach each other much, so the score peaks at 30 to 50% overlap, not 100%.",
+          text: "Skills was the interesting one. Partners don't work on the same project, and two people with the same skills don't teach each other much. So the score peaks at about 25 to 50% overlap, not 100%.",
         },
         {
           kind: 'p',
           text: 'Then the summer 2026 surveys said people wanted to meet before committing. The live workflow swap mid sprint already gave people a boost, so I added a speed round before pairs lock. Now the code makes the shortlist and the designers make the pick.',
         },
         {
+          kind: 'quote',
+          text: "I enjoyed the breakout rooms last night. I'd say they could even be 10 minutes just for the ability to meet more people.",
+          cite: 'Week 1 pulse survey, summer 2026',
+        },
+        // Session 2: the real match card, rebuilt as a native component, with its own caption.
+        {
           kind: 'visual',
           visual: {
-            label: 'A match card with the score breakdown, then a speed round still',
+            label: 'The real match card, rebuilt as a component: a seeded demo pair, tap to open the compatibility breakdown (Session 2)',
             caption: 'The code makes the shortlist. The designers make the pick.',
           },
         },
@@ -110,16 +136,24 @@ export const designGarden: CaseStudy = {
     {
       id: 'garden',
       title: 'The garden',
+      hook: 'Every check in plants something',
       blocks: [
         {
           kind: 'p',
           text: 'Progress bars made it feel like work software, and this is something people do after work. So every pair shares a garden instead. Each check in plants something, and by week four the pair can see what they did together.',
         },
         {
+          kind: 'quote',
+          text: 'I did not expect that our chats would be more like solo builder therapy sessions.',
+          cite: 'Week 1 pulse survey, summer 2026',
+        },
+        // Parked until the emil skills upgrade. Becomes a compare (today's, then upgraded) in a browser
+        // frame, seeded demo pairs.
+        {
           kind: 'visual',
           visual: {
-            label: 'The same garden in summer and in fall, side by side',
-            caption: 'One garden, two seasons.',
+            label: 'Before and after: check in ritual and garden (coming)',
+            frame: 'browser',
           },
         },
       ],
@@ -127,6 +161,7 @@ export const designGarden: CaseStudy = {
     {
       id: 'showcase',
       title: 'Showcase night',
+      hook: '8\u00a0of\u00a08 said they wouldn\'t have gotten this far without it',
       blocks: [
         {
           kind: 'p',
@@ -140,23 +175,35 @@ export const designGarden: CaseStudy = {
         {
           kind: 'visual',
           visual: {
-            label: 'The Summer 2026 Almanac, cropped to "The harvest" (needs Tashana and Mads to OK first)',
+            label: 'The Summer 2026 Almanac, cropped to "The harvest"',
             caption: 'From the Summer 2026 Almanac.',
           },
         },
       ],
     },
     {
-      id: 'reflection',
-      title: 'Reflection',
+      id: 'next',
+      title: "What's next",
+      hook: 'It works. Now it gets a design system.',
       blocks: [
         {
           kind: 'p',
-          text: 'I built the matching to get six hours back. The score got good at finding people who fit on paper, and the crew still asked to meet first. So the code makes the list, and people make the call.',
+          text: "Since January, I built for function: make it work and get real crews using it. Now I'm building Design Garden a proper design system, starting with the check in and the garden. The before and after in the garden chapter is the first piece.",
+        },
+      ],
+    },
+    {
+      id: 'reflection',
+      title: 'Reflection',
+      hook: "The part I'm not handing to the code",
+      blocks: [
+        {
+          kind: 'p',
+          text: "Sprintfolio ran on me. In 2023, AI couldn't read a spreadsheet, so I paired people by hand and waited for the tools to catch up. I watched self serve products make money and kept ours low cost, since access was the mission. It wore me down.",
         },
         {
           kind: 'p',
-          text: "Where I could be wrong: the 8 who answered the survey are the ones who stayed. I don't hear much from the ones who left, and that's the next thing I want to fix.",
+          text: "What I believe now: cheap made it too easy to skip. Fall 2026 is $50, and I'm watching whether paying turns into showing up. And the more AI can do, the more people miss building next to each other. That's the part I'm not handing to the code.",
         },
       ],
     },

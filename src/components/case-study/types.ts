@@ -8,6 +8,12 @@ export type Visual = {
   src?: string
   // Animated sources get a first frame for reduced motion.
   still?: string
+  // A muted loop in place of src (Design Garden's landing page), on the tag panel like the Cal quiz
+  // hero. still is its poster and the whole visual under reduced motion. mask is an image whose alpha
+  // cuts the loop to its device frame, so the panel shows through around it.
+  video?: { webm: string; mp4: string; mask?: string }
+  // Opens the real thing in a new tab, under the visual (like a flow's link).
+  link?: { label: string; href: string }
   alt?: string
   caption?: string
   // Renders a photo (src) as the closing taped print, like Cal's, without photoQuote's closing lines.
@@ -93,7 +99,7 @@ export type Block =
   // "What I owned": numbered 01, 02, 03.
   | { kind: 'owned'; items: string[] }
   // A place and year heading, like a slug line in a script.
-  | { kind: 'scene'; slug: string; text: string }
+  | { kind: 'scene'; slug: string; text: string } // text takes [text](url) links, like p
   | { kind: 'quote'; text: string; cite?: string }
   // A labeled one liner set apart from the body, like a "how might we".
   | { kind: 'callout'; label?: string; text: string }
