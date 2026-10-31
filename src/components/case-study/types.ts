@@ -18,6 +18,9 @@ export type Visual = {
   caption?: string
   // Renders a photo (src) as the closing taped print, like Cal's, without photoQuote's closing lines.
   print?: boolean
+  // The print's max width in px (600 by default). A smaller print keeps a short chapter from
+  // being mostly photo (Design Garden's Buildspace photo).
+  printWidth?: number
   // CSS aspect ratio, e.g. '16 / 10'. Defaults to 16 / 10.
   aspect?: string
   // Placeholder shape only, ignored once there's a src. tiles lays the slot out as several pieces

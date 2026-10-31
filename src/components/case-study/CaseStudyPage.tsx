@@ -414,8 +414,10 @@ function Pair({ items }: { items: NonNullable<Visual['pair']> }) {
 // strip of washi tape, a slight tilt that straightens and lifts on hover. Caption under the print.
 function Print({ v }: { v: Visual }) {
   return (
-    <figure className="max-w-[600px]">
-      <div className="cs-print-wrap">
+    <figure className="max-w-[600px]" style={v.printWidth ? { maxWidth: v.printWidth } : undefined}>
+      {/* The wrap's 3cqw headroom for the tape is measured off the page column, not the print, so a
+          narrow print gets it as a % of its own width (padding % reads the figure's width). */}
+      <div className="cs-print-wrap" style={v.printWidth ? { paddingTop: '3%' } : undefined}>
         <div className="cs-print">
           <img src={v.src} alt={v.alt ?? ''} draggable={false} style={{ aspectRatio: v.aspect }} />
           <span className="cs-tape" aria-hidden="true" />

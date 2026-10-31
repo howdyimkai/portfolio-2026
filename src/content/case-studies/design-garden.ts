@@ -85,19 +85,25 @@ export const designGarden: CaseStudy = {
         {
           kind: 'scene',
           slug: 'San Francisco, summer 2023',
-          text: 'Out of 5,400 projects, Buildspace picked 35 for its first SF class. Sprintfolio was one of them.',
+          text: 'Out of 5,400 projects, [Buildspace](https://buildspace.so/sf1) picked 35 for its first SF class. Sprintfolio was one of them.',
+        },
+        // artifacts/02-buildspace (Kai, 2026-10-31: after San Francisco, not Miami as the handoff had it).
+        {
+          kind: 'visual',
+          visual: {
+            label: 'Kai with the Sprintfolio Notion template at Buildspace',
+            src: '/works/design-garden/started/sprintfolio-template.webp',
+            alt: 'Kai smiling at Buildspace in San Francisco, holding up an iPad open to the Sprintfolio Notion template, beside a laptop showing the Sprintfolio site and a "sprint folio" table sign.',
+            aspect: '1200 / 1186',
+            caption: 'The Notion template we ran Sprintfolio sprints on.',
+            print: true,
+            printWidth: 400,
+          },
         },
         {
           kind: 'scene',
           slug: 'Every season after',
           text: "Our community ran 250+ sprint teams. It worked, and I was the part that didn't scale. Every season meant 6+ hours in a spreadsheet, pairing people by hand.",
-        },
-        {
-          kind: 'visual',
-          visual: {
-            label: 'The old matching spreadsheet next to the new match screen',
-            caption: 'Six hours of hand pairing, and what replaced it.',
-          },
         },
       ],
     },
