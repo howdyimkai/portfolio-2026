@@ -180,13 +180,8 @@ export const designGarden: CaseStudy = {
           text: 'I whipped up a quick website instead of a portfolio... and landed a paid project with a startup the next day.',
           cite: 'Summer 2026 crew member',
         },
-        {
-          kind: 'visual',
-          visual: {
-            label: 'The Summer 2026 Almanac, cropped to "The harvest"',
-            caption: 'From the Summer 2026 Almanac.',
-          },
-        },
+        // No Almanac crop on the page, just the link out (Kai, 2026-10-31).
+        { kind: 'link', label: 'See the full Almanac', href: 'https://designgarden.xyz/almanac' },
       ],
     },
     {

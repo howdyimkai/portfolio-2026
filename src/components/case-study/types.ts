@@ -104,6 +104,9 @@ export type Block =
   // A place and year heading, like a slug line in a script.
   | { kind: 'scene'; slug: string; text: string } // text takes [text](url) links, like p
   | { kind: 'quote'; text: string; cite?: string }
+  // A link out on its own line, in place of a visual (Design Garden's Almanac), styled like a
+  // visual's link. Opens in a new tab.
+  | { kind: 'link'; label: string; href: string }
   // A labeled one liner set apart from the body, like a "how might we".
   | { kind: 'callout'; label?: string; text: string }
   // A short list of named rules, each with what it drove. With poses, each rule is a card with its

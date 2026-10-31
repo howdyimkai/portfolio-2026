@@ -311,6 +311,12 @@ function BlockView({ b }: { b: Block }) {
           ))}
         </ul>
       )
+    case 'link':
+      return (
+        <p className="font-mono text-[13px] leading-[1.5]">
+          <VisualLink link={b} />
+        </p>
+      )
     case 'funnel':
       return <Funnel steps={b.steps} caption={b.caption} />
     case 'kit':
