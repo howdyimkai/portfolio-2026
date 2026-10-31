@@ -96,7 +96,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             <VisualBlock v={s.hero} />
           </div>
 
-          <StatStrip stats={s.stats} />
+          <StatStrip stats={s.stats} link={s.statsLink} />
           {s.quote &&
             (s.quote.doc ? (
               // The doc leads, then the quote under it.
@@ -152,8 +152,10 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
   )
 }
 
-function StatStrip({ stats }: { stats: CaseStudy['stats'] }) {
+function StatStrip({ stats, link }: { stats: CaseStudy['stats']; link?: CaseStudy['statsLink'] }) {
   const notes = stats.filter((st) => st.note)
+  // One star for the first note, two for the second, so each number points at its own line.
+  const mark = (st: CaseStudy['stats'][number]) => '*'.repeat(notes.indexOf(st) + 1)
   return (
     <div className="mt-14">
       {/* Equal thirds, unless a value runs long ("80% → 31%" filled its third and touched the
@@ -170,7 +172,7 @@ function StatStrip({ stats }: { stats: CaseStudy['stats'] }) {
               <span className="block font-display text-[28px] font-semibold leading-none tracking-[-0.01em] text-ink-primary min-[400px]:text-[32px] md:text-[52px]">
                 {/* 28px under 400px wide: at 32px, "68.7%" filled 94 of a 97px column at 375. */}
                 {st.value}
-                {st.note && <span className="ml-1 align-top font-mono text-[13px] font-normal text-ink-faint">*</span>}
+                {st.note && <span className="ml-1 align-top font-mono text-[13px] font-normal text-ink-faint">{mark(st)}</span>}
               </span>
               <span className="mt-3 block font-mono text-[12px] leading-[1.45] text-ink-body [text-wrap:balance] md:text-[13px]">{st.label}</span>
             </dd>
@@ -179,9 +181,14 @@ function StatStrip({ stats }: { stats: CaseStudy['stats'] }) {
       </dl>
       {notes.map((st) => (
         <p key={st.label} className={`mt-4 ${PROSE} font-mono text-[12px] leading-[1.6] text-ink-faint`}>
-          * {st.note}
+          {mark(st)} {st.note}
         </p>
       ))}
+      {link && (
+        <p className="mt-4 font-mono text-[13px] leading-[1.5]">
+          <VisualLink link={link} />
+        </p>
+      )}
     </div>
   )
 }

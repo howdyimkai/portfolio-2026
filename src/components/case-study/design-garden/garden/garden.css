@@ -1,0 +1,139 @@
+/* Design Garden's check in demo (case study, garden chapter). */
+
+/* Today: the app's own keyframes, as shipped (TetrisGarden ritualFlash, CheckinPlant pop). */
+@keyframes gc-ritual-flash {
+  0% { filter: brightness(1.6) drop-shadow(0 0 18px rgba(255, 240, 200, 0.9)); }
+  100% { filter: none; }
+}
+@keyframes gc-plant-pop {
+  0% { transform: scale(0.85); opacity: 0.6; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.gc-today-flash { animation: gc-ritual-flash 0.5s ease-out; }
+.gc-today-pop { animation: gc-plant-pop 420ms ease-out; }
+
+/* Upgraded: one landing curve for everything that arrives, one settle for what moves. */
+:root {
+  --gc-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --gc-move: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* A piece lands: drops a few px into place with a tiny squash, never from scale(0). */
+@keyframes gc-land {
+  0% { opacity: 0; transform: translate(-50%, -50%) translateY(-14px) scale(0.92); }
+  60% { opacity: 1; transform: translate(-50%, -50%) translateY(1px) scale(1.02, 0.98); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.gc-land { animation: gc-land 420ms var(--gc-out) both; }
+
+/* The plant steps up a stage: the new drawing grows from the soil line. */
+@keyframes gc-grow {
+  0% { transform: scale(0.94); }
+  55% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.gc-grow { transform-origin: 50% 92%; animation: gc-grow 360ms var(--gc-out) both; }
+
+/* Text that arrives (a prompt, a tag): short rise and fade. */
+@keyframes gc-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.gc-rise { animation: gc-rise 240ms var(--gc-out) both; }
+
+/* Typing dots for the partner. */
+@keyframes gc-dot {
+  0%, 80%, 100% { opacity: 0.25; }
+  40% { opacity: 1; }
+}
+.gc-dots span { animation: gc-dot 1.2s infinite; }
+.gc-dots span:nth-child(2) { animation-delay: 0.15s; }
+.gc-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+.gc-press { transition: scale 150ms ease-out, background-color 150ms ease-out, opacity 150ms ease-out; }
+.gc-press:active:not(:disabled) { scale: 0.97; }
+
+.gc-focus:focus-visible { outline: 2px solid rgba(0, 0, 0, 0.5); outline-offset: 2px; }
+.gc-input:focus-visible { outline: 2px solid rgba(0, 0, 0, 0.35); outline-offset: 1px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-today-flash, .gc-today-pop, .gc-land, .gc-grow, .gc-rise, .gc-dots span { animation: none; }
+  .gc-land { transform: translate(-50%, -50%); opacity: 1; }
+}
+
+/* Play garden: a piece lifts a touch under the pointer. */
+@media (hover: hover) and (pointer: fine) {
+  .gc-piece img { transition: scale 150ms ease-out; }
+  .gc-piece:hover img { scale: 1.06; }
+}
+.gc-piece:active img { scale: 1.1; }
+
+/* Leader tooltip: scales in from the icon, out a little quicker. Hidden from pointer and AT when shut. */
+.gc-tip {
+  opacity: 0;
+  scale: 0.97;
+  transform-origin: left top; /* the tip hangs from the start of the leader line */
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 120ms ease-in, scale 120ms ease-in, visibility 0s linear 120ms;
+}
+.gc-tip.gc-tip-open {
+  opacity: 1;
+  scale: 1;
+  visibility: visible;
+  transition: opacity 160ms var(--gc-out), scale 160ms var(--gc-out), visibility 0s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gc-tip, .gc-tip.gc-tip-open { transition: none; scale: 1; }
+}
+
+/* Expanded demo: the backdrop fades and the frame settles in. Closing is instant (it's leaving). */
+@keyframes gc-overlay-in { from { opacity: 0; } }
+@keyframes gc-overlay-frame-in { from { opacity: 0; transform: scale(0.97); } }
+.gc-overlay { animation: gc-overlay-in 200ms var(--gc-out); }
+.gc-overlay-frame { animation: gc-overlay-frame-in 240ms var(--gc-out); }
+@media (prefers-reduced-motion: reduce) {
+  .gc-overlay, .gc-overlay-frame { animation: none; }
+}
+
+/* The magic moment (Variants.tsx Sparkle). Plays once when the garden comes back after a check in.
+   A warm glow swells behind the plant while eight stars burst out, twinkle once and drift off. */
+.gc-sparkle { width: 0; height: 0; z-index: -1; }
+.gc-glow {
+  position: absolute;
+  left: -60px;
+  top: -60px;
+  width: 120px;
+  height: 120px;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, rgba(255, 236, 170, 0.75), rgba(255, 236, 170, 0) 70%);
+  opacity: 0;
+  animation: gc-glow 1100ms var(--gc-out) var(--gc-delay) both;
+}
+@keyframes gc-glow {
+  0% { opacity: 0; transform: scale(0.5); }
+  30% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+.gc-spark {
+  position: absolute;
+  left: -11px;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  opacity: 0;
+  filter: drop-shadow(0 0 3px rgba(255, 230, 150, 0.8));
+  animation: gc-spark 1000ms var(--gc-out) calc(var(--gc-delay) + var(--d)) both;
+}
+@keyframes gc-spark {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.3) rotate(0deg); }
+  35% { opacity: 1; transform: translate(calc(var(--dx) * 0.7), calc(var(--dy) * 0.7)) scale(var(--s)) rotate(20deg); }
+  55% { opacity: 1; transform: translate(calc(var(--dx) * 0.85), calc(var(--dy) * 0.85)) scale(calc(var(--s) * 0.7)) rotate(35deg); }
+  70% { opacity: 1; transform: translate(calc(var(--dx) * 0.92), calc(var(--dy) * 0.92)) scale(var(--s)) rotate(45deg); }
+  100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) - 6px)) scale(calc(var(--s) * 0.5)) rotate(60deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gc-sparkle { display: none; }
+}
+

@@ -2,7 +2,8 @@ import type { CaseStudy } from '@/components/case-study/types'
 
 // Build plan: Claude-Workspace/projects/2026-10-PortfolioSprint/case-studies/design-garden/
 // CaseStudy_DesignGarden_Handoff.md (2026-10-31, Session 1 done: copy and hero). Copy is that folder's
-// CaseStudy_DesignGarden_ChapterOutline_v1.md as of 2026-10-31.
+// CaseStudy_DesignGarden_ChapterOutline_v1.md as of 2026-10-31, plus Kai's 2026-10-31 garden pass (the
+// garden body and captions, What's next, and the 8 of 8 stat with its Almanac link).
 // Visuals without a src are placeholders named after the outline's [VISUAL] notes.
 export const designGarden: CaseStudy = {
   title: 'Design Garden',
@@ -39,8 +40,14 @@ export const designGarden: CaseStudy = {
       label: 'weekly check ins',
       note: 'Of all the weekly check ins pairs were scheduled to do, 80% happened in the app.',
     },
-    { value: 'Live', label: 'app, built solo' },
+    // Kai, 2026-10-31. The 8 are everyone who answered the summer 2026 survey, never "all participants".
+    {
+      value: '8\u00a0of\u00a08',
+      label: "survey respondents said they wouldn't have gotten this far without it",
+      note: '8 survey respondents, summer 2026.',
+    },
   ],
+  statsLink: { label: 'See what the summer 2026 crew shipped', href: 'https://designgarden.xyz/almanac' },
   quote: {
     text: 'The accountability from deadlines was huge. I accomplished a lot more than I thought I could. I have two young kids and a full-time job.',
     cite: 'Jacob, Digital Experience Manager, Summer 2026 crew',
@@ -148,20 +155,20 @@ export const designGarden: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: 'Progress bars made it feel like work software, and this is something people do after work. So every pair shares a garden instead. Each check in plants something, and by week four the pair can see what they did together.',
+          text: 'A task list only grows. Nobody prunes it, and it feels like homework. I wanted check ins to be a two player mode, so every pair shares a whimsy garden. Each check in plants something. By week four, the pair can see what they built together.',
         },
         {
           kind: 'quote',
           text: 'I did not expect that our chats would be more like solo builder therapy sessions.',
           cite: 'Week 1 pulse survey, summer 2026',
         },
-        // Parked until the emil skills upgrade. Becomes a compare (today's, then upgraded) in a browser
-        // frame, seeded demo pairs.
+        // The check in, before and after, both live (design-garden/GardenCompare.tsx): the app's dashboard
+        // today, then the upgrade. Captions live in the component, since they swap with the toggle.
         {
           kind: 'visual',
           visual: {
-            label: 'Before and after: check in ritual and garden (coming)',
-            frame: 'browser',
+            label: 'Before and after: the garden check in',
+            custom: 'garden-compare',
           },
         },
       ],
@@ -187,11 +194,11 @@ export const designGarden: CaseStudy = {
     {
       id: 'next',
       title: "What's next",
-      hook: 'It works. Now it gets a design system.',
+      hook: 'It works. Now it gets a proper design pass.',
       blocks: [
         {
           kind: 'p',
-          text: "Since January, I built for function: make it work and get real crews using it. Now I'm building Design Garden a proper design system, starting with the check in and the garden. The before and after in the garden chapter is the first piece.",
+          text: "Since January, I built for function: make it work and get real crews using it. Now I'm giving Design Garden a proper design pass. The check in and the garden went first, and the before and after above shows what changed. The rest of the app is next.",
         },
       ],
     },

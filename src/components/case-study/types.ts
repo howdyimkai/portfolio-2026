@@ -176,6 +176,8 @@ export type CaseStudy = {
   meta: { label: string; value: string }[]
   hero: Visual
   stats: [Stat, Stat, Stat]
+  // A link out under the stat strip and its notes (Design Garden's Almanac). Opens in a new tab.
+  statsLink?: { label: string; href: string }
   // A pull quote under the stat strip. Optional. doc is a piece the quoted person made, shown above
   // the quote with its lower part blurred.
   quote?: { text: string; cite?: string; doc?: NonNullable<Visual['strip']>[number] }

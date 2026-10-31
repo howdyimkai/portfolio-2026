@@ -10,6 +10,7 @@ import Palette from './Palette'
 import SetupWalkthrough from './SetupWalkthrough'
 import Social from './Social'
 import MatchCard from '../design-garden/MatchCard'
+import GardenCompare from '../design-garden/GardenCompare'
 
 // The Brand System case study's built visuals, by the `custom` key in its content file. A key with
 // no component yet falls back to the labeled placeholder, so the page reads end to end while the
@@ -26,4 +27,5 @@ export const CUSTOM_VISUALS: Record<string, ComponentType<{ visual: Visual }>> =
   outputs: Outputs,
   // Design Garden's (the one registry for every case study's built visuals).
   'match-card': MatchCard,
+  'garden-compare': GardenCompare,
 }
