@@ -1,13 +1,18 @@
 'use client'
 
 // Design Garden's match card, rebuilt from DesignGardenTool src/pages/Matches.tsx (renderProfileCard
-// and renderScoreBreakdown, 2026-10-31) for the Matching chapter: the app's layout and plant rating
-// in portfolio tokens, on the tag panel like Cal's screens. A seeded demo pair, never crew data,
-// scored by the ported logic in matching.ts. Handoff: Claude-Workspace .../case-studies/design-garden/
-// CaseStudy_DesignGarden_Handoff.md, Session 2.
+// and renderScoreBreakdown, 2026-10-31) for the Matching chapter. The card keeps Design Garden's own
+// design system (Kai, 2026-10-31): Enriqueta headings, Inter body, and the app's tailwind.config.js
+// colors as hex below. Only the tag panel and the cue under it are the portfolio's, like Cal's
+// screens on their panel. A seeded demo pair, never crew data, scored by the ported logic in
+// matching.ts. Handoff: Claude-Workspace .../case-studies/design-garden/CaseStudy_DesignGarden_Handoff.md, Session 2.
 import { useId, useState } from 'react'
+import { Enriqueta, Inter } from 'next/font/google'
 import type { Visual } from '../types'
 import { CRITERION_MAX, calculateMatchScore, getBarColor, getPlantRating, scoreFeedbackCrossMatch, type Profile, type ScoreBreakdown } from './matching'
+
+const enriqueta = Enriqueta({ weight: '600', subsets: ['latin'], display: 'swap' })
+const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 // The pair is picked so the score reads honest, not perfect: their skills overlap yours by a third
 // (2 shared of 6, the top band), and they're an hour off your timezone, so that row shows ✕.
@@ -29,8 +34,12 @@ const YOU: Profile = {
   feedback_wants: 'supportive',
 }
 
+// The app's crew avatar art (cowboy hat and sprout), from artifacts/03-matching (Kai, 2026-10-31).
+// The app shows the name's initial when there's no picture.
+const THEM_AVATAR = '/works/design-garden/matching/demo-avatar.webp'
+
 const THEM: Profile = {
-  full_name: 'Robin Demo',
+  full_name: 'Robin Smith',
   bio: 'Product designer moving into design systems. Looking for a partner who keeps a weekly deadline.',
   career_stage: 'mid',
   specialization: ['Product Design', 'Design Systems'],
@@ -83,18 +92,17 @@ export default function MatchCard({ visual }: { visual: Visual }) {
 
   return (
     <div className="rounded-[14px] bg-tag px-5 pb-5 pt-6 md:px-10 md:pb-7 md:pt-10" role="group" aria-label={`${visual.label}: a demo designer, ${plants.label.toLowerCase()}, ${plants.count} of 5 plants`}>
-      <div className="mx-auto max-w-[560px] rounded-[12px] border border-hairline bg-white p-5 shadow-[0_8px_24px_rgba(58,50,38,0.08)] md:p-6">
+      {/* The app's Card: bg-white rounded-xl shadow-sm border-secondary-200 p-6. */}
+      <div className={`${inter.className} mx-auto max-w-[560px] rounded-xl border border-[#DEE2E6] bg-white p-5 text-[#212529] shadow-sm md:p-6`}>
         <div className="mb-3 flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3 md:gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-sand-light md:size-14" aria-hidden="true">
-              <span className="font-display text-[20px] font-semibold text-ink-primary">{THEM.full_name?.charAt(0)}</span>
-            </div>
+            <img src={THEM_AVATAR} alt="" width={56} height={56} draggable={false} className="size-12 shrink-0 rounded-full md:size-14" />
             <div className="min-w-0">
-              <h3 className="truncate font-display text-[17px] font-semibold leading-tight text-ink-primary">{THEM.full_name}</h3>
-              <div className="mt-1.5 flex flex-wrap gap-1.5">
-                <span className="rounded-full bg-sand-light px-2 py-0.5 font-mono text-[11px] text-ink-primary">{THEM.career_stage}</span>
+              <h3 className={`${enriqueta.className} truncate text-base font-semibold text-[#212529]`}>{THEM.full_name}</h3>
+              <div className="mt-1 flex flex-wrap gap-2">
+                <span className="rounded-full bg-[#C2DFD0] px-2 py-0.5 text-xs text-[#003912]">{THEM.career_stage}</span>
                 {THEM.specialization?.map((s) => (
-                  <span key={s} className="rounded-full bg-tag px-2 py-0.5 font-mono text-[11px] text-ink-body">
+                  <span key={s} className="rounded-full bg-[#E9ECEF] px-2 py-0.5 text-xs text-[#5A6268]">
                     {s}
                   </span>
                 ))}
@@ -104,24 +112,22 @@ export default function MatchCard({ visual }: { visual: Visual }) {
 
           {/* Plant rating: five sprouts, the unearned ones faded, as in the app. */}
           <div className="shrink-0 text-right">
-            <div className="mb-0.5 flex justify-end gap-0.5 text-[13px] md:text-[15px]" role="img" aria-label={`${plants.count} of 5 plants`}>
+            <div className="mb-0.5 flex justify-end gap-0.5 text-[13px] md:text-base" role="img" aria-label={`${plants.count} of 5 plants`}>
               {Array.from({ length: 5 }, (_, i) => (
                 <span key={i} aria-hidden="true" style={{ opacity: i < plants.count ? 1 : 0.2 }}>
                   🌱
                 </span>
               ))}
             </div>
-            <span className="font-mono text-[11px] text-ink-muted">{plants.label}</span>
+            <span className="text-xs text-[#6C757D]">{plants.label}</span>
           </div>
         </div>
 
-        <p className="mb-3 font-mono text-[13px] leading-[1.55] text-ink-body [text-wrap:pretty]">{THEM.bio}</p>
+        <p className="mb-3 text-sm text-[#5A6268] [text-wrap:pretty]">{THEM.bio}</p>
 
         <div className="mb-3">
-          <p className="mb-1.5 font-mono text-[11px] text-ink-muted">Goal:</p>
-          <span className="rounded-full bg-accent-orange/10 px-2 py-0.5 font-mono text-[11px] text-accent-orange">
-            {SPRINT_GOAL_LABELS[THEM.sprint_goal ?? '']}
-          </span>
+          <p className="mb-2 text-xs text-[#6C757D]">Goal:</p>
+          <span className="rounded-full bg-[#FF7F50]/10 px-2 py-0.5 text-xs text-[#FF7F50]">{SPRINT_GOAL_LABELS[THEM.sprint_goal ?? '']}</span>
         </div>
 
         <button
@@ -129,9 +135,9 @@ export default function MatchCard({ visual }: { visual: Visual }) {
           aria-expanded={open}
           aria-controls={id}
           onClick={() => setOpen((o) => !o)}
-          className="press-scale relative inline-flex items-center gap-1 font-mono text-[12px] text-ink-primary underline decoration-chip-line underline-offset-4 after:absolute after:-inset-x-1 after:-inset-y-3 after:content-['']"
+          className="press-scale relative block text-xs text-[#003912] underline after:absolute after:-inset-x-1 after:-inset-y-3 after:content-[''] hover:text-[#00220A]"
         >
-          {open ? 'Hide' : 'See'} compatibility breakdown
+          {open ? 'Hide' : 'See'} compatibility breakdown{' '}
           <span aria-hidden="true" className={`inline-block transition-transform duration-200 ease-[var(--ease-out-strong)] motion-reduce:transition-none ${open ? 'rotate-180' : ''}`}>
             ↓
           </span>
@@ -144,14 +150,14 @@ export default function MatchCard({ visual }: { visual: Visual }) {
           className={`grid transition-[grid-template-rows] duration-[240ms] ease-[var(--ease-out-strong)] motion-reduce:transition-none ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
         >
           <div className="overflow-hidden">
-            <div className="mt-3 space-y-2.5 border-t border-hairline pt-3">
+            <div className="mt-3 space-y-2 border-t border-[#E9ECEF] pt-3">
               {BAR_KEYS.map((key) => {
                 const pct = Math.round((breakdown[key] / CRITERION_MAX[key]) * 100)
                 return (
                   <div key={key} className="flex items-center gap-3">
-                    <span className="w-28 shrink-0 font-mono text-[12px] text-ink-body">{CRITERION_LABELS[key]}</span>
+                    <span className="w-28 shrink-0 text-xs text-[#5A6268]">{CRITERION_LABELS[key]}</span>
                     <div
-                      className="h-1.5 flex-1 rounded-full bg-tag"
+                      className="h-1.5 flex-1 rounded-full bg-[#DEE2E6]"
                       role="meter"
                       aria-label={CRITERION_LABELS[key]}
                       aria-valuemin={0}
@@ -166,9 +172,9 @@ export default function MatchCard({ visual }: { visual: Visual }) {
               })}
               {rows.map((r) => (
                 <div key={r.label} className="flex items-center gap-3">
-                  <span className="w-28 shrink-0 font-mono text-[12px] text-ink-muted">{r.label}</span>
-                  <span className="min-w-0 flex-1 truncate font-mono text-[12px] font-medium text-ink-primary">{r.value}</span>
-                  <span className={`font-mono text-[12px] font-medium ${r.matched ? 'text-ink-primary' : 'text-ink-faint'}`}>
+                  <span className="w-28 shrink-0 text-xs text-[#6C757D]">{r.label}</span>
+                  <span className="min-w-0 flex-1 truncate text-xs font-medium text-[#343A40]">{r.value}</span>
+                  <span className={`text-xs font-medium ${r.matched ? 'text-[#16A34A]' : 'text-[#ADB5BD]'}`}>
                     <span aria-hidden="true">{r.matched ? '✓' : '✕'}</span>
                     <span className="sr-only">{r.matched ? 'match' : 'no match'}</span>
                   </span>

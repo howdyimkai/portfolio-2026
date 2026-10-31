@@ -236,10 +236,11 @@ export function getPlantRating(score: number): { count: number; label: string } 
   return { count: 1, label: 'Worth a try' }
 }
 
-// The app's bar bands (green, brand green, yellow, grey), in portfolio ink: darker is a stronger fit.
+// The app's bar bands in its own colors (green-500, primary, yellow-500, secondary-400), as hex
+// since the portfolio's theme doesn't carry Design Garden's palette.
 export function getBarColor(pct: number): string {
-  if (pct >= 80) return 'bg-ink-primary'
-  if (pct >= 60) return 'bg-ink-body'
-  if (pct >= 40) return 'bg-sand-dark'
-  return 'bg-chip-line'
+  if (pct >= 80) return 'bg-[#22C55E]'
+  if (pct >= 60) return 'bg-[#003912]'
+  if (pct >= 40) return 'bg-[#EAB308]'
+  return 'bg-[#ADB5BD]'
 }
