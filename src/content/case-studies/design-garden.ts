@@ -123,12 +123,14 @@ export const designGarden: CaseStudy = {
           text: "I enjoyed the breakout rooms last night. I'd say they could even be 10 minutes just for the ability to meet more people.",
           cite: 'Week 1 pulse survey, summer 2026',
         },
-        // Session 2: the real match card, rebuilt as a native component, with its own caption.
+        // The real match card, rebuilt as a component (design-garden/MatchCard.tsx), scored by the
+        // ported matching logic on a seeded demo pair.
         {
           kind: 'visual',
           visual: {
-            label: 'The real match card, rebuilt as a component: a seeded demo pair, tap to open the compatibility breakdown (Session 2)',
-            caption: 'The code makes the shortlist. The designers make the pick.',
+            label: 'Match card with the compatibility breakdown',
+            custom: 'match-card',
+            caption: 'Six signals, one score per pair. A demo pair, scored by the real logic.',
           },
         },
       ],
