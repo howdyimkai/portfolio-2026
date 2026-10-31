@@ -268,19 +268,24 @@ export const brandSystem: CaseStudy = {
     {
       id: 'handoff',
       title: 'Handoff',
-      hook: 'The next fix came from someone else',
+      hook: 'A brand repo the team can change without me',
       blocks: [
         {
-          kind: 'p',
-          text: 'I built the system to keep working after my last day: a changelog that explains every decision, a quickstart for new hires, a written contribution process, and a co-maintainer who already runs it in their own workflows.',
+          kind: 'quote',
+          text: 'Kai and I maintain the brand system together. She built it so writers, designers, and the automations I run all start from the same specs: voice, color, type, and the numbers we are allowed to publish. The changelog records what changed and why. She keeps guidance out of the shared system until it is approved. That is how a small team stays consistent across the site, social, video, and partner work.',
+          cite: '[Christian](https://christiangomez.dev/), Technical SEO & AI Automation Lead, Tallo',
         },
         {
           kind: 'p',
-          text: "One thing I'd change: for months the system lived only in Bitbucket, where most of the people it was built for never looked. Dated release zips on the shared drive fixed access but split the system in two, because changes from drive users came back as messages someone had to turn into pull requests. I should have designed both paths from the start.",
+          text: 'A brand guide only one person can edit expires when that person leaves. So I built the way in alongside the system. `CONTRIBUTE.md` says how to propose a change, what ships without review, and what needs a brand call. `QUICKSTART.md` gets a new hire running in 15 minutes without a terminal. And Christian co-maintains it from inside his own n8n and SEO workflows, so the system has an owner who didn\'t inherit it as a chore.',
         },
         {
           kind: 'p',
-          text: 'A contributor noticed the role templates and our automation file each restated the brand voice in their own words, and the copies had started to contradict each other. One listed "empowering" as a core trait while another banned "empower." Their fix made `BRAND.md` the only place voice is written in prose. It\'s the single-source rule I\'d applied to stats, now applied to voice, and I didn\'t have to be the one to spot it.',
+          text: 'It works. Christian noticed the role templates and our automation file each restated the brand voice in their own words, and the copies had started to contradict each other. One listed "empowering" as a core trait while another banned "empower." His fix made `BRAND.md` the only place voice is written in prose. It\'s the single-source rule I\'d applied to stats, now applied to voice, and I didn\'t have to be the one to spot it.',
+        },
+        {
+          kind: 'p',
+          text: "One thing I'd change: for months the system lived only in Bitbucket, where most of the people it was built for never looked. Dated release zips on the shared drive fixed access but split the system in two, because changes from drive users came back as messages someone had to turn into pull requests. A contribution path only counts if it reaches the people doing the work. I should have designed both from the start.",
         },
       ],
     },

@@ -244,7 +244,11 @@ function BlockView({ b }: { b: Block }) {
           <blockquote className="font-display text-[20px] leading-[1.4] text-ink-primary [text-wrap:pretty] md:text-[22px]">
             “{b.text}”
           </blockquote>
-          {b.cite && <figcaption className="mt-2 font-mono text-[12px] text-ink-faint">{b.cite}</figcaption>}
+          {b.cite && (
+            <figcaption className="mt-2 font-mono text-[12px] text-ink-faint">
+              <Inline text={b.cite} />
+            </figcaption>
+          )}
         </figure>
       )
     case 'callout':
