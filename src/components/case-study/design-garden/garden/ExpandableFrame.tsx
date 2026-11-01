@@ -2,8 +2,13 @@
 
 // A browser frame with an Expand button that takes the same live demo full screen (only classes
 // change, never the tree, so nothing restarts). The 880px case study column can't grow.
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import BrowserFrame from '@/components/case-study/BrowserFrame'
+
+// Lets a control inside the demo open the full screen view: starting a check in does, so the flow
+// runs where there's room and the column keeps a calm preview. Outside a frame it does nothing.
+const Expand = createContext<() => void>(() => {})
+export const useExpand = () => useContext(Expand)
 
 export default function ExpandableFrame({ size, label, children }: { size: string; label: string; children: ReactNode }) {
   const [big, setBig] = useState(false)
@@ -36,7 +41,9 @@ export default function ExpandableFrame({ size, label, children }: { size: strin
       >
         <div className={big ? 'gc-overlay-frame relative h-full w-full max-w-[1480px] md:max-h-[920px]' : 'relative'}>
           <BrowserFrame className={big ? 'h-full' : ''}>
-            <div className={`${big ? 'h-[calc(100%-32px)] overflow-y-auto md:overflow-visible' : size} bg-white p-2 md:p-3`}>{children}</div>
+            <div className={`${big ? 'h-[calc(100%-32px)] overflow-y-auto md:overflow-visible' : size} bg-white p-2 md:p-3`}>
+              <Expand.Provider value={() => setBig(true)}>{children}</Expand.Provider>
+            </div>
           </BrowserFrame>
           <button
             ref={btn}

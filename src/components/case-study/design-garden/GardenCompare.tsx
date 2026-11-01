@@ -11,11 +11,14 @@ import type { Visual } from '../types'
 import '../step-frame.css'
 import { useRitual } from './garden/ritual'
 import { Swap, TodayDashboard } from './garden/Dashboard'
+import { ShowLeadTip } from './garden/Checkin'
 import ExpandableFrame from './garden/ExpandableFrame'
 import { inter } from './garden/fonts'
 import './garden/garden.css'
 
-const SIZE = 'h-[720px] sm:h-auto sm:aspect-[16/10]'
+// 5:4 from tablet up (about 640px tall in the 880px column): at 16:10 the before's garden got
+// ~290px and its warm-up questions piled on each other. The app's own canvas minimum is 420px.
+const SIZE = 'h-[720px] sm:h-auto sm:aspect-[5/4]'
 
 const BEFORE = 'The garden took most of the screen. The questions were small text squeezed into a bar under it.'
 const AFTER = [
@@ -54,9 +57,12 @@ export default function GardenCompare({ visual }: { visual: Visual }) {
     } else before.reset()
   }, [on])
 
+  // "Who leads" also opens the leader's info tooltip, so the guidance it talks about is on screen.
+  const [leadTip, setLeadTip] = useState(0)
   const go = (m: (typeof AFTER)[number]) => {
     setMoment(m.key)
     after.jumpTo(m.to)
+    if (m.key === 'leads') setLeadTip((n) => n + 1)
   }
 
   return (
@@ -70,7 +76,13 @@ export default function GardenCompare({ visual }: { visual: Visual }) {
       </div>
 
       <ExpandableFrame key={on} size={SIZE} label={on === 'before' ? 'Check in before' : 'Check in after'}>
-        {on === 'before' ? <TodayDashboard r={before} /> : <Swap r={after} />}
+        {on === 'before' ? (
+          <TodayDashboard r={before} />
+        ) : (
+          <ShowLeadTip.Provider value={leadTip}>
+            <Swap r={after} />
+          </ShowLeadTip.Provider>
+        )}
       </ExpandableFrame>
 
       {/* Both captions share one grid cell, so the panel keeps the taller one's height and doesn't

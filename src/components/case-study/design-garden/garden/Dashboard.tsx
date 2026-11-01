@@ -7,19 +7,27 @@ import { EARLIER, PARTNER, type Ritual } from './ritual'
 import { INK, INK_SOFT, Pieces, Primary, Sand, Week } from './kit'
 import { CheckinCard, GardenPane } from './Checkin'
 import { TaskEditor, TaskPanel, WeekCard, useTasks } from './tasks'
+import { useExpand } from './ExpandableFrame'
 import Today from './Today'
 
 // The garden between check ins: last weeks' pieces and the way in.
 // The garden between check ins: last weeks' pieces and the way in. When Robin leads, Robin is the
 // one who started it (the app's host is whoever starts), so you join.
 function IdleGarden({ onStart, leader = 'you', className = '' }: { onStart: () => void; leader?: 'you' | 'partner'; className?: string }) {
+  const expand = useExpand() // starting (or joining) opens the full screen view
   return (
     <Sand className={`min-h-0 rounded-[14px] ${className}`}>
       <div className="absolute right-3 top-3 z-[4] rounded-full bg-white/75 px-2.5 py-1"><Week /></div>
       <Pieces pieces={EARLIER} />
       <div className="absolute inset-x-3 bottom-3 z-[5] mx-auto flex max-w-[420px] flex-col items-center gap-2 rounded-[14px] bg-white/85 p-3 shadow-[0_0_0_1px_rgba(74,40,12,.08),0_12px_28px_rgba(74,40,12,.14)] backdrop-blur-md">
         <p className="text-[13px] font-medium" style={{ color: leader === 'you' ? INK_SOFT : INK }}>{leader === 'you' ? 'Look how far you’ve grown together.' : `${PARTNER} started your check-in.`}</p>
-        <Primary onClick={onStart} className="w-full">{leader === 'you' ? 'Start check-in' : 'Join check-in'}</Primary>
+        <Primary
+          onClick={() => {
+            expand()
+            onStart()
+          }}
+          className="w-full"
+        >{leader === 'you' ? 'Start check-in' : 'Join check-in'}</Primary>
       </div>
     </Sand>
   )

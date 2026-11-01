@@ -6,6 +6,7 @@
 import { useState } from 'react'
 import { EARLIER, LENGTHS, OBSTACLE, BEE, PARTNER, PROMPT, SAND, SECTION, TAKEAWAY_CONSEQUENCE, WARMUP, WEEK, clock, useSecsLeft, type Ritual, type Piece } from './ritual'
 import { enriqueta } from './fonts'
+import { useExpand } from './ExpandableFrame'
 
 const PILL = {
   win: { background: '#d9f0a3', color: '#2d5a00' },
@@ -34,6 +35,7 @@ export default function Today({ r }: { r: Ritual }) {
   // Resting (before anyone starts): the garden undimmed, the start strip above it, no ritual bar.
   const resting = r.idle
   const [initiating, setInitiating] = useState(false)
+  const expand = useExpand() // starting opens the full screen view (case study)
   const [length, setLength] = useState<number>(30)
   const secsLeft = useSecsLeft(r.startedAt, r.minutes)
   const active = !resting && r.stage !== 'done'
@@ -99,7 +101,14 @@ export default function Today({ r }: { r: Ritual }) {
         {resting && !initiating && (
           <div className="flex shrink-0 items-center gap-2.5">
             <span className="whitespace-nowrap text-[11px] underline" style={{ color: '#6b5a47' }}>Check in solo</span>
-            <button onClick={() => setInitiating(true)} className="whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium text-white" style={{ background: '#003912' }}>
+            <button
+              onClick={() => {
+                expand()
+                setInitiating(true)
+              }}
+              className="whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium text-white"
+              style={{ background: '#003912' }}
+            >
               Start check-in 🌱
             </button>
           </div>

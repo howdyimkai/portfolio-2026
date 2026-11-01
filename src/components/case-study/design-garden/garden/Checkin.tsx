@@ -4,7 +4,7 @@
 // design-intent/garden-checkin-exploration/NOTES.md): the check in card (one prompt at a time, who
 // leads, the gate that moves both screens), the garden beside it, and the garden after (drag a
 // piece, tap it to read). Seeded demo pair only, scored by ritual.ts.
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { EARLIER, PARTNER, PROMPT, WARMUP, withBloom, type Entry, type Piece, type Ritual, type Tag } from './ritual'
 import { Composer, GREEN, INK, INK_SOFT, NEXT_LABEL, Pieces, Plot, Primary, Prompt, Quiet, Sand, Stepper, Typing, Week } from './kit'
 import { enriqueta } from './fonts'
@@ -147,18 +147,32 @@ const LEAD_TIP = {
 }
 
 // Hover or focus shows it; a tap toggles it on touch, where there's no hover. Escape closes it.
+// Opens the leader tooltip from outside the card (the case study's "Who leads" caption). Each new
+// number opens it once; it then closes the usual ways.
+export const ShowLeadTip = createContext(0)
+
 function LeadInfo({ who }: { who: 'you' | 'partner' }) {
   const [open, setOpen] = useState(false)
+  const show = useContext(ShowLeadTip)
+  useEffect(() => {
+    if (show > 0) setOpen(true)
+  }, [show])
   const hoverTimer = useRef<number | null>(null)
   const pointer = useRef<string>('')
   const wrap = useRef<HTMLSpanElement>(null)
   const id = `gc-lead-tip-${who}`
-  // A tap anywhere else closes it. iOS doesn't focus a tapped button, so blur alone won't.
+  // A tap anywhere else closes it (iOS doesn't focus a tapped button, so blur alone won't), and so
+  // does Escape, even when it was opened from outside and never had focus.
   useEffect(() => {
     if (!open) return
     const away = (e: PointerEvent) => !wrap.current?.contains(e.target as Node) && setOpen(false)
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
     document.addEventListener('pointerdown', away)
-    return () => document.removeEventListener('pointerdown', away)
+    document.addEventListener('keydown', esc)
+    return () => {
+      document.removeEventListener('pointerdown', away)
+      document.removeEventListener('keydown', esc)
+    }
   }, [open])
   const hover = (on: boolean) => {
     if (hoverTimer.current) clearTimeout(hoverTimer.current)
