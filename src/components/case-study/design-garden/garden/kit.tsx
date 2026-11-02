@@ -205,8 +205,9 @@ export function Composer({ r, id, onNext, nextLabel, aside }: { r: Ritual; id: s
         {aside}
       </div>
       {/* "Place my takeaway" is too long to sit beside the field, and it closes your side of the
-          check in, so it gets its own full width row, as in the app. */}
-      <div className={r.section === 'takeaway' ? 'flex flex-col gap-2' : 'flex items-end gap-2'}>
+          check in, so it gets its own full width row, as in the app. In that column the field's
+          flex-1 would set its height and pin it at one line, so it's switched off there. */}
+      <div className={r.section === 'takeaway' ? 'flex flex-col gap-2 [&>textarea]:flex-none' : 'flex items-end gap-2'}>
         <GrowField id={id} value={r.draft} onChange={r.setDraft} onSubmit={r.submit} placeholder={sec.placeholder} />
         <Primary submit disabled={!r.draft.trim()} className={r.section === 'takeaway' ? 'w-full' : ''}>
           {sec.cta}

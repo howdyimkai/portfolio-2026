@@ -97,7 +97,7 @@ const ONLINE = [
       <>“Design, Test, Repeat” · <a href="https://haas.berkeley.edu/business-academy/" target="_blank" rel="noopener noreferrer">UC Berkeley Business Academy for Youth</a>, Haas School of Business · Feb 2026</>,
       <><a href="https://www.chicagocamps.org/event/ux-camp-fall-2024/" target="_blank" rel="noopener noreferrer">Future Proof Your Portfolio with AI Projects + Insights</a> · UX Camp Fall · Nov 2024</>,
       <><a href="https://www.chicagocamps.org/kai-tran-bridging-gaps-how-ai-transforms-design-learning-and-careers/" target="_blank" rel="noopener noreferrer">Bridging Gaps: How AI Transforms Design Learning and Careers</a> · Chicago Camp Tent Talks podcast · May 2024</>,
-      <><a href="https://vimeo.com/876057163" target="_blank" rel="noopener noreferrer">The Future of Tech Needs Design Innovators</a> · University of Arizona, UX of UA · Mar 2023</>,
+      <>“The Future of Tech Needs Design Innovators” · University of Arizona, UX of UA · Mar 2023</>,
     ],
   },
   {
