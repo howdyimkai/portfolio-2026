@@ -1,21 +1,33 @@
 'use client'
 
+import { useLayoutEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import ShelfNav from '@/components/shelf/ShelfNav'
 import PhoneMenu from '@/components/shelf/PhoneMenu'
+import { playPageEnter } from '@/components/pageEnter'
 import ResumeBookmark from '@/components/resume/ResumeBookmark'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isHome = pathname === '/'
 
+  // Page changes fade the new page in (playPageEnter) while the shelf, phone bar and bookmark stay
+  // put. Not on the first page, since what's there when the site opens just sits there. WAAPI rather
+  // than a keyed remount, which left the old page mounted under the new one.
+  const firstPath = useRef(pathname)
+  useLayoutEffect(() => {
+    if (pathname === firstPath.current) return
+    firstPath.current = ''
+    playPageEnter()
+  }, [pathname])
+
   // /pieces/* show one part of the site on its own, so no site chrome around it.
-  if (pathname.startsWith('/pieces/')) return <main>{children}</main>
+  if (pathname.startsWith('/pieces/')) return <main data-page-enter="">{children}</main>
 
   // The case study password page sits alone on white grid paper (src/proxy.ts sends people here).
-  if (pathname === '/unlock') return <main className="grid-sheet">{children}</main>
+  if (pathname === '/unlock') return <main data-page-enter="" className="grid-sheet">{children}</main>
 
   if (isHome) {
     return (
@@ -24,7 +36,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       // hamburger the other pages use instead of the shelf, which was too crowded there (Kai, 2026-11-01).
       <>
         <PhoneMenu />
-        <main className="h-[100dvh] overflow-hidden">{children}</main>
+        <main data-page-enter="" className="h-[100dvh] overflow-hidden">{children}</main>
         <ResumeBookmark />
       </>
     )
@@ -41,7 +53,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <div className="max-md:hidden [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark_img]:[filter:brightness(0)]!">
           <ShelfNav />
         </div>
-        <main className="flex-grow max-md:pt-14">{children}</main>
+        <main data-page-enter="" className="flex-grow max-md:pt-14">{children}</main>
         <Footer />
         <ResumeBookmark />
       </div>
@@ -51,7 +63,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
       <Navigation />
-      <main className="flex-grow">{children}</main>
+      <main data-page-enter="" className="flex-grow">{children}</main>
       <Footer />
     </div>
   )

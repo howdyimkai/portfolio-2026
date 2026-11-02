@@ -19,7 +19,7 @@ export default function Footer() {
   if (pathname === '/') return null
 
   return (
-    <footer className="ft">
+    <footer className="ft" data-page-enter="">
       <span className="ft-ledge" aria-hidden="true" />
       <div className="ft-grid">
         <div className="ft-reach">
