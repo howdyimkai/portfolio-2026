@@ -95,20 +95,6 @@ h1, h2, h3 {
   border-radius: 9999px;
 }
 
-/* Nav watercolor-brush hover underlay: fades in under the label, gated to real hover devices */
-.nav-brush {
-  opacity: 0;
-  transition: opacity 150ms ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .group:hover .nav-brush {
-    opacity: 1;
-  }
-}
-.nav-brush.is-active {
-  opacity: 1;
-}
-
 /* Press feedback for buttons/links per emil-design-eng */
 .press-scale {
   transition: transform 160ms var(--ease-out-strong);
@@ -120,19 +106,6 @@ h1, h2, h3 {
 }
 .press-scale:active {
   transform: scale(0.97);
-}
-
-/* Mobile nav overlay entrance/exit */
-.nav-overlay {
-  opacity: 0;
-  transform: scale(0.98);
-  pointer-events: none;
-  transition: opacity 200ms ease-out, transform 200ms var(--ease-out-strong);
-}
-.nav-overlay.is-open {
-  opacity: 1;
-  transform: scale(1);
-  pointer-events: auto;
 }
 
 /* Zen garden: hide the OS cursor only where a real pointer + custom cursor apply,

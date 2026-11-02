@@ -9,7 +9,8 @@ The homepage and `/works` are being rebuilt in a design direction called
 the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
 `explore/proto-about` (2026-10-18, see `AboutPage` below) and merged into
 `explore/cal-v4-copy` on 2026-10-24. `/play` became the playground grid on 2026-11-02 (see
-`PlayGrid` below). `/resume` became a plain résumé page with the bookmark (2026-10-27).
+`PlayGrid` below). The résumé lives only in the bookmark; the `/resume` page and the old text `Navigation` were removed
+2026-11-02.
 
 ## Review preview and the parked password gate (2026-10-25, opened 2026-11-02)
 
@@ -20,7 +21,7 @@ the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
   howdyimkai.com is a **Framer** site, not this repo. Never push or merge to `main`.
 - Kai runs `git push` (auto mode blocks Claude's push). Each push rebuilds the preview.
 - **The case studies are open** (Kai, 2026-11-02): there is no `src/proxy.ts`, so `/works/cal` and
-  `/works/brand-system` need no password. Both pages stay noindex. The gate is **parked** for future
+  `/works/brand-system` need no password. Both are indexed and in the sitemap since 2026-11-02. The gate is **parked** for future
   private projects: `src/lib/unlock-gate.ts` (its comment says how to switch it back on with a
   `src/proxy.ts` and a matcher), the `/unlock` page (`src/app/unlock/`, still reachable, noindex) and
   `src/lib/unlock.ts` (30 day httpOnly cookie holding a hash of `CASE_STUDY_PASSWORD`, so changing the
@@ -28,8 +29,8 @@ the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
   in that page's `public/works/<case>/` folder.
 - Vercel refuses to deploy vulnerable Next versions (16.0.1 was blocked). Next is on 16.4.4
   (`^16.4.4`), npm audit clean as of 2026-11-02.
-- `/proto/*` stays reachable locally and on Vercel previews for review, and 404s on the production
-  deployment (`VERCEL_ENV === 'production'` in `src/app/proto/layout.tsx`). `robots.ts` and
+- `/proto/*` and `/pieces/*` stay reachable locally and on Vercel previews, and 404 on the production
+  deployment (`VERCEL_ENV === 'production'` in their `layout.tsx`). `robots.ts` and
   `sitemap.ts` assume the site lives at howdyimkai.com (`metadataBase`).
 
 ## Taste (read first)
@@ -145,15 +146,13 @@ About copy draft lives in the Positioning Brainstorm doc.
   `/pieces/*` renders bare (one piece of the site on its own, for recordings).
   `/works`, its case studies, `/about` and `/play` use `ShelfNav` + `Footer` on white grid paper; below
   md the shelf gives way to `PhoneMenu` (paper bar + hamburger opening a one-column shelf) and
-  case studies get a chalk `ChapterSheet` chip. The black-ink wordmark overrides in AppShell and
-  `SandboxHome` target `.shelf-wordmark img`, since `.shelf-wordmark` is now the link. Every other route
-  uses `Navigation` + `Footer` with normal scrolling.
-- **`Navigation`** — route-aware: homepage renders 4 items edge-to-edge with
-  no wordmark ("hello world" = home); other routes show the "Kai Tran"
-  wordmark + 3 links. Each item's watercolor brush underlay fades in under
-  the label on hover and stays persistent on the active page.
+  case studies get a chalk `ChapterSheet` chip. Any unknown path (the 404) gets the same shelf chrome. The 404 (`not-found.tsx`, the pony) and the error page
+  (`error.tsx`, the open cassette) share `components/stray/StrayPage`. The favicon and app icons are
+  the shelf's felt hat (`src/app/favicon.ico`, `icon.png`, `apple-icon.png`, from `nav/shelf/hat.webp`,
+  which is the only copy, 138×84). The black-ink wordmark overrides in AppShell and
+  `SandboxHome` target `.shelf-wordmark img`, since `.shelf-wordmark` is now the link.
 - **`ShelfNav`** (`src/components/shelf/`) — the homepage nav (AppShell renders it
-  instead of `Navigation` on `/`). A shadow-box shelf of felt toys drawn at 1× shelf
+  on every shelf page). A shadow-box shelf of felt toys drawn at 1× shelf
   units and scaled by `--zoom` (0.86 phones, 1.4 md+). Hover runs the "Tic" motion in
   `shelfMotion.ts`; the broom button sweeps the toys off and leaves a plain text row.
   Since 2026-10-28 a broom crosses the shelf (528ms): one animated `@property --tip`
@@ -207,7 +206,7 @@ About copy draft lives in the Positioning Brainstorm doc.
   labels and its width follows the label, both read from the shelf's top (36px) and `--shelf-zoom`.
   Since 2026-10-27 the homepage shelf uses the same size and top as /works on desktop. It's in the tools' quiet zone (`.rb`).
   `Resume.tsx` is the one copy of the résumé text (from `Resume_2026-10_Draft.md`, site header
-  without email or city); `/resume` renders it with `online` for the longer speaking section.
+  without email or city); the sheet renders it with `online` for the longer speaking section.
   Felt art and paper are SVG stand-ins (`public/resume-bookmark/*-standin.svg`); the PDF at
   `public/resume/Kai-Tran-Resume.pdf` is Kai's export and doesn't exist yet.
 - **`ZenGarden`** — self-contained canvas-based tool system (teeth rake,

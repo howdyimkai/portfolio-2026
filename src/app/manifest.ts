@@ -10,11 +10,9 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: '#F2EBE1',
     theme_color: '#F2EBE1',
     icons: [
-      {
-        src: '/favicon.ico',
-        sizes: '32x32',
-        type: 'image/x-icon',
-      }
+      // The shelf's felt hat (src/app/apple-icon.png, icon.png), at its drawn size.
+      { src: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+      { src: '/icon.png', sizes: '96x96', type: 'image/png' },
     ],
   }
 }

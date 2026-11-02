@@ -2,7 +2,6 @@
 
 import { useLayoutEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
-import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import ShelfNav from '@/components/shelf/ShelfNav'
 import PhoneMenu from '@/components/shelf/PhoneMenu'
@@ -45,26 +44,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   // /works, its case studies, /about and /play share the homepage's shelf nav, on white grid paper
   // (Kai, 2026-10-16; /about joined 2026-10-18, /play 2026-11-02). The wordmark and broom are inked like the homepage's:
   // black at 85%. On phones the shelf gives way to a paper bar whose hamburger opens it as one
-  // column (PhoneMenu, 2026-10-23).
-  if (pathname === '/works' || pathname.startsWith('/works/') || pathname === '/about' || pathname === '/play') {
-    return (
-      <div className="grid-sheet flex min-h-screen flex-col">
-        <PhoneMenu />
-        <div className="max-md:hidden [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark_img]:[filter:brightness(0)]!">
-          <ShelfNav />
-        </div>
-        <main data-page-enter="" className="flex-grow max-md:pt-14">{children}</main>
-        <Footer />
-        <ResumeBookmark />
-      </div>
-    )
-  }
-
+  // column (PhoneMenu, 2026-10-23). Any other path is a 404, which gets the same chrome (2026-11-02).
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navigation />
-      <main data-page-enter="" className="flex-grow">{children}</main>
+    <div className="grid-sheet flex min-h-screen flex-col">
+      <PhoneMenu />
+      <div className="max-md:hidden [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark_img]:[filter:brightness(0)]!">
+        <ShelfNav />
+      </div>
+      <main data-page-enter="" className="flex-grow max-md:pt-14">{children}</main>
       <Footer />
+      <ResumeBookmark />
     </div>
   )
 }

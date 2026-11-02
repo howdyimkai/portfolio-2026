@@ -215,8 +215,7 @@ const R = '/works/cal/rules'
 // Copy: this file is the source of record. Claude-Workspace/projects/2026-10-PortfolioSprint/
 // case-studies/cal/CaseStudy_Cal_V5.md, Part 1, is the reading copy (V5, 2026-10-30: problem
 // reframed as an acquisition test, kit + challenges + stamps folded into "What it led to").
-// Private working draft: names teammates and nothing is signed off by Tallo yet, so the page is
-// unlisted and noindex (see src/app/works/cal/page.tsx). Never frame 3 in 100 → 1 in 3 as a lift.
+// Public and indexed since 2026-11-02 (Kai). Never frame 3 in 100 → 1 in 3 as a lift.
 export const cal: CaseStudy = {
   eyebrow: 'Case study · Product design',
   title: "Cal's Career Quiz",

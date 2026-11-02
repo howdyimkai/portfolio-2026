@@ -1,8 +1,8 @@
 // The résumé, from Claude-Workspace/career/resume/variants/website.md (the part between the first
 // two `---` lines), which already has the site header (no email, no St. Louis). Hyphens kept on purpose: it's
 // professional copy. The PDF carries the one-page "Speaking and Awards" lines; `online` swaps in the
-// draft's longer "Online résumé only" section with links (/resume and the bookmark sheet pass it).
-// `page` makes the name the h1 (only /resume; in the sheet it titles the dialog).
+// draft's longer "Online résumé only" section with links (the bookmark sheet passes it).
+// `page` makes the name the h1 (for a standalone page; in the sheet it titles the dialog).
 import SayHowdy from './SayHowdy'
 
 const EXPERIENCE = [
@@ -122,7 +122,7 @@ export default function Resume({ titleId, online = false, page = online }: { tit
   return (
     <article className="rs-doc">
       <header className="rs-head">
-        {/* The page's heading on /resume, the dialog's title in the sheet. */}
+        {/* The page's heading when standalone, the dialog's title in the sheet. */}
         <Name id={titleId} className="rs-name">Kai Tran</Name>
         <p className="rs-line">Product designer · Open to remote or roles in Austin, Texas</p>
         <p className="rs-line">
