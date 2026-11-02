@@ -162,7 +162,8 @@ About copy draft lives in the Positioning Brainstorm doc.
   `TOYS`, so moving a toy means redoing them. The swept broom is a stand-in (the chip's
   glyph, straw); it wants felt art (`design-intent/broom-sweep-exploration/NOTES.md`).
   Taller than the old bar, so `Hero.tsx` shrinks the garden on short desktop screens to
-  keep the tool cards at the fold. The "howdy im Kai" wordmark links home on every shelf page
+  keep the tool cards at the fold. "field notes" (the pencil) is `external` in `TOYS` and opens
+  Kai's Substack in a new tab from the shelf, the swept text row and `PhoneMenu` (2026-11-02). The "howdy im Kai" wordmark links home on every shelf page
   (2026-10-24), like `PhoneMenu`'s. Decision record: `design-intent/nav-exploration/NOTES.md`.
 - **`AboutPage`** (`src/components/about/`) — `/about`, the "Shadow box" picked
   from `/proto/about` (decision + rejected options:
@@ -181,6 +182,9 @@ About copy draft lives in the Positioning Brainstorm doc.
   a rope. The sheet never scrolls by itself; the hat holds a line ~42% down and drag, wheel and swipe
   all move it along the rope, so the photos reveal as it reaches each pin. Era copy, labels and the
   closing line are `ERAS` / `RODEO_*` in `data.ts`; art in `public/about/rodeo/`. Hat and rope are stand-ins.
+  The cactus grows Kai's felt flower while its card is open (`bloom` in `data.ts`). The rodeo ends with
+  Kai's stamp beside a Copy email button (`SayHowdy`, shared with the résumé). On phones the
+  principles frame sits above the shelves.
   Sources: `design-intent/about-shelf/` (Paper exports), WebPs in `public/about/`.
 - **`PlayGrid`** (`src/components/play/`) — `/play`, "Gallery" picked from `/proto/play` on 2026-11-02
   (decision + rejected options: `design-intent/play-exploration/NOTES.md`). Nine tiles in four rows
