@@ -11,7 +11,7 @@ the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
 `explore/cal-v4-copy` on 2026-10-24. `/play` became the playground grid on 2026-11-02 (see
 `PlayGrid` below). `/resume` became a plain résumé page with the bookmark (2026-10-27).
 
-## Review preview and the case study gate (2026-10-25)
+## Review preview and the parked password gate (2026-10-25, opened 2026-11-02)
 
 - `explore/brand-system` (carries cal-v4-copy, K-Zen, /works, /about) is
   pushed and deploys to Vercel project `howdyimkais-projects/kai-portfolio-2026`.
@@ -19,15 +19,13 @@ the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
   `kai-portfolio-2026-git-explore-bran-428c65-howdyimkais-projects.vercel.app/works/cal`.
   howdyimkai.com is a **Framer** site, not this repo. Never push or merge to `main`.
 - Kai runs `git push` (auto mode blocks Claude's push). Each push rebuilds the preview.
-- `src/proxy.ts` (Next 16's middleware) gates `/works/cal` and
-  `/works/brand-system`: no valid cookie → `/unlock?next=<path>`. `/unlock`
-  (`src/app/unlock/`) checks `CASE_STUDY_PASSWORD` in a server action and sets
-  a 30 day httpOnly cookie holding a hash of the password (`src/lib/unlock.ts`),
-  so changing the password signs everyone out. Unset password = locked.
-  The matcher also catches files in `public/works/cal/` and `public/works/brand-system/`, so
-  anything shown on /works (card covers, Cal's float) must live outside those folders.
-  Locally the value is a placeholder in `.env.local` (gitignored); the real one
-  is in Vercel, Preview only. Vercel env changes need a Redeploy.
+- **The case studies are open** (Kai, 2026-11-02): there is no `src/proxy.ts`, so `/works/cal` and
+  `/works/brand-system` need no password. Both pages stay noindex. The gate is **parked** for future
+  private projects: `src/lib/unlock-gate.ts` (its comment says how to switch it back on with a
+  `src/proxy.ts` and a matcher), the `/unlock` page (`src/app/unlock/`, still reachable, noindex) and
+  `src/lib/unlock.ts` (30 day httpOnly cookie holding a hash of `CASE_STUDY_PASSWORD`, so changing the
+  password signs everyone out; unset password = locked). When it's on, its matcher also catches files
+  in that page's `public/works/<case>/` folder.
 - Vercel refuses to deploy vulnerable Next versions (16.0.1 was blocked). The
   branch is on 16.0.11; npm audit still flags advisories up to 16.4.0, so bump
   before going public.
@@ -323,9 +321,6 @@ Change the `.ts` first; if the two disagree, the `.ts` wins.
   `python3 tools/publish-visual.py <src> --chapter <slug>` from the sprint folder,
   which writes webp into `public/works/<case>/<chapter>/` and prints the `src`,
   width and height. Don't hand-copy art in.
-- `public/works/cal/` and `public/works/brand-system/` are inside the password
-  gate's matcher (`src/proxy.ts`), so nothing in them can be used on `/works` or
-  the homepage.
 - Design Garden's built visuals are native components in Design Garden's own design
   system (Enriqueta/Inter, the app's colors), not captures: `match-card` and, for the
   garden chapter, `garden-compare` (`src/components/case-study/design-garden/`, a live

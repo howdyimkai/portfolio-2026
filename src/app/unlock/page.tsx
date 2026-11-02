@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-// Where src/proxy.ts sends anyone without the case study cookie. White grid paper, no shelf nav:
+// Where the password gate (src/lib/unlock-gate.ts, parked) sends anyone without the cookie. White grid paper, no shelf nav:
 // reviewers arrive here from a direct link and only need the one field.
 export default async function UnlockPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const { next } = await searchParams

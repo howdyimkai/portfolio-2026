@@ -3,6 +3,7 @@
 // One high level case study card: the frosted card (name, role, cover window) sitting on Kai's
 // chalkboard, which carries the hook and the story. Promoted from /proto/project-card (Chalkboard).
 import { useRef, type CSSProperties, type PointerEvent } from 'react'
+import Link from 'next/link'
 import Loop from '@/components/case-study/Loop'
 import './project-card.css'
 
@@ -138,14 +139,15 @@ export default function ProjectCard({ project: p }: { project: Project }) {
     </>
   )
 
+  // Link, not <a>, so opening a case study is a client navigation and gets the page fade.
   return p.href ? (
-    <a
+    <Link
       href={p.href}
       className="wk-card group flex h-full w-full flex-col rounded-[22px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink-primary"
       aria-label={`${p.name} case study`}
     >
       {body}
-    </a>
+    </Link>
   ) : (
     <article className="wk-card flex h-full w-full flex-col" aria-label={`${p.name}, case study coming soon`}>
       {body}

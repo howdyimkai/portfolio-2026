@@ -26,7 +26,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   // /pieces/* show one part of the site on its own, so no site chrome around it.
   if (pathname.startsWith('/pieces/')) return <main data-page-enter="">{children}</main>
 
-  // The case study password page sits alone on white grid paper (src/proxy.ts sends people here).
+  // The case study password page sits alone on white grid paper (the parked password gate, src/lib/unlock-gate.ts, sends people here).
   if (pathname === '/unlock') return <main data-page-enter="" className="grid-sheet">{children}</main>
 
   if (isHome) {
