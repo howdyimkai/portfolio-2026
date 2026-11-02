@@ -35,3 +35,9 @@ Clefairy · Moo Deng + Claude & Cursor poster + Bootcamp.
   each capture the whole tile.
 - **Hobonichi's "The Latest Collections" row**: cropped off so the collage shows ~30% bigger.
 - **Design Garden Harvest video**: never used (crew faces and a crew member's post).
+
+## Copy sign-off (Kai, 2026-11-02)
+Approved as shipped: the Claude & Cursor 101 line ("I designed the poster and hosted this hands-on
+workshop with Ashita Achuthan."), the meta description ("Interactions, concept roasts and
+illustrations by Kai Tran."), and "Ruler nav" as the nav tile's name. Media pipeline notes and open
+items: the brief's "Status" section (sprint folder, `playground/IMPLEMENTATION_Playground.md`).
