@@ -33,3 +33,6 @@ design-intent/sand2.png
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+
+# Planning reference screenshots, not part of the site
+design-intent/design-garden-session1/
