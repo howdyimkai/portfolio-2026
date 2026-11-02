@@ -88,7 +88,7 @@ const BLOSSOM_ERASE_RADIUS = 34
 // Notes: design-intent/tool-exit-exploration/NOTES.md.
 const QUIET_ZONE_PAD = 32
 // The résumé bookmark (.rb) hangs beside the shelf, so it gets the same room (2026-10-27).
-const QUIET_ZONE_SELECTOR = '.shelf-wordmark, .shelf-cubby, .shelf-broom, .rb'
+const QUIET_ZONE_SELECTOR = '.shelf-wordmark, .shelf-cubby, .shelf-broom, .rb, [data-tool-quiet]'
 // Principles hint (Kai, 2026-10-24, "Whisper" from /proto/hint): after this long on the
 // page a caption fades in under the title pointing at the erase reveal, and it leaves for
 // good the first time the eraser touches the title. Desktop only, like the reveal.
@@ -103,6 +103,7 @@ const KEEP_GOING_AT = 0.5
 // title element so erasing the title leaves it alone. Kai, 2026-10-29: name plus title, then the
 // page's tools as verbs. Replaced "Product designer. Head of Creative at Tallo." (role ends Nov 2026).
 const TITLE_SUBLINE = 'Kai Tran, product designer. Plant, rake, ship.'
+const TITLE_SUBLINE_PHONE = 'Kai Tran, product designer'
 const HINT_COPY = { start: 'psst, try the eraser above', keep: 'keep going, try an infinity pattern' } // keep renders with InfinityTrace before "infinity"
 // Single-key tool shortcuts. Pressing the held tool's key puts it down, like clicking it.
 const TOOL_KEYS: Record<string, Tool> = { r: 'rake', e: 'eraser', b: 'blossom' }
@@ -193,10 +194,10 @@ const PRINCIPLES = [
 // Pixel erase (picked from /proto/eraser-reveal, 2026-10-28): on desktop the title and each
 // principle's still are drawn into canvases (EraseCanvas) and the eraser wipes only the pixels
 // its towed head passes over, with a soft, grainy edge. Progress is the share of real ink gone,
-// which replaced a 16x6 swept-cell grid that faded the whole title at once. Desktop-only — the
-// title lives inside the interactive plot only at md+ (see the md:flex title block below); on
-// mobile it's a separate static block above the plot entirely, so this whole mechanic is gated
-// behind an explicit viewport check rather than a hidden element's getBoundingClientRect.
+// which replaced a 16x6 swept-cell grid that faded the whole title at once. On desktop, and on
+// phones in the full-bleed homepage (Kai, 2026-11-02): the other layouts show phones a static
+// title, so the mechanic is gated behind an explicit check (revealOnRef) rather than a hidden
+// element's getBoundingClientRect.
 //
 // The title is Kai's October hero (design-intent/Kai-October-Hero.GIF, 2026-10-08), a
 // line-boil loop. The GIF ping-pongs 7 drawings (1-7-2); here they're a sprite strip in
@@ -480,7 +481,7 @@ export default function Garden({ layout }: { layout: Layout }) {
     },
     []
   )
-  const isDesktopRef = useRef(false)
+  const revealOnRef = useRef(false)
   const titleRectRef = useRef<Rect>({ left: 0, top: 0, width: 0, height: 0 })
   // Desktop: the title sits in a pointer-events-none layer over the plot, so hover is a
   // hit-test of plot-local points against its box (titleRectRef is zeroed on mobile).
@@ -673,7 +674,7 @@ export default function Garden({ layout }: { layout: Layout }) {
     (p: Point) => {
       const prev = prevEraseHeadRef.current ?? p
       prevEraseHeadRef.current = p
-      if (!isDesktopRef.current) return
+      if (!revealOnRef.current) return
 
       if (!sequenceActiveRef.current) {
         const rect = titleRectRef.current
@@ -838,13 +839,13 @@ export default function Garden({ layout }: { layout: Layout }) {
       activeStrokeRef.current = createStroke(gesture)
     }
 
-    // Erase-the-name reveal is desktop-only: the title only lives inside the interactive
-    // plot at md+ (see the md:flex title block in the JSX). A breakpoint change swaps
+    // Erase-the-name reveal: the title lives inside the interactive plot at md+, and at every
+    // width in the full-bleed layout (see the title block in the JSX). A breakpoint change swaps
     // coordinate spaces same as the rake grooves above, so drop any in-progress sequence
     // rather than let it resolve against stale geometry.
-    isDesktopRef.current = window.matchMedia('(min-width: 768px)').matches
+    revealOnRef.current = layout === 'bleed' || window.matchMedia('(min-width: 768px)').matches
     resetTitleErase()
-    if (isDesktopRef.current && titleElRef.current) {
+    if (revealOnRef.current && titleElRef.current) {
       const tRect = titleElRef.current.getBoundingClientRect()
       titleRectRef.current = {
         left: tRect.left - rect.left,
@@ -855,7 +856,7 @@ export default function Garden({ layout }: { layout: Layout }) {
     } else {
       titleRectRef.current = { left: 0, top: 0, width: 0, height: 0 }
     }
-  }, [resetTitleErase])
+  }, [resetTitleErase, layout])
 
   useEffect(() => {
     resizeRef.current = resize
@@ -1156,7 +1157,7 @@ export default function Garden({ layout }: { layout: Layout }) {
   // The hint waits HINT_DELAY_MS in each idle state, and hides while a principle plays.
   useEffect(() => {
     setHintOn(false)
-    if (hintDoneRef.current || !isDesktopRef.current || sequencePhase !== 'idle') return
+    if (hintDoneRef.current || !revealOnRef.current || sequencePhase !== 'idle') return
     const id = window.setTimeout(() => setHintOn(true), HINT_DELAY_MS)
     return () => window.clearTimeout(id)
   }, [tool, sequencePhase])
@@ -1268,28 +1269,37 @@ export default function Garden({ layout }: { layout: Layout }) {
           {mode === 'bleed' && <div className="grid-paper absolute inset-0 mix-blend-multiply" />}
         </div>
 
-        {/* Phones: in the full-screen layouts the title sits on the sand (no erase reveal). */}
-        {mode !== 'home' && (
+        {/* Phones in the tray layout: the title sits on the sand (no erase reveal). */}
+        {mode === 'tray' && (
           <div className={`pointer-events-none absolute left-1/2 z-10 aspect-[900/436] w-[90%] max-w-[368px] -translate-x-1/2 md:hidden ${D.mobileTitle}`}>
             <TitleArt boiling={titleBoiling} />
-            <p className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] font-bold text-ink-primary min-[390px]:text-[13px]">
-              {TITLE_SUBLINE}
+            <p className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap font-mono text-[16px] font-bold text-ink-primary">
+              {TITLE_SUBLINE_PHONE}
             </p>
           </div>
         )}
 
-        <div className="pointer-events-none absolute inset-0 hidden flex-col items-center justify-center md:flex">
+        {/* Full bleed on phones (Kai, 2026-11-02): the same erasable title, hints and principles,
+            the title's top at 184px like the tray layout's static one, under the paper bar. */}
+        <div
+          className={`pointer-events-none absolute inset-0 flex-col items-center md:flex md:justify-center md:pt-0 ${
+            mode === 'bleed' ? 'flex justify-start pt-[148px]' : 'hidden'
+          }`}
+        >
           {/* The caption sits beside the title, not inside it, so it doesn't fade as the
               title is erased. */}
           <div className="relative">
-            {/* Above the title in mono bold, 20% up from 13px (Kai, 2026-10-29). Phones stay 12-13px,
-                since mono at 14px is wider than a 390px screen. */}
-            <p className="mb-3 text-center font-mono text-[16px] font-bold text-ink-primary">{TITLE_SUBLINE}</p>
+            {/* Above the title in mono bold, 20% up from 13px (Kai, 2026-10-29). Phones drop
+                "Plant, rake, ship." (Kai, 2026-11-02), since mono at 16px is wider than the screen. */}
+            <p className="mb-3 text-center font-mono text-[16px] font-bold text-ink-primary">
+              <span className="md:hidden">{TITLE_SUBLINE_PHONE}</span>
+              <span className="max-md:hidden">{TITLE_SUBLINE}</span>
+            </p>
             <div
               ref={titleElRef}
               className={`relative aspect-[900/436] ${
                 // Title and principles 15% larger with pixel erase (Kai, 2026-10-28).
-                mode === 'bleed' ? 'w-[calc(var(--u)*67)] min-w-[320px]' : 'w-[calc(var(--u)*61)] min-w-[291px]'
+                mode === 'bleed' ? 'w-[min(90vw,368px)] md:w-[calc(var(--u)*67)] md:min-w-[320px]' : 'w-[calc(var(--u)*61)] min-w-[291px]'
               } transition-[opacity,filter] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]`}
             >
               {/* A canvas, so the eraser wipes only what it passes over (EraseCanvas). */}
@@ -1318,7 +1328,9 @@ export default function Garden({ layout }: { layout: Layout }) {
             role="img"
             aria-label={PRINCIPLES[principleIndex].text}
             aria-hidden={sequencePhase === 'idle'}
-            className={`absolute aspect-[1440/540] w-[calc(var(--u)*77)] mix-blend-multiply transition-[opacity,transform,filter] motion-reduce:scale-100 motion-reduce:blur-[0px] ${
+            // Phones: 15% wider than the title like desktop (capped at the screen), its middle on the
+            // title's middle. The column starts at 148px and the title's top is at 184px.
+            className={`absolute aspect-[1440/540] w-[min(100vw,min(90vw,368px)*1.15)] mt-[calc(36px+min(90vw,368px)*0.2422-min(100vw,min(90vw,368px)*1.15)*0.1875)] md:mt-0 md:w-[calc(var(--u)*77)] mix-blend-multiply transition-[opacity,transform,filter] motion-reduce:scale-100 motion-reduce:blur-[0px] ${
               sequencePhase === 'principle-in' || sequencePhase === 'principle-hold'
                 ? 'scale-100 opacity-100 blur-[0px] duration-[380ms] ease-[cubic-bezier(0.23,1,0.32,1)]'
                 : `scale-[0.98] opacity-0 duration-[600ms] ease-[cubic-bezier(0.45,0,0.55,1)] ${principleStill ? 'blur-[3px]' : ''}`
@@ -1439,9 +1451,13 @@ function ToolRail({
     <div
       role="toolbar"
       aria-label="Garden tools"
+      // Desktop: while the drop slot is open the rail moves down by half its height (53px),
+      // in step with it, so the tools stay put under the cursor and the slot grows below them.
       className={`flex items-center gap-1 ${
         floating
-          ? 'absolute bottom-[max(16px,env(safe-area-inset-bottom))] left-1/2 z-40 -translate-x-1/2 rounded-[22px] border border-hairline bg-page/85 p-1.5 shadow-[0_1px_2px_rgba(58,50,38,0.06),0_8px_24px_rgba(58,50,38,0.12)] backdrop-blur-md md:bottom-auto md:left-6 md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 md:flex-col'
+          ? `absolute bottom-[max(16px,env(safe-area-inset-bottom))] left-1/2 z-40 w-max -translate-x-1/2 rounded-[22px] border border-hairline bg-page/85 p-1.5 shadow-[0_1px_2px_rgba(58,50,38,0.06),0_8px_24px_rgba(58,50,38,0.12)] backdrop-blur-md transition-[translate] duration-200 ease-[var(--ease-out-strong)] motion-reduce:transition-none md:bottom-auto md:left-6 md:top-1/2 md:-translate-x-0 md:flex-col ${
+              onDone && tool ? 'md:translate-y-[calc(-50%+26.5px)]' : 'md:-translate-y-1/2'
+            }`
           : 'shrink-0 justify-center md:flex-col md:justify-center'
       }`}
     >
@@ -1470,28 +1486,38 @@ function ToolRail({
         </button>
       ))}
       {onDone && (
-        <>
-          {/* Always laid out and only shown while a tool is held, so the tools never
-              shift under the cursor when it appears (31px on desktop otherwise). */}
-          <span aria-hidden className={`mx-1 h-8 w-px bg-hairline md:mx-0 md:my-1 md:h-px md:w-8 ${tool ? '' : 'invisible'}`} />
-          <button
-            type="button"
-            onClick={(e) => {
-              // The button hides itself; hand focus back to the tool it dropped, not <body>.
-              const held = e.currentTarget.parentElement?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]')
-              onDone()
-              held?.focus()
-            }}
-            aria-label="Drop the tool"
-            aria-keyshortcuts="Escape"
-            className={`${tool ? '' : 'invisible'} press-scale flex h-11 w-[76px] flex-col items-center justify-center gap-1 rounded-2xl font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted transition-[background-color,color] duration-150 ease-out hover:bg-sand-light/40 hover:text-ink-body focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink-primary [touch-action:manipulation]`}
-          >
-            drop tool
-            <kbd className="hidden rounded border border-hairline px-1 font-mono text-[9px] leading-[14px] text-ink-muted [@media(hover:hover)_and_(pointer:fine)]:block">
-              esc
-            </kbd>
-          </button>
-        </>
+        // Folded away until a tool is held, then opens beside the tools (below them on
+        // desktop, to their right on phones). Kai, 2026-11-02: no empty slot by default.
+        <div
+          inert={!tool}
+          className={`-ml-1 grid shrink-0 transition-[grid-template-columns,grid-template-rows,opacity] duration-200 ease-[var(--ease-out-strong)] motion-reduce:transition-none md:-mt-1 md:ml-0 ${
+            tool
+              ? 'grid-cols-[1fr] grid-rows-[1fr] opacity-100'
+              : 'grid-cols-[0fr] opacity-0 md:grid-cols-[1fr] md:grid-rows-[0fr]'
+          }`}
+        >
+          <div className="flex min-h-0 min-w-0 items-center overflow-hidden pl-1 md:flex-col md:pl-0 md:pt-1">
+            <span aria-hidden className="mx-1 h-8 w-px shrink-0 bg-hairline md:mx-0 md:my-1 md:h-px md:w-8" />
+            <button
+              type="button"
+              onClick={(e) => {
+                // The button hides itself; hand focus back to the tool it dropped, not <body>.
+                const held = e.currentTarget.closest('[role="toolbar"]')?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]')
+                onDone()
+                held?.focus()
+              }}
+              aria-label="Drop the tool"
+              aria-keyshortcuts="Escape"
+              // Inset focus ring: the folding wrapper clips anything drawn outside the button.
+              className="press-scale flex h-11 w-[76px] shrink-0 flex-col items-center justify-center gap-1 rounded-2xl font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted transition-[background-color,color] duration-150 ease-out hover:bg-sand-light/40 hover:text-ink-body focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink-primary [touch-action:manipulation]"
+            >
+              drop tool
+              <kbd className="hidden rounded border border-hairline px-1 font-mono text-[9px] leading-[14px] text-ink-muted [@media(hover:hover)_and_(pointer:fine)]:block">
+                esc
+              </kbd>
+            </button>
+          </div>
+        </div>
       )}
     </div>
   )
@@ -1514,18 +1540,21 @@ const DECOR: Record<'home' | 'bleed' | 'tray', { mobileTitle: string; moss: stri
   // and bonsai follow Kai's red-circle pass (2026-10-14): in from the corners, bigger.
   bleed: {
     mobileTitle: 'top-[184px]', // room above for the sub line, under the shelf's 146px bottom
-    // Phones (Kai, 2026-10-29): the title ends at 184px + its width (min(90vw, 368px)) × 436/900.
-    // The moss and small rock start at least 8px under it. Below 767px tall the sand between the
-    // title and the tool tray can't hold four objects, so those two step out and the big rock and
-    // bonsai sit side by side 16px under the title.
-    moss: 'w-[calc(var(--u)*30)] left-[60%] top-[max(42%,calc(192px+min(90vw,368px)*0.4844))] [@media(max-width:767px)_and_(max-height:766px)]:hidden md:w-[calc(var(--u)*23)] md:left-[9.6%] md:top-[15.2%]',
+    // Phones (Kai's mock, 2026-11-02): a small rock up top right, 10px above where the sand turns
+    // solid under its white grid band (sandbox-home.css), beside the sub line; the moss
+    // 40px under the title (room for the eraser hint) (which ends at 184px + min(90vw, 368px) × 436/900), the bonsai big on
+    // the right and the wide rock low on the left. The bonsai and that rock are anchored to the
+    // works pill (its top is 159px above the safe bottom), so they never sit on it. The bonsai
+    // shrinks so its top stays 80px under the moss's top. The smallest rock stays off phones. Below
+    // 767px tall the moss steps out and the bonsai drops to 40u, 8px closer to the pill, to clear the hint.
+    moss: 'w-[calc(var(--u)*33)] left-[9%] top-[max(45%,calc(224px+min(90vw,368px)*0.4844))] [@media(max-width:767px)_and_(max-height:766px)]:hidden md:w-[calc(var(--u)*23)] md:left-[9.6%] md:top-[15.2%]',
     rocks: [
-      'w-[calc(var(--u)*34)] left-[2%] top-[58%] [@media(max-width:767px)_and_(max-height:766px)]:top-[calc(200px+min(90vw,368px)*0.4844)] md:w-[calc(var(--u)*20)] md:left-[9.5%] md:top-[70.6%]',
+      'w-[calc(var(--u)*20)] left-[8%] bottom-[calc(max(16px,env(safe-area-inset-bottom))+153px)] md:bottom-auto md:left-[9.5%] md:top-[70.6%]',
       // Kai, 2026-10-29: down and left of 81%/12% (his circle), so the résumé ribbon never hangs over it.
-      'hidden md:block md:w-[calc(var(--u)*14)] md:left-[76.5%] md:top-[24%]',
-      'w-[calc(var(--u)*17)] left-[14%] top-[max(44%,calc(192px+min(90vw,368px)*0.4844))] [@media(max-width:767px)_and_(max-height:766px)]:hidden md:w-[calc(var(--u)*9)] md:left-[27%] md:top-[82%]',
+      'w-[calc(var(--u)*16)] left-[83%] top-[calc(23.2px+7.9dvh)] md:w-[calc(var(--u)*14)] md:left-[76.5%] md:top-[24%]',
+      'hidden md:block md:w-[calc(var(--u)*9)] md:left-[27%] md:top-[82%]',
     ],
-    bonsai: 'w-[calc(var(--u)*56)] left-[38%] top-[60%] [@media(max-width:767px)_and_(max-height:766px)]:top-[calc(200px+min(90vw,368px)*0.4844)] md:w-[calc(var(--u)*48)] md:left-[69.2%] md:top-[57.2%]',
+    bonsai: 'w-[min(calc(var(--u)*71),calc((100dvh-487px-min(90vw,368px)*0.4844)*1.291))] right-[5%] bottom-[calc(max(16px,env(safe-area-inset-bottom))+167px)] [@media(max-width:767px)_and_(max-height:766px)]:w-[calc(var(--u)*40)] [@media(max-width:767px)_and_(max-height:766px)]:bottom-[calc(max(16px,env(safe-area-inset-bottom))+151px)] md:bottom-auto md:right-auto md:w-[calc(var(--u)*48)] md:left-[69.2%] md:top-[57.2%]',
   },
   // Plot starts under the shelf, framed by the page.
   tray: {

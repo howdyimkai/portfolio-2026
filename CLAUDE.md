@@ -143,6 +143,8 @@ About copy draft lives in the Positioning Brainstorm doc.
   `/proto/garden-full?v=2`, 2026-10-15): `<main>` locked to `h-[100dvh]` with
   `overflow-hidden`, and `SandboxHome` (`src/components/SandboxHome.tsx`) brings
   its own floating `ShelfNav` over `SandGarden layout="bleed"`. No footer on `/`.
+  A "see selected works" pill (`WorksPill`, 2026-11-02, `design-intent/works-nudge-exploration/NOTES.md`)
+  sits bottom right on desktop and above the tool rail on phones, as a plain way into `/works`.
   `/pieces/*` renders bare (one piece of the site on its own, for recordings).
   `/works`, its case studies, `/about` and `/play` use `ShelfNav` + `Footer` on white grid paper; below
   md the shelf gives way to `PhoneMenu` (paper bar + hamburger opening a one-column shelf) and
@@ -267,7 +269,8 @@ About copy draft lives in the Positioning Brainstorm doc.
   file plus the towed branch in `handlePointerMove`, so it's revertible
   without touching the groove rendering system described above.
 
-  **Erase-the-name reveal (desktop only, 2026-09-29):** sweeping the eraser
+  **Erase-the-name reveal (2026-09-29; on phones too in the full-bleed homepage since
+  2026-11-02, with both hints, the title's top at 184px and the principle centered on it):** sweeping the eraser
   over the hero title wipes it away, then — after a 1s beat of
   bare sand (`REVEAL_DELAY_MS`, 2026-10-08) — plays one of Kai's five
   hand-written principles as a write-on video, holds, and fades back to the

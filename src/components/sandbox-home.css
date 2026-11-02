@@ -10,7 +10,10 @@
   .bleed-shelf .shelf-nav-draw { top: var(--bleed-top); }
 }
 
-/* Phones: the paper bar (56px) replaces the shelf, so the sand's soft top edge starts just under it. */
+/* Phones: the paper bar (56px) replaces the shelf. The sand's visible edge sits a little under the bar, so some white
+   grid frames the sand and its edge reads just under the résumé ribbon's tip (Kai, 2026-11-02; 16px
+   lower was too much). --feather-y is where the fade turns solid, and the fade is 7.9% of the window
+   tall, so its start is (y - 7.9dvh) / 0.921 = 36px, behind the bar: the first part of the fade is too faint to see. */
 @media (max-width: 767px) {
-  .bleed-shelf { --feather-y: 60px; }
+  .bleed-shelf { --feather-y: calc(33.2px + 7.9dvh); }
 }

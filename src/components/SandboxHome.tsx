@@ -2,6 +2,7 @@
 
 import ShelfNav from '@/components/shelf/ShelfNav'
 import SandGarden from '@/components/SandGarden'
+import WorksPill from '@/components/WorksPill'
 import './sandbox-home.css'
 
 // Homepage: sand is the page, and the shelf and tools float on top of it.
@@ -16,6 +17,7 @@ export default function SandboxHome() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-40 max-md:hidden [&_.shelf-broom]:pointer-events-auto [&_.shelf-wordmark]:pointer-events-auto [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-wordmark_img]:[filter:brightness(0)]!">
         <ShelfNav activeHref="/" />
       </div>
+      <WorksPill />
     </div>
   )
 }
