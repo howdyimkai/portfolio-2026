@@ -8,8 +8,8 @@ The homepage and `/works` are being rebuilt in a design direction called
 **K-Zen** on the `explore/k-zen` branch (not merged to `main`). `main` holds
 the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
 `explore/proto-about` (2026-10-18, see `AboutPage` below) and merged into
-`explore/cal-v4-copy` on 2026-10-24. `/play` is intentionally untouched — out of scope
-for this exploration. `/resume` became a plain résumé page with the bookmark (2026-10-27).
+`explore/cal-v4-copy` on 2026-10-24. `/play` became the playground grid on 2026-11-02 (see
+`PlayGrid` below). `/resume` became a plain résumé page with the bookmark (2026-10-27).
 
 ## Review preview and the case study gate (2026-10-25)
 
@@ -143,7 +143,7 @@ About copy draft lives in the Positioning Brainstorm doc.
   `overflow-hidden`, and `SandboxHome` (`src/components/SandboxHome.tsx`) brings
   its own floating `ShelfNav` over `SandGarden layout="bleed"`. No footer on `/`.
   `/pieces/*` renders bare (one piece of the site on its own, for recordings).
-  `/works`, its case studies and `/about` use `ShelfNav` + `Footer` on white grid paper; below
+  `/works`, its case studies, `/about` and `/play` use `ShelfNav` + `Footer` on white grid paper; below
   md the shelf gives way to `PhoneMenu` (paper bar + hamburger opening a one-column shelf) and
   case studies get a chalk `ChapterSheet` chip. The black-ink wordmark overrides in AppShell and
   `SandboxHome` target `.shelf-wordmark img`, since `.shelf-wordmark` is now the link. Every other route
@@ -180,6 +180,14 @@ About copy draft lives in the Positioning Brainstorm doc.
   all move it along the rope, so the photos reveal as it reaches each pin. Era copy, labels and the
   closing line are `ERAS` / `RODEO_*` in `data.ts`; art in `public/about/rodeo/`. Hat and rope are stand-ins.
   Sources: `design-intent/about-shelf/` (Paper exports), WebPs in `public/about/`.
+- **`PlayGrid`** (`src/components/play/`) — `/play`, "Gallery" picked from `/proto/play` on 2026-11-02
+  (decision + rejected options: `design-intent/play-exploration/NOTES.md`). Nine tiles in four rows
+  (`items.ts`; copy and media from the sprint folder's `playground/IMPLEMENTATION_Playground.md`),
+  raised on the page color and standing on the /works chalkboard's wooden ledge at half height. Loops
+  are muted MP4/WebM in `public/play/` that play only on screen and never under reduced motion
+  (posters instead); roasts use the case study Toggle's control, opening on after. The title is
+  Kai's hand-drawn line boil, stepped like the hero's and boiling only on hover. No tile links.
+  Never use the Design Garden Harvest video here (crew faces).
 - **`ResumeBookmark`** (`src/components/resume/`) — a red felt ribbon hanging from the top
   edge right of the shelf on every shelf page (home, `/works*`, `/about`; AppShell mounts it),
   opening the résumé on paper over the page ("Tug", from `/proto/resume-bookmark`, decision record

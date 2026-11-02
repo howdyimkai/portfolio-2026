@@ -1,0 +1,209 @@
+/* /play tiles: "Gallery" from /proto/play (Kai, 2026-11-02, design-intent/play-exploration/NOTES.md).
+   Raised tiles on the page color that stand on the /works chalkboard's wooden ledge, the piece
+   centered inside, a caption row underneath. */
+
+.pl-grid {
+  --pl-radius: 22px; /* the selected works cards' radius */
+  --pl-gap: 32px;
+  --pl-lift: 3px;
+  --pl-cap: 13px;
+  --pl-ratio: 1.06; /* tile height × column width */
+  --pl-pad: 28px;
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: calc(var(--pl-gap) * 1.25) var(--pl-gap);
+}
+@media (min-width: 1024px) {
+  .pl-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pl-wide { grid-column: span 2; }
+}
+
+/* ---- Title ---- */
+.pl-title {
+  width: fit-content;
+  margin-bottom: 24px;
+}
+.pl-title-art {
+  display: block;
+  overflow: hidden;
+  width: 160px;
+  aspect-ratio: 600 / 198;
+  user-select: none;
+  /* The shelf wordmark's ink on these pages: black at 85% (AppShell). */
+  filter: brightness(0);
+  opacity: 0.85;
+}
+@media (min-width: 768px) {
+  .pl-title-art { width: 208px; }
+}
+.pl-title-strip {
+  display: block;
+  width: 700%;
+  max-width: none;
+  height: 100%;
+  animation-play-state: paused;
+}
+@media (hover: hover) and (pointer: fine) {
+  .pl-title:hover .pl-title-strip { animation-play-state: running; }
+}
+
+/* ---- Tiles ---- */
+.pl-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+}
+
+/* The ledge is the top 52 of case-study-chalk-large.webp's 706px, cut out as public/play/ledge.webp,
+   at half the height /works gives it: 52/706 of one column × 0.5, so a wide tile's ledge matches a
+   normal one's. Registered so it resolves against the grid, then inherits as a plain length. */
+@property --pl-ledge {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 13px;
+}
+.pl-item { --pl-ledge: calc(100cqw * 52 / 706 * 0.5); }
+@media (min-width: 1024px) {
+  .pl-item { --pl-ledge: calc((100cqw - 2 * var(--pl-gap)) / 3 * 52 / 706 * 0.5); }
+}
+
+.pl-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: var(--pl-pad);
+  padding-bottom: calc(var(--pl-pad) + var(--pl-ledge));
+  border-radius: var(--pl-radius) var(--pl-radius) 0 0;
+  /* Keeps the roast toggle's stacked views (z-index 1) inside the tile. */
+  isolation: isolate;
+  background-color: var(--color-page);
+  box-shadow:
+    0 0 0 1px rgb(61 50 38 / 0.05),
+    0 1px 3px rgb(61 50 38 / 0.05),
+    0 6px 16px -6px rgb(61 50 38 / 0.08);
+  transition:
+    transform 220ms var(--ease-out-strong),
+    box-shadow 220ms var(--ease-out-strong);
+}
+.pl-tile::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--pl-ledge);
+  background: url('/play/ledge.webp') center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+/* Phones: square normal tiles; wide tiles and the nav strip take their content's height, and the
+   strip gets the full width so its labels stay readable. */
+.pl-item:not(.pl-wide):not(:has(.pl-flush)) .pl-tile { aspect-ratio: 1; }
+@media (max-width: 1023px) {
+  .pl-tile:has(.pl-flush) { padding: 20px 12px; }
+}
+@media (min-width: 1024px) {
+  /* Every tile in a row is one column tall (× ratio), so wide and normal tiles line up. */
+  .pl-tile {
+    height: calc((100cqw - 2 * var(--pl-gap)) / 3 * var(--pl-ratio));
+    aspect-ratio: auto !important;
+    container-type: size;
+  }
+}
+
+/* ---- The piece inside ---- */
+.pl-fit {
+  position: relative;
+  aspect-ratio: var(--ar);
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .pl-fit { width: min(100cqw, 100cqh * var(--ar)); }
+}
+.pl-media-el {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Screen captures (the roasts): a small radius and the 10% black inset outline. */
+.pl-screen .pl-media-el {
+  border-radius: 6px;
+  outline: 1px solid rgb(0 0 0 / 0.1);
+  outline-offset: -1px;
+}
+
+/* Full-bleed pieces (Curiosity, Lightning Round, the poster) fill their tile down to the ledge;
+   Gengar fills its height on its own navy, so the sides are the art's color, not bars. */
+.pl-tile:has(> .pl-bleed),
+.pl-tile:has(> .pl-contain) { padding: 0 0 var(--pl-ledge); }
+.pl-bleed { width: 100% !important; height: 100%; aspect-ratio: auto; }
+.pl-contain { position: absolute !important; inset: 0 0 var(--pl-ledge); width: auto !important; aspect-ratio: auto; }
+.pl-contain .pl-media-el { object-fit: contain; }
+
+/* Moo Deng and the shoe sit on the surface with room around them. Both are drawn on white (the shoe's
+   PNG is a white box with clear side margins, not a cutout), so multiply drops the white into the
+   tile; on the wrapper, not the <video>, like the principles on the sand. */
+.pl-m-moodeng { padding: calc(var(--pl-pad) * 1.6); padding-bottom: calc(var(--pl-pad) + var(--pl-ledge)); }
+.pl-m-bootcamp { padding: calc(var(--pl-pad) * 0.5); padding-bottom: calc(var(--pl-pad) + var(--pl-ledge)); }
+.pl-m-moodeng .pl-fit,
+.pl-m-bootcamp .pl-fit { mix-blend-mode: multiply; }
+
+/* Roasts: the before/after toggle over a canvas that takes the rest of the tile. */
+.pl-m-aih,
+.pl-m-hobonichi { padding-top: 18px; }
+.pl-compare { display: flex; flex-direction: column; gap: 14px; width: 100%; height: 100%; }
+.pl-compare-canvas { display: grid; place-items: center; }
+@media (min-width: 1024px) {
+  .pl-compare-canvas { flex: 1; min-height: 0; container-type: size; }
+}
+
+/* ---- Captions ---- */
+.pl-cap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 4px;
+  font-size: var(--pl-cap);
+}
+.pl-cap-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+.pl-name {
+  font-family: var(--font-display);
+  font-size: calc(var(--pl-cap) * 1.15);
+  font-weight: 500;
+  color: var(--color-ink-primary);
+}
+.pl-meta {
+  font-family: var(--font-mono);
+  font-size: calc(var(--pl-cap) * 0.88);
+  color: var(--color-ink-muted);
+}
+.pl-line {
+  max-width: 60ch;
+  font-family: var(--font-mono);
+  line-height: 1.6;
+  color: var(--color-ink-body);
+  text-wrap: pretty;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pl-item:hover .pl-tile {
+    transform: translateY(calc(var(--pl-lift) * -1));
+    box-shadow:
+      0 0 0 1px rgb(61 50 38 / 0.06),
+      0 2px 4px rgb(61 50 38 / 0.06),
+      0 12px 24px -8px rgb(61 50 38 / 0.14);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pl-tile { transition: none; }
+  .pl-item:hover .pl-tile { transform: none !important; }
+}

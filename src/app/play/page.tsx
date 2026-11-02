@@ -1,11 +1,16 @@
+import type { Metadata } from 'next'
+import PlayGrid from '@/components/play/PlayGrid'
+
+export const metadata: Metadata = {
+  title: 'Playground',
+  description: 'Interactions, concept roasts and illustrations by Kai Tran.',
+}
+
+// White grid paper and the shelf nav like /works (AppShell), then the title and the tiles.
 export default function PlayPage() {
-    return (
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-6">Recent Play</h1>
-        <p className="text-gray-600 mb-8">
-          Exploring the intersection of creativity, design, and playful learning.
-        </p>
-        {/* Future: Add interactive or experimental projects */}
-      </div>
-    )
-  }
+  return (
+    <div className="mx-auto max-w-[1360px] px-4 pb-20 pt-10 md:px-10 md:pb-28 md:pt-14">
+      <PlayGrid />
+    </div>
+  )
+}
