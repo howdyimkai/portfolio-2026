@@ -8,7 +8,7 @@ const EXPERIENCE = [
   {
     org: 'Tallo',
     about: 'Edtech career platform for people 13 to 30',
-    dates: 'May 2025 to Nov 2026',
+    dates: 'May 2025 – Nov 2026',
     roles: (
       <>
         <strong>Head of Creative</strong>, Aug 2026 – Nov 2026 · <strong>Multimedia Designer</strong>, May 2025 – Aug 2026
@@ -27,7 +27,7 @@ const EXPERIENCE = [
   {
     org: 'Design Garden',
     about: 'Sprint program and web app where designers pair up and ship one goal in four weeks',
-    dates: 'Apr 2023 to present',
+    dates: 'Apr 2023 – present',
     roles: (
       <>
         <strong>Founder and Product Designer.</strong> Started as Sprintfolio with two cofounders, then rebuilt solo.
@@ -44,7 +44,7 @@ const EXPERIENCE = [
   {
     org: 'USAA',
     about: 'Insurance, banking and investing for military members and their families',
-    dates: 'Sep 2021 to Jun 2022, Mar 2024 to May 2025',
+    dates: 'Sep 2021 – Jun 2022, Mar 2024 – May 2025',
     roles: (
       <>
         <strong>Senior Creative Designer (contract)</strong> · Life Company leadership team, then Enterprise Portfolio Management Office
@@ -59,7 +59,7 @@ const EXPERIENCE = [
   {
     org: 'Innovare',
     about: 'Edtech company that builds data dashboards for schools',
-    dates: 'Sep 2022 to Jan 2023',
+    dates: 'Sep 2022 – Jan 2023',
     roles: (
       <>
         <strong>UX Consultant, team lead</strong> (apprenticeship through Beginex)
@@ -72,7 +72,7 @@ const EXPERIENCE = [
   {
     org: 'University of Texas at Austin',
     about: 'Moody College of Communication, about 5,000 students and 200 faculty',
-    dates: 'Apr 2018 to Sep 2021',
+    dates: 'Apr 2018 – Sep 2021',
     roles: <strong>Multimedia Technician</strong>,
     bullets: [
             'Built Premiere Pro templates and guides for two journalism classes, and refreshed the Reporting Texas broadcast branding.',
@@ -94,9 +94,9 @@ const ONLINE = [
     title: 'Speaking',
     items: [
       <>“Design, Test, Repeat” · <a href="https://haas.berkeley.edu/business-academy/" target="_blank" rel="noopener noreferrer">UC Berkeley Business Academy for Youth</a>, Haas School of Business · Feb 2026</>,
-      <><a href="https://www.chicagocamps.org/event/ux-camp-fall-2024/" target="_blank" rel="noopener noreferrer">Future Proof Your Portfolio with AI Projects + Insights</a> · UX Camp Fall · 2024</>,
-      <><a href="https://www.chicagocamps.org/kai-tran-bridging-gaps-how-ai-transforms-design-learning-and-careers/" target="_blank" rel="noopener noreferrer">Bridging Gaps: How AI Transforms Design Learning and Careers</a> · Chicago Camp Tent Talks podcast · 2024</>,
-      <><a href="https://vimeo.com/876057163" target="_blank" rel="noopener noreferrer">The Future of Tech Needs Design Innovators</a> · University of Arizona, UX of UA · 2023</>,
+      <><a href="https://www.chicagocamps.org/event/ux-camp-fall-2024/" target="_blank" rel="noopener noreferrer">Future Proof Your Portfolio with AI Projects + Insights</a> · UX Camp Fall · Nov 2024</>,
+      <><a href="https://www.chicagocamps.org/kai-tran-bridging-gaps-how-ai-transforms-design-learning-and-careers/" target="_blank" rel="noopener noreferrer">Bridging Gaps: How AI Transforms Design Learning and Careers</a> · Chicago Camp Tent Talks podcast · May 2024</>,
+      <><a href="https://vimeo.com/876057163" target="_blank" rel="noopener noreferrer">The Future of Tech Needs Design Innovators</a> · University of Arizona, UX of UA · Mar 2023</>,
     ],
   },
   {
@@ -104,14 +104,14 @@ const ONLINE = [
     title: 'Awards',
     items: [
       <>“Voice of the User” and “Best Mentor” · Tallo Tallies, Tallo’s team awards · 2025</>,
-      <><a href="https://uxdesignathon.com/" target="_blank" rel="noopener noreferrer">Miami Hack Week UX Designathon</a>, winner · 2023</>,
+      <>Miami Hack Week UX Designathon, winner · Feb 2023</>,
     ],
   },
   {
     id: 'community',
     title: 'Community',
     items: [
-      <>Judge and mentor at 3 hackathons: <a href="https://www.makeitmvp.com/" target="_blank" rel="noopener noreferrer">makeitMVP</a> pitch night, <a href="https://outsidellms.devpost.com/" target="_blank" rel="noopener noreferrer">Outside LLMs</a> AI and music hackathon, <a href="https://imnothackathon.devfolio.co/" target="_blank" rel="noopener noreferrer">imnotHackathon</a> · 2023 to 2024</>,
+      <>Judge and mentor at 3 hackathons: makeitMVP pitch night, <a href="https://outsidellms.devpost.com/" target="_blank" rel="noopener noreferrer">Outside LLMs</a> AI and music hackathon, <a href="https://imnothackathon.devfolio.co/" target="_blank" rel="noopener noreferrer">imnotHackathon</a> · 2023 – 2024</>,
     ],
   },
 ]
@@ -197,10 +197,10 @@ export default function Resume({ titleId, online = false }: { titleId: string; o
         <section aria-labelledby="rs-speaking">
           <h3 id="rs-speaking" className="rs-h">Speaking and Awards</h3>
           <p>
-            <strong>Speaking:</strong> UC Berkeley Haas (2026), UX Camp Fall (2024), Chicago Camp podcast (2024), University of Arizona (2023)
+            <strong>Speaking:</strong> UC Berkeley Haas (Feb 2026), UX Camp Fall (Nov 2024), Chicago Camp podcast (May 2024), University of Arizona (Mar 2023)
           </p>
           <p>
-            <strong>Awards:</strong> Miami Hack Week UX Designathon winner (2023)
+            <strong>Awards:</strong> Miami Hack Week UX Designathon winner (Feb 2023)
           </p>
         </section>
       )}
