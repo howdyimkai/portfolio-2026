@@ -30,3 +30,6 @@ design-intent/sand2.png
 .claude/skills/emil-*/
 .cursor/
 .codex/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
