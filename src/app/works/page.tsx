@@ -10,11 +10,20 @@ const PROJECTS: Project[] = [
     story: 'A four week sprint platform I built and run. Designers pair up, check in weekly, and end on showcase night with real progress on their next move.',
     role: 'founder',
     year: '2026',
-    // designgarden-cover.gif frames 0-66 (the Takeaway tab), 480px wide animated WebP.
+    // The case study hero's landing page loop in its MacBook (Kai, 2026-11-01), in the wide window
+    // with no browser chrome of its own; the mask cuts the loop to the laptop. The landing still is
+    // its poster and the reduced motion frame. These files are outside the password gate.
     cover: {
-      anim: '/works/design-garden-cover-anim.webp',
-      still: '/works/design-garden-cover-still.webp',
-      alt: "Design Garden: two designers' shared garden board for the week",
+      anim: '/works/design-garden/hero/landing-still.webp',
+      still: '/works/design-garden/hero/landing-still.webp',
+      device: 'browser',
+      video: {
+        webm: '/works/design-garden/hero/landing-loop.webm',
+        mp4: '/works/design-garden/hero/landing-loop.mp4',
+        mask: '/works/design-garden/hero/landing-mask.webp',
+        aspect: '1408 / 816',
+      },
+      alt: 'Design Garden\'s landing page on a laptop: "Dig into your craft. Ship your best work, together." with crew avatars in cowboy hats floating over fall leaves',
     },
     href: '/works/design-garden',
     cta: 'see how it grew',

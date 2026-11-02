@@ -70,6 +70,10 @@
   border-radius: 50%;
   background-color: var(--color-chip-line);
 }
+.wk-loop-mask {
+  -webkit-mask: var(--mask) center / 100% 100% no-repeat;
+  mask: var(--mask) center / 100% 100% no-repeat;
+}
 .wk-browser .wk-screen {
   border-radius: 0;
 }

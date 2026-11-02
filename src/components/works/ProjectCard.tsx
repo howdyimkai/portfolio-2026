@@ -2,7 +2,8 @@
 
 // One high level case study card: the frosted card (name, role, cover window) sitting on Kai's
 // chalkboard, which carries the hook and the story. Promoted from /proto/project-card (Chalkboard).
-import { useRef, type PointerEvent } from 'react'
+import { useRef, type CSSProperties, type PointerEvent } from 'react'
+import Loop from '@/components/case-study/Loop'
 import './project-card.css'
 
 export type Project = {
@@ -25,6 +26,9 @@ export type Project = {
     alt: string
     float?: { src: string; box: [number, number, number, number] }
     device?: 'browser'
+    // A muted loop in place of the animated image (`still` is its poster and the reduced motion
+    // frame). The mask cuts it to its own device, so it takes no browser window of its own.
+    video?: { webm: string; mp4: string; mask: string; aspect: string }
   }
   // No href → the card is a "coming soon" placeholder and isn't a link.
   href?: string
@@ -55,8 +59,8 @@ export default function ProjectCard({ project: p }: { project: Project }) {
         <div ref={windowRef} className={`wk-window absolute ${p.cover?.device === 'browser' ? 'wk-window-wide' : ''}`}>
           {p.cover ? (
             <>
-              <div className={`wk-gif ${p.cover.device ? `wk-${p.cover.device}` : ''}`}>
-                {p.cover.device === 'browser' && (
+              <div className={`wk-gif ${p.cover.device && !p.cover.video ? `wk-${p.cover.device}` : ''}`}>
+                {p.cover.device === 'browser' && !p.cover.video && (
                   <div className="wk-browser-bar" aria-hidden="true">
                     {[0, 1, 2].map((d) => (
                       <span key={d} />
@@ -64,10 +68,19 @@ export default function ProjectCard({ project: p }: { project: Project }) {
                   </div>
                 )}
                 <div className="relative">
-                  <picture>
-                    <source media="(prefers-reduced-motion: reduce)" srcSet={p.cover.still} />
-                    <img src={p.cover.anim} alt={p.cover.alt} draggable={false} className="wk-screen block w-full rounded-[5px]" />
-                  </picture>
+                  {p.cover.video ? (
+                    <div
+                      className="wk-loop-mask"
+                      style={{ aspectRatio: p.cover.video.aspect, '--mask': `url(${p.cover.video.mask})` } as CSSProperties}
+                    >
+                      <Loop webm={p.cover.video.webm} mp4={p.cover.video.mp4} still={p.cover.still} alt={p.cover.alt} />
+                    </div>
+                  ) : (
+                    <picture>
+                      <source media="(prefers-reduced-motion: reduce)" srcSet={p.cover.still} />
+                      <img src={p.cover.anim} alt={p.cover.alt} draggable={false} className="wk-screen block w-full rounded-[5px]" />
+                    </picture>
+                  )}
                   {p.cover.float && (
                     <img
                       src={p.cover.float.src}
