@@ -12,14 +12,18 @@ import { usePathname } from 'next/navigation'
 import { enter, leave, tap, type Rig, type Tic } from './shelfMotion'
 import './shelf-nav.css'
 
-type Toy = { label: string; href: string; src: string; w: number; h: number; x0: number; x1: number; floor: number; width: number; tic: Tic }
+type Toy = { label: string; href: string; src: string; w: number; h: number; x0: number; x1: number; floor: number; width: number; tic: Tic; external?: boolean }
+
+// An external toy (field notes → Substack) opens in a new tab, wherever the toys are listed.
+export const newTab = (t: Toy) => (t.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})
+export const NewTabNote = ({ t }: { t: Toy }) => (t.external ? <span className="sr-only"> (opens in a new tab)</span> : null)
 
 export const TOYS: Toy[] = [
   { label: 'selected works', href: '/works', src: '/nav/shelf/cloud.webp', w: 183, h: 111, x0: 25.5, x1: 81.5, floor: 85, width: 50, tic: 'puff' },
   { label: 'play ground', href: '/play', src: '/nav/shelf/pony.webp', w: 385, h: 395, x0: 95.5, x1: 157, floor: 87, width: 38, tic: 'prance' },
   { label: 'humble abode', href: '/', src: '/nav/shelf/hat.webp', w: 139, h: 84, x0: 164, x1: 230, floor: 82, width: 50, tic: 'tip' },
-  // No field notes page yet.
-  { label: 'field notes', href: '#', src: '/nav/shelf/pencil.webp', w: 146, h: 80, x0: 237, x1: 298.5, floor: 84, width: 50, tic: 'waddle' },
+  // Field notes live on Kai's Substack (2026-11-02).
+  { label: 'field notes', href: 'https://howdyimkai.substack.com/', external: true, src: '/nav/shelf/pencil.webp', w: 146, h: 80, x0: 237, x1: 298.5, floor: 84, width: 50, tic: 'waddle' },
   { label: 'about me', href: '/about', src: '/nav/shelf/star.webp', w: 89, h: 87, x0: 312.5, x1: 369, floor: 76, width: 32, tic: 'spin' },
 ]
 
@@ -37,12 +41,13 @@ function Cubby({ toy, i, active, landing, onSelect }: { toy: Toy; i: number; act
   return (
     <Link
       href={toy.href}
+      {...newTab(toy)}
       className="shelf-cubby"
       aria-current={active ? 'page' : undefined}
       data-landing={landing ? '' : undefined}
       style={{ left: toy.x0, width: toy.x1 - toy.x0, '--i': i } as React.CSSProperties}
       onClick={(e) => {
-        if (!onSelect) return
+        if (!onSelect || toy.external) return
         e.preventDefault()
         onSelect(toy.href)
       }}
@@ -56,6 +61,7 @@ function Cubby({ toy, i, active, landing, onSelect }: { toy: Toy; i: number; act
         {first}
         <br />
         {rest.join(' ')}
+        <NewTabNote t={toy} />
       </span>
       <span ref={shadowRef} className="shelf-shadow" style={{ left: cx - toy.x0, top: toy.floor - 10, width: toy.width * 0.8 }} aria-hidden />
       <span
@@ -240,8 +246,9 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
           {/* Left behind once the toys are swept off. */}
           <nav className="shelf-text" aria-label="Main" inert={!tidy}>
             {TOYS.map((t, i) => (
-              <Link key={t.label} href={t.href} aria-current={pathname === t.href ? 'page' : undefined} style={{ '--i': i } as React.CSSProperties}>
+              <Link key={t.label} href={t.href} {...newTab(t)} aria-current={pathname === t.href ? 'page' : undefined} style={{ '--i': i } as React.CSSProperties}>
                 {t.label}
+                <NewTabNote t={t} />
               </Link>
             ))}
           </nav>

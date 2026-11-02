@@ -8,7 +8,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode, type RefObjec
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { TOYS } from './ShelfNav'
+import { NewTabNote, TOYS, newTab } from './ShelfNav'
 import './phone-menu.css'
 
 const EMAIL = 'uxdesignerkaitran@gmail.com'
@@ -108,7 +108,7 @@ function ToyColumn({ pathname, onPick }: { pathname: string; onPick: () => void 
       {TOYS.map((t, i) => {
         const w = t.width * 1.7
         return (
-          <Link key={t.label} href={t.href} onClick={onPick} aria-current={isHere(t.href, pathname) ? 'page' : undefined} className="pm-cubby" style={rowStyle(i)}>
+          <Link key={t.label} href={t.href} {...newTab(t)} onClick={onPick} aria-current={isHere(t.href, pathname) ? 'page' : undefined} className="pm-cubby" style={rowStyle(i)}>
             <span className="pm-group">
               <span className="pm-slot" aria-hidden="true" style={{ '--i': i } as React.CSSProperties}>
                 <span className="pm-toy" style={{ width: w }}>
@@ -116,7 +116,10 @@ function ToyColumn({ pathname, onPick }: { pathname: string; onPick: () => void 
                 </span>
                 <span className="pm-shadow" style={{ width: w * 0.8 }} />
               </span>
-              <span className="pm-cubby-label">{t.label}</span>
+              <span className="pm-cubby-label">
+                {t.label}
+                <NewTabNote t={t} />
+              </span>
             </span>
           </Link>
         )
