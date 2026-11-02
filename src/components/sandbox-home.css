@@ -9,3 +9,8 @@
   .bleed-shelf .shelf-nav { padding-top: var(--bleed-top); }
   .bleed-shelf .shelf-nav-draw { top: var(--bleed-top); }
 }
+
+/* Phones: the paper bar (56px) replaces the shelf, so the sand's soft top edge starts just under it. */
+@media (max-width: 767px) {
+  .bleed-shelf { --feather-y: 60px; }
+}

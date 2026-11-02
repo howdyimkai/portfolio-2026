@@ -20,8 +20,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   if (isHome) {
     return (
       // The sandbox fills the screen and brings its own floating shelf nav (SandboxHome). The résumé
-      // bookmark hangs beside the shelf on every shelf page (2026-10-27).
+      // bookmark hangs beside the shelf on every shelf page (2026-10-27). Phones get the paper bar and
+      // hamburger the other pages use instead of the shelf, which was too crowded there (Kai, 2026-11-01).
       <>
+        <PhoneMenu />
         <main className="h-[100dvh] overflow-hidden">{children}</main>
         <ResumeBookmark />
       </>

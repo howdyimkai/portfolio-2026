@@ -309,10 +309,11 @@
 /* ── Phone: hangs off the paper bar, left of the hamburger; the sheet goes full screen. ── */
 
 @media (max-width: 767px) {
-  .rb-root { --rb-w: 40px; --rb-body: 92px; }
+  /* Short: the label sits in the paper bar and the V tail dips only a little past it (Kai, 2026-11-01). */
+  .rb-root { --rb-w: 40px; --rb-body: 58px; }
   .rb { left: auto; right: 60px; }
   .rb::before { content: ''; position: absolute; inset: 0 -2px; }
-  .rb-label { top: 30px; font-size: 9px; }
+  .rb-label { top: 22px; font-size: 9px; }
   .rs-sheet { top: 0; width: 100%; border-radius: 0; }
   .rs-under { display: none; }
   .rs-scroll { padding: calc(64px + env(safe-area-inset-top, 0px)) 20px calc(48px + env(safe-area-inset-bottom, 0px)); }
@@ -321,22 +322,6 @@
   .rs-doc { font-size: 14px; }
   .rs-skills div { grid-template-columns: 1fr; gap: 0; }
   .rs-page { margin: 0; padding: 40px 20px 56px; border-radius: 0; box-shadow: none; }
-
-  /* Homepage phones have no paper bar, and the shelf fills the width under a 56px band, so
-     the ribbon hangs thin down the right edge beside the shelf, lettered sideways. Its tap area
-     reaches left only below the broom. */
-  :root:has(.bleed-shelf) .rb-root { --rb-w: 24px; --rb-body: 150px; }
-  :root:has(.bleed-shelf) .rb { right: 0; }
-  :root:has(.bleed-shelf) .rb::before { inset: 64px 0 0 -20px; }
-  :root:has(.bleed-shelf) .rb-label {
-    top: 26px;
-    left: 50%;
-    right: auto;
-    translate: -50% 0;
-    writing-mode: vertical-rl;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-  }
 }
 
 /* Reduced motion: no curl, dip or travel, just a fade. */
