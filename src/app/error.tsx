@@ -15,7 +15,7 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center">
+    <div className="min-h-[calc(100dvh-200px)] flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-6xl font-bold text-red-600 mb-4">Oops!</h1>
         <p className="text-xl text-gray-600 mb-6">
@@ -24,13 +24,13 @@ export default function Error({
         <div className="flex justify-center space-x-4">
           <button 
             onClick={() => reset()}
-            className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition"
+            className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors"
           >
             Try Again
           </button>
           <Link 
             href="/" 
-            className="px-4 py-2 border border-gray-800 rounded hover:bg-gray-100 transition"
+            className="px-4 py-2 border border-gray-800 rounded hover:bg-gray-100 transition-colors"
           >
             Go Home
           </Link>
