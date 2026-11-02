@@ -1328,9 +1328,10 @@ export default function Garden({ layout }: { layout: Layout }) {
             role="img"
             aria-label={PRINCIPLES[principleIndex].text}
             aria-hidden={sequencePhase === 'idle'}
-            // Phones: 15% wider than the title like desktop (capped at the screen), its middle on the
-            // title's middle. The column starts at 148px and the title's top is at 184px.
-            className={`absolute aspect-[1440/540] w-[min(100vw,min(90vw,368px)*1.15)] mt-[calc(36px+min(90vw,368px)*0.2422-min(100vw,min(90vw,368px)*1.15)*0.1875)] md:mt-0 md:w-[calc(var(--u)*77)] mix-blend-multiply transition-[opacity,transform,filter] motion-reduce:scale-100 motion-reduce:blur-[0px] ${
+            // Phones: 90% of the screen, up to 15% wider than the title like desktop (Kai, 2026-11-02:
+            // "delight" fills 97% of its frame and touched the edges at full width), its middle on
+            // the title's middle. The column starts at 148px and the title's top is at 184px.
+            className={`absolute aspect-[1440/540] w-[min(90vw,423px)] mt-[calc(36px+min(90vw,368px)*0.2422-min(90vw,423px)*0.1875)] md:mt-0 md:w-[calc(var(--u)*77)] mix-blend-multiply transition-[opacity,transform,filter] motion-reduce:scale-100 motion-reduce:blur-[0px] ${
               sequencePhase === 'principle-in' || sequencePhase === 'principle-hold'
                 ? 'scale-100 opacity-100 blur-[0px] duration-[380ms] ease-[cubic-bezier(0.23,1,0.32,1)]'
                 : `scale-[0.98] opacity-0 duration-[600ms] ease-[cubic-bezier(0.45,0,0.55,1)] ${principleStill ? 'blur-[3px]' : ''}`
