@@ -21,6 +21,7 @@ const commitMono = localFont({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://howdyimkai.com'),
   title: {
     default: 'Kai Tran | Product designer and tinkerer',
     template: '%s | Kai Tran'
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Kai Tran | Product designer and tinkerer',
     description: 'Product designer and tinkerer. I make learning feel like play.',
-    url: 'https://www.kaitran.design',
+    url: 'https://howdyimkai.com',
     siteName: 'Kai Tran Portfolio',
     type: 'website',
   },
