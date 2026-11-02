@@ -1,5 +1,5 @@
-// The résumé, from strategy/Resume_2026-10_Draft.md (the part between the first two `---` lines),
-// with the site version header (no email, no St. Louis). Hyphens kept on purpose: it's
+// The résumé, from Claude-Workspace/career/resume/variants/website.md (the part between the first
+// two `---` lines), which already has the site header (no email, no St. Louis). Hyphens kept on purpose: it's
 // professional copy. The bookmark sheet and the PDF carry the one-page "Speaking and Awards"
 // lines; /resume passes `online` for the draft's longer "Online résumé only" section.
 import SayHowdy from './SayHowdy'
@@ -11,18 +11,17 @@ const EXPERIENCE = [
     dates: 'May 2025 to Nov 2026',
     roles: (
       <>
-        <strong>Head of Creative</strong>, Aug 2026 to Nov 2026 · <strong>Multimedia Designer</strong>, May 2025 to Aug 2026
+        <strong>Head of Creative</strong>, Aug 2026 – Nov 2026 · <strong>Multimedia Designer</strong>, May 2025 – Aug 2026
         <br />
         <em>Role eliminated when the parent company closed the marketing department, Nov 2026.</em>
       </>
     ),
     bullets: [
-      'Designed Cal, a compass mascot and three-minute story quiz, to test whether a smaller ask could pull teens into career discovery. 9,400+ people finished it on public pages in 6 months. Once Tallo’s product team built it in, 72% of starters finished, and about half of finishers went on to complete the full 60-question assessment.',
-      'Rebuilt the brand as structured data that AI reads before it writes, with Claude workflows, a brand linter and an eval. In testing, drafts that broke a brand rule fell from 80% to 31%. Drafts with made-up stats went from 31% to zero. 14 teammates used it.',
-      'Redesigned a scholarships application drive mid-campaign. Completion rose from 29.9% to 63.9%.',
-      'Built the community engagement framework. Community members came back at over 3x the rate of Tallo users overall. Took the results of Cal’s Passport Challenge, a back-to-school campaign where students earned stamps for profile tasks, to product, and art directed the Stamps feature that shipped in Feb 2026.',
-      'Built Tallo’s first design automation, a testimonial system holding 56 testimonials, and a digital asset hub.',
-      'Hired and managed two creative interns, and wrote the video production guide they and our social team used for TikTok. The account grew from 1,750 to 11,700 followers in 11 months, including a 1.4M-view video.',
+      <>Designed Cal, a compass mascot and three-minute story quiz, to test whether a smaller ask could pull teens into career discovery. <strong>9,400+ people</strong> finished it on public pages in 6 months. Once Tallo’s product team built it in, 72% of starters finished, and about half of finishers went on to complete the full 60-question assessment.</>,
+      <>Rebuilt the brand as structured data that AI reads before it writes, with Claude workflows, a brand linter and an eval. In testing, drafts that broke a brand rule fell from <strong>80% to 31%</strong>. Drafts with made-up stats went from 31% to zero. 14 teammates used it.</>,
+      <>Redesigned a scholarships application drive mid-campaign. Completion rose from <strong>29.9% to 63.9%</strong>.</>,
+      <>Built the community engagement framework. Community members came back at <strong>over 3x</strong> the rate of Tallo users overall. Took the results of Cal’s Passport Challenge, a back-to-school campaign where students earned stamps for profile tasks, to product, and art directed the Stamps feature that shipped in Feb 2026.</>,
+      <>Hired and managed two creative interns, and wrote the video production guide they and our social team used for TikTok. The account grew from <strong>1,750 to 11,700 followers</strong> in 11 months, including a 1.4M-view video.</>,
     ],
   },
   {
@@ -31,48 +30,59 @@ const EXPERIENCE = [
     dates: 'Apr 2023 to present',
     roles: (
       <>
-        <strong>Founder and product designer.</strong> Started as Sprintfolio with two cofounders, then rebuilt solo.
+        <strong>Founder and Product Designer.</strong> Started as Sprintfolio with two cofounders, then rebuilt solo.
       </>
     ),
     bullets: [
-      'Designed and built the sprint app, with pair matching and weekly check-ins, using Claude Code and Supabase. 37 designers across four crews have gone through it, with about an 80% pair check-in rate, and 29 more are on the waitlist.',
+      <>Designed and built the sprint app, with pair matching and weekly check-ins, using Claude Code and Supabase. <strong>37 designers</strong> across four crews have gone through it, with about an 80% pair check-in rate, and 29 more are on the waitlist.</>,
       <>
-        As Sprintfolio, ran nearly 200 sprint partnerships on Notion, then built a platform with the team that reached $1K MRR in its first month. One of 35 teams picked from 57,000 applicants to build in San Francisco with{' '}
+        As Sprintfolio, ran nearly 200 sprint partnerships on Notion, then built a platform with the team that reached $1K MRR in its first month. <strong>One of 35 teams</strong> picked from 57,000 applicants to build in San Francisco with{' '}
         <a href="https://buildspace.so/sf1" target="_blank" rel="noopener noreferrer">Buildspace</a>.
       </>,
     ],
   },
   {
     org: 'USAA',
-    about: 'Senior Creative Designer (contract)',
+    about: 'Insurance, banking and investing for military members and their families',
     dates: 'Sep 2021 to Jun 2022, Mar 2024 to May 2025',
+    roles: (
+      <>
+        <strong>Senior Creative Designer (contract)</strong> · Life Company leadership team, then Enterprise Portfolio Management Office
+      </>
+    ),
     bullets: [
-      'Worked with subject matter experts to turn USAA’s value management framework into required training for 205 executives, teaching leaders how to size a bet: budget, goals and risks. 195 finished it, and USAA renewed it as an annual refresher.',
-      'Designed and built benefits training for 5,000 employees in Articulate 360 Rise and Storyline.',
-      'Created an employee recognition app in Power Apps, Power Automate and SharePoint for the portfolio office’s 219 employees, and took it through launch. Nominations move through three levels of review on their own, so admins no longer build forms or chase reviewers by email.',
+      <>Worked with subject matter experts to turn USAA’s value management framework into required training for <strong>205 executives</strong>, teaching leaders how to size a bet: budget, goals and risks. 195 finished it, and USAA renewed it as an annual refresher.</>,
+      <>Designed and built benefits training for <strong>5,000 employees</strong> in Articulate 360 Rise and Storyline, checking color contrast so every learner could read it.</>,
+            'Created an employee recognition app in Power Apps, Power Automate and SharePoint for the portfolio office’s 219 employees, and took it through launch.',
     ],
   },
   {
     org: 'Innovare',
-    about: 'UX Consultant, team lead (apprenticeship)',
+    about: 'Edtech company that builds data dashboards for schools',
     dates: 'Sep 2022 to Jan 2023',
+    roles: (
+      <>
+        <strong>UX Consultant, team lead</strong> (apprenticeship through Beginex)
+      </>
+    ),
     bullets: [
-      'Led three designers to research and design self-service onboarding for a school data dashboard, where half of new clients were dropping off during setup. In usability testing, setup dropped from six to eight weeks of custom builds to under three minutes, and satisfaction rose from 3.8 to 4.13 out of 5.',
+      <>Led three designers to design self-service onboarding for the dashboard. In testing, setup went from six to eight weeks to <strong>under three minutes</strong>.</>,
     ],
   },
   {
     org: 'University of Texas at Austin',
-    about: 'Multimedia Technician',
+    about: 'Moody College of Communication, about 5,000 students and 200 faculty',
     dates: 'Apr 2018 to Sep 2021',
+    roles: <strong>Multimedia Technician</strong>,
     bullets: [
-      'Built Premiere Pro templates and beginner-friendly guides for two journalism classes, and refreshed the branding and intro motion graphics for the Reporting Texas broadcast.',
+            'Built Premiere Pro templates and guides for two journalism classes, and refreshed the Reporting Texas broadcast branding.',
     ],
   },
 ]
 
 const SKILLS = [
-  ['Design', 'interaction design, user flows, information architecture, prototyping, design systems, brand systems, accessibility, motion'],
-  ['Research', 'user interviews, usability testing, A/B testing, journey mapping, affinity mapping, competitive analysis, card sorting, survey design'],
+  ['Design', 'interaction design, user flows, information architecture, prototyping, design and brand systems, accessibility, motion'],
+  ['Research', 'user interviews, usability testing, A/B testing, journey mapping, survey design'],
   ['AI and build', 'Claude Code, Lovable, Midjourney, Nano Banana, AI workflows and evals, JavaScript, HTML/CSS, Supabase, Git, n8n, Power Apps, Power Automate'],
   ['Tools', 'Figma, Paper, Framer, Webflow, Adobe CC (Illustrator, Photoshop, After Effects, Premiere), DaVinci Resolve, Jitter, Articulate 360, SharePoint, Typeform, Notion'],
 ]
@@ -119,7 +129,7 @@ export default function Resume({ titleId, online = false }: { titleId: string; o
           <a href="https://www.linkedin.com/in/uxdesignerkai/" target="_blank" rel="noopener noreferrer">linkedin.com/in/uxdesignerkai</a>
         </p>
         <div className="rs-actions">
-          {/* MISSING: /resume/Kai-Tran-Resume.pdf isn't exported yet (handoff step 2), so this 404s for now. */}
+          {/* Exported by Claude-Workspace/career/resume/tools/build-pdf.py. Re-export when the copy changes. */}
           <a className="rs-btn rs-btn-primary" href="/resume/Kai-Tran-Resume.pdf" download>
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.5v9m0 0-3.5-3.5M10 12.5l3.5-3.5M4 15.5h12" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
             Download PDF
@@ -168,7 +178,7 @@ export default function Resume({ titleId, online = false }: { titleId: string; o
       <section aria-labelledby="rs-edu">
         <h3 id="rs-edu" className="rs-h">Education</h3>
         <p>
-          <strong>B.S. Radio, Television and Digital Media</strong>, minor in Digital Arts and Media · University of Texas at Austin
+          <strong>B.S. Radio, Television and Digital Media</strong>, minor in Digital Arts and Media · University of Texas at Austin, Moody College of Communication
         </p>
       </section>
 
