@@ -158,15 +158,15 @@ function StatStrip({ stats, link }: { stats: CaseStudy['stats']; link?: CaseStud
   const mark = (st: CaseStudy['stats'][number]) => '*'.repeat(notes.indexOf(st) + 1)
   return (
     <div className="mt-14">
-      {/* Equal thirds, unless a value runs long ("80% → 31%" filled its third and touched the
-          divider): that column takes a bigger share, so it keeps the gap the others get from their
-          left padding. */}
+      {/* Equal thirds with each stat centered (Kai, 2026-11-01: left aligned read lopsided), unless
+          a value runs long ("80% → 31%" filled its third and touched the divider): that column takes
+          a bigger share so it keeps its padding. */}
       <dl
         className="grid border-y border-hairline [grid-template-columns:var(--stat-cols)]"
         style={{ '--stat-cols': stats.map((st) => (st.value.length > 7 ? '1.5fr' : '1fr')).join(' ') } as CSSProperties}
       >
         {stats.map((st, i) => (
-          <div key={st.label} className={`min-w-0 py-6 md:py-8 ${i > 0 ? 'border-l border-hairline pl-4 md:pl-8' : 'pr-3 md:pr-0'}`}>
+          <div key={st.label} className={`min-w-0 px-2 py-6 text-center md:px-8 md:py-8 ${i > 0 ? 'border-l border-hairline' : ''}`}>
             <dt className="sr-only">{st.label}</dt>
             <dd>
               <span className="block font-display text-[28px] font-semibold leading-none tracking-[-0.01em] text-ink-primary min-[400px]:text-[32px] md:text-[52px]">
@@ -174,7 +174,7 @@ function StatStrip({ stats, link }: { stats: CaseStudy['stats']; link?: CaseStud
                 {st.value}
                 {st.note && <span className="ml-1 align-top font-mono text-[13px] font-normal text-ink-faint">{mark(st)}</span>}
               </span>
-              <span className="mt-3 block font-mono text-[12px] leading-[1.45] text-ink-body [text-wrap:balance] md:text-[13px]">{st.label}</span>
+              <span className="mx-auto mt-3 block max-w-[26ch] font-mono text-[12px] leading-[1.45] text-ink-body [text-wrap:balance] md:text-[13px]">{st.label}</span>
             </dd>
           </div>
         ))}
