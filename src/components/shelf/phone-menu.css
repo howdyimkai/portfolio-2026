@@ -110,6 +110,11 @@
   }
   .pm-email-open { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-mono); font-size: 12px; color: var(--color-ink-faint); }
   .pm-socials { display: flex; gap: 8px; margin-top: 8px; }
+  /* Sound effects toggle (SoundToggle): the phone's only one, since the tool rail has no room. */
+  .pm-sound {
+    display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin-top: 8px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--color-ink-faint);
+  }
   /* Social tiles: plain chalk cut from Kai's shelf (public/nav/shelf-column/chalk-tile.webp)
      with the icon in the chalk label color. #ECE8E0 on this chalk is 9.2:1 on average and 3.2:1
      against its brightest smudge, so it clears WCAG's 3:1 for icons everywhere on the tile. */

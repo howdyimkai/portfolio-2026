@@ -10,6 +10,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { NewTabNote, TOYS, newTab } from './ShelfNav'
 import { SOCIALS } from './socials'
+import SoundToggle from '@/components/SoundToggle'
+import { play } from '@/lib/sfx'
 import './phone-menu.css'
 
 const EMAIL = 'uxdesignerkaitran@gmail.com'
@@ -129,6 +131,7 @@ function Contact() {
   const timer = useRef<number | undefined>(undefined)
   useEffect(() => () => window.clearTimeout(timer.current), [])
   const copy = async () => {
+    void play('copy')
     try {
       await navigator.clipboard.writeText(EMAIL)
     } catch {
@@ -164,6 +167,7 @@ function Contact() {
           </li>
         ))}
       </ul>
+      <SoundToggle className="pm-sound" />
     </section>
   )
 }

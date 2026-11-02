@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { play } from '@/lib/sfx'
 
 // Copies the address, like the phone menu's contact block. No address on the page or in the markup:
 // it's assembled on click so scrapers don't find it.
@@ -9,6 +10,7 @@ export default function SayHowdy({ className = 'rs-btn' }: { className?: string 
   const timer = useRef<number | undefined>(undefined)
   useEffect(() => () => window.clearTimeout(timer.current), [])
   const copy = async () => {
+    void play('copy')
     const email = ['uxdesignerkaitran', 'gmail.com'].join('@')
     try {
       await navigator.clipboard.writeText(email)

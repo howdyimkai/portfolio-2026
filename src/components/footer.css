@@ -73,8 +73,17 @@
   max-width: 56ch; font-family: var(--font-mono); font-size: 14px; line-height: 1.7; text-wrap: pretty;
   color: rgb(236 232 224 / 0.82); text-shadow: 0 0 1px rgb(240 236 226 / 0.25);
 }
-.ft-copyright { align-self: flex-end; font-family: var(--font-mono); font-size: 12px; color: rgb(236 232 224 / 0.6); }
+.ft-meta { align-self: flex-end; display: flex; align-items: center; gap: 16px; }
+.ft-copyright { font-family: var(--font-mono); font-size: 12px; color: rgb(236 232 224 / 0.6); }
+/* Sound effects toggle (SoundToggle): chalk text, same size as the copyright. */
+.ft-sound {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
+  font-family: var(--font-mono); font-size: 12px; color: rgb(236 232 224 / 0.6);
+  transition: color 150ms ease-out;
+}
+.ft-sound:focus-visible { outline: 2px solid #ECE8E0; outline-offset: 2px; border-radius: 4px; }
+@media (hover: hover) and (pointer: fine) { .ft-sound:hover { color: #ECE8E0; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .ft-stamp, .ft-copy, .ft-social { transition: none; }
+  .ft-stamp, .ft-copy, .ft-social, .ft-sound { transition: none; }
 }

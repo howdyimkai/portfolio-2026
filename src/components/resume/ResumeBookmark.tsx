@@ -6,6 +6,7 @@
 // design-intent/resume-bookmark-exploration/NOTES.md.
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import Resume from './Resume'
+import { play } from '@/lib/sfx'
 import './resume.css'
 
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
@@ -62,7 +63,10 @@ export default function ResumeBookmark() {
         aria-label="Open résumé"
         aria-haspopup="dialog"
         aria-expanded={open}
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          void play('bookmark')
+          setOpen(true)
+        }}
       >
         <span className="rb-hang">
           <img className="rb-body" src="/resume-bookmark/ribbon-body-standin.svg" alt="" draggable={false} />

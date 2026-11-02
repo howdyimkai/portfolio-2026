@@ -6,6 +6,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import EraseCanvas, { loadImage, type EraseHandle } from './EraseCanvas'
+import SoundToggle from './SoundToggle'
+import { play, playBlossom, sandVoice, type SandVoice } from '@/lib/sfx'
 
 type Tool = 'rake' | 'eraser' | 'blossom'
 
@@ -413,6 +415,11 @@ export default function Garden({ layout }: { layout: Layout }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
+  // The sand sound (src/lib/sfx.ts): lives while the rake or eraser is held, silent at rest.
+  const sandRef = useRef<SandVoice | null>(null)
+  const sandMoveRef = useRef<{ t: number; idle: number }>({ t: 0, idle: 0 })
+  const sandTraveledRef = useRef(0)
+  useEffect(() => () => sandRef.current?.stop(), [])
   // Every live chunk (from any gesture, finished or in-progress-but-rolled-over) in
   // chronological insertion order. No persistent bake layer — the whole population is
   // redrawn from scratch every frame, oldest first, so later chunks' carve passes erase
@@ -631,6 +638,7 @@ export default function Garden({ layout }: { layout: Layout }) {
           })
         }
         setSequencePhase('principle-in')
+        void play('reveal', { fromGesture: false })
 
         // Principle hit area: the wrapper's untransformed box (it rests at scale 0.98 while
         // hidden, so the bounding rect alone would be 2% small), centered on its layout center.
@@ -984,6 +992,7 @@ export default function Garden({ layout }: { layout: Layout }) {
       scale: 0.85 + Math.random() * 0.3,
     }
     setBlossoms((prev) => [...prev, next])
+    playBlossom()
   }
 
   const handlePointerMove = (e: React.PointerEvent) => {
@@ -1075,6 +1084,20 @@ export default function Garden({ layout }: { layout: Layout }) {
       if (finalAngle !== undefined) cursorTargetAngleRef.current = finalAngle
     }
 
+    // Sand follows the towed head's speed, and rests once samples stop coming (pointer still).
+    const sand = sandRef.current
+    if (sand && (toolRef.current === 'rake' || toolRef.current === 'eraser') && hoveringRef.current) {
+      const m = sandMoveRef.current
+      const dt = e.timeStamp - m.t
+      // headTraveledRef restarts at 0 on every re-arm, so a negative step is just that reset.
+      const step = Math.max(0, headTraveledRef.current - sandTraveledRef.current)
+      if (m.t && dt > 0 && dt < 120) sand.move(step / dt, cursorPosRef.current.x / (rectRef.current.width || 1))
+      m.t = e.timeStamp
+      sandTraveledRef.current = headTraveledRef.current
+      window.clearTimeout(m.idle)
+      m.idle = window.setTimeout(() => sand.rest(), 70)
+    }
+
     // lastPointRef always tracks the raw pointer (used by the blossom branch above),
     // independent of the towed head's position.
     lastPointRef.current = prev
@@ -1104,6 +1127,8 @@ export default function Garden({ layout }: { layout: Layout }) {
   const handlePointerLeave = () => {
     updateTitleHover(null)
     hoveringRef.current = false
+    sandRef.current?.rest()
+    sandMoveRef.current.t = 0
     commitGesture()
     lastPointRef.current = null
     // The head does not keep coasting toward a pointer that's no longer over the plot —
@@ -1126,6 +1151,13 @@ export default function Garden({ layout }: { layout: Layout }) {
   // Picking the held tool again puts it down.
   const pickTool = (picked: Tool | null) => {
     const t = picked === tool ? null : picked
+    if (t) void play('tool')
+    else if (tool) void play('tool', { rate: 0.8 }) // putting it down: the same knock, lower
+    // A new voice per tool: the eraser's hiss is softer than the rake's.
+    if (t !== tool) {
+      sandRef.current?.stop()
+      sandRef.current = t === 'rake' || t === 'eraser' ? sandVoice(t) : null
+    }
     if (layout === 'expand' && (t === null) !== (tool === null)) {
       flipFromRef.current = wrapRef.current?.getBoundingClientRect() ?? null
       // Blossoms are placed in plot pixels; a new plot size would strand them.
@@ -1520,6 +1552,9 @@ function ToolRail({
           </div>
         </div>
       )}
+      {/* Desktop only: on phones the rail has no room left, so the phone menu carries the toggle. */}
+      <span aria-hidden className="hidden h-px w-8 bg-hairline md:my-1 md:block" />
+      <SoundToggle className="press-scale hidden h-11 w-[76px] shrink-0 flex-col items-center justify-center gap-0.5 rounded-2xl font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted transition-[background-color,color] duration-150 ease-out hover:bg-sand-light/40 hover:text-ink-body focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink-primary md:flex" />
     </div>
   )
 }

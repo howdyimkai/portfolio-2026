@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { enter, leave, tap, type Rig, type Tic } from './shelfMotion'
 import './shelf-nav.css'
+import { play } from '@/lib/sfx'
 
 type Toy = { label: string; href: string; src: string; w: number; h: number; x0: number; x1: number; floor: number; width: number; tic: Tic; external?: boolean }
 
@@ -201,6 +202,7 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
   }, [compact])
 
   const toggle = () => {
+    void play('broom')
     // One-shot sweep flick on every press; it always runs to completion.
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
       broomRef.current?.querySelector('svg')?.animate(

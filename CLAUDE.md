@@ -211,6 +211,14 @@ About copy draft lives in the Positioning Brainstorm doc.
   without email or city); the sheet renders it with `online` for the longer speaking section.
   Felt art and paper are SVG stand-ins (`public/resume-bookmark/*-standin.svg`); the PDF at
   `public/resume/Kai-Tran-Resume.pdf` is Kai's export and doesn't exist yet.
+- **Sound effects** (`src/lib/sfx.ts`, 2026-11-02, decision record
+  `design-intent/sfx-exploration/NOTES.md`) — earshot bank renders (made in code, no
+  recordings) in `public/sfx/`, plus the rake's sand hiss synthesized live with Web Audio. Only on
+  things a visitor chooses to do: tool pick up and put down, blossom stamp (C pentatonic kalimba),
+  principle reveal, rake and eraser (a softer hiss), shelf broom, résumé bookmark, Copy email. Nothing on hover or page load.
+  `SoundToggle` lives in the desktop tool rail, the phone menu and the footer, and shares one
+  remembered mute. Re-render sounds with `design-intent/sfx-exploration/render.sh` (earshot is in
+  `~/Desktop/Claude-Workspace/tools/earshot`, installed without torch, which has no Intel Mac wheels).
 - **`ZenGarden`** — self-contained canvas-based tool system (teeth rake,
   eraser rake, blossom stamp). Rake/eraser act on **hover alone** — drawing
   starts on `pointerenter` and continues on every `pointermove`, no

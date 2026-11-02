@@ -9,6 +9,7 @@ import SayHowdy from '@/components/resume/SayHowdy'
 import { STAMP } from '@/components/about/data'
 import { Broom } from '@/components/shelf/ShelfNav'
 import { SOCIALS } from '@/components/shelf/socials'
+import SoundToggle from '@/components/SoundToggle'
 import './footer.css'
 
 const BIO =
@@ -46,7 +47,10 @@ export default function Footer() {
             <span className="ft-broom"><Broom /></span>
             <p>{BIO}</p>
           </div>
-          <p className="ft-copyright">© {new Date().getFullYear()} Kai Tran</p>
+          <div className="ft-meta">
+            <SoundToggle className="ft-sound" />
+            <p className="ft-copyright">© {new Date().getFullYear()} Kai Tran</p>
+          </div>
         </div>
       </div>
     </footer>
