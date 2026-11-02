@@ -5,8 +5,8 @@
 `design-garden/garden/`). The proto routes are deleted. In the case study the after opens mid check
 in (wins, both answers in), its three captions (space, who leads, tasks) each jump the demo to their
 moment, and the timer, the bloom and the growing text box aren't featured (Kai: the timer is left
-out of the after entirely; bloom and the text box still work).
-
+out of the after entirely; bloom and the text box still work). Commits: 6c91fdb (chapter, copy pass,
+stat strip link), 5f62edb (follow-ups below).
 
 Brief: Design Garden case study, chapter 04 (The garden), its before and after visual. Handoff:
 Claude-Workspace/projects/2026-10-PortfolioSprint/case-studies/design-garden/CaseStudy_DesignGarden_Handoff.md.
@@ -57,6 +57,11 @@ CheckinPlant, SprintOverviewCard, WeeklyGoalCard) with the app's own colors, cop
   real header (Flower.svg, ☰, 🌸, "You and Robin's Design Garden")
 - Case study frame: the 880px column can't grow (chapter rail on the left). An Expand button
   opens the same live demo full screen, without restarting it
+- Follow ups (Kai, 2026-11-01, 5f62edb): the frame is 5:4 from tablet up (~640px in the column,
+  was 16:10 at ~500px), since the before's warm-up questions piled on each other in a ~290px
+  garden. Starting a check in (either version) also opens the full screen view, so the flow runs
+  where there's room and the column stays a preview. The "Who leads" caption also opens the
+  leader's info tooltip; it closes on a click away, Escape, or another caption
 
 ## Rejected
 
@@ -68,10 +73,18 @@ CheckinPlant, SprintOverviewCard, WeeklyGoalCard) with the app's own colors, cop
 - Bloom on close (above). Where the app grows CheckinPlant from winsCount, the completed
   session's plant should be the flower; wins past 4 can still scale it, as now
 - The leader gate and "Move us both" wording, if the prototype's flow is adopted
+- Meeting timer: the length picked on the dashboard card, the countdown on the garden
+- Kai chose to do these later, in their own session in DesignGardenTool
 - Straight apostrophes in the app's ritual copy (What's, you're) could be curly
 
 ## Open
 
+- Not pushed: Kai runs git push, which rebuilds the Vercel review preview
+- Design Garden has no data/DATA-SUMMARY.md, though the repo's rule wants every stat backed there
+  (8 of 8 was already in the Showcase night copy). The Almanac is now linked twice (stat strip,
+  Showcase night) and 8 of 8 is both a stat and that chapter's hook
+- The chapter outline in the sprint folder still has the old garden body, What's next and stat
+  copy; design-garden.ts is the source of record
 - New copy to approve: the gate lines, the leader tooltip, "Your tasks this week", "Robin
   started your check-in." / "Join check-in"
 - The em dashes in the app's plant labels show inside the screens (page copy bans them)

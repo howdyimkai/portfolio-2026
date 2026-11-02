@@ -306,6 +306,13 @@ Change the `.ts` first; if the two disagree, the `.ts` wins.
 - `public/works/cal/` and `public/works/brand-system/` are inside the password
   gate's matcher (`src/proxy.ts`), so nothing in them can be used on `/works` or
   the homepage.
+- Design Garden's built visuals are native components in Design Garden's own design
+  system (Enriqueta/Inter, the app's colors), not captures: `match-card` and, for the
+  garden chapter, `garden-compare` (`src/components/case-study/design-garden/`, a live
+  before and after of the check in; decisions in
+  `design-intent/garden-checkin-exploration/NOTES.md`). Its "before" is a faithful port of
+  DesignGardenTool today, so don't restyle it. Seeded demo pair only (you and Robin).
+  DesignGardenTool itself is read only from here.
 
 ## Assets
 
