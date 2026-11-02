@@ -168,11 +168,13 @@ About copy draft lives in the Positioning Brainstorm doc.
   from `/proto/about` (decision + rejected options:
   `design-intent/about-exploration/NOTES.md`). Three floating birch planks of
   felt objects (`AboutShelf`, driven by `data.ts`; moving an object is changing
-  its `shelf`; the principles frame hangs on the wall above the shelves on desktop, beside them at md) to the right of a docked panel (left, sticky) that starts as the bio and swaps to an
-  object's "currently into" card when picked. Every hover moment is CSS over a
+  its `shelf`; the principles frame hangs on the wall above the shelves on desktop, beside them at md) to the right of the bio panel (left, sticky), which never changes.
+  Picking an object opens its "currently into" card as a drawer under that plank (`ShelfCaption`,
+  "Shelf drawer" from `/proto/about-detail`, 2026-11-02) with a notch pointing at it, ← → through
+  the cards in shelf order, and the other objects dimmed. Every hover moment is CSS over a
   single image (no paired on/off exports) and fires on mouse hover or keyboard
   focus only, via `data-on`. AppShell gives `/about` the same chrome as `/works`
-  (shelf nav, `PhoneMenu` below md, footer, white grid paper `.grid-sheet`). Cards marked `draft: true` still have placeholder copy.
+  (shelf nav, `PhoneMenu` below md, footer, white grid paper `.grid-sheet`). Card copy is final as of 2026-11-02 (source: the sprint folder's `about-me/ABOUT_Final.md`, "On my shelf").
   The cowboy hat on the top shelf (under the "what I'm into" label) opens **my career rodeo**
   (`CareerRodeo.tsx` + `RodeoTrail.tsx`, "Reel", 2026-10-30, decision record
   `design-intent/career-rodeo-exploration/NOTES.md`): the résumé's paper sheet with four era cards on

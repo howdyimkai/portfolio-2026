@@ -1,6 +1,6 @@
 // One data file drives the About shelf (design-intent/about-exploration/NOTES.md). Moving an object
 // is changing its `shelf`; swapping one (the pumpkin becomes a seed packet later) is editing its entry.
-// Cards marked `draft` still have placeholder copy for Kai to replace.
+// Card copy of record: about-me/ABOUT_Final.md, "On my shelf" (updated 2026-11-02).
 
 export type Hover = 'hop' | 'stretch' | 'swing' | 'tilt-out' | 'flicker' | 'lamp' | 'wiggle' | 'tilt-glow' | 'bounce-notes'
 
@@ -19,6 +19,8 @@ export type ShelfObject = {
   // Art shown while the object's card is open, and where it sits as [left, top, width, height] in % of the
   // closed art's box (registered by the body, so parts that swing out overflow it).
   open?: { src: string; w: number; h: number; box: [number, number, number, number] }
+  // Art that grows out of the object while its card is open, placed like `open`.
+  bloom?: { src: string; w: number; h: number; box: [number, number, number, number] }
 }
 
 export type Card = {
@@ -43,7 +45,9 @@ export const OBJECTS: ShelfObject[] = [
   { id: 'spine', card: 'notes', shelf: 1, src: p('spine'), w: 124, h: 339, height: 84, alt: 'Sage green felt notebook', hover: 'tilt-out' },
   { id: 'book', card: 'reading', shelf: 1, src: p('book'), w: 261, h: 338, height: 80, alt: 'Cream felt book with a star', hover: 'swing' },
   { id: 'toph', card: 'cats', shelf: 1, src: p('toph'), w: 253, h: 185, height: 42, alt: 'Clay figurine of Toph, a sleepy tabby cat', hover: 'stretch' },
-  { id: 'cactus', card: 'growing', shelf: 2, src: p('cactus'), w: 241, h: 356, height: 82, alt: 'Felt cactus pincushion in a clay pot', hover: 'wiggle' },
+  { id: 'cactus', card: 'growing', shelf: 2, src: p('cactus'), w: 241, h: 356, height: 82, alt: 'Felt cactus pincushion in a clay pot', hover: 'wiggle',
+    // Kai's dusty pink felt flower (2026-11-02) opens on top of the right pad while the card is open.
+    bloom: { src: p('cactus-bloom'), w: 120, h: 140, box: [62, -19, 38, 30] } },
   { id: 'pumpkin', card: 'garden', shelf: 2, src: p('pumpkin'), w: 309, h: 311, height: 68, alt: 'Clay pumpkin with a smiling face', hover: 'tilt-glow' },
   { id: 'cassette', card: 'listening', shelf: 2, src: p('cassette'), w: 361, h: 272, height: 56, alt: 'Pale blue clay cassette player', hover: 'bounce-notes',
     // Kai's open recorder (2026-10-30), registered to the closed one by its buttons and body edges.
@@ -60,19 +64,17 @@ export const CARDS: Card[] = [
     note: "Archie is the cream one who hops at anything that moves. Toph is the tabby who would like you to leave. They have their own TikTok, and it does better than anything I've ever posted.",
     tags: ['cats', 'chaos'],
     date: 'since 2021',
-    cta: { label: 'watch on TikTok', href: '#' },
-    draft: true,
+    cta: { label: 'watch on TikTok', href: 'https://www.tiktok.com/@thebeifongcats' },
   },
   {
     id: 'reading',
     category: 'reading',
-    title: 'Book title goes here',
-    subtitle: 'Author name, year',
+    title: 'The Art of Strategy',
+    subtitle: 'Avinash Dixit and Barry Nalebuff',
     image: p('book'),
-    note: 'Two or three sentences on why this book has my attention right now. What surprised me, and one line I keep thinking about when I should be doing something else.',
-    tags: ['design', 'nonfiction'],
-    date: 'started Oct 2026',
-    draft: true,
+    note: 'Picked this up to sharpen my strategic thinking. It fuses history, economics and bite sized case studies, which beats a dry game theory textbook.',
+    tags: ['strategy', 'nonfiction'],
+    date: 'reading now',
   },
   {
     id: 'notes',
@@ -83,18 +85,17 @@ export const CARDS: Card[] = [
     note: 'I build first and write second. Most notes start as something I made in code with AI as my build partner, then turn into a few paragraphs on what it taught me.',
     tags: ['substack', 'process'],
     date: 'new posts monthly',
-    cta: { label: 'read the notes', href: '#' },
+    cta: { label: 'read the notes', href: 'https://howdyimkai.substack.com/' },
   },
   {
     id: 'watching',
     category: 'watching',
-    title: 'Show title goes here',
-    subtitle: 'season, where to watch',
+    title: 'The Midnight Club',
+    subtitle: 'Mike Flanagan and Leah Fong, Netflix',
     image: p('tv'),
-    note: "A sentence or two about what I'm watching and the small moment in it that made me pause it to rewind. Film school never really leaves you.",
-    tags: ['tv', 'story'],
+    note: 'A horror mystery mini series. I love a good spooky show, just not too spooky for my scaredy cat self.',
+    tags: ['tv', 'horror'],
     date: 'this week',
-    draft: true,
   },
   {
     id: 'tinkering',
@@ -109,36 +110,33 @@ export const CARDS: Card[] = [
   {
     id: 'growing',
     category: 'growing',
-    title: 'A cactus that might flower',
-    subtitle: 'week 6, no bloom yet',
+    title: 'A small fall garden',
+    subtitle: 'cacti, green onions, strawberries, rosemary',
     image: p('cactus'),
-    note: "Swap this for whatever you're growing: a plant, a skill, a habit. Keep it to a couple of sentences so the card stays a glance, not a read.",
-    tags: ['plants', 'patience'],
-    date: 'week 6',
-    draft: true,
+    note: 'Cold weather means bringing it inside soon. The green onions move to a jar of water for winter.',
+    tags: ['plants', 'garden'],
+    date: 'fall 2026',
   },
   {
     id: 'garden',
     category: 'hosting',
-    title: 'Design Garden fall social',
-    subtitle: 'St. Louis and online',
+    title: 'Design Garden fall showcase',
+    subtitle: 'virtual',
     image: p('pumpkin'),
     note: "A sprint community for designers who ship. Every season we get together, show what we made, and eat too many snacks. Next one's brewing, follow along.",
     tags: ['community', 'design garden'],
     date: 'fall 2026',
-    cta: { label: 'follow on Luma', href: '#' },
-    draft: true,
+    cta: { label: 'follow on Luma', href: 'https://luma.com/gayefojt' },
   },
   {
     id: 'listening',
     category: 'listening',
-    title: 'Album or podcast title',
-    subtitle: 'artist or host',
+    title: "Life's a Beach",
+    subtitle: 'hard life',
     image: p('cassette'),
-    note: 'What has been on repeat while I work, and when I reach for it. One sentence is plenty here.',
+    note: "This season's comfort album. Simple, candid lyrics that swing between sad and disco, pop and hip hop.",
     tags: ['music'],
     date: 'on repeat',
-    draft: true,
   },
 ]
 
@@ -242,6 +240,8 @@ export const ERAS: Era[] = [
   },
 ]
 
+// Kai's stamp (the girl in the cowboy hat), under the closing line beside Copy email.
+export const STAMP = { src: p('stamp'), w: 188, h: 201, alt: 'Kai\'s stamp: a girl with glasses in a cowboy hat' }
 export const RODEO_TITLE = { src: r('hand-my-career-rodeo.webp'), w: 610, h: 110, alt: 'My career rodeo' }
 // STANDIN: the shelf nav's felt hat (139×84). Kai's About shelf hat drops in 1:1.
 export const RODEO_HAT = { src: '/nav/shelf/hat.webp', w: 139, h: 84 }

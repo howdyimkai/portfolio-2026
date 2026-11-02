@@ -7,7 +7,8 @@
 // a line about 40% down and the rope reels up past it, whether you drag the hat, scroll or swipe, so
 // the two never fight. Tapping a pin or a waiting card sends the hat there.
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
-import { ERAS, RODEO_CLOSING, RODEO_HAT, RODEO_TITLE, type Era } from './data'
+import SayHowdy from '@/components/resume/SayHowdy'
+import { ERAS, RODEO_CLOSING, RODEO_HAT, RODEO_TITLE, STAMP, type Era } from './data'
 
 type Box = { x: number; y: number; w: number }
 type Placed = Box & { ax: number; ay: number } // card + where the rope pins it
@@ -141,6 +142,7 @@ function Loop({ art }: { art: Extract<Era['art'], { kind: 'video' }> }) {
 export default function RodeoTrail({ scroller }: { scroller: React.RefObject<HTMLElement | null> }) {
   const root = useRef<HTMLDivElement>(null)
   const head = useRef<HTMLDivElement>(null)
+  const closing = useRef<HTMLDivElement>(null)
   const cards = useRef<(HTMLElement | null)[]>([])
   const mask = useRef<SVGPathElement>(null)
   const rope = useRef<SVGPathElement>(null)
@@ -163,7 +165,11 @@ export default function RodeoTrail({ scroller }: { scroller: React.RefObject<HTM
     cards.current.forEach((c, i) => c && (c.style.width = `${first.cards[i].w}px`))
     const headH = (head.current?.offsetHeight ?? 0) + HAT_ROOM
     const heights = cards.current.map((c) => c?.offsetHeight ?? 0)
-    setLayout(plan(w, headH, heights))
+    // The closing (line, stamp and Copy email) is measured too, so the sheet always fits it.
+    if (closing.current) closing.current.style.width = `${first.closing.w}px`
+    const next = plan(w, headH, heights)
+    next.height = Math.max(next.height, next.closing.y + (closing.current?.offsetHeight ?? 0) + 56)
+    setLayout(next)
   }, [])
 
   useLayoutEffect(() => {
@@ -538,14 +544,22 @@ export default function RodeoTrail({ scroller }: { scroller: React.RefObject<HTM
                 aria-label={`Send the hat to ${ERAS[i].name}`}
               />
             ))}
-            <p
-              className="rodeo-closing"
-              style={{ left: layout.closing.x, top: layout.closing.y, width: layout.closing.w, textAlign: layout.closing.align }}
-            >
-              {RODEO_CLOSING}
-            </p>
           </>
         )}
+        {/* The closing line, then Kai's stamp beside a Copy email button (2026-11-02). It shows when the
+            hat reaches the end of the rope. */}
+        <div
+          ref={closing}
+          className="rodeo-closing"
+          data-align={layout?.closing.align ?? 'center'}
+          style={layout ? { left: layout.closing.x, top: layout.closing.y, width: layout.closing.w } : undefined}
+        >
+          <p>{RODEO_CLOSING}</p>
+          <div className="rodeo-howdy">
+            <img className="rodeo-stamp" src={STAMP.src} alt={STAMP.alt} width={STAMP.w} height={STAMP.h} draggable={false} />
+            <SayHowdy className="rodeo-email" />
+          </div>
+        </div>
       </div>
     </section>
   )

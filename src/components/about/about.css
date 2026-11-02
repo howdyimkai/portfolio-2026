@@ -20,14 +20,11 @@
   padding: 0 calc(18 * var(--u));
 }
 
-/* Top shelf with a lead: the label rests at the left, the objects slide to the right. */
-.about-row.has-lead {
-  justify-content: flex-end;
-}
+/* Top shelf with a lead (the rodeo hat): it sits first in the row, and the hat, TV and lamp center as
+   one group with the shelf's usual gap, like the shelves below (Kai, 2026-11-02: it used to pin left,
+   with the TV and lamp pushed right, leaving a gap). */
 .about-lead {
   flex: none;
-  width: calc(80 * var(--u));
-  margin-right: auto;
   align-self: flex-end;
   padding-bottom: calc(4 * var(--u));
 }
@@ -410,15 +407,96 @@
   font-size: 11px;
 }
 
-/* ── panel swap: short ease-out on a keyed re-mount ── */
-.about-swap {
-  animation: about-swap 220ms var(--ease-out-strong);
+/* ── bloom: the cactus flowers while its card is open. It grows from its base on the pad with a
+   small overshoot, and folds away quickly when the card closes. ── */
+.about-bloom {
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: 50% 90%;
+  scale: 0;
+  rotate: -40deg;
+  filter: drop-shadow(0 calc(2 * var(--u)) calc(2 * var(--u)) rgba(64, 42, 18, 0.18));
+  transition: scale 160ms ease-in, rotate 160ms ease-in;
 }
-@keyframes about-swap {
-  from { opacity: 0; transform: translateY(6px); }
+.about-obj[data-active] .about-bloom {
+  scale: 1;
+  rotate: 0deg;
+  transition: scale 520ms cubic-bezier(0.34, 1.56, 0.64, 1) 120ms, rotate 620ms var(--ease-out-strong) 120ms;
 }
 @media (prefers-reduced-motion: reduce) {
-  .about-swap { animation: none; }
+  .about-bloom { scale: 1; rotate: 0deg; opacity: 0; transition: opacity 150ms ease; }
+  .about-obj[data-active] .about-bloom { opacity: 1; transition: opacity 200ms ease; }
+}
+
+/* ── the caption drawer under a plank (ShelfCaption.tsx, "Shelf drawer" 2026-11-02) ── */
+
+/* While a card is open, the other objects step back; hovering one brings it forward again. */
+.about-shelves .about-obj { transition: opacity 200ms ease; }
+.about-shelves[data-picking] .about-obj:not([data-active]) { opacity: 0.4; }
+@media (hover: hover) and (pointer: fine) {
+  .about-shelves[data-picking] .about-obj:not([data-active]):hover { opacity: 1; }
+}
+
+.about-drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms var(--ease-out-strong);
+}
+.about-drawer[data-open] { grid-template-rows: 1fr; }
+.about-drawer-clip { min-height: 0; overflow: hidden; padding: 0 2px; }
+
+.about-caption {
+  position: relative;
+  margin: 18px 0 6px;
+  padding: 18px 20px 14px;
+  border-radius: 16px;
+  background: #fffdf9;
+  box-shadow:
+    0 0 0 1px rgba(61, 50, 38, 0.07),
+    0 2px 4px rgba(61, 50, 38, 0.04),
+    0 10px 22px rgba(61, 50, 38, 0.07);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.about-drawer[data-open] .about-caption { opacity: 1; }
+/* the notch points up at the object you picked */
+.about-caption::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: clamp(20px, var(--notch), calc(100% - 20px));
+  width: 12px;
+  height: 12px;
+  translate: -50% 0;
+  rotate: 45deg;
+  background: #fffdf9;
+  box-shadow: -1px -1px 0 rgba(61, 50, 38, 0.07);
+  transition: left 280ms var(--ease-out-strong);
+}
+.about-caption-swap { animation: about-caption-swap 200ms var(--ease-out-strong); }
+@keyframes about-caption-swap { from { opacity: 0; } }
+
+.about-icon-btn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  color: var(--color-ink-body);
+  font-size: 14px;
+  transition: background-color 150ms ease, color 150ms ease, transform 150ms var(--ease-out-strong);
+}
+.about-icon-btn:active { transform: scale(0.94); }
+.about-icon-btn:focus-visible { outline: 2px solid var(--color-accent-washi-blue); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .about-icon-btn:hover { background: rgba(58, 50, 38, 0.06); color: var(--color-ink-primary); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-shelves .about-obj, .about-drawer, .about-caption, .about-caption::before { transition: none; }
+  .about-caption-swap { animation: none; }
 }
 
 .about-link {

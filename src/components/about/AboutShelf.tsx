@@ -1,7 +1,8 @@
 'use client'
 
 // The About shelf: floating birch planks, felt objects resting on them, one hover moment per object.
-// Objects are <button>s; the page decides what a pick does.
+// Objects are <button>s; the page decides what a pick does. `after` renders under a shelf's plank
+// (the page's caption drawer, 2026-11-02).
 import { useState } from 'react'
 import Image from 'next/image'
 import { OBJECTS, cardById, type ShelfObject } from './data'
@@ -21,7 +22,7 @@ function ShelfItem({
 }: {
   o: ShelfObject
   active: boolean
-  onPick: (card: string, el: HTMLButtonElement) => void
+  onPick: (id: string) => void
 }) {
   const card = cardById(o.card)
   // data-on drives every hover moment: a real mouse hover or keyboard focus, never a touch tap.
@@ -31,6 +32,7 @@ function ShelfItem({
     <button
       type="button"
       className="about-obj"
+      data-obj={o.id}
       data-hover={o.hover}
       data-flip={o.flip ? '' : undefined}
       data-active={active ? '' : undefined}
@@ -41,7 +43,7 @@ function ShelfItem({
       onBlur={() => setOn(false)}
       aria-label={`${o.alt}. Open ${card.category} card`}
       aria-pressed={active}
-      onClick={(e) => onPick(o.card, e.currentTarget)}
+      onClick={() => onPick(o.id)}
       style={{ ['--w' as string]: width, ['--h' as string]: o.height, ['--lift' as string]: o.lift ?? 0 }}
     >
       <span className="about-light" aria-hidden="true" />
@@ -73,6 +75,17 @@ function ShelfItem({
         ) : (
           <Image src={o.src} alt="" width={o.w} height={o.h} draggable={false} />
         )}
+        {o.bloom && (
+          <Image
+            className="about-bloom"
+            src={o.bloom.src}
+            alt=""
+            width={o.bloom.w}
+            height={o.bloom.h}
+            draggable={false}
+            style={{ left: `${o.bloom.box[0]}%`, top: `${o.bloom.box[1]}%`, width: `${o.bloom.box[2]}%`, height: `${o.bloom.box[3]}%` }}
+          />
+        )}
         {o.hover === 'flicker' && <span className="about-screen" aria-hidden="true" />}
         {o.hover === 'lamp' && <span className="about-bulb" aria-hidden="true" />}
         {o.hover === 'bounce-notes' && [0, 1, 2].map((i) => <Note key={i} i={i} />)}
@@ -87,6 +100,7 @@ export default function AboutShelf({
   activeCard,
   onPick,
   lead,
+  after,
   className = '',
 }: {
   shelves?: number[]
@@ -94,11 +108,12 @@ export default function AboutShelf({
   lead?: React.ReactNode
   zoom?: number // or set --zoom per breakpoint through className
   activeCard?: string
-  onPick: (card: string, el: HTMLButtonElement) => void
+  onPick: (id: string) => void // the object's id; its card is cardById(o.card)
+  after?: (shelf: number) => React.ReactNode
   className?: string
 }) {
   return (
-    <div className={`about-shelves ${className}`} style={zoom ? { ['--zoom' as string]: zoom } : undefined}>
+    <div className={`about-shelves ${className}`} data-picking={activeCard ? '' : undefined} style={zoom ? { ['--zoom' as string]: zoom } : undefined}>
       {shelves.map((s) => (
         <div key={s} className="about-shelf">
           <div className={`about-row ${lead && s === shelves[0] ? 'has-lead' : ''}`}>
@@ -108,6 +123,7 @@ export default function AboutShelf({
             ))}
           </div>
           <Image className="about-plank" src="/about/plank.webp" alt="" width={1333} height={66} draggable={false} />
+          {after?.(s)}
         </div>
       ))}
     </div>

@@ -77,3 +77,43 @@ what Kai is currently into. Built three ways, Kai kept **Shadow box**.
 - Card copy for reading, watching, growing, listening, cats, and the Design
   Garden social is placeholder (marked `draft: true` in `src/components/about/data.ts`).
   TikTok, Luma, and field notes links are `#`.
+
+# Object detail view — decided from /proto/about-detail (Kai, 2026-11-02)
+
+Brief: Kai didn't like the bio panel swapping to each object's card ("I'd prefer a
+clean view of the items and maybe we see the shelf again so you can click through
+easily"). Built three ways, Kai kept **Shelf drawer**.
+
+## Direction: Shelf drawer
+- The bio panel never swaps. It's the page's left column, always (`AboutBio`).
+- Picking an object opens a quiet caption card right under that object's plank
+  (`ShelfCaption`), with a notch pointing up at the toy that was clicked (both cats
+  share one card; the notch finds the one you picked). Nothing covers the page.
+- While a card is open, the other objects step back to 40% opacity (200ms), and come
+  back to full on hover. The picked one keeps its lift and shelf light.
+- The card: category, title, subtitle · date, note (56ch max), CTA as a quiet
+  underlined link, ← n/8 → to walk the cards in shelf order (top shelf first), × to close.
+  Picking the same object again also closes it.
+- Open/close: `grid-template-rows` 0fr → 1fr, 280ms strong ease-out, with the card
+  fading in over 200ms; the notch slides 280ms when you pick another object on the
+  same shelf. Swapping cards re-mounts the content with a 200ms fade. No motion under
+  reduced motion.
+- Hidden cards are `inert`, so tabbing never lands in a closed drawer.
+
+## Rejected
+- **Lightbox + shelf**: full page over /about, object large on cream paper, caption
+  below, a mini copy of the shelf along the bottom as the way through. The cleanest
+  "view of the item", but it covers the page again, and the mini shelf's toys are
+  ~25px on phones.
+- **Sketchbook** (Kai's reference, a lightbox with an open book spread, tick scrubber
+  on the left, wheel/arrow paging, "View all" back): the most journal-like, but the
+  shelf is out of sight while it's open (the same problem that sank Gallery wall), and
+  its elastic band was a CSS stand-in that would need felt art.
+
+## Cactus bloom (Kai, 2026-11-02)
+- While the "growing" card is open, Kai's dusty pink felt flower (`public/about/cactus-bloom.webp`,
+  from `about-me/artifacts/Dusty pink felt flower@2x.png`, trimmed, 120px) sits on top of the cactus's
+  right pad. Placed with `bloom.box` in `data.ts`, the same % registration as the cassette's open art.
+- Grows from its base: scale 0 → 1 with a small overshoot (520ms, cubic-bezier(0.34, 1.56, 0.64, 1))
+  and unwinds from -40°, 120ms after the pick so the cactus lifts first. It folds away in 160ms ease-in
+  when the card closes. Reduced motion: a 200ms fade instead.

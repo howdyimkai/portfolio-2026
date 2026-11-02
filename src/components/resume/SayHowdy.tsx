@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 
 // Copies the address, like the phone menu's contact block. No address on the page or in the markup:
 // it's assembled on click so scrapers don't find it.
-export default function SayHowdy() {
+export default function SayHowdy({ className = 'rs-btn' }: { className?: string } = {}) {
   const [copied, setCopied] = useState(false)
   const timer = useRef<number | undefined>(undefined)
   useEffect(() => () => window.clearTimeout(timer.current), [])
@@ -25,7 +25,7 @@ export default function SayHowdy() {
     timer.current = window.setTimeout(() => setCopied(false), 2000)
   }
   return (
-    <button type="button" className="rs-btn" onClick={copy}>
+    <button type="button" className={className} onClick={copy}>
       {/* Both labels share one grid cell, so the button keeps its width when the text swaps. */}
       <span className="inline-grid text-center">
         <span className={`[grid-area:1/1] ${copied ? 'invisible' : ''}`}>Copy email</span>

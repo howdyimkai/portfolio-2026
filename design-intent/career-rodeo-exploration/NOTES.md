@@ -49,3 +49,12 @@ Systems, Learning, Building. You ride the hat down the rope.
 - Hat art: the stand in is the shelf nav's hat, so two hats show on /about. Swap Kai's hat 1:1.
 - Rope art: drawn rope could replace the stroked stand in.
 - Not yet tried on a real phone or trackpad (tested with simulated touch and wheel).
+
+## Closing: stamp + Copy email (Kai, 2026-11-02)
+- Under the closing line, Kai's stamp (the girl in the cowboy hat, `public/about/stamp.webp`, 68px,
+  -6°, straightens a touch on hover) sits beside a dark Copy email button. It's the résumé's
+  `SayHowdy` (copies the address assembled on click, swaps to "Copied" for 2s) with its own
+  `rodeo-email` style. Centered on the wander layout, left aligned on the phone column.
+- The closing block is now measured in `replan`, so the sheet's height always fits it (+56px).
+- It stays `visibility: hidden` until the hat reaches the end of the rope, so the button isn't in the
+  tab order before you can see it.

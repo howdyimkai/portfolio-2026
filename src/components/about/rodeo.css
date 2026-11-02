@@ -194,14 +194,58 @@
 
 .rodeo-closing {
   position: absolute;
-  margin: 0;
   font: 13px/1.6 var(--font-mono);
   color: var(--color-ink-body);
   text-wrap: balance;
+  /* hidden (and out of the tab order) until the hat reaches the end of the rope */
   opacity: 0;
-  transition: opacity 400ms ease-out;
+  visibility: hidden;
+  transition: opacity 400ms ease-out, visibility 0s linear 400ms;
 }
-.rodeo[data-done] .rodeo-closing { opacity: 1; }
+.rodeo-closing[data-align='center'] { text-align: center; }
+.rodeo[data-done] .rodeo-closing { opacity: 1; visibility: visible; transition: opacity 400ms ease-out; }
+.rodeo-closing p { margin: 0; }
+
+/* Kai's stamp tucked beside the Copy email button, like a sticker on the envelope. */
+.rodeo-howdy {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+}
+.rodeo-closing[data-align='center'] .rodeo-howdy { justify-content: center; }
+.rodeo-stamp {
+  width: 68px;
+  height: auto;
+  rotate: -6deg;
+  filter: drop-shadow(0 3px 5px rgba(61, 50, 38, 0.18));
+  user-select: none;
+  transition: rotate 300ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .rodeo-howdy:hover .rodeo-stamp { rotate: -2deg; }
+}
+.rodeo-email {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--color-ink-primary);
+  border-radius: 10px;
+  background: var(--color-ink-primary);
+  color: var(--color-page);
+  font: 13px/1 var(--font-mono);
+  touch-action: manipulation;
+  transition: scale 150ms ease-out, background-color 150ms ease-out;
+}
+.rodeo-email:active { scale: 0.96; }
+.rodeo-email:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .rodeo-email:hover { background: color-mix(in oklch, var(--color-ink-primary) 88%, white); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rodeo-stamp { transition: none; }
+}
 
 /* ── The hat on the rope ──────────────────────────────────── */
 
