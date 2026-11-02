@@ -194,6 +194,12 @@ About copy draft lives in the Positioning Brainstorm doc.
   (posters instead); roasts use the case study Toggle's control, opening on after. The title is
   Kai's hand-drawn line boil, stepped like the hero's and boiling only on hover. No tile links.
   Never use the Design Garden Harvest video here (crew faces).
+- **`Footer`** (`src/components/Footer.tsx` + `footer.css`) — every page but `/`: "Chalkboard", picked
+  from `/works/proto-footer` on 2026-11-02 (decision + rejected options:
+  `design-intent/footer-exploration/NOTES.md`). A band of the /works board with its wooden ledge on top;
+  Kai's rodeo stamp beside "Come play. Say howdy.", Copy email (`SayHowdy`) and the phone menu's socials
+  as chalk rings under it, the locked blurb with the shelf broom on the right and the copyright under
+  its bottom right. Socials live in `shelf/socials.ts`, shared with `PhoneMenu`.
 - **`ResumeBookmark`** (`src/components/resume/`) — a red felt ribbon hanging from the top
   edge right of the shelf on every shelf page (home, `/works*`, `/about`; AppShell mounts it),
   opening the résumé on paper over the page ("Tug", from `/proto/resume-bookmark`, decision record

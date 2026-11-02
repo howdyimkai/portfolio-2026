@@ -1,0 +1,80 @@
+/* Footer (Footer.tsx): Kai's /works board (706×750, ledge in its top 52px) as a full-width band.
+   The board's own ledge is cropped off and redrawn as a strip on the top edge: md+ scale the board
+   to the band's width (the ledge falls far above), phones scale it to 140% of the band's height,
+   bottom anchored, so it still covers and its ledge falls off the top. Everything on it is chalk. */
+.ft {
+  position: relative; margin-top: 8px; color: rgb(240 236 226 / 0.9);
+  background: #262626 url('/works/case-study-chalk-large.webp') center bottom / auto 140% no-repeat;
+}
+@media (min-width: 768px) { .ft { background-size: 100% auto; } }
+.ft-ledge {
+  position: absolute; left: 0; right: 0; top: -6px; height: 18px;
+  background: url('/play/ledge.webp') center / 100% 100% no-repeat;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35);
+}
+.ft-grid {
+  display: grid; gap: 36px; max-width: 1360px; margin: 0 auto;
+  padding: 56px 16px 32px;
+}
+@media (min-width: 768px) { .ft-grid { padding-left: 40px; padding-right: 40px; } }
+@media (min-width: 900px) {
+  .ft-grid { grid-template-columns: auto minmax(0, 1fr); gap: 80px; align-items: start; padding-top: 64px; padding-bottom: 40px; }
+  .ft-side { justify-self: end; }
+}
+
+.ft a, .ft button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+/* Left: stamp + invitation, then Copy email and the socials. */
+.ft-reach { display: flex; flex-direction: column; gap: 14px; }
+.ft-howdy { display: flex; align-items: center; gap: 20px; }
+/* Kai's stamp from the rodeo's sign off. It straightens a little while the pointer is over this
+   block, like the rodeo's. */
+.ft-stamp {
+  flex-shrink: 0; width: 76px; height: auto; rotate: -6deg; user-select: none;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+  transition: rotate 300ms var(--ease-out-strong);
+}
+@media (min-width: 768px) { .ft-stamp { width: 88px; } }
+@media (hover: hover) and (pointer: fine) { .ft-reach:hover .ft-stamp { rotate: -2deg; } }
+.ft-cta {
+  font-family: var(--font-display); font-size: 32px; line-height: 1.2;
+  color: rgb(244 240 230 / 0.95); text-shadow: 0 0 1px rgb(240 236 226 / 0.35);
+}
+.ft-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.ft-copy {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px;
+  border: 1.5px solid rgb(236 232 224 / 0.45);
+  font-family: var(--font-mono); font-size: 14px; color: rgb(244 240 230 / 0.95);
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, scale 150ms ease-out;
+}
+.ft-copy:active { scale: 0.97; }
+.ft-copy:focus-visible { outline: 2px solid rgb(244 240 230); outline-offset: 2px; }
+/* The phone menu's marks, drawn as chalk rings on the board. */
+.ft-socials { display: flex; gap: 8px; }
+.ft-social {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 999px;
+  border: 1.5px solid rgb(236 232 224 / 0.35); color: rgb(236 232 224 / 0.82);
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, scale 150ms ease-out;
+}
+.ft-social svg { width: 20px; height: 20px; }
+.ft-social:active { scale: 0.96; }
+.ft-social:focus-visible { outline: 2px solid rgb(244 240 230); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .ft-copy:hover { background: rgb(236 232 224 / 0.08); border-color: rgb(236 232 224 / 0.7); }
+  .ft-social:hover { color: rgb(244 240 230); background: rgb(236 232 224 / 0.08); border-color: rgb(236 232 224 / 0.6); }
+}
+
+/* Right: the blurb beside the broom, the copyright tucked under its bottom right. */
+.ft-side { display: flex; flex-direction: column; gap: 16px; }
+.ft-bio { display: flex; gap: 14px; align-items: flex-start; }
+.ft-broom { flex-shrink: 0; display: block; width: 24px; height: 24px; margin-top: 1px; color: rgb(236 232 224 / 0.82); }
+.ft-broom svg { width: 100%; height: 100%; }
+.ft-bio p {
+  max-width: 56ch; font-family: var(--font-mono); font-size: 14px; line-height: 1.7; text-wrap: pretty;
+  color: rgb(236 232 224 / 0.82); text-shadow: 0 0 1px rgb(240 236 226 / 0.25);
+}
+.ft-copyright { align-self: flex-end; font-family: var(--font-mono); font-size: 12px; color: rgb(236 232 224 / 0.6); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ft-stamp, .ft-copy, .ft-social { transition: none; }
+}
