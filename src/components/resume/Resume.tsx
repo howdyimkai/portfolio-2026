@@ -72,7 +72,7 @@ const EXPERIENCE = [
   },
   {
     org: 'University of Texas at Austin',
-    about: 'Moody College of Communication, about 5,000 students and 200 faculty',
+    about: 'Moody College of Communication',
     dates: 'Apr 2018 – Sep 2021',
     roles: <strong>Multimedia Technician</strong>,
     bullets: [
@@ -179,7 +179,7 @@ export default function Resume({ titleId, online = false, page = online }: { tit
       <section aria-labelledby="rs-edu">
         <h3 id="rs-edu" className="rs-h">Education</h3>
         <p>
-          <strong>B.S. Radio, Television and Digital Media</strong>, minor in Digital Arts and Media · University of Texas at Austin, Moody College of Communication
+          <strong>B.S. Radio, Television and Film</strong>, minor in Digital Arts and Media · University of Texas at Austin, Moody College of Communication
         </p>
       </section>
 
