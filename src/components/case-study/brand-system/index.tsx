@@ -11,6 +11,8 @@ import SetupWalkthrough from './SetupWalkthrough'
 import Social from './Social'
 import MatchCard from '../design-garden/MatchCard'
 import GardenCompare from '../design-garden/GardenCompare'
+import ReelPlayer from '../visual-media/ReelPlayer'
+import ShowdownWipe from '../visual-media/ShowdownWipe'
 
 // The Brand System case study's built visuals, by the `custom` key in its content file. A key with
 // no component yet falls back to the labeled placeholder, so the page reads end to end while the
@@ -28,4 +30,7 @@ export const CUSTOM_VISUALS: Record<string, ComponentType<{ visual: Visual }>> =
   // Design Garden's (the one registry for every case study's built visuals).
   'match-card': MatchCard,
   'garden-compare': GardenCompare,
+  // Visual media's.
+  'reel-player': ReelPlayer,
+  'showdown-wipe': ShowdownWipe,
 }

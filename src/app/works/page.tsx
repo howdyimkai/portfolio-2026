@@ -70,6 +70,23 @@ const PROJECTS: Project[] = [
     href: '/works/brand-system',
     cta: 'see the system',
   },
+  {
+    name: 'Storytelling, video, motion',
+    hook: 'Short videos about big career decisions, and the system that kept them coming.',
+    mark: 'big career decisions',
+    story: 'I turned hours of live sessions into a series of under three minute episodes, then wrote the guidelines our team and interns made every video from. Twelve episodes so far.',
+    role: 'video and motion',
+    year: '2026',
+    // The reel's cover (Paper's export, artwork moved up), in the wide window like the other 16:9 covers.
+    cover: {
+      anim: '/works/visual-media/reel-poster.webp',
+      still: '/works/visual-media/reel-poster.webp',
+      device: 'browser',
+      alt: 'The reel cover: a hand lettered "howdy im Kai" beside a postage stamp portrait, above "storytelling, video, motion"',
+    },
+    href: '/works/visual-media',
+    cta: 'watch the reel',
+  },
 ]
 
 // Hidden 2026-10-24 (Kai) to keep /works at three cards. Move back into PROJECTS to bring it back.
