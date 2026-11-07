@@ -1583,7 +1583,7 @@ const DECOR: Record<'home' | 'bleed' | 'tray', { mobileTitle: string; moss: stri
     // works pill (its top is 159px above the safe bottom), so they never sit on it. The bonsai
     // shrinks so its top stays 80px under the moss's top. The smallest rock stays off phones. Below
     // 767px tall the moss steps out and the bonsai drops to 40u, 8px closer to the pill, to clear the hint.
-    moss: 'w-[calc(var(--u)*33)] left-[9%] top-[max(45%,calc(224px+min(90vw,368px)*0.4844))] [@media(max-width:767px)_and_(max-height:766px)]:hidden md:w-[calc(var(--u)*23)] md:left-[9.6%] md:top-[15.2%]',
+    moss: 'w-[calc(var(--u)*33)] left-[9%] top-[max(45%,calc(224px+min(90vw,368px)*0.4844))] [@media(max-width:767px)_and_(max-height:766px)]:hidden md:max-lg:hidden md:w-[calc(var(--u)*23)] md:left-[9.6%] md:top-[15.2%]',
     rocks: [
       'w-[calc(var(--u)*20)] left-[8%] bottom-[calc(max(16px,env(safe-area-inset-bottom))+153px)] md:bottom-auto md:left-[9.5%] md:top-[70.6%]',
       // Kai, 2026-10-29: down and left of 81%/12% (his circle), so the résumé ribbon never hangs over it.
