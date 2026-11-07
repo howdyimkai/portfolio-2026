@@ -6,6 +6,7 @@
 // (Escape, the button, a tap outside the video) stops the video. Shared by Cal's kit (a 9:16 Short)
 // and the Brand System challenge episode (16:9, `wide`). The caller sizes the poster via className.
 import { useRef, useState } from 'react'
+import HoverTeaser from './HoverTeaser'
 import './step-frame.css'
 
 export default function YouTube({
@@ -14,6 +15,8 @@ export default function YouTube({
   poster,
   chip,
   wide = false,
+  teaser,
+  corner = false,
   className,
 }: {
   youtubeId: string
@@ -22,6 +25,10 @@ export default function YouTube({
   // The label that rises on hover or focus.
   chip: string
   wide?: boolean
+  // A muted loop that plays behind the button while it's hovered or focused. `poster` is its still.
+  teaser?: { webm: string; mp4: string }
+  // Puts the play button bottom right, for a still whose type is centered.
+  corner?: boolean
   className: string
 }) {
   const dialog = useRef<HTMLDialogElement>(null)
@@ -32,9 +39,13 @@ export default function YouTube({
   }
   return (
     <div className={className}>
-      <button type="button" onClick={open} className="kit-play group absolute inset-0 block w-full cursor-pointer">
-        <img src={poster} alt="" draggable={false} className="kit-poster absolute inset-0 h-full w-full object-cover" />
-        <span className="kit-play-btn absolute left-1/2 top-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#211e1a] shadow-[0_4px_16px_rgba(0,0,0,0.25)]">
+      <button type="button" onClick={open} data-teaser-host className="kit-play group absolute inset-0 block w-full cursor-pointer">
+        {teaser ? (
+          <HoverTeaser webm={teaser.webm} mp4={teaser.mp4} still={poster} alt="" className="absolute inset-0 h-full w-full" />
+        ) : (
+          <img src={poster} alt="" draggable={false} className="kit-poster absolute inset-0 h-full w-full object-cover" />
+        )}
+        <span className={`kit-play-btn absolute grid size-14 place-items-center ${corner ? 'bottom-4 right-4' : 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'} rounded-full bg-white/90 text-[#211e1a] shadow-[0_4px_16px_rgba(0,0,0,0.25)]`}>
           <svg viewBox="0 0 24 24" className="ml-0.5 size-6" fill="currentColor" aria-hidden="true">
             <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" />
           </svg>

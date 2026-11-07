@@ -7,7 +7,7 @@ import type { CaseStudy } from '@/components/case-study/types'
 // marked CHECK below. Change the draft first, then this file.
 export const visualMedia: CaseStudy = {
   eyebrow: 'Case study · Video and motion',
-  title: 'Storytelling, video, motion',
+  title: 'Tallo Video System',
   hook: 'Short videos about big career decisions, and the system that kept them coming.',
   meta: [
     { label: 'Role', value: 'Multimedia Designer, then Head of Creative' },
@@ -67,8 +67,9 @@ export const visualMedia: CaseStudy = {
               {
                 src: '/works/visual-media/series-ep1.webp',
                 alt: 'Video cover for the Entrepreneurship series, episode 1. Opens on YouTube.',
-                caption: 'Entrepreneurship, Ep 1. Watch the episode on YouTube.',
+                caption: 'Entrepreneurship, Ep 1.',
                 href: 'https://www.youtube.com/watch?v=S6Sy1F0Z-Es',
+                hrefLabel: 'Watch the episode on YouTube',
               },
             ],
           },
@@ -118,12 +119,14 @@ export const visualMedia: CaseStudy = {
                 alt: 'Video cover for the Real Careers, Real Journeys educator video. Opens on YouTube.',
                 caption: 'Teachers and counselors heard “No prep for you.”',
                 href: 'https://www.youtube.com/watch?v=CvS0BOaQW-w',
+                hrefLabel: 'Watch the educator video',
               },
               {
                 src: '/works/visual-media/volunteer.webp',
                 alt: 'Video cover for the Real Careers, Real Journeys volunteer video. Opens on YouTube.',
                 caption: 'Volunteers heard “Share your career story with students.”',
                 href: 'https://www.youtube.com/watch?v=dL02JIn6jnI',
+                hrefLabel: 'Watch the volunteer video',
               },
             ],
           },
@@ -172,6 +175,14 @@ export const visualMedia: CaseStudy = {
         {
           kind: 'visual',
           visual: {
+            label: 'The social palette: two primaries turned up, the palette and its pairings',
+            custom: 'social-palette',
+            caption: 'Two primaries, turned up for the feed. Same brand, louder.',
+          },
+        },
+        {
+          kind: 'visual',
+          visual: {
             label: 'Showdown cover, before and after the refresh',
             custom: 'showdown-wipe',
             caption: 'Showdown cover. Same layout, with our purple moved to #7C3AED.',
@@ -181,25 +192,23 @@ export const visualMedia: CaseStudy = {
           kind: 'p',
           text: 'Captions got a rule anyone could follow. Busy footage gets a purple pill with white text. Dark footage gets yellow with a dark stroke. One line, every time. The exact values live in caption templates, so editors apply them and never set them by hand.',
         },
-        // CHECK: caption switch frames. The clip is bright daytime footage, so the labels name the two
-        // routes and don't claim it's busy or dark footage. A dark clip would prove the rule better.
         {
           kind: 'visual',
           visual: {
             label: 'One clip, two caption routes',
-            aspect: '1 / 1',
+            aspect: '9 / 8',
             compare: [
               {
                 label: 'Purple pill',
-                src: '/works/visual-media/caption-pill.webp',
-                alt: 'Two women at a picnic table under trees, with the caption “today we’re taking a poll” in white text on a purple pill.',
-                caption: 'Purple pill: white text on purple.',
-              },
-              {
-                label: 'Caption yellow',
-                src: '/works/visual-media/caption-yellow.webp',
-                alt: 'The same two women and the same caption, now in yellow text with a dark stroke and no pill.',
-                caption: 'Caption yellow: yellow text with a dark stroke.',
+                src: '/works/visual-media/captions/kit-purple.webp',
+                alt: 'A woman in safety glasses assembling a small drone, with the caption “Get started with engineering” in white text on a purple pill.',
+                with: [
+                  {
+                    src: '/works/visual-media/captions/kit-yellow.webp',
+                    alt: 'The same clip, with the caption now in yellow text with a dark stroke and no pill.',
+                  },
+                ],
+                caption: 'Purple pill, white text, beside caption yellow with a dark stroke. Same clip, same caption.',
               },
             ],
           },
@@ -213,7 +222,7 @@ export const visualMedia: CaseStudy = {
     {
       id: 'closing',
       title: 'Reflection',
-      unnumbered: true,
+      hook: 'Stories worth someone’s 3 minutes',
       blocks: [
         {
           kind: 'p',

@@ -33,8 +33,9 @@ export type Visual = {
   flow?: Flow
   // Captures of one page in a browser frame with a switch between them (a before and after). They
   // share the visual's aspect, so crop them to the same size and zoom. A caption under the frame
-  // swaps with the tab.
-  compare?: { label: string; src: string; alt: string; caption?: string }[]
+  // swaps with the tab. A view with `with` shows its image and those beside it, side by side (each
+  // image takes the visual's aspect, so set it to the whole row's).
+  compare?: { label: string; src: string; alt: string; caption?: string; with?: { src: string; alt: string }[] }[]
   // A row of art on one baseline, each with a caption, that opens larger on tap (Calvolution). The
   // pieces share the visual's aspect and lay out by cols, like placeholder tiles. With frame
   // 'screen' they're product screens instead: a second caption line (note), and a mark that rings
@@ -42,8 +43,8 @@ export type Visual = {
   // With frame 'device' they're screens in their own mockup bezel, shown as they are.
   // An item's own aspect overrides the visual's, for a row of different shapes (Brand System's
   // outputs). An href makes the piece a link out with a play badge (a video cover) instead of an
-  // enlarge. fill is the piece's own edge color, behind it where a feature strip letterboxes it.
-  strip?: { src: string; alt: string; caption: string; note?: string; mark?: Box; aspect?: string; href?: string; fill?: string }[]
+  // enlarge, and a visible link under the caption (hrefLabel, 'Watch on YouTube' by default). fill is the piece's own edge color, behind it where a feature strip letterboxes it.
+  strip?: { src: string; alt: string; caption: string; note?: string; mark?: Box; aspect?: string; href?: string; hrefLabel?: string; fill?: string }[]
   // Several captures, each in its own browser frame with a label above and a caption under (Cal
   // chapter 8, one per month). Laid out by cols; a link or a small note can follow a caption.
   browsers?: { label: string; src: string; alt: string; caption: string; note?: string; link?: { label: string; href: string } }[]

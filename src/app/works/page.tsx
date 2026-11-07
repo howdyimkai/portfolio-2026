@@ -71,18 +71,19 @@ const PROJECTS: Project[] = [
     cta: 'see the system',
   },
   {
-    name: 'Storytelling, video, motion',
+    name: 'Tallo Video System',
     hook: 'Short videos about big career decisions, and the system that kept them coming.',
     mark: 'big career decisions',
     story: 'I turned hours of live sessions into a series of under three minute episodes, then wrote the guidelines our team and interns made every video from. Twelve episodes so far.',
     role: 'video and motion',
     year: '2026',
-    // The reel's cover (Paper's export, artwork moved up), in the wide window like the other 16:9 covers.
+    // The reel teaser's first frame, in the wide window like the other 16:9 covers. It plays on hover.
     cover: {
-      anim: '/works/visual-media/reel-poster.webp',
-      still: '/works/visual-media/reel-poster.webp',
+      anim: '/works/visual-media/reel-teaser-still.webp',
+      still: '/works/visual-media/reel-teaser-still.webp',
       device: 'browser',
-      alt: 'The reel cover: a hand lettered "howdy im Kai" beside a postage stamp portrait, above "storytelling, video, motion"',
+      teaser: { webm: '/works/visual-media/reel-teaser.webm', mp4: '/works/visual-media/reel-teaser.mp4' },
+      alt: 'Reel teaser: white type on blue reading "Real career paths," then "Real decisions," as Real Careers, Real Journeys episode cards fan in.',
     },
     href: '/works/visual-media',
     cta: 'watch the reel',

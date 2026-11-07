@@ -52,11 +52,10 @@ export default function Strip({
         {items.map((it, i) => (
           <li key={it.src}>
             {it.href ? (
-              <a href={it.href} target="_blank" rel="noopener noreferrer" className={`st-tile st-tile-link block w-full ${blend}`}>
+              <a href={it.href} target="_blank" rel="noopener noreferrer" tabIndex={-1} aria-hidden="true" className={`st-tile st-tile-link block w-full ${blend}`}>
                 <Piece item={it} aspect={aspect} look={look} className="w-full">
                   <PlayBadge />
                 </Piece>
-                <span className="sr-only">, opens on YouTube in a new tab</span>
               </a>
             ) : (
               <button type="button" onClick={() => show(i)} className={`st-tile block w-full ${blend}`}>
@@ -65,6 +64,14 @@ export default function Strip({
               </button>
             )}
             <p className={`mt-2 text-center font-mono text-[12px] leading-[1.5] ${panel ? 'text-ink-primary' : 'text-ink-muted'} [text-wrap:balance]`}>{it.caption}</p>
+            {it.href && (
+              <p className="mt-1.5 text-center font-mono text-[12px] leading-[1.5]">
+                <a href={it.href} target="_blank" rel="noopener noreferrer" className="sf-link press-scale inline-block text-ink-primary">
+                  {it.hrefLabel ?? 'Watch on YouTube'} <span aria-hidden="true">↗</span>
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </p>
+            )}
             {it.note && <p className={`text-center font-mono text-[12px] leading-[1.5] ${panel ? 'text-ink-body' : 'text-ink-faint'} [text-wrap:balance]`}>{it.note}</p>}
           </li>
         ))}

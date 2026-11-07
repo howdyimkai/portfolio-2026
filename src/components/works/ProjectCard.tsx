@@ -5,6 +5,7 @@
 import { useRef, type CSSProperties, type PointerEvent } from 'react'
 import Link from 'next/link'
 import Loop from '@/components/case-study/Loop'
+import HoverTeaser from '@/components/case-study/HoverTeaser'
 import './project-card.css'
 
 export type Project = {
@@ -30,6 +31,9 @@ export type Project = {
     // A muted loop in place of the animated image (`still` is its poster and the reduced motion
     // frame). The mask cuts it to its own device, so it takes no browser window of its own.
     video?: { webm: string; mp4: string; mask: string; aspect: string }
+    // A muted loop that plays only while the card is hovered or focused, over `still`, in the
+    // browser window like any cover. Reduced motion and touch keep the still.
+    teaser?: { webm: string; mp4: string }
   }
   // No href → the card is a "coming soon" placeholder and isn't a link.
   href?: string
@@ -76,6 +80,8 @@ export default function ProjectCard({ project: p }: { project: Project }) {
                     >
                       <Loop webm={p.cover.video.webm} mp4={p.cover.video.mp4} still={p.cover.still} alt={p.cover.alt} />
                     </div>
+                  ) : p.cover.teaser ? (
+                    <HoverTeaser webm={p.cover.teaser.webm} mp4={p.cover.teaser.mp4} still={p.cover.still} alt={p.cover.alt} className="wk-screen rounded-[5px]" />
                   ) : (
                     <picture>
                       <source media="(prefers-reduced-motion: reduce)" srcSet={p.cover.still} />
@@ -143,6 +149,7 @@ export default function ProjectCard({ project: p }: { project: Project }) {
   return p.href ? (
     <Link
       href={p.href}
+      data-teaser-host
       className="wk-card group flex h-full w-full flex-col rounded-[22px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink-primary"
       aria-label={`${p.name} case study`}
     >

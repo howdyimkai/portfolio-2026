@@ -13,6 +13,7 @@ import MatchCard from '../design-garden/MatchCard'
 import GardenCompare from '../design-garden/GardenCompare'
 import ReelPlayer from '../visual-media/ReelPlayer'
 import ShowdownWipe from '../visual-media/ShowdownWipe'
+import SocialPalette from '../visual-media/SocialPalette'
 
 // The Brand System case study's built visuals, by the `custom` key in its content file. A key with
 // no component yet falls back to the labeled placeholder, so the page reads end to end while the
@@ -33,4 +34,5 @@ export const CUSTOM_VISUALS: Record<string, ComponentType<{ visual: Visual }>> =
   // Visual media's.
   'reel-player': ReelPlayer,
   'showdown-wipe': ShowdownWipe,
+  'social-palette': SocialPalette,
 }

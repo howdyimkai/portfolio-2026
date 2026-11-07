@@ -13,21 +13,24 @@ export default function Toggle({ views, aspect, framed }: { views: NonNullable<V
   const [on, setOn] = useState(0)
   const stack = (
     <div className="relative" style={{ aspectRatio: aspect }}>
-      {views.map((v, i) => (
-        <img
-          key={v.src}
-          src={v.src}
-          alt={v.alt}
-          draggable={false}
-          data-active={i === on}
-          aria-hidden={i !== on}
-          className="tg-view absolute inset-0 block h-full w-full"
-        />
-      ))}
+      {views.map((v, i) => {
+        const imgs = [{ src: v.src, alt: v.alt }, ...(v.with ?? [])]
+        const props = { 'data-active': i === on, 'aria-hidden': i !== on, className: 'tg-view absolute inset-0' }
+        return imgs.length === 1 ? (
+          <img key={v.src} src={v.src} alt={v.alt} draggable={false} {...props} className="tg-view absolute inset-0 block h-full w-full" />
+        ) : (
+          <div key={v.src} {...props} className="tg-view absolute inset-0 grid gap-3 md:gap-5" style={{ gridTemplateColumns: `repeat(${imgs.length}, minmax(0, 1fr))` }}>
+            {imgs.map((m) => (
+              <img key={m.src} src={m.src} alt={m.alt} draggable={false} className="block h-full w-full object-cover" />
+            ))}
+          </div>
+        )
+      })}
     </div>
   )
   return (
     <div className="rounded-[14px] bg-tag px-5 pb-5 pt-5 md:px-10 md:pb-10 md:pt-8">
+      {views.length > 1 && (
       <div role="group" aria-label="Show" className="mb-4 inline-flex rounded-full border border-hairline bg-white p-0.5 md:mb-5">
         {views.map((v, i) => (
           <button
@@ -41,6 +44,7 @@ export default function Toggle({ views, aspect, framed }: { views: NonNullable<V
           </button>
         ))}
       </div>
+      )}
       {framed ? <BrowserFrame>{stack}</BrowserFrame> : stack}
       {/* Every caption sits in the same grid cell, so the panel keeps the tallest one's height and
           doesn't jump when the tab switches. Only the current one shows. */}

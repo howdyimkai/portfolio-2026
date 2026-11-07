@@ -3,7 +3,7 @@ import CaseStudyPage from '@/components/case-study/CaseStudyPage'
 import { visualMedia } from '@/content/case-studies/visual-media'
 
 export const metadata: Metadata = {
-  title: 'Storytelling, video, motion',
+  title: 'Tallo Video System',
   description: visualMedia.hook,
 }
 
