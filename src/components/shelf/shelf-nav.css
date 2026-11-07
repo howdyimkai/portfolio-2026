@@ -20,14 +20,19 @@
    The homepage stacks: shelf pad 36 + 160·zoom, hero pad 20, garden W/1.553, cards gap 40,
    card peek 148 (whole blossom). With zoom = 0.7·W/394 that solves to
    W = (1.553·100dvh − 378.9px) / 1.4415, capped at 900. Hero.tsx reads --home-garden-w;
-   tan(atan2(len, len)) turns the length ratio into the unitless zoom scale() needs.
+   calc(len / len) turns the length ratio into the unitless zoom scale() needs.
    Compact keeps that zoom (the wordmark doesn't jump) and frees the header down to 96·zoom:
    W = 1.553·(100dvh − 244px − 96px·zoom), capped at 900. */
 @media (min-width: 768px) {
   :root {
     --home-garden-base: min(900px, calc(107.74dvh - 262.9px));
-    --shelf-zoom: tan(atan2(var(--home-garden-base), 562.86px));
+    --shelf-zoom: 1.4; /* fallback where length / length isn't supported */
     --home-garden-w: var(--home-garden-base);
+  }
+  /* Typed division. Replaces tan(atan2(len, len)), which WebKit (every iOS/iPadOS browser,
+     Firefox included) evaluates wrongly: the shelf came out scaled negative, so upside down. */
+  @supports (scale: calc(1px / 1px)) {
+    :root { --shelf-zoom: calc(var(--home-garden-base) / 562.86px); }
   }
   :root:has(.shelf-nav-draw[data-compact]) {
     --home-garden-w: min(900px, calc(155.3dvh - 378.9px - 149.1px * var(--shelf-zoom)));
