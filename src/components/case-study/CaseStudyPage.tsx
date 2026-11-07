@@ -384,7 +384,7 @@ function VisualBlock({ v }: { v: Visual }) {
           <VisualLink link={v.link} />
         </div>
       )}
-      {v.caption && <figcaption className="mt-4 font-mono text-[12px] leading-[1.6] text-ink-faint">{v.caption}</figcaption>}
+      {v.caption && <figcaption className="mt-4 font-mono text-[12px] leading-[1.6] text-ink-faint"><Inline text={v.caption} /></figcaption>}
     </figure>
   )
 }

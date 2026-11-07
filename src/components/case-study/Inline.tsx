@@ -27,7 +27,13 @@ export default function Inline({ text }: { text: string }) {
           className="text-ink-primary underline decoration-hairline underline-offset-4 hover:decoration-ink-primary"
         >
           {m[2]}
-          {external && <span className="sr-only"> (opens in a new tab)</span>}
+          {external && (
+            <>
+              {' '}
+              <span aria-hidden="true">↗</span>
+              <span className="sr-only"> (opens in a new tab)</span>
+            </>
+          )}
         </a>,
       )
     }

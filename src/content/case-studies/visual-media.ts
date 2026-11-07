@@ -19,7 +19,7 @@ export const visualMedia: CaseStudy = {
     label: 'Motion reel',
     custom: 'reel-player',
     aspect: '16 / 9',
-    caption: 'Edited and animated by me. An intern wrote and shot No Tutorial. Our social media manager started the educator video, and I finished it.',
+    caption: 'Edited and animated by me. An intern wrote and shot [No Tutorial](https://www.youtube.com/watch?v=gM25Pn0udMA). Our social media manager started the educator video, and I finished it.',
   },
   stats: [
     { value: '12', label: 'episodes published in the career series' },
@@ -143,7 +143,7 @@ export const visualMedia: CaseStudy = {
         },
         {
           kind: 'p',
-          text: 'With interns, I start where they are. One wrote and shot No Tutorial, and I edited it and added the motion graphics. Another wrote and hosted the bridges on Mental Health, and I helped refine the script.',
+          text: 'With interns, I start where they are. One wrote and shot [No Tutorial](https://www.youtube.com/watch?v=gM25Pn0udMA), and I edited it and added the motion graphics. Another wrote and hosted the bridges on Mental Health, and I helped refine the script.',
         },
       ],
     },
