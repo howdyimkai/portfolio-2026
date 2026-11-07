@@ -3,8 +3,7 @@ import type { CaseStudy } from '@/components/case-study/types'
 // Copy is CaseStudy_VisualMedia_v1.md (Claude-Workspace/projects/2026-10-PortfolioSprint/case-studies/
 // visual-media/, 2026-11-04) with the handoff beside it. Visuals are Paper's exports from "Claude
 // Sessions", published to public/works/visual-media/. Where the draft's open checks (its "Not page
-// copy" list) are still unanswered, the line is worded so it claims nothing unconfirmed; each is
-// marked CHECK below. Change the draft first, then this file.
+// copy" list) were all answered by Kai on 2026-11-07 and are in. Change the draft first, then this file.
 export const visualMedia: CaseStudy = {
   eyebrow: 'Case study · Video and motion',
   title: 'Tallo Video System',
@@ -12,9 +11,7 @@ export const visualMedia: CaseStudy = {
   meta: [
     { label: 'Role', value: 'Multimedia Designer, then Head of Creative' },
     { label: 'Where', value: 'Tallo, May 2025 to Nov 2026. Design Garden, my own program.' },
-    // CHECK: the draft also lists Remotion; the educator project folder has film.html and render.mjs
-    // and no Remotion package, so it's off until the name is confirmed.
-    { label: 'Tools', value: 'DaVinci Resolve, Jitter, Capsule, Canva, Claude Code' },
+    { label: 'Tools', value: 'DaVinci Resolve, Jitter, Capsule, Canva, Claude Code, Remotion' },
     { label: 'Background', value: 'Film at UT Austin, then game cinematics for BioWare and Trion Worlds.' },
   ],
   // The reel, click to load from YouTube (the master stays there). Credits sit under it.
@@ -26,9 +23,7 @@ export const visualMedia: CaseStudy = {
   },
   stats: [
     { value: '12', label: 'episodes published in the career series' },
-    // CHECK: session length. The draft said "1 hour to under 3 minutes", the reel says sessions run
-    // 30 to 45 minutes. Worded to hold either way until Kai picks.
-    { value: 'Under 3 minutes', label: 'per episode, cut down from a full live session' },
+    { value: '1 hour to under 3 minutes', label: 'from live session to finished episode' },
     {
       value: '1,750 to 11,700',
       label: 'TikTok followers in 11 months',
@@ -55,7 +50,7 @@ export const visualMedia: CaseStudy = {
     {
       id: 'series',
       title: 'The series',
-      hook: 'A long Zoom session, under three minutes of story',
+      hook: 'An hour of Zoom, under three minutes of story',
       blocks: [
         {
           kind: 'visual',
@@ -82,10 +77,9 @@ export const visualMedia: CaseStudy = {
           kind: 'p',
           text: 'The order never changes. Episode one asks if you’d want this life. Episode two shows how to get there. Episode three is real talk about what it costs.',
         },
-        // CHECK: Mental Health Ep 1 (did Kai cut it too). The line below only credits the bridges.
         {
           kind: 'p',
-          text: 'I find the moments that answer each question, then cut the full session down around them. On Music Careers, I wrote the host script and hosted it on camera. On Mental Health, an intern wrote and hosted the bridges, and I helped refine the script.',
+          text: 'Each session ran about an hour with setup. A trim pass got it down to a longform version, then I found the moments that answer each question and cut it down even further around them. On Music Careers, I wrote the host script and hosted it on camera. On Mental Health, an intern wrote and hosted the bridges, I helped refine the script, and I cut Ep 1.',
         },
         // Kept in step with Brand System ("I built the challenge from their plan").
         {
@@ -143,11 +137,9 @@ export const visualMedia: CaseStudy = {
           kind: 'p',
           text: 'Episodes changed shape for their channel too. Entrepreneurship Ep 1 became a vertical teaser for social, cut down to 44 seconds.',
         },
-        // CHECK: the draft's "Teammates finished in CapCut or Resolve" is out until the process guide's
-        // claim is confirmed.
         {
           kind: 'p',
-          text: 'I work in whatever gets the video out. My edits run through DaVinci Resolve, Jitter and Capsule, and the educator video ran on code. The rough cut gives any editor a clear target, so people can use the tool they’re fastest in.',
+          text: 'I work in whatever gets the video out. My edits run through DaVinci Resolve, Jitter and Capsule, and the educator video ran on code. Teammates finished in CapCut or Resolve. The rough cut gives any editor a clear target, so people can use the tool they’re fastest in.',
         },
         {
           kind: 'p',
