@@ -18,7 +18,11 @@ the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
   pushed and deploys to Vercel project `howdyimkais-projects/kai-portfolio-2026`.
   Reviewers get the branch alias
   `kai-portfolio-2026-git-explore-bran-428c65-howdyimkais-projects.vercel.app/works/cal`.
-  howdyimkai.com is a **Framer** site, not this repo. Never push or merge to `main`.
+  **This repo is the live site** (corrected 2026-11-07; it used to say howdyimkai.com was Framer, but
+  an iPad screenshot showed this code serving there). GitHub `howdyimkai/portfolio-2026` is linked to
+  Vercel: pushing a branch builds a preview, and pushing `main` deploys to production at howdyimkai.com.
+  Branch for fixes, check the preview, and only merge to `main` when Kai says to (he said so for
+  `fix/shelf-zoom-webkit`, 2026-11-07).
 - Kai runs `git push` (auto mode blocks Claude's push). Each push rebuilds the preview.
 - **The case studies are open** (Kai, 2026-11-02): there is no `src/proxy.ts`, so `/works/cal` and
   `/works/brand-system` need no password. Both are indexed and in the sitemap since 2026-11-02. The gate is **parked** for future
