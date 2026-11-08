@@ -1329,6 +1329,7 @@ export default function Garden({ layout }: { layout: Layout }) {
             </p>
             <div
               ref={titleElRef}
+              data-fog-origin=""
               className={`relative aspect-[900/436] ${
                 // Title and principles 15% larger with pixel erase (Kai, 2026-10-28).
                 mode === 'bleed' ? 'w-[min(90vw,368px)] md:w-[calc(var(--u)*67)] md:min-w-[320px]' : 'w-[calc(var(--u)*61)] min-w-[291px]'

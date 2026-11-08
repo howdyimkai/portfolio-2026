@@ -149,6 +149,10 @@ About copy draft lives in the Positioning Brainstorm doc.
   its own floating `ShelfNav` over `SandGarden layout="bleed"`. No footer on `/`.
   A "see selected works" pill (`WorksPill`, 2026-11-02, `design-intent/works-nudge-exploration/NOTES.md`)
   sits bottom right on desktop and above the tool rail on phones, as a plain way into `/works`.
+  `HomeFog` (2026-11-07, after the sprint's `inspiration/rug-reveal.mov`) covers the window in the
+  grid paper on a fresh load of `/` only, then clears it outward from the title (`data-fog-origin`) in
+  blotchy clumps over 1.5s: a coarse distance + noise mask stretched over a canvas. Never on a click
+  home, never under reduced motion; a CSS fallback fades the paper at 2.6s if the script never runs.
   `/pieces/*` renders bare (one piece of the site on its own, for recordings).
   `/works`, its case studies, `/about` and `/play` use `ShelfNav` + `Footer` on white grid paper; below
   md the shelf gives way to `PhoneMenu` (paper bar + hamburger opening a one-column shelf) and
