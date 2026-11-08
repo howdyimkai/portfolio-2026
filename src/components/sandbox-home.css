@@ -44,3 +44,15 @@
 @media (prefers-reduced-motion: reduce) {
   .home-fog { display: none; }
 }
+
+/* The hero title and its line fade in as the fog starts clearing from them (Kai, 2026-11-08). On the
+   wrapper, not the title, whose own opacity belongs to the erase reveal. A soft ease out over 400ms:
+   the paper uncovers the title in its first ~150ms, so a strong curve would finish under the fog. */
+html[data-hero-enter='wait'] .hero-enter { opacity: 0; }
+html[data-hero-enter='go'] .hero-enter { animation: hero-enter 400ms cubic-bezier(0.33, 1, 0.68, 1) both; }
+@keyframes hero-enter {
+  from { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-hero-enter] .hero-enter { opacity: 1; animation: none; }
+}

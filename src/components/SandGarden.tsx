@@ -1318,8 +1318,8 @@ export default function Garden({ layout }: { layout: Layout }) {
           }`}
         >
           {/* The caption sits beside the title, not inside it, so it doesn't fade as the
-              title is erased. */}
-          <div className="relative">
+              title is erased. hero-enter: the first-load fade (HomeFog). */}
+          <div className="hero-enter relative">
             {/* Above the title in mono bold, 20% up from 13px (Kai, 2026-10-29). Phones drop
                 "Plant, rake, ship." (Kai, 2026-11-02), since mono at 16px is wider than the screen. */}
             <p className="mb-3 text-center font-mono text-[16px] font-bold text-ink-primary">

@@ -37,6 +37,14 @@ const setBookmark = (v?: 'wait' | 'go') => {
   else delete document.documentElement.dataset.rbEnter
 }
 
+// The hero title (with its "Plant, rake, ship." line) fades in gently as the paper starts clearing
+// from it (Kai, 2026-11-08), so it develops instead of being uncovered crisp. sandbox-home.css,
+// `hero-enter`. `<html data-hero-enter>`: 'wait' while the paper covers it, 'go' when it clears.
+const setHero = (v?: 'wait' | 'go') => {
+  if (v) document.documentElement.dataset.heroEnter = v
+  else delete document.documentElement.dataset.heroEnter
+}
+
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 3)
 
 function makeNoise(cols: number, rows: number) {
@@ -110,6 +118,7 @@ export default function HomeFog() {
       return
     }
 
+    setHero('wait')
     let raf = 0
     let cancelled = false
     let finished = false
@@ -118,7 +127,10 @@ export default function HomeFog() {
       const canvas = canvasRef.current
       const ctx = canvas?.getContext('2d')
       if (cancelled) return
-      if (!canvas || !ctx || performance.now() > LATE_MS) return setOn(false)
+      if (!canvas || !ctx || performance.now() > LATE_MS) {
+        setHero()
+        return setOn(false)
+      }
 
       const W = window.innerWidth
       const H = window.innerHeight
@@ -198,6 +210,7 @@ export default function HomeFog() {
 
       draw(0)
       setHandoff(true)
+      setHero('go')
       const start = performance.now()
       const tick = (now: number) => {
         const t = Math.min((now - start) / DURATION, 1)
@@ -205,6 +218,7 @@ export default function HomeFog() {
         if (t < 1) raf = requestAnimationFrame(tick)
         else {
           finished = true
+          setHero()
           setOn(false)
         }
       }
@@ -216,6 +230,7 @@ export default function HomeFog() {
       // unmount (leaving home mid reveal) still counts as the first load having happened.
       if (!finished) {
         setBookmark()
+        setHero()
         firstLoad = true
         queueMicrotask(() => (firstLoad = false))
       }
