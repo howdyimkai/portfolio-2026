@@ -20,8 +20,13 @@ const EDGE = 0.09 // how soft the frontier is, in reveal units
 const NOISE = 0.42 // noise share of the reveal order; the rest is distance from the title
 const GRID_SRC = '/textures/grid-paper.webp'
 const GRID_WIDTH = 336 // matches .grid-paper's background-size
-// No JS by then (slow hydration, an error): the CSS fallback has already faded the paper, so don't cover it again.
+// No JS by then (slow hydration, an error): the CSS fallback has already started fading the paper,
+// so don't cover it again. Once the script is running before then, it stops the fallback and owns
+// the paper, so slow images can't push the reveal past this and lose it (seen on the Vercel preview,
+// 2026-11-08: the garden images held the reveal to 2.2s, a hair under the old second check).
 const LATE_MS = 2600
+// The longest the script holds the paper for the garden's images and the grid texture.
+const WAIT_MS = 1200
 // Share of the window cleared when the résumé bookmark starts its enter.
 const RB_AT = 0.8
 
@@ -118,16 +123,20 @@ export default function HomeFog() {
       return
     }
 
+    // The script is here in time: the paper now waits for it instead of fading by itself.
+    const paper = document.querySelector<HTMLElement>('.home-fog-paper')
+    if (paper) paper.style.animation = 'none'
     setHero('wait')
     let raf = 0
     let cancelled = false
     let finished = false
     ;(async () => {
-      const [grid] = await Promise.all([loadImage(GRID_SRC), gardenPainted(1200)])
+      const late = new Promise<null>((r) => setTimeout(() => r(null), WAIT_MS))
+      const [grid] = await Promise.all([Promise.race([loadImage(GRID_SRC), late]), gardenPainted(WAIT_MS)])
       const canvas = canvasRef.current
       const ctx = canvas?.getContext('2d')
       if (cancelled) return
-      if (!canvas || !ctx || performance.now() > LATE_MS) {
+      if (!canvas || !ctx) {
         setHero()
         return setOn(false)
       }
