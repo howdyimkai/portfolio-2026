@@ -4,7 +4,7 @@
 // résumé on paper over the current page (no navigation, so closing leaves you where you were).
 // Picked from /proto/resume-bookmark (Tug, 2026-10-27); decision record in
 // design-intent/resume-bookmark-exploration/NOTES.md.
-import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import Resume from './Resume'
 import { play } from '@/lib/sfx'
 import './resume.css'
@@ -17,6 +17,11 @@ export default function ResumeBookmark() {
   const sheet = useRef<HTMLDivElement>(null)
   const titleId = useId()
   const close = useCallback(() => setOpen(false), [])
+
+  // The homepage's first-load drop (HomeFog sets <html data-rb-enter>). Each page mounts its own
+  // bookmark, so leaving mid drop would leave the flag on and replay it on the next page: clear it here too.
+  // A layout effect, so it's gone before the next page's bookmark paints (a plain effect runs after paint).
+  useLayoutEffect(() => () => void delete document.documentElement.dataset.rbEnter, [])
 
   // Locks the page behind it, Escape closes, Tab stays in the sheet, focus goes in and comes back.
   // iOS Safari ignores overflow: hidden for touch scrolling, so the body is pinned at its scroll
@@ -63,6 +68,9 @@ export default function ResumeBookmark() {
         aria-label="Open résumé"
         aria-haspopup="dialog"
         aria-expanded={open}
+        onAnimationEnd={(e) => {
+          if (e.animationName === 'rb-enter') delete document.documentElement.dataset.rbEnter
+        }}
         onClick={() => {
           void play('bookmark')
           setOpen(true)

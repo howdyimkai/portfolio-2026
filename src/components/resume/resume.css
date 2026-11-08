@@ -52,6 +52,17 @@
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+/* First load of the homepage: the bookmark enters once 80% of HomeFog's paper has cleared (RB_AT).
+   It drops in from above the top edge, overshoots and settles back (Kai, 2026-11-08). The overshoot
+   stays under the 8px the felt is tucked above the edge (top: -8px), so no gap opens at the top.
+   Fast out of the gate (ease out), then an even ease back up from the overshoot. */
+html[data-rb-enter='wait'] .rb { translate: 0 -100%; }
+html[data-rb-enter='go'] .rb { animation: rb-enter 360ms both; }
+@keyframes rb-enter {
+  0% { translate: 0 -100%; animation-timing-function: var(--ease-out-strong); }
+  65% { translate: 0 7px; animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1); }
+  100% { translate: 0 0; }
+}
 .rb:focus-visible { outline: 2px solid var(--color-ink-primary); outline-offset: 3px; }
 .rb-hang {
   display: block;
@@ -327,6 +338,7 @@
 
 /* Reduced motion: no curl, dip or travel, just a fade. */
 @media (prefers-reduced-motion: reduce) {
+  html[data-rb-enter] .rb { translate: none; animation: none; }
   .rb .rb-flip, .rb .rb-hang { transform: none !important; translate: none !important; transition: none; }
   .rs-sheet, .rs-under, .rs-sheet[data-open], .rs-under[data-open] { translate: none; }
   .rs-sheet, .rs-under { opacity: 0; transition: opacity 160ms ease-out, visibility 0s linear 160ms; }

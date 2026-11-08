@@ -22,9 +22,20 @@ const GRID_SRC = '/textures/grid-paper.webp'
 const GRID_WIDTH = 336 // matches .grid-paper's background-size
 // No JS by then (slow hydration, an error): the CSS fallback has already faded the paper, so don't cover it again.
 const LATE_MS = 2600
+// Share of the window cleared when the résumé bookmark starts its enter.
+const RB_AT = 0.8
 
 // Seen the first load already in this document: client navigations back home skip the fog.
 let firstLoad = true
+
+// The résumé bookmark waits hidden under the paper and plays its enter (resume.css, `rb-enter`)
+// once most of the garden is showing (RB_AT), so the motion is seen instead of spent under the fog.
+// `<html data-rb-enter>`: 'wait', then 'go'; the bookmark
+// clears it when its animation ends, so a later remount doesn't replay it.
+const setBookmark = (v?: 'wait' | 'go') => {
+  if (v) document.documentElement.dataset.rbEnter = v
+  else delete document.documentElement.dataset.rbEnter
+}
 
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 3)
 
@@ -148,12 +159,25 @@ export default function HomeFog() {
         }
       }
 
+      // The bookmark enters once 80% of the window has cleared (Kai, 2026-11-08): the cell order
+      // that 80% of cells sit under is where the frontier is at that moment.
+      let rbAt = -1
+      if (document.querySelector('.rb')) {
+        const sorted = Float32Array.from(order).sort()
+        rbAt = sorted[Math.floor(sorted.length * RB_AT)]
+        setBookmark('wait')
+      }
+
       const pattern = grid ? ctx.createPattern(grid, 'repeat') : null
       pattern?.setTransform(new DOMMatrix().scale(GRID_WIDTH / grid!.naturalWidth))
 
       const draw = (p: number) => {
         // p runs from just before the first cell to just past the last, so the frontier enters and leaves whole.
         const front = -EDGE + p * (1 + 2 * EDGE)
+        if (rbAt >= 0 && front >= rbAt) {
+          rbAt = -1
+          setBookmark('go')
+        }
         for (let i = 0; i < order.length; i++) {
           const a = (order[i] - front) / EDGE
           data.data[i * 4 + 3] = a <= 0 ? 0 : a >= 1 ? 255 : a * 255
@@ -191,6 +215,7 @@ export default function HomeFog() {
       // Strict mode reruns effects at once in dev: let that rerun pick the fog back up, but a real
       // unmount (leaving home mid reveal) still counts as the first load having happened.
       if (!finished) {
+        setBookmark()
         firstLoad = true
         queueMicrotask(() => (firstLoad = false))
       }
