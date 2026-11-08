@@ -311,7 +311,8 @@
 @media (max-width: 767px) {
   /* Short: the label sits in the paper bar and the V tail dips only a little past it (Kai, 2026-11-01). */
   .rb-root { --rb-w: 40px; --rb-body: 58px; }
-  .rb { left: auto; right: 60px; }
+  /* Left of the sound toggle and hamburger (44px each, 2px apart, 8px bar padding) since 2026-11-07. */
+  .rb { left: auto; right: 106px; }
   .rb::before { content: ''; position: absolute; inset: 0 -2px; }
   .rb-label { top: 22px; font-size: 9px; }
   .rs-sheet { top: 0; width: 100%; border-radius: 0; }

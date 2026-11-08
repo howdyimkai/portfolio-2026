@@ -224,8 +224,9 @@ About copy draft lives in the Positioning Brainstorm doc.
   recordings) in `public/sfx/`, plus the rake's sand hiss synthesized live with Web Audio. Only on
   things a visitor chooses to do: tool pick up and put down, blossom stamp (C pentatonic kalimba),
   principle reveal, rake and eraser (a softer hiss), shelf broom, résumé bookmark, Copy email. Nothing on hover or page load.
-  `SoundToggle` lives in the desktop tool rail, the phone menu and the footer, and shares one
-  remembered mute. Re-render sounds with `design-intent/sfx-exploration/render.sh` (earshot is in
+  `SoundToggle` lives in a chip left of the shelf's broom, in the phone bar left of the hamburger
+  (both moved there 2026-11-07, off the tool rail and the phone menu's bottom) and in the footer, and
+  shares one remembered mute. Re-render sounds with `design-intent/sfx-exploration/render.sh` (earshot is in
   `~/Desktop/Claude-Workspace/tools/earshot`, installed without torch, which has no Intel Mac wheels).
 - **`ZenGarden`** — self-contained canvas-based tool system (teeth rake,
   eraser rake, blossom stamp). Rake/eraser act on **hover alone** — drawing

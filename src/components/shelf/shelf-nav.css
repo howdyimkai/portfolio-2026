@@ -97,7 +97,7 @@
 /* ---- Broom ---- */
 /* Same frosted chip as the garden tool tray (bg-page/85, hairline, blur, soft lift),
    in shelf units: 26 → ~36px rendered on desktop. Centered where the bare icon sat. */
-.shelf-broom {
+.shelf-broom, .shelf-sound {
   position: absolute;
   right: 0;
   top: 23px;
@@ -118,13 +118,17 @@
   -webkit-tap-highlight-color: transparent;
 }
 /* Mobile draws at 0.86×: grow the hit area to ~43px rendered without moving the icon. */
-.shelf-broom::after { content: ''; position: absolute; inset: -14px; }
+.shelf-broom::after, .shelf-sound::after { content: ''; position: absolute; inset: -14px; }
+/* The sound chip, 8 units left of the broom. Its hit area stops short of the broom's. */
+.shelf-sound { right: 34px; }
+.shelf-sound::after { inset: -14px -4px -14px -14px; }
+.shelf-sound svg { width: 14px; height: 14px; }
 .shelf-broom svg { width: 13px; height: 13px; transform-origin: 70% 30%; transition: rotate 200ms var(--ease-out-strong); }
 .shelf-broom .shelf-spark { transform-box: fill-box; transform-origin: center; transition: opacity 200ms ease-out, scale 200ms var(--ease-out-strong); }
-.shelf-broom:active { scale: 0.96; }
-.shelf-broom:focus-visible { outline: 1px solid var(--shelf-ink); outline-offset: 2px; }
+.shelf-broom:active, .shelf-sound:active { scale: 0.96; }
+.shelf-broom:focus-visible, .shelf-sound:focus-visible { outline: 1px solid var(--shelf-ink); outline-offset: 2px; }
 @media (hover: hover) and (pointer: fine) {
-  .shelf-broom:hover { background-color: color-mix(in srgb, var(--color-sand-light) 40%, color-mix(in srgb, var(--color-page) 85%, transparent)); }
+  .shelf-broom:hover, .shelf-sound:hover { background-color: color-mix(in srgb, var(--color-sand-light) 40%, color-mix(in srgb, var(--color-page) 85%, transparent)); }
   .shelf-broom:hover svg { rotate: -10deg; }
 }
 /* Tidied: the sparkles go out — they come back when the mess does. */

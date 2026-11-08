@@ -29,9 +29,13 @@ export default function PhoneMenu() {
         <Link href="/" className="pm-mark" aria-label="howdy im Kai, home">
           <Image src="/nav/shelf/wordmark.webp" alt="" width={309} height={130} draggable={false} unoptimized />
         </Link>
-        <button ref={burger} type="button" className="pm-burger" aria-expanded={open} aria-haspopup="dialog" aria-label="Menu" onClick={() => setOpen(true)}>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5h16M4 12h16M4 16.5h16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
-        </button>
+        <div className="pm-bar-end">
+          {/* Sound sits left of the menu, the phone's version of the shelf's chip (Kai, 2026-11-07). */}
+          <SoundToggle iconOnly className="pm-sound" />
+          <button ref={burger} type="button" className="pm-burger" aria-expanded={open} aria-haspopup="dialog" aria-label="Menu" onClick={() => setOpen(true)}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5h16M4 12h16M4 16.5h16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+          </button>
+        </div>
       </div>
       <Overlay open={open} onClose={close} trigger={burger}>
         <ToyColumn pathname={pathname} onPick={close} />
@@ -167,7 +171,6 @@ function Contact() {
           </li>
         ))}
       </ul>
-      <SoundToggle className="pm-sound" />
     </section>
   )
 }

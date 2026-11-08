@@ -6,7 +6,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import EraseCanvas, { loadImage, type EraseHandle } from './EraseCanvas'
-import SoundToggle from './SoundToggle'
 import { play, playBlossom, sandVoice, type SandVoice } from '@/lib/sfx'
 
 type Tool = 'rake' | 'eraser' | 'blossom'
@@ -1553,9 +1552,6 @@ function ToolRail({
           </div>
         </div>
       )}
-      {/* Desktop only: on phones the rail has no room left, so the phone menu carries the toggle. */}
-      <span aria-hidden className="hidden h-px w-8 bg-hairline md:my-1 md:block" />
-      <SoundToggle className="press-scale hidden h-11 w-[76px] shrink-0 flex-col items-center justify-center gap-0.5 rounded-2xl font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted transition-[background-color,color] duration-150 ease-out hover:bg-sand-light/40 hover:text-ink-body focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink-primary md:flex" />
     </div>
   )
 }

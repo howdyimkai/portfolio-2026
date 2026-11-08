@@ -5,6 +5,7 @@
 // broom crossing the shelf from /proto/broom-sweep (Broom pass, 2026-10-28).
 // Coordinates are 1× shelf units (394×104, measured off design-intent/pony-test/
 // Chalk inside shelf@2x.png); .shelf-nav scales the whole drawing by --zoom.
+import SoundToggle from '@/components/SoundToggle'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -221,6 +222,9 @@ export default function ShelfNav({ activeHref, onSelect }: { activeHref?: string
         <Link href="/" className="shelf-wordmark" aria-label="howdy im Kai, home">
           <Image src="/nav/shelf/wordmark.webp" alt="" width={309} height={130} draggable={false} priority unoptimized />
         </Link>
+
+        {/* Sound sits left of the broom (Kai, 2026-11-07), same chip. */}
+        <SoundToggle iconOnly className="shelf-sound" />
 
         <button ref={broomRef} type="button" className="shelf-broom" aria-pressed={tidy} aria-label="Tidy up navigation" onClick={toggle}>
           <Broom />
