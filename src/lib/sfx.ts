@@ -75,7 +75,9 @@ function wake() {
     master.connect(ctx.destination)
     for (const k of Object.keys(FILES) as Sfx[]) load(k)
   }
-  if (ctx.state === 'suspended') void ctx.resume()
+  // iOS parks the context as 'interrupted' (not 'suspended') after the phone locks, a call comes in
+  // or Safari goes to the background, and it stays silent until resumed from a tap.
+  if (ctx.state !== 'running') void ctx.resume()
   return ctx
 }
 
