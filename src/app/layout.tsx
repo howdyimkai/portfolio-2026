@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Bricolage_Grotesque } from 'next/font/google'
 import localFont from 'next/font/local'
 import '../styles/globals.css'
+import { Analytics } from '@vercel/analytics/next'
 import AppShell from '@/components/AppShell'
 
 const bricolage = Bricolage_Grotesque({ 
@@ -61,6 +62,8 @@ export default function RootLayout({
     <html lang="en" className={`${bricolage.variable} ${commitMono.variable} antialiased`}>
       <body>
         <AppShell>{children}</AppShell>
+        {/* Vercel Web Analytics: page views only, no cookies. Only sends on Vercel deployments. */}
+        <Analytics />
       </body>
     </html>
   )
