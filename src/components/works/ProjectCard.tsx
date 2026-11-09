@@ -1,11 +1,14 @@
 'use client'
 
-// One high level case study card: the frosted card (name, role, cover window) sitting on Kai's
-// chalkboard, which carries the hook and the story. Promoted from /proto/project-card (Chalkboard).
+// One high level case study card: the cover (only the product, in its window) sitting on Kai's
+// chalkboard, which carries the name, my part in it, the hook and the story. Chalkboard from
+// /proto/project-card; the larger cover, two up, and the painted hover from /proto/works-deck
+// (2026-11-09, design-intent/works-layout-exploration/NOTES.md).
 import { useRef, type CSSProperties, type PointerEvent } from 'react'
 import Link from 'next/link'
 import Loop from '@/components/case-study/Loop'
 import HoverTeaser from '@/components/case-study/HoverTeaser'
+import CoverPaint from './CoverPaint'
 import './project-card.css'
 
 export type Project = {
@@ -58,10 +61,11 @@ export default function ProjectCard({ project: p }: { project: Project }) {
 
   const body = (
     <>
-      <div onPointerMove={tilt} onPointerLeave={settle} className="wk-frost relative aspect-[333/328] overflow-hidden rounded-t-[22px]">
+      <div onPointerMove={tilt} onPointerLeave={settle} className="wk-cover">
+        {p.cover && <CoverPaint />}
         {/* The window plus two of the garden's blossoms perched on opposite corners. A plain
             <picture>, not next/image: the optimizer would flatten the animation. */}
-        <div ref={windowRef} className={`wk-window absolute ${p.cover?.device === 'browser' ? 'wk-window-wide' : ''}`}>
+        <div ref={windowRef} className={`wk-window ${p.cover?.device === 'browser' ? 'wk-window-wide' : ''}`}>
           {p.cover ? (
             <>
               <div className={`wk-gif ${p.cover.device && !p.cover.video ? `wk-${p.cover.device}` : ''}`}>
@@ -81,11 +85,11 @@ export default function ProjectCard({ project: p }: { project: Project }) {
                       <Loop webm={p.cover.video.webm} mp4={p.cover.video.mp4} still={p.cover.still} alt={p.cover.alt} />
                     </div>
                   ) : p.cover.teaser ? (
-                    <HoverTeaser webm={p.cover.teaser.webm} mp4={p.cover.teaser.mp4} still={p.cover.still} alt={p.cover.alt} className="wk-screen rounded-[5px]" />
+                    <HoverTeaser webm={p.cover.teaser.webm} mp4={p.cover.teaser.mp4} still={p.cover.still} alt={p.cover.alt} className="wk-screen" />
                   ) : (
                     <picture>
                       <source media="(prefers-reduced-motion: reduce)" srcSet={p.cover.still} />
-                      <img src={p.cover.anim} alt={p.cover.alt} draggable={false} className="wk-screen block w-full rounded-[5px]" />
+                      <img src={p.cover.anim} alt={p.cover.alt} draggable={false} className="wk-screen block w-full" />
                     </picture>
                   )}
                   {p.cover.float && (
@@ -111,17 +115,17 @@ export default function ProjectCard({ project: p }: { project: Project }) {
             <div className="wk-window-empty flex items-center justify-center font-mono text-[12px] text-ink-faint">{!p.href && 'coming soon'}</div>
           )}
         </div>
-        {/* Header: what it is, then my part in it, on the chalkboard's 24px gutter. Each half stays
-            whole; when both don't fit on a phone, the role and year drop to their own line. */}
-        <div className="absolute inset-x-6 top-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 font-mono text-[13px]">
-          <span className="whitespace-nowrap text-ink-primary">{p.name}</span>
-          <span className="whitespace-nowrap text-ink-faint">{[p.role, p.year].filter(Boolean).join(' · ')}</span>
-        </div>
       </div>
 
       {/* The hook leads, the story supports it, and the one action sits at the bottom. */}
-      <div className="wk-raised wk-chalkboard flex flex-1 flex-col rounded-b-[22px] px-6 pb-6 pt-[calc(7.6%+22px)]">
-        <h2 className="wk-chalk-ink font-display text-[19px] font-medium leading-[1.3] [text-wrap:balance]">
+      <div className="wk-board wk-chalkboard">
+        {/* What it is, then my part in it. Each half stays whole; when both don't fit on a phone,
+            the role and year drop to their own line. */}
+        <div className="wk-chalk-ink flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 font-mono text-[13px]">
+          <span className="whitespace-nowrap">{p.name}</span>
+          <span className="whitespace-nowrap opacity-60">{[p.role, p.year].filter(Boolean).join(' · ')}</span>
+        </div>
+        <h2 className="wk-hook wk-chalk-ink font-display font-medium [text-wrap:balance]">
           {p.mark && p.hook.includes(p.mark) ? (
             <>
               {p.hook.slice(0, p.hook.indexOf(p.mark))}
@@ -132,7 +136,7 @@ export default function ProjectCard({ project: p }: { project: Project }) {
             p.hook
           )}
         </h2>
-        <p className="wk-chalk-ink mt-2 font-mono text-[13px] leading-[1.6] opacity-70 [text-wrap:pretty]">{p.story}</p>
+        <p className="wk-chalk-ink mt-3 font-mono text-[13px] leading-[1.65] opacity-70 [text-wrap:pretty]">{p.story}</p>
         {p.href && (
           <span className="wk-chalk-ink mt-auto flex items-center gap-2 self-start pt-6 font-mono text-[13px]">
             <span className="wk-link">{p.cta ?? 'read the story'}</span>
@@ -150,13 +154,13 @@ export default function ProjectCard({ project: p }: { project: Project }) {
     <Link
       href={p.href}
       data-teaser-host
-      className="wk-card group flex h-full w-full flex-col rounded-[22px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink-primary"
+      className="wk-card group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink-primary"
       aria-label={`${p.name} case study`}
     >
       {body}
     </Link>
   ) : (
-    <article className="wk-card flex h-full w-full flex-col" aria-label={`${p.name}, case study coming soon`}>
+    <article className="wk-card" aria-label={`${p.name}, case study coming soon`}>
       {body}
     </article>
   )

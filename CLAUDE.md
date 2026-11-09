@@ -81,6 +81,10 @@ from `BUILD-PLAN_BrandSystem_ClaudeCode.md`). ApolloEd is hidden since
 2026-10-24 (Kai), parked in a commented `HIDDEN` const in `works/page.tsx`. Cards are
 `src/components/works/ProjectCard.tsx`, promoted from `/proto/project-card`'s
 Chalkboard variant.
+Since 2026-11-09 the cards sit two up (four projects, 2×2 from 768px) with a larger cover that
+holds only the product, the name and role on the chalkboard, and a hover that paints the cover
+blue (`CoverPaint.tsx`). Picked from `/proto/works-deck`; decision and rejected options in
+`design-intent/works-layout-exploration/NOTES.md`. Not yet checked in Safari or on a phone.
 
 **Sprint scope (updated 2026-10-11):** the homepage hero is built and Kai
 likes it. Remaining sprint work: footer (every page), high level project

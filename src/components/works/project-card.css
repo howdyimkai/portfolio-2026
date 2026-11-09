@@ -1,36 +1,143 @@
-/* Selected works cards: promoted from /proto/project-card (Chalkboard variant, 2026-10-16). */
+/* Selected works cards. Chalkboard promoted from /proto/project-card (2026-10-16); the larger cover,
+   two up, and the painted hover from /proto/works-deck (2026-11-09,
+   design-intent/works-layout-exploration/NOTES.md). */
 
-/* Frosted card: white tray surface with only the app window showing. */
-.wk-frost {
-  border: 1px solid var(--color-hairline);
+.wk-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border-radius: 22px;
+  box-shadow:
+    0 0 0 1px rgb(61 50 38 / 0.08),
+    0 1px 2px rgb(58 50 38 / 0.06),
+    0 10px 28px -8px rgb(58 50 38 / 0.16);
+}
+/* The cover: a frosted tray holding only the product's window. */
+.wk-cover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 36px 24px 30px;
+  border-radius: 22px 22px 0 0;
   background-color: color-mix(in srgb, white 88%, transparent);
-  box-shadow: 0 1px 2px rgba(58, 50, 38, 0.06), 0 8px 24px rgba(58, 50, 38, 0.1);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   transition:
     transform 150ms var(--ease-out-strong),
     background-color 200ms ease-out;
 }
-.wk-raised {
-  box-shadow:
-    0 0 0 1px rgb(61 50 38 / 0.06),
-    0 1px 3px rgb(61 50 38 / 0.06),
-    0 6px 16px -6px rgb(61 50 38 / 0.1);
-}
-
-/* The cover window, centered in the card (its height is 61.7% of the card's width). */
+/* The cover window. A portrait cover gets a narrow one; a full desktop screen (wk-window-wide)
+   fills the cover. */
 .wk-window {
   --tx: 0;
   --ty: 0;
-  left: 20.45%;
-  top: 18.7%;
-  width: 59.1%;
+  position: relative;
+  width: 56%;
   /* Tilt toward the cursor (vars set in ProjectCard). The transition makes it trail the pointer
      a little and ease home on leave. preserve-3d lets the blossoms sit in front in real depth. */
-  transform: perspective(800px) rotateX(calc(var(--ty) * -8deg)) rotateY(calc(var(--tx) * 10deg));
+  transform: perspective(1200px) rotateX(calc(var(--ty) * -5deg)) rotateY(calc(var(--tx) * 6deg));
   transform-style: preserve-3d;
   transition: transform 450ms var(--ease-out-strong);
 }
+.wk-window-wide {
+  width: 100%;
+}
+.wk-board {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: calc(7.6% + 22px) 24px 24px;
+  border-radius: 0 0 22px 22px;
+}
+.wk-hook {
+  margin-top: 14px;
+  font-size: 21px;
+  line-height: 1.28;
+}
+@media (min-width: 768px) {
+  .wk-cover {
+    padding: 44px 32px 36px;
+  }
+  .wk-board {
+    padding: calc(7.6% + 26px) 28px 28px;
+  }
+  .wk-hook {
+    font-size: 23px;
+    line-height: 1.26;
+  }
+}
+
+/* Hover and keyboard focus: the cover's background gets painted blue (CoverPaint.tsx). Six uneven
+   strokes; leaving pulls them all off at once. What was tried and rejected is in
+   design-intent/works-layout-exploration/NOTES.md. */
+.wk-paint {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+/* Each stroke rests thin (ZEBRA of its full width, --sw from CoverPaint.tsx) and clear. */
+.wk-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  stroke-width: calc(var(--sw) * 0.42px);
+  stroke-opacity: 0;
+  transition:
+    stroke-dashoffset 260ms ease-in,
+    stroke-width 200ms ease-in,
+    stroke-opacity 260ms ease-in;
+}
+.wk-coat {
+  opacity: 0;
+  transition: opacity 160ms ease-in;
+}
+/* Enter (Kai): all six pull in at once, thin and fading up, so for a moment the cover is zebra
+   stripes of blue and paper, which swell to their full width while the coat closes the gaps.
+   Everything starts together and overlaps: the swell is one slow-in, slow-out curve across the
+   whole 540ms, so the stripes come from it starting slowly, not from a pause. (Starting the swell
+   after the pull-in, at 220ms, read as two separate moves and stuttered.) */
+@media (hover: hover) and (pointer: fine) {
+  a.wk-card:hover .wk-stroke {
+    stroke-dashoffset: 0;
+    stroke-width: calc(var(--sw) * 1px);
+    stroke-opacity: 1;
+    transition:
+      stroke-dashoffset 420ms var(--ease-out-strong),
+      stroke-opacity 240ms ease-out,
+      stroke-width 540ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  a.wk-card:hover .wk-coat {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out 260ms;
+  }
+}
+a.wk-card:focus-visible .wk-stroke {
+  stroke-dashoffset: 0;
+  stroke-width: calc(var(--sw) * 1px);
+  stroke-opacity: 1;
+  transition:
+    stroke-dashoffset 420ms var(--ease-out-strong),
+    stroke-opacity 240ms ease-out,
+    stroke-width 540ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+a.wk-card:focus-visible .wk-coat {
+  opacity: 1;
+  transition: opacity 300ms ease-in-out 260ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wk-stroke,
+  .wk-coat,
+  a.wk-card:hover .wk-stroke,
+  a.wk-card:hover .wk-coat,
+  a.wk-card:focus-visible .wk-stroke,
+  a.wk-card:focus-visible .wk-coat {
+    transition: none;
+  }
+}
+
 /* No cover yet: a quiet dashed frame the same shape as Design Garden's window. */
 .wk-window-empty {
   aspect-ratio: 800 / 835;
@@ -41,16 +148,11 @@
   transition: transform 500ms var(--ease-out-strong);
 }
 /* A full desktop screen in the case study hero's window: white, a hairline, three dots, no address
-   bar. Wide, so it gets a wider window than the portrait covers, centered under the header. */
-.wk-window-wide {
-  left: 8%;
-  top: 29%;
-  width: 84%;
-}
+   bar. */
 .wk-browser {
   overflow: hidden;
   border: 1px solid var(--color-hairline);
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: white;
   box-shadow:
     0 1px 2px rgb(58 50 38 / 0.06),
@@ -59,14 +161,14 @@
 .wk-browser-bar {
   display: flex;
   align-items: center;
-  gap: 4px;
-  height: 16px;
-  padding: 0 7px;
+  gap: 6px;
+  height: 26px;
+  padding: 0 12px;
   border-bottom: 1px solid var(--color-hairline);
 }
 .wk-browser-bar span {
-  width: 5px;
-  height: 5px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background-color: var(--color-chip-line);
 }
@@ -98,27 +200,27 @@
     filter 600ms var(--ease-out-strong);
 }
 .wk-blossom-a {
-  width: 21%;
-  right: -7%;
-  top: -6%;
+  width: 13%;
+  right: -4.5%;
+  top: -7%;
   transform: translateZ(30px) rotate(-8deg);
 }
 .wk-blossom-b {
-  width: 15%;
-  left: -6%;
-  bottom: -4%;
+  width: 9.5%;
+  left: -3.5%;
+  bottom: -5%;
   transform: translateZ(22px) rotate(14deg);
   transition-delay: 40ms;
 }
 .wk-arrow {
   transition: transform 200ms var(--ease-out-strong);
 }
-a.wk-card:active .wk-frost {
+a.wk-card:active .wk-cover {
   transform: scale(0.99);
 }
 @media (hover: hover) and (pointer: fine) {
   /* The grid paper shows through the frost, softened by its blur. */
-  a.wk-card:hover .wk-frost {
+  a.wk-card:hover .wk-cover {
     background-color: color-mix(in srgb, white 68%, transparent);
   }
   a.wk-card:hover .wk-gif {
@@ -193,7 +295,7 @@ a.wk-card:focus-visible .wk-mark {
 
 @media (prefers-reduced-motion: reduce) {
   .wk-arrow,
-  .wk-frost,
+  .wk-cover,
   .wk-window,
   .wk-gif,
   .wk-blossom {

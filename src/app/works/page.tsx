@@ -100,16 +100,15 @@ const PROJECTS: Project[] = [
 //   },
 // ]
 
-// White grid paper, the same shelf nav as the homepage, and the three cards.
+// White grid paper, the same shelf nav as the homepage, and the cards two up (2026-11-09,
+// design-intent/works-layout-exploration/NOTES.md).
 export default function WorksPage() {
   return (
-    <div className="mx-auto max-w-[1360px] px-4 pb-20 pt-10 md:px-10 md:pb-28 md:pt-14">
+    <div className="mx-auto max-w-[1200px] px-4 pb-20 pt-10 md:px-10 md:pb-28 md:pt-14">
       <h1 className="sr-only">Selected works</h1>
-      <div className="grid grid-cols-1 justify-items-center gap-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8">
         {PROJECTS.map((p) => (
-          <div key={p.name} className="flex w-full max-w-[440px]">
-            <ProjectCard project={p} />
-          </div>
+          <ProjectCard key={p.name} project={p} />
         ))}
       </div>
     </div>
