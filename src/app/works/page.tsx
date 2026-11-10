@@ -44,7 +44,7 @@ const PROJECTS: Project[] = [
       still: '/works/tallo-cover-browser.webp',
       // A copy of the hero's Cal layer beside the other covers: under /works/cal/ the password gate
       // caught it, so logged-out visitors got no Cal.
-      float: { src: '/works/tallo-cover-cal.webp', box: [42.07, 27.95, 18.32, 33.66] },
+      float: { src: '/works/tallo-cover-cal.webp', box: [40.24, 17.58, 21.98, 40.39] },
       device: 'browser',
       alt: 'Cal\'s Career Quiz welcome screen on desktop: Cal the compass waving in front of a mountain trail, above a Begin Expedition button',
     },

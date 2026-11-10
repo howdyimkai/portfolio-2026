@@ -4,7 +4,7 @@
 // chalkboard, which carries the name, my part in it, the hook and the story. Chalkboard from
 // /proto/project-card; the larger cover, two up, and the painted hover from /proto/works-deck
 // (2026-11-09, design-intent/works-layout-exploration/NOTES.md).
-import { useRef, type CSSProperties, type PointerEvent } from 'react'
+import { useLayoutEffect, useRef, type CSSProperties, type PointerEvent } from 'react'
 import Link from 'next/link'
 import Loop from '@/components/case-study/Loop'
 import HoverTeaser from '@/components/case-study/HoverTeaser'
@@ -45,6 +45,25 @@ export type Project = {
 
 export default function ProjectCard({ project: p }: { project: Project }) {
   const windowRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLAnchorElement & HTMLElement>(null)
+  // Cards in view at load play their entrance from CSS. Cards below the fold are held (data-wait)
+  // until they're about to scroll in, then released to play it. Never held under reduced motion.
+  useLayoutEffect(() => {
+    const el = cardRef.current
+    if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (el.getBoundingClientRect().top < window.innerHeight) return
+    el.setAttribute('data-wait', '')
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return
+        el.removeAttribute('data-wait')
+        io.disconnect()
+      },
+      { rootMargin: '0px 0px 15% 0px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
   // The window tilts toward the cursor: --tx/--ty run -1..1 across the card, and the CSS turns
   // them into a rotation. Mouse only, and not under reduced motion.
   const tilt = (e: PointerEvent<HTMLDivElement>) => {
@@ -117,7 +136,7 @@ export default function ProjectCard({ project: p }: { project: Project }) {
         </div>
       </div>
 
-      {/* The hook leads, the story supports it, and the one action sits at the bottom. */}
+      {/* The hook leads and the one action sits under it. The story stays in the data but isn't shown: nobody read it on the board. */}
       <div className="wk-board wk-chalkboard">
         {/* What it is, then my part in it. Each half stays whole; when both don't fit on a phone,
             the role and year drop to their own line. */}
@@ -136,9 +155,8 @@ export default function ProjectCard({ project: p }: { project: Project }) {
             p.hook
           )}
         </h2>
-        <p className="wk-chalk-ink mt-3 font-mono text-[13px] leading-[1.65] opacity-70 [text-wrap:pretty]">{p.story}</p>
         {p.href && (
-          <span className="wk-chalk-ink mt-auto flex items-center gap-2 self-start pt-6 font-mono text-[13px]">
+          <span className="wk-chalk-ink mt-auto flex items-center gap-2 self-start pt-4 font-mono text-[13px]">
             <span className="wk-link">{p.cta ?? 'read the story'}</span>
             <svg className="wk-arrow" width="16" height="10" viewBox="0 0 22 14" fill="none" aria-hidden="true">
               <path d="M1 7h18M14 2l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -152,6 +170,7 @@ export default function ProjectCard({ project: p }: { project: Project }) {
   // Link, not <a>, so opening a case study is a client navigation and gets the page fade.
   return p.href ? (
     <Link
+      ref={cardRef}
       href={p.href}
       data-teaser-host
       className="wk-card group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink-primary"
@@ -160,7 +179,7 @@ export default function ProjectCard({ project: p }: { project: Project }) {
       {body}
     </Link>
   ) : (
-    <article className="wk-card" aria-label={`${p.name}, case study coming soon`}>
+    <article ref={cardRef} className="wk-card" aria-label={`${p.name}, case study coming soon`}>
       {body}
     </article>
   )

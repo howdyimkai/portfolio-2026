@@ -49,7 +49,7 @@
   width: 56%;
   /* Tilt toward the cursor (vars set in ProjectCard). The transition makes it trail the pointer
      a little and ease home on leave. preserve-3d lets the blossoms sit in front in real depth. */
-  transform: perspective(1200px) rotateX(calc(var(--ty) * -5deg)) rotateY(calc(var(--tx) * 6deg));
+  transform: perspective(1200px) rotateX(calc(var(--ty) * -5.75deg)) rotateY(calc(var(--tx) * 6.9deg));
   transform-style: preserve-3d;
   transition: transform 450ms var(--ease-out-strong);
 }
@@ -60,7 +60,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: calc(7.6% + 22px) 24px 24px;
+  padding: calc(7.6% + 18px) 24px 20px;
   border-radius: 0 0 22px 22px;
 }
 .wk-hook {
@@ -78,7 +78,7 @@
     padding: 36px 32px 32px;
   }
   .wk-board {
-    padding: calc(7.6% + 26px) 28px 28px;
+    padding: calc(7.6% + 22px) 28px 22px;
   }
   .wk-hook {
     font-size: 23px;
@@ -314,7 +314,35 @@ a.wk-card:focus-visible .wk-mark {
   }
 }
 
+/* Entrance: each card eases up 12px as it arrives. In-view cards play it at load, the right one
+   70ms behind the left; cards below the fold wait (data-wait, ProjectCard.tsx) and play when
+   released. `backwards` fill only, so nothing keeps a transform once it has landed. */
+@keyframes wk-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+.wk-card {
+  /* 160ms in: arriving from another page, the page's own 400ms fade (pageEnter.ts) is mostly
+     done by then, so the left card's rise isn't hidden under it. */
+  animation: wk-in 280ms cubic-bezier(0.32, 0.72, 0, 1) 160ms backwards;
+}
+@media (min-width: 768px) {
+  .wk-card:nth-child(even) {
+    animation-delay: 230ms;
+  }
+}
+.wk-card[data-wait] {
+  animation: none;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .wk-card {
+    animation: none;
+  }
   .wk-arrow,
   .wk-cover,
   .wk-window,
