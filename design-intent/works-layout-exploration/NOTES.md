@@ -41,8 +41,15 @@ Rejected:
   cards unpainting at once
 - Swell starting after the pull-in (at 220ms): read as two moves and stuttered
 
+Review pass (2026-11-09, emil-ui-review):
+- Cover and board sit on the page grid's rows (subgrid), so a row shares one cover height
+  and the ledges line up. Before, Design Garden's cover was 18px shorter than Cal's
+- Page top padding 56 → 24px and cover padding 44/36 → 36/32px from 768px: at 1440 the
+  first row's hooks end at y=783, inside a browser window on a 900px screen. The story and
+  link stay below the fold on purpose; the whole card is the link
+- Browser screens hold 800×448 in CSS, so the cover keeps its height before the image loads
+- Cal and Brand System covers re-exported at 1200px (Cal from the hero's 1600px plate; the
+  setup walkthrough recaptured at 883px wide, role step, 3×)
+
 Open:
-- Each card is about 704px tall at 1440, so on a 900px screen the first row's story and
-  link sit below the fold
 - Not checked in Safari (a filter inside an SVG mask) or on a real phone
-- The Cal and Brand System covers are 800px files, a little soft at this size on retina

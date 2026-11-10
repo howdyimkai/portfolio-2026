@@ -36,7 +36,7 @@ const PROJECTS: Project[] = [
     role: 'brand and product',
     year: '2026',
     // The Cal hero's desktop Welcome in the hero's browser window (Kai, 2026-10-24, matching the case
-    // study hero): the plate at 800 wide (a still, so it serves as both frames) with the hero's own
+    // study hero): the plate at 1200 wide (a still, so it serves as both frames) with the hero's own
     // Cal layer bobbing on top. Box is the hero's Cal box grown 20% from the feet, as the tablet
     // cover did, so Cal stands off the screen (Kai, 2026-10-22).
     cover: {
@@ -59,7 +59,7 @@ const PROJECTS: Project[] = [
     role: 'brand systems',
     year: '2026',
     // The case study's setup walkthrough on its role step (Kai, 2026-10-24: the role you pick is the
-    // system's point), captured from the live card at 2x without its border and saved 800 wide, in
+    // system's point), captured from the live card (883px wide, role step) at 3x without its border and saved 1200 wide, in
     // the browser window like the Tallo card.
     cover: {
       anim: '/works/brand-system-cover-setup.webp',
@@ -104,9 +104,11 @@ const PROJECTS: Project[] = [
 // design-intent/works-layout-exploration/NOTES.md).
 export default function WorksPage() {
   return (
-    <div className="mx-auto max-w-[1200px] px-4 pb-20 pt-10 md:px-10 md:pb-28 md:pt-14">
+    // Each card carries its own bottom margin (project-card.css), so the grid has no row gap and
+    // the bottom padding is that much shorter.
+    <div className="mx-auto max-w-[1200px] px-4 pb-10 pt-10 md:px-10 md:pb-20 md:pt-6">
       <h1 className="sr-only">Selected works</h1>
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-8">
         {PROJECTS.map((p) => (
           <ProjectCard key={p.name} project={p} />
         ))}
