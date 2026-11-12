@@ -420,7 +420,7 @@ export const cal: CaseStudy = {
           steps: [
             { label: 'Started Cal', share: 100 },
             { label: 'Finished', share: 72 },
-            { label: 'Finished and completed the full assessment', share: 38 },
+            { label: 'Finished and completed the full assessment (52% of finishers)', share: 38 },
           ],
           caption: 'Share of people who started Cal. What happened, not what Cal caused.',
         },
