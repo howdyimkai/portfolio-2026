@@ -354,6 +354,15 @@ Change the `.ts` first; if the two disagree, the `.ts` wins.
   DesignGardenTool today, so don't restyle it. Seeded demo pair only (you and Robin).
   DesignGardenTool itself is read only from here.
 
+- **Phone images (2026-11-15, ApolloEd):** a `src` visual or a `pair` item can carry `mobile`
+  (`MobileImage` in `types.ts`): a phone version that swaps in under 640px (src) or 1024px (pair item),
+  since desktop captures shrink to about a quarter on a phone. `device: true` marks a phone screen with
+  a transparent outside, shown without the card outline and at most 300px wide. The shared stat strip
+  is one row per stat under 640px. Shelf pages' `<main>` clips sideways overflow (`overflow-x-clip`);
+  the case study backdrop used to make pages scroll sideways at 768 and 1024.
+- Crop Lovable and app exports with a 24px margin around the panel outline, never flush: a flush crop
+  lets the card's rounded corner and cover fit eat the outline (ApolloEd ch 7 and 8, 2026-11-15).
+
 ## Assets
 
 - `public/garden/`, `public/nav/`, `public/hero/` — WebP, converted from

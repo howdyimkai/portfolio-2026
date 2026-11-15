@@ -160,21 +160,28 @@ function StatStrip({ stats, link }: { stats: CaseStudy['stats']; link?: CaseStud
     <div className="mt-14">
       {/* Equal thirds with each stat centered (Kai, 2026-11-01: left aligned read lopsided), unless
           a value runs long ("80% → 31%" filled its third and touched the divider): that column takes
-          a bigger share so it keeps its padding. */}
+          a bigger share so it keeps its padding. Under 640px the thirds were too narrow (ApolloEd's
+          "13 → 6" broke in two, a label ran 8 lines), so phones get one row per stat instead, number
+          left and label right (2026-11-15). A short value never breaks; tablets take a 40px number
+          before the 52px one on desktop. */}
       <dl
-        className="grid border-y border-hairline [grid-template-columns:var(--stat-cols)]"
+        className="grid border-y border-hairline sm:[grid-template-columns:var(--stat-cols)]"
         style={{ '--stat-cols': stats.map((st) => (st.value.length > 7 ? '1.5fr' : '1fr')).join(' ') } as CSSProperties}
       >
         {stats.map((st, i) => (
-          <div key={st.label} className={`min-w-0 px-2 py-6 text-center md:px-8 md:py-8 ${i > 0 ? 'border-l border-hairline' : ''}`}>
+          <div
+            key={st.label}
+            className={`min-w-0 py-5 sm:px-2 sm:py-6 sm:text-center md:px-5 md:py-8 lg:px-8 ${i > 0 ? 'border-t border-hairline sm:border-l sm:border-t-0' : ''}`}
+          >
             <dt className="sr-only">{st.label}</dt>
-            <dd>
-              <span className="block font-display text-[28px] font-semibold leading-none tracking-[-0.01em] text-ink-primary min-[400px]:text-[32px] md:text-[52px]">
-                {/* 28px under 400px wide: at 32px, "68.7%" filled 94 of a 97px column at 375. */}
+            <dd className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-center gap-5 sm:block">
+              <span
+                className={`block font-display text-[30px] font-semibold leading-[1.05] tracking-[-0.01em] text-ink-primary sm:text-[32px] sm:leading-none md:text-[40px] lg:text-[52px] ${st.value.length <= 12 ? 'whitespace-nowrap' : ''}`}
+              >
                 {st.value}
                 {st.note && <span className="ml-1 align-top font-mono text-[13px] font-normal text-ink-faint">{mark(st)}</span>}
               </span>
-              <span className="mx-auto mt-3 block max-w-[26ch] font-mono text-[12px] leading-[1.45] text-ink-body [text-wrap:balance] md:text-[13px]">{st.label}</span>
+              <span className="block font-mono text-[12px] leading-[1.45] text-ink-body [text-wrap:pretty] sm:mx-auto sm:mt-3 sm:max-w-[26ch] sm:[text-wrap:balance] md:text-[13px]">{st.label}</span>
             </dd>
           </div>
         ))}
@@ -368,6 +375,18 @@ function VisualBlock({ v }: { v: Visual }) {
             </div>
           )}
         </div>
+      ) : v.src && v.mobile ? (
+        // A phone version under 640px, at its own shape (see MobileImage in types.ts).
+        <div
+          className={`aspect-[var(--a-m)] overflow-hidden rounded-[14px] border border-hairline bg-white sm:aspect-[var(--a)] ${v.mobile.device ? 'max-sm:max-w-[300px] max-sm:rounded-none max-sm:border-0 max-sm:bg-transparent' : ''}`}
+          style={{ '--a': v.aspect ?? '16 / 10', '--a-m': `${v.mobile.width} / ${v.mobile.height}` } as CSSProperties}
+        >
+          <picture>
+            <source media="(max-width: 639px)" srcSet={v.mobile.src} />
+            {v.still && <source media="(prefers-reduced-motion: reduce)" srcSet={v.still} />}
+            <img src={v.src} alt={v.alt ?? ''} draggable={false} className="block h-full w-full object-cover" />
+          </picture>
+        </div>
       ) : v.src ? (
         <div className="overflow-hidden rounded-[14px] border border-hairline bg-white" style={{ aspectRatio: v.aspect ?? '16 / 10' }}>
           {/* A plain <picture>, not next/image: the optimizer would flatten animated WebPs. */}
@@ -403,19 +422,41 @@ function VisualLink({ link }: { link: NonNullable<Visual['link']> }) {
 // stacked on phones with a device kept to phone width.
 function Pair({ items }: { items: NonNullable<Visual['pair']> }) {
   const cols = items.map((it) => `${it.width / it.height}fr`).join(' ')
+  // Items with a phone version swap it in under 1024px, and the columns follow its shape there.
+  const mobile = items.some((it) => it.mobile)
+  const mobileCols = items.map((it) => `${(it.mobile?.width ?? it.width) / (it.mobile?.height ?? it.height)}fr`).join(' ')
   return (
-    <ul className="grid gap-x-5 gap-y-8 sm:[grid-template-columns:var(--pair-cols)]" style={{ '--pair-cols': cols } as CSSProperties}>
+    <ul
+      className={`grid gap-x-5 gap-y-8 ${mobile ? 'sm:[grid-template-columns:var(--pair-cols-m)] lg:[grid-template-columns:var(--pair-cols)]' : 'sm:[grid-template-columns:var(--pair-cols)]'}`}
+      style={{ '--pair-cols': cols, '--pair-cols-m': mobileCols } as CSSProperties}
+    >
       {items.map((it) => (
         <li key={it.src} className="min-w-0">
           <p className="mb-2.5 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-ink-primary">{it.label}</p>
-          <img
-            src={it.src}
-            alt={it.alt}
-            draggable={false}
-            loading="lazy"
-            className={`block w-full ${it.look === 'card' ? 'rounded-[12px] border border-hairline' : 'max-w-[260px] sm:max-w-none'}`}
-            style={{ aspectRatio: `${it.width} / ${it.height}` }}
-          />
+          {it.mobile ? (
+            <picture>
+              <source media="(max-width: 1023px)" srcSet={it.mobile.src} />
+              <img
+                src={it.src}
+                alt={it.alt}
+                draggable={false}
+                loading="lazy"
+                className={`block aspect-[var(--a-m)] w-full lg:aspect-[var(--a)] ${it.look === 'card' ? 'lg:rounded-[12px] lg:border lg:border-hairline' : ''} ${
+                  it.mobile.device ? 'max-sm:max-w-[300px]' : it.look === 'card' ? 'rounded-[12px] border border-hairline' : ''
+                }`}
+                style={{ '--a': `${it.width} / ${it.height}`, '--a-m': `${it.mobile.width} / ${it.mobile.height}` } as CSSProperties}
+              />
+            </picture>
+          ) : (
+            <img
+              src={it.src}
+              alt={it.alt}
+              draggable={false}
+              loading="lazy"
+              className={`block w-full ${it.look === 'card' ? 'rounded-[12px] border border-hairline' : 'max-w-[260px] sm:max-w-none'}`}
+              style={{ aspectRatio: `${it.width} / ${it.height}` }}
+            />
+          )}
           {it.credit && <p className="mt-2.5 font-mono text-[12px] leading-[1.5] text-ink-faint [text-wrap:pretty]">{it.credit}</p>}
         </li>
       ))}

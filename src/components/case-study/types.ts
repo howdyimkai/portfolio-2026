@@ -52,11 +52,20 @@ export type Visual = {
   // shipped beside what didn't). width and height are the image's own, which set each column's
   // share. 'device' is a screen in its own bezel, drawn as is; 'card' gets a hairline edge. credit
   // is a small line under the piece.
-  pair?: { label: string; src: string; alt: string; width: number; height: number; look: 'device' | 'card'; credit?: string }[]
+  pair?: { label: string; src: string; alt: string; width: number; height: number; look: 'device' | 'card'; credit?: string; mobile?: MobileImage }[]
+  // A phone version of a src visual (ApolloEd, 2026-11-15): a desktop capture shrinks to about a
+  // quarter on a phone, so under 640px this image shows instead, at its own shape. On a pair item it
+  // swaps under 1024px, where a pair's columns get too narrow to read.
+  mobile?: MobileImage
   // A built component from the registry in brand-system/ (the Brand System case study's hero and
   // visuals). Until its key has a component, the visual renders as a labeled placeholder.
   custom?: string
 }
+
+// A phone version of an image, with its own size. device marks a phone screen in its own frame (with
+// a transparent outside): it shows without the card's outline, at most 300px wide, so it doesn't run
+// a screen and a half tall.
+export type MobileImage = { src: string; width: number; height: number; device?: boolean }
 
 // A box on a screen image as % of the image: [left, top, width, height]. Percentages, so hotspots
 // sit over the <img> at any size with no measuring.

@@ -14,6 +14,11 @@ import GardenCompare from '../design-garden/GardenCompare'
 import ReelPlayer from '../visual-media/ReelPlayer'
 import ShowdownWipe from '../visual-media/ShowdownWipe'
 import SocialPalette from '../visual-media/SocialPalette'
+import Sitemap from '../apolloed/Sitemap'
+import Stall from '../apolloed/Stall'
+import DataStep from '../apolloed/DataStep'
+import FlowQuote from '../apolloed/FlowQuote'
+import Handoff from '../apolloed/Handoff'
 
 // The Brand System case study's built visuals, by the `custom` key in its content file. A key with
 // no component yet falls back to the labeled placeholder, so the page reads end to end while the
@@ -35,4 +40,10 @@ export const CUSTOM_VISUALS: Record<string, ComponentType<{ visual: Visual }>> =
   'reel-player': ReelPlayer,
   'showdown-wipe': ShowdownWipe,
   'social-palette': SocialPalette,
+  // ApolloEd's (2023 half, rebuilt natively).
+  sitemap: Sitemap,
+  stall: Stall,
+  'data-step': DataStep,
+  'flow-quote': FlowQuote,
+  handoff: Handoff,
 }

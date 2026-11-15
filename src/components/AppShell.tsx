@@ -51,7 +51,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <div className="max-md:hidden [&_.shelf-wordmark]:opacity-[0.85] [&_.shelf-broom]:text-black/85! [&_.shelf-sound]:text-black/85! [&_.shelf-wordmark_img]:[filter:brightness(0)]!">
         <ShelfNav />
       </div>
-      <main data-page-enter="" className="flex-grow max-md:pt-14">{children}</main>
+      {/* overflow-x: clip, not hidden, so the case study chapter bar and /about's bio stay sticky.
+          It only cuts what reaches past the window: the case study backdrop did by 16px at 1024,
+          where the column sits off center (2026-11-15). */}
+      <main data-page-enter="" className="flex-grow overflow-x-clip max-md:pt-14">{children}</main>
       <Footer />
       <ResumeBookmark />
     </div>

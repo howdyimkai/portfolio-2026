@@ -12,9 +12,12 @@
   mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent), linear-gradient(to bottom, transparent, #000 56px, #000 calc(100% - 56px), transparent);
   mask-composite: intersect;
 }
-/* The top runs past the 56px fade, so the header sits on solid white with room above it. */
+/* The top runs past the 56px fade, so the header sits on solid white with room above it. Sideways it
+   reaches 56px past the column, but never past the window: at 768 the column's margins are about 44px,
+   and a full 56px made the page scroll sideways by 8px (2026-11-15). The 10px is slack for a classic
+   scrollbar, which 100vw counts but the page can't use. */
 @media (min-width: 768px) {
-  .cs-backdrop { inset: -112px -56px -64px; }
+  .cs-backdrop { inset: -112px max(-56px, calc((100% - 100vw) / 2 + 10px)) -64px; }
 }
 
 /* A loop cut to its device frame by a still alpha mask, the same size as the video. */
