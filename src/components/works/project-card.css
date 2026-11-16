@@ -25,6 +25,15 @@
     grid-row: span 2;
   }
 }
+/* An odd card out (five on /works) sits alone in the last row, centered at the usual card width:
+   half the row less half the grid's 32px column gap. */
+@media (min-width: 768px) {
+  .wk-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 16px);
+  }
+}
 /* The cover: a frosted tray holding only the product's window. */
 .wk-cover {
   position: relative;

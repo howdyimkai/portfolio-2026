@@ -33,7 +33,8 @@ export type Project = {
     device?: 'browser'
     // A muted loop in place of the animated image (`still` is its poster and the reduced motion
     // frame). The mask cuts it to its own device, so it takes no browser window of its own.
-    video?: { webm: string; mp4: string; mask: string; aspect: string }
+    // `hover` makes it a teaser instead: it plays only while the card is hovered or focused.
+    video?: { webm: string; mp4: string; mask: string; aspect: string; hover?: boolean }
     // A muted loop that plays only while the card is hovered or focused, over `still`, in the
     // browser window like any cover. Reduced motion and touch keep the still.
     teaser?: { webm: string; mp4: string }
@@ -101,7 +102,11 @@ export default function ProjectCard({ project: p }: { project: Project }) {
                       className="wk-loop-mask"
                       style={{ aspectRatio: p.cover.video.aspect, '--mask': `url(${p.cover.video.mask})` } as CSSProperties}
                     >
-                      <Loop webm={p.cover.video.webm} mp4={p.cover.video.mp4} still={p.cover.still} alt={p.cover.alt} />
+                      {p.cover.video.hover ? (
+                        <HoverTeaser webm={p.cover.video.webm} mp4={p.cover.video.mp4} still={p.cover.still} alt={p.cover.alt} />
+                      ) : (
+                        <Loop webm={p.cover.video.webm} mp4={p.cover.video.mp4} still={p.cover.still} alt={p.cover.alt} />
+                      )}
                     </div>
                   ) : p.cover.teaser ? (
                     <HoverTeaser webm={p.cover.teaser.webm} mp4={p.cover.teaser.mp4} still={p.cover.still} alt={p.cover.alt} className="wk-screen" />

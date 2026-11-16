@@ -1,7 +1,8 @@
 import ProjectCard, { type Project } from '@/components/works/ProjectCard'
 
-// Design Garden leads, then Tallo's Cal Quiz (positioning, 2026-10-10), then Tallo Brand System. The
-// Cal Quiz card links to the Cal case study. ApolloEd is hidden for now (see HIDDEN below).
+// Design Garden leads, then Tallo's Cal Quiz (positioning, 2026-10-10), Tallo Brand System, Tallo
+// Video System and ApolloEd. The Cal Quiz card links to the Cal case study. Five cards, so the last
+// one sits alone, centered at the cards' usual width (project-card.css).
 const PROJECTS: Project[] = [
   {
     name: 'Design Garden',
@@ -88,17 +89,32 @@ const PROJECTS: Project[] = [
     href: '/works/visual-media',
     cta: 'watch the reel',
   },
+  {
+    name: 'ApolloEd',
+    hook: 'Letting school leaders try the dashboard before anyone signs for the data.',
+    mark: 'before anyone signs',
+    story: 'In 2023 I led four designers on an onboarding redesign that took signup from 13 screens to 6 in testing. In 2026 I rebuilt the idea on my own as a working prototype.',
+    role: 'product design',
+    year: '2023 · 2026',
+    // The case study hero's laptop lid (loop, still and corner mask), like Design Garden's laptop,
+    // but it plays only on hover like the Video System teaser. The still is the hero still at 1200.
+    cover: {
+      anim: '/works/apolloed/cover.webp',
+      still: '/works/apolloed/cover.webp',
+      device: 'browser',
+      video: {
+        webm: '/works/apolloed/hero-loop.webm',
+        mp4: '/works/apolloed/hero-loop.mp4',
+        mask: '/works/apolloed/hero-mask.webp',
+        aspect: '1490 / 956',
+        hover: true,
+      },
+      alt: 'A school dashboard built from three traits, with every chart tagged as generated sample data.',
+    },
+    href: '/works/apolloed',
+    cta: 'take the test drive',
+  },
 ]
-
-// Hidden 2026-10-24 (Kai) to keep /works at three cards. Move back into PROJECTS to bring it back.
-// const HIDDEN: Project[] = [
-//   {
-//     name: 'ApolloEd',
-//     hook: 'An edtech dashboard.',
-//     story: 'The story behind this dashboard is on its way.',
-//     role: 'product design',
-//   },
-// ]
 
 // White grid paper, the same shelf nav as the homepage, and the cards two up (2026-11-09,
 // design-intent/works-layout-exploration/NOTES.md).

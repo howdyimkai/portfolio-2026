@@ -77,11 +77,12 @@ is the way in. `/works` uses the same `ShelfNav` on white grid paper
 (`.grid-sheet`) with three cards: Design Garden, Tallo's Cal Quiz, Tallo Brand
 System. Tallo's Cal Quiz links to the Cal case study (`/works/cal`, still noindex); Tallo Brand
 System links to `/works/brand-system` (noindex, built on `explore/brand-system`
-from `BUILD-PLAN_BrandSystem_ClaudeCode.md`). ApolloEd is hidden since
-2026-10-24 (Kai), parked in a commented `HIDDEN` const in `works/page.tsx`. Cards are
+from `BUILD-PLAN_BrandSystem_ClaudeCode.md`). ApolloEd is the fifth card since 2026-11-16
+(`explore/apolloed`), its masked laptop loop playing on hover only (`video.hover`); the odd
+last card sits alone, centered at the usual width (`project-card.css`). Cards are
 `src/components/works/ProjectCard.tsx`, promoted from `/proto/project-card`'s
 Chalkboard variant.
-Since 2026-11-09 the cards sit two up (four projects, 2×2 from 768px) with a larger cover that
+Since 2026-11-09 the cards sit two up (five projects from 2026-11-16, two up from 768px) with a larger cover that
 holds only the product, the name and role on the chalkboard, and a hover that paints the cover
 blue (`CoverPaint.tsx`). Picked from `/proto/works-deck`; decision and rejected options in
 `design-intent/works-layout-exploration/NOTES.md`. Not yet checked in Safari or on a phone.
