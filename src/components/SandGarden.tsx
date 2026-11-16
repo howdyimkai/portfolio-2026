@@ -419,6 +419,10 @@ export type Layout = 'home' | 'bleed' | 'tray' | 'expand'
 
 export default function Garden({ layout }: { layout: Layout }) {
   const [tool, setTool] = useState<Tool | null>(null)
+  // The principle videos (~190KB) only play after an erase, so they wait until the eraser is first
+  // picked up instead of downloading with the page (perf pass, 2026-11-16).
+  const [revealMedia, setRevealMedia] = useState(false)
+  if (tool === 'eraser' && !revealMedia) setRevealMedia(true)
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
@@ -1414,7 +1418,7 @@ export default function Garden({ layout }: { layout: Layout }) {
                 poster={`${p.src}.webp`}
                 muted
                 playsInline
-                preload="auto"
+                preload={revealMedia ? 'auto' : 'none'}
                 disablePictureInPicture
                 onEnded={() => {
                   if (i !== lastPrincipleRef.current) return

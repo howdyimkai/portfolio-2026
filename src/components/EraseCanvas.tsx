@@ -165,14 +165,32 @@ const EraseCanvas = forwardRef<EraseHandle, Props>(function EraseCanvas({ stillS
     const cached = loaded.get(stillSrc)
     if (cached) takeStill(cached)
     else loadImage(stillSrc).then(takeStill, () => {})
-    if (stripSrc)
+    // The boil strip only plays on hover, so it waits until the page has loaded and gone idle rather
+    // than racing the first paint (perf pass, 2026-11-16). The still is up meanwhile.
+    let idleId: number | undefined
+    const hasIdle = typeof window.requestIdleCallback === 'function'
+    const loadStrip = () => {
+      if (cancelled || !stripSrc) return
       loadImage(stripSrc).then((img) => {
         if (cancelled) return
         stripRef.current = img
         draw()
       }, () => {})
+    }
+    const whenIdle = () => {
+      idleId = hasIdle ? window.requestIdleCallback(loadStrip, { timeout: 1500 }) : (setTimeout(loadStrip, 200) as unknown as number)
+    }
+    if (stripSrc) {
+      if (loaded.has(stripSrc) || document.readyState === 'complete') whenIdle()
+      else window.addEventListener('load', whenIdle, { once: true })
+    }
     return () => {
       cancelled = true
+      window.removeEventListener('load', whenIdle)
+      if (idleId !== undefined) {
+        if (hasIdle) window.cancelIdleCallback(idleId)
+        else clearTimeout(idleId)
+      }
     }
   }, [stillSrc, stripSrc, ink, draw])
 
