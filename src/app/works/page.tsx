@@ -80,15 +80,15 @@ const PROJECTS: Project[] = [
     story: 'I turned hours of live sessions into a series of under three minute episodes, then wrote the guidelines our team and interns made every video from. Twelve episodes so far.',
     role: 'video and motion',
     year: '2026',
-    // Episode one's thumbnail (the case study's series-ep1 at 1200), in the wide window like the
-    // other 16:9 covers; the reel teaser plays over it on hover. Not the teaser's own first frame
-    // (2026-11-16): every frame of it is one flat blue, the heaviest thing on /works.
+    // The reel teaser at 2.25s, where three episode cards fan out under "Real decisions" (Kai,
+    // 2026-11-16: the episodes connect better than one episode's thumbnail), in the wide window like
+    // the other 16:9 covers. The teaser plays over it on hover.
     cover: {
-      anim: '/works/visual-media/cover-series-ep1.webp',
-      still: '/works/visual-media/cover-series-ep1.webp',
+      anim: '/works/visual-media/cover-reel-fan.webp',
+      still: '/works/visual-media/cover-reel-fan.webp',
       device: 'browser',
       teaser: { webm: '/works/visual-media/reel-teaser.webm', mp4: '/works/visual-media/reel-teaser.mp4' },
-      alt: 'Episode one of Real Careers, Real Journeys: Cal the compass presents Entrepreneurship beside a woman on a call asking "Would you actually want this kind of life?"',
+      alt: 'White type on blue reading "Real decisions," with three Real Careers, Real Journeys episode cards fanned out beneath it, the front one a full stack software developer.',
     },
     href: '/works/visual-media',
     cta: 'watch the reel',
