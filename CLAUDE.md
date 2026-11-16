@@ -31,8 +31,8 @@ the pre-K-Zen baseline. `/about` was rebuilt as the shelf page on
   `src/lib/unlock.ts` (30 day httpOnly cookie holding a hash of `CASE_STUDY_PASSWORD`, so changing the
   password signs everyone out; unset password = locked). When it's on, its matcher also catches files
   in that page's `public/works/<case>/` folder.
-- Vercel refuses to deploy vulnerable Next versions (16.0.1 was blocked). Next is on 16.4.4
-  (`^16.4.4`), npm audit clean as of 2026-11-02.
+- Vercel refuses to deploy vulnerable Next versions (16.0.1 was blocked). Next is on 16.4.6
+  (`^16.4.6`), npm audit clean as of 2026-11-16.
 - `/proto/*` and `/pieces/*` stay reachable locally and on Vercel previews, and 404 on the production
   deployment (`VERCEL_ENV === 'production'` in their `layout.tsx`). `robots.ts` and
   `sitemap.ts` assume the site lives at howdyimkai.com (`metadataBase`).
