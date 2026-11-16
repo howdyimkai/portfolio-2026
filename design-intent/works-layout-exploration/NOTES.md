@@ -51,5 +51,29 @@ Review pass (2026-11-09, emil-ui-review):
 - Cal and Brand System covers re-exported at 1200px (Cal from the hero's 1600px plate; the
   setup walkthrough recaptured at 883px wide, role step, 3×)
 
+Five cards (2026-11-16, explore/apolloed, 1ced297..d7bfe13):
+- ApolloEd is the fifth card. Its cover is the case study hero's laptop lid with the corner mask,
+  playing on hover only (`video.hover`), like the Video System teaser
+- Layout: tried the fifth card alone and centered under a 2×2; Kai: "weird". Now three over two
+  from 1024px, the two centered (six column `.wk-grid`, page max 1200 → 1440). Two up (768 to
+  1023) keeps the lone centered last card. At 1024 the cards are ~290px and hooks run 4 to 5
+  lines; starting three up at 1280 is the fallback if that feels cramped
+- Balance pass (emil-unslop-design), Kai picked fixes 1 to 4 of 5:
+  1. Video System's still: the teaser is flat blue in every frame, the heaviest thing on the page.
+     Tried episode one's thumbnail; Kai preferred the cards fanning out, so it's the teaser's
+     2.25s frame (`cover-reel-fan.webp`). Cropping in to make the fan bigger was offered, not done
+     (the hover teaser would jump in scale)
+  2. Every product screen shows at 86% of its cover: `video.screen` is a laptop's screen share
+     of its image (Design Garden 0.76, ApolloEd 0.97), so the laptop grows into the padding
+  3. Hooks wrap `pretty`, and the yellow highlight may now wrap (box-decoration-break: clone).
+     Kept in one piece it forced short first lines like "Helping designers". Reverses the old
+     "never split" rule
+  4. One blossom per card, alternating corners, pinned to the screen's corner
+  5. Not done: bottom two cards spanning half the row each
+- Case study heroes (Cal, Design Garden, ApolloEd): the beige tag panel wears this page's blue
+  paint (`cover-paint.webp`), muted text in it darkened to 5.8:1, and the outside link is a dark
+  ink pill (`.cs-cta`). Brand System and Video System heroes have no tag panel
+
 Open:
 - Not checked in Safari (a filter inside an SVG mask) or on a real phone
+- The five card layout and the hero button not checked on a real phone or in Safari
