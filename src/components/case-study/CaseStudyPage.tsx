@@ -112,7 +112,8 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             ))}
 
           {s.chapters.map((c, i) => (
-            <section key={c.id} id={c.id} className="mt-[77px] scroll-mt-[72px] md:mt-[104px] md:scroll-mt-12">
+            <section key={c.id} id={c.id} className={`${i === 0 ? 'mt-14' : 'mt-[77px]'} scroll-mt-[72px] md:mt-[104px] md:scroll-mt-12`}>
+              {/* Phones: the first chapter sits 56px under the stats or quote, not the 77px between chapters (2026-11-16). */}
               {/* Chapter number as a quiet label above, so the title alone carries the weight. With a
                   hook, the label takes the short title ("02 THE PROBLEM") and the hook is the h2. */}
               {labels[i] && (
@@ -158,12 +159,12 @@ function StatStrip({ stats, link }: { stats: CaseStudy['stats']; link?: CaseStud
   // One star for the first note, two for the second, so each number points at its own line.
   const mark = (st: CaseStudy['stats'][number]) => '*'.repeat(notes.indexOf(st) + 1)
   return (
-    <div className="mt-14">
+    <div className="mt-10 sm:mt-14">
       {/* Equal thirds with each stat centered (Kai, 2026-11-01: left aligned read lopsided), unless
           a value runs long ("80% → 31%" filled its third and touched the divider): that column takes
           a bigger share so it keeps its padding. Under 640px the thirds were too narrow (ApolloEd's
-          "13 → 6" broke in two, a label ran 8 lines), so phones get one row per stat instead, number
-          left and label right (2026-11-15). A short value never breaks; tablets take a 40px number
+          "13 → 6" broke in two, a label ran 8 lines), so phones get one row per stat instead (2026-11-15),
+          the number over its label (2026-11-16: side by side left a wide gap after short values like "5"). A short value never breaks; tablets take a 40px number
           before the 52px one on desktop. */}
       <dl
         className="grid border-y border-hairline sm:[grid-template-columns:var(--stat-cols)]"
@@ -175,14 +176,14 @@ function StatStrip({ stats, link }: { stats: CaseStudy['stats']; link?: CaseStud
             className={`min-w-0 py-5 sm:px-2 sm:py-6 sm:text-center md:px-5 md:py-8 lg:px-8 ${i > 0 ? 'border-t border-hairline sm:border-l sm:border-t-0' : ''}`}
           >
             <dt className="sr-only">{st.label}</dt>
-            <dd className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-center gap-5 sm:block">
+            <dd className="flex flex-col gap-1.5 sm:block">
               <span
                 className={`block font-display text-[30px] font-semibold leading-[1.05] tracking-[-0.01em] text-ink-primary sm:text-[32px] sm:leading-none md:text-[40px] lg:text-[52px] ${st.value.length <= 12 ? 'whitespace-nowrap' : ''}`}
               >
                 {st.value}
                 {st.note && <span className="ml-1 align-top font-mono text-[13px] font-normal text-ink-faint">{mark(st)}</span>}
               </span>
-              <span className="block font-mono text-[12px] leading-[1.45] text-ink-body [text-wrap:pretty] sm:mx-auto sm:mt-3 sm:max-w-[26ch] sm:[text-wrap:balance] md:text-[13px]">{st.label}</span>
+              <span className="block font-mono text-[13px] leading-[1.5] text-ink-body [text-wrap:pretty] sm:mx-auto sm:text-[12px] sm:mt-3 sm:max-w-[26ch] sm:[text-wrap:balance] md:text-[13px]">{st.label}</span>
             </dd>
           </div>
         ))}
