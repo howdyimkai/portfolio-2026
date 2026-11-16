@@ -88,8 +88,11 @@ html[data-rb-enter='go'] .rb { animation: rb-enter 360ms both; }
   font-size: calc(9.5px * var(--rb-zoom));
   line-height: 0.95;
   letter-spacing: 0.01em;
-  color: rgba(246, 236, 224, 0.9);
-  text-shadow: 0 0 0.6px rgba(246, 236, 224, 0.5);
+  /* Reviewer pass 2026-11-16: solid page color, a touch heavier, and a dark halo into the red so it
+     reads (was 90% cream with a cream glow). */
+  font-weight: 600;
+  color: var(--color-page);
+  text-shadow: 0 0 2px rgba(40, 14, 10, 0.75), 0 1px 1px rgba(40, 14, 10, 0.6);
   pointer-events: none;
 }
 /* The V tail pivots from its top edge; past 90° its darker back would show. */

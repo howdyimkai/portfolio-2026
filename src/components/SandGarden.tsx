@@ -94,7 +94,6 @@ const QUIET_ZONE_SELECTOR = '.shelf-wordmark, .shelf-cubby, .shelf-broom, .rb, [
 // page a caption fades in under the title pointing at the erase reveal, and it leaves for
 // good the first time the eraser touches the title. Desktop only, like the reveal.
 // Notes: design-intent/hint-exploration/NOTES.md.
-const HINT_DELAY_MS = 4000
 // Second hint, in the same spot: once an erase gets this far toward the reveal (halfway,
 // 40% of the title's ink; 0.75 felt too late, Kai 2026-10-24) without finishing, nudge the visitor on with the stroke that
 // clears it best (Kai, 2026-10-24). Leaves for good once the reveal fires.
@@ -103,9 +102,11 @@ const KEEP_GOING_AT = 0.5
 // line gives a skimming recruiter the job title. Static on purpose, and it sits outside the
 // title element so erasing the title leaves it alone. Kai, 2026-10-29: name plus title, then the
 // page's tools as verbs. Replaced "Product designer. Head of Creative at Tallo." (role ends Nov 2026).
-const TITLE_SUBLINE = 'Kai Tran, product designer. Plant, rake, ship.'
+const TITLE_SUBLINE = 'Kai Tran, product designer. Remote or Austin, Texas.'
 const TITLE_SUBLINE_PHONE = 'Kai Tran, product designer'
-const HINT_COPY = { start: 'psst, try the eraser above', keep: 'keep going, try an infinity pattern' } // keep renders with InfinityTrace before "infinity"
+// Under the title: "Plant, rake, ship." always shows; the halfway line swaps in while erasing (it renders with
+// InfinityTrace before "infinity"). The first "psst, try the eraser" text hint was removed 2026-11-16.
+const TAGLINE = 'Plant, rake, ship.'
 // Single-key tool shortcuts. Pressing the held tool's key puts it down, like clicking it.
 const TOOL_KEYS: Record<string, Tool> = { r: 'rake', e: 'eraser', b: 'blossom' }
 // Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
@@ -459,16 +460,8 @@ export default function Garden({ layout }: { layout: Layout }) {
   // A returning title isn't erasable until the eraser has left its box once, or the wipe that
   // just cleared the principle (same spot) would carve straight into it.
   const titleArmedRef = useRef(true)
-  const [hintOn, setHintOn] = useState(false)
-  const hintDoneRef = useRef(false)
   const [keepGoing, setKeepGoing] = useState(false)
-  const [hintCopy, setHintCopy] = useState<keyof typeof HINT_COPY>('start')
   const keepGoingShownRef = useRef(false)
-  const endHint = useCallback(() => {
-    if (hintDoneRef.current) return
-    hintDoneRef.current = true
-    setHintOn(false)
-  }, [])
 
   // Title boil (see BOIL_* above). Tracked apart from hoveringRef, which only follows
   // hover while a tool is armed — the title wiggles under a bare pointer too.
@@ -697,13 +690,11 @@ export default function Garden({ layout }: { layout: Layout }) {
         const erased = canvas.erase(local(prev), local(p), ERASE_RADIUS)
         if (erased <= titleErasedRef.current) return
         titleErasedRef.current = erased
-        endHint()
         // The title keeps full opacity while it's wiped; the reveal fades what's left.
         const coverage = Math.min(1, erased / ERASE_THRESHOLD)
         if (coverage >= 1) triggerReveal()
         else if (coverage >= KEEP_GOING_AT && !keepGoingShownRef.current) {
           keepGoingShownRef.current = true
-          setHintCopy('keep')
           setKeepGoing(true)
         }
         return
@@ -722,7 +713,7 @@ export default function Garden({ layout }: { layout: Layout }) {
       // finish the return on its own rather than leaving it half-erased.
       else scheduleAutoReturn(PRINCIPLE_IDLE_MS)
     },
-    [triggerReveal, beginReturn, scheduleAutoReturn, endHint]
+    [triggerReveal, beginReturn, scheduleAutoReturn]
   )
 
   // Decode each principle's still now, so its canvas paints on its first frame.
@@ -1185,14 +1176,6 @@ export default function Garden({ layout }: { layout: Layout }) {
     )
   }, [expanded])
 
-  // The hint waits HINT_DELAY_MS in each idle state, and hides while a principle plays.
-  useEffect(() => {
-    setHintOn(false)
-    if (hintDoneRef.current || !revealOnRef.current || sequencePhase !== 'idle') return
-    const id = window.setTimeout(() => setHintOn(true), HINT_DELAY_MS)
-    return () => window.clearTimeout(id)
-  }, [tool, sequencePhase])
-
   useEffect(() => {
     // R, E and B pick (or drop) a tool; Escape drops the held tool.
     const onKey = (e: KeyboardEvent) => {
@@ -1304,7 +1287,7 @@ export default function Garden({ layout }: { layout: Layout }) {
         {mode === 'tray' && (
           <div className={`pointer-events-none absolute left-1/2 z-10 aspect-[900/436] w-[90%] max-w-[368px] -translate-x-1/2 md:hidden ${D.mobileTitle}`}>
             <TitleArt boiling={titleBoiling} />
-            <p className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap font-mono text-[16px] font-bold text-ink-primary">
+            <p className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap font-mono text-[18px] font-bold text-ink-primary">
               {TITLE_SUBLINE_PHONE}
             </p>
           </div>
@@ -1320,9 +1303,10 @@ export default function Garden({ layout }: { layout: Layout }) {
           {/* The caption sits beside the title, not inside it, so it doesn't fade as the
               title is erased. hero-enter: the first-load fade (HomeFog). */}
           <div className="hero-enter relative">
-            {/* Above the title in mono bold, 20% up from 13px (Kai, 2026-10-29). Phones drop
-                "Plant, rake, ship." (Kai, 2026-11-02), since mono at 16px is wider than the screen. */}
-            <p className="mb-3 text-center font-mono text-[16px] font-bold text-ink-primary">
+            {/* Above the title in mono bold, 20% up from 13px (Kai, 2026-10-29), a step up to 18px
+                on 2026-11-16 for legibility on the sand. Phones drop the location (Kai, 2026-11-02 and
+                -16): mono at 18px is wider than the screen with it, so they get the short line. */}
+            <p className="mb-3 text-center font-mono text-[18px] font-bold text-ink-primary">
               <span className="md:hidden">{TITLE_SUBLINE_PHONE}</span>
               <span className="max-md:hidden">{TITLE_SUBLINE}</span>
             </p>
@@ -1339,18 +1323,17 @@ export default function Garden({ layout }: { layout: Layout }) {
                 <EraseCanvas ref={titleCanvasRef} stillSrc={TITLE_STILL_SRC} stripSrc={TITLE_BOIL_SRC} frames={TITLE_BOIL_FRAMES} ink="alpha" boiling={titleBoiling} />
               </div>
             </div>
-            {/* ink-primary at 12px: 7.7:1 on the sand (ink-muted at 10px was 3.3:1). Only
-                one of the two hints is ever on: the first ends when erasing starts. */}
-            <p
-              aria-hidden={!(hintOn || keepGoing)}
-              className={`absolute left-1/2 top-full mt-4 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] text-ink-primary transition-opacity duration-500 ease-out ${hintOn || keepGoing ? 'opacity-100' : 'opacity-0'}`}
-            >
-              {hintCopy === 'keep' ? (
+            {/* Under the title, in the subline's style (mono, ink-primary: 7.7:1 on the sand), a
+                step up to 14px with medium weight. "Plant, rake, ship." stays; the halfway line
+                swaps in while erasing. */}
+            {/* SLOT: Kai's drawn "psst" note with an arrow to the hero goes here (art to come). */}
+            <p className="absolute left-1/2 top-full mt-4 -translate-x-1/2 whitespace-nowrap font-mono text-[14px] font-medium text-ink-primary">
+              {keepGoing ? (
                 <>
                   keep going, try an <InfinityTrace /> infinity pattern
                 </>
               ) : (
-                HINT_COPY.start
+                TAGLINE
               )}
             </p>
           </div>
