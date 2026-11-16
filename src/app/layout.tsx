@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Bricolage_Grotesque } from 'next/font/google'
+import { Bricolage_Grotesque, Inter } from 'next/font/google'
 import localFont from 'next/font/local'
 import '../styles/globals.css'
 import { Analytics } from '@vercel/analytics/next'
@@ -9,6 +9,16 @@ const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
   variable: '--font-bricolage',
   display: 'swap',
+})
+
+// Body sans for the résumé on phones only (reviewer pass, 2026-11-16: mono at ~37 characters a line was
+// hard to read). Not preloaded, so other pages never download it. The PDF uses Inter too.
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  variable: '--font-inter',
+  display: 'swap',
+  preload: false,
 })
 
 const commitMono = localFont({
@@ -59,7 +69,7 @@ export default function RootLayout({
 }) {
   return (
     // Font variables live on <html> so the @theme tokens (resolved at :root) can see them.
-    <html lang="en" className={`${bricolage.variable} ${commitMono.variable} antialiased`}>
+    <html lang="en" className={`${bricolage.variable} ${commitMono.variable} ${inter.variable} antialiased`}>
       <body>
         <AppShell>{children}</AppShell>
         {/* Vercel Web Analytics: page views only, no cookies. Only sends on Vercel deployments. */}

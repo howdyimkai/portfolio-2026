@@ -334,7 +334,10 @@ html[data-rb-enter='go'] .rb { animation: rb-enter 360ms both; }
   .rs-scroll { padding: calc(64px + env(safe-area-inset-top, 0px)) 20px calc(48px + env(safe-area-inset-bottom, 0px)); }
   .rs-close { top: calc(6px + env(safe-area-inset-top, 0px)); right: 8px; }
   .rs-name { font-size: 30px; }
-  .rs-doc { font-size: 14px; }
+  /* Phones read the résumé in sans, in the dark ink, at 15px (reviewer pass, 2026-11-16: Robin and
+     ashita found the mono hard to read on a phone). Section labels stay mono. */
+  .rs-doc { font: 15px/1.6 var(--font-inter), system-ui, sans-serif; color: var(--color-ink-primary); }
+  .rs-doc .rs-dates { font-size: 14px; }
   .rs-skills div { grid-template-columns: 1fr; gap: 0; }
   /* Easier to read on a phone: more air between jobs and between bullets (reviewer pass, 2026-11-16). */
   .rs-job + .rs-job { margin-top: 36px; }
