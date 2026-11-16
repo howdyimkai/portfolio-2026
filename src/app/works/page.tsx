@@ -122,9 +122,9 @@ export default function WorksPage() {
   return (
     // Each card carries its own bottom margin (project-card.css), so the grid has no row gap and
     // the bottom padding is that much shorter.
-    <div className="mx-auto max-w-[1200px] px-4 pb-10 pt-10 md:px-10 md:pb-20 md:pt-6">
+    <div className="mx-auto max-w-[1440px] px-4 pb-10 pt-10 md:px-10 md:pb-20 md:pt-6">
       <h1 className="sr-only">Selected works</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-8">
+      <div className="wk-grid grid grid-cols-1 md:grid-cols-2 md:gap-x-8">
         {PROJECTS.map((p) => (
           <ProjectCard key={p.name} project={p} />
         ))}
