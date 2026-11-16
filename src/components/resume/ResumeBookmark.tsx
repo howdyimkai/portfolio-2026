@@ -14,6 +14,10 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 
 export default function ResumeBookmark() {
   const [open, setOpen] = useState(false)
+  // Set on first open and kept, so the phone sheet's Inter (resume.css) loads only when wanted and
+  // doesn't flip back to mono while the sheet slides away.
+  const [seen, setSeen] = useState(false)
+  if (open && !seen) setSeen(true)
   const trigger = useRef<HTMLButtonElement>(null)
   const sheet = useRef<HTMLDivElement>(null)
   const titleId = useId()
@@ -111,6 +115,7 @@ export default function ResumeBookmark() {
         aria-labelledby={titleId}
         className="rs-sheet"
         data-open={open ? '' : undefined}
+        data-seen={seen ? '' : undefined}
         inert={!open}
       >
         <button type="button" className="rs-close" aria-label="Close résumé" onClick={close}>

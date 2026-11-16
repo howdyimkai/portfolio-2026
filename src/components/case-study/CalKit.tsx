@@ -10,9 +10,10 @@ import type { Kit } from './types'
 import YouTube from './YouTube'
 import './step-frame.css'
 
-const adamina = Adamina({ weight: '400', subsets: ['latin'], display: 'swap' })
-const hubballi = Hubballi({ weight: '400', subsets: ['latin'], display: 'swap' })
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
+// preload: false on all three: the kit sits far below the fold, and a preload here leaks onto other pages' first load.
+const adamina = Adamina({ weight: '400', subsets: ['latin'], display: 'swap', preload: false })
+const hubballi = Hubballi({ weight: '400', subsets: ['latin'], display: 'swap', preload: false })
+const inter = Inter({ subsets: ['latin'], display: 'swap', preload: false })
 
 // Sizes from the Paper layout (1352px wide) scaled to the column, a step smaller on phones.
 const FACE = {
@@ -44,7 +45,7 @@ export default function CalKit({ kit }: { kit: Kit }) {
         <ul className={`mt-5 cs-tiles grid gap-x-2 gap-y-6 px-3 py-6 md:px-5 md:py-7 ${PANEL}`} style={grid(3, 6)}>
           {kit.personas.map((p) => (
             <li key={p.name} className="flex flex-col items-center text-center">
-              <img src={p.src} alt={p.alt} draggable={false} className={CAL} style={{ aspectRatio: CAL_ASPECT }} />
+              <img loading="lazy" src={p.src} alt={p.alt} draggable={false} className={CAL} style={{ aspectRatio: CAL_ASPECT }} />
               {/* No tracking on phones, so the longest names (THE RESEARCHER, THE ORGANIZER) stay on one line at 12px. */}
               <p className={`mt-3 ${CAPS} text-[12px] max-md:tracking-normal`}>{p.name}</p>
               <p className="mt-1 font-mono text-[12px] text-ink-muted">{p.type}</p>
@@ -73,7 +74,7 @@ export default function CalKit({ kit }: { kit: Kit }) {
         <ul className="mt-4 cs-tiles grid gap-x-2 gap-y-5" style={grid(3, 6)}>
           {kit.expressions.map((e) => (
             <li key={e.name} className="flex flex-col items-center">
-              <img src={e.src} alt={`Cal, ${e.name}`} draggable={false} className={CAL} style={{ aspectRatio: CAL_ASPECT }} />
+              <img loading="lazy" src={e.src} alt={`Cal, ${e.name}`} draggable={false} className={CAL} style={{ aspectRatio: CAL_ASPECT }} />
               <p className="mt-2 font-mono text-[12px] text-ink-muted">{e.name}</p>
             </li>
           ))}
@@ -85,7 +86,7 @@ export default function CalKit({ kit }: { kit: Kit }) {
         <ul className={`mt-4 cs-tiles grid gap-2 p-4 md:p-6 ${PANEL}`} style={grid(4, 6)}>
           {kit.props.map((p) => (
             <li key={p.name}>
-              <img src={p.src} alt={p.name} draggable={false} className="mx-auto block w-full max-w-[100px] mix-blend-multiply" style={{ aspectRatio: '1 / 1' }} />
+              <img loading="lazy" src={p.src} alt={p.name} draggable={false} className="mx-auto block w-full max-w-[100px] mix-blend-multiply" style={{ aspectRatio: '1 / 1' }} />
             </li>
           ))}
         </ul>

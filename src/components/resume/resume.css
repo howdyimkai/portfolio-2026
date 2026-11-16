@@ -336,7 +336,8 @@ html[data-rb-enter='go'] .rb { animation: rb-enter 360ms both; }
   .rs-name { font-size: 30px; }
   /* Phones read the résumé in sans, in the dark ink, at 15px (reviewer pass, 2026-11-16: Robin and
      ashita found the mono hard to read on a phone). Section labels stay mono. */
-  .rs-doc { font: 15px/1.6 var(--font-inter), system-ui, sans-serif; color: var(--color-ink-primary); }
+  /* Only once the sheet has opened, so pages never fetch Inter for a closed sheet. */
+  .rs-sheet[data-seen] .rs-doc { font: 15px/1.6 var(--font-inter), system-ui, sans-serif; color: var(--color-ink-primary); }
   .rs-doc .rs-dates { font-size: 14px; }
   .rs-skills div { grid-template-columns: 1fr; gap: 0; }
   /* Easier to read on a phone: more air between jobs and between bullets (reviewer pass, 2026-11-16). */

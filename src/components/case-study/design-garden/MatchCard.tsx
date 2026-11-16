@@ -11,8 +11,9 @@ import { Enriqueta, Inter } from 'next/font/google'
 import type { Visual } from '../types'
 import { CRITERION_MAX, calculateMatchScore, getBarColor, getPlantRating, scoreFeedbackCrossMatch, type Profile, type ScoreBreakdown } from './matching'
 
-const enriqueta = Enriqueta({ weight: '600', subsets: ['latin'], display: 'swap' })
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
+// preload: false: below the fold, and preloads leak onto other pages' first load.
+const enriqueta = Enriqueta({ weight: '600', subsets: ['latin'], display: 'swap', preload: false })
+const inter = Inter({ subsets: ['latin'], display: 'swap', preload: false })
 
 // The pair is picked so the score reads honest, not perfect: their skills overlap yours by a third
 // (2 shared of 6, the top band), and they're an hour off your timezone, so that row shows ✕.

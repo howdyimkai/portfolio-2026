@@ -12,10 +12,10 @@ const bricolage = Bricolage_Grotesque({
 })
 
 // Body sans for the résumé on phones only (reviewer pass, 2026-11-16: mono at ~37 characters a line was
-// hard to read). Not preloaded, so other pages never download it. The PDF uses Inter too.
+// hard to read). Not preloaded, and the sheet only asks for it once it's open. The variable file,
+// the same one the case study kits use, so it's one download site-wide. The PDF uses Inter too.
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '600'],
   variable: '--font-inter',
   display: 'swap',
   preload: false,

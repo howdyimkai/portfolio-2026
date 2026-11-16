@@ -10,7 +10,7 @@
 import { Young_Serif } from 'next/font/google'
 import type { Visual } from '../types'
 
-const youngSerif = Young_Serif({ weight: '400', subsets: ['latin'], display: 'swap' })
+const youngSerif = Young_Serif({ weight: '400', subsets: ['latin'], display: 'swap', preload: false })
 
 type Swatch = { name: string; hex: string; light?: boolean }
 
