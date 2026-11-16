@@ -62,7 +62,7 @@ export default function HoverTeaser({
 
   return (
     <span ref={wrap} className={`relative block overflow-hidden ${className}`}>
-      <img src={still} alt={alt} draggable={false} className="block h-full w-full object-cover" />
+      <img loading="lazy" src={still} alt={alt} draggable={false} className="block h-full w-full object-cover" />
       <video
         ref={video}
         muted

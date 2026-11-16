@@ -75,7 +75,7 @@ export default function Social() {
               {g.label}
             </h3>
             <div className="relative [mask-image:linear-gradient(to_bottom,black_86%,transparent)] max-w-[606px] overflow-hidden rounded-[12px] border border-hairline">
-              <img src={g.src} width={606} height={660} alt={g.alt} draggable={false} className="block h-auto w-full" />
+              <img loading="lazy" src={g.src} width={606} height={660} alt={g.alt} draggable={false} className="block h-auto w-full" />
               {BLUR.map((b, i) => (
                 <div
                   key={b}

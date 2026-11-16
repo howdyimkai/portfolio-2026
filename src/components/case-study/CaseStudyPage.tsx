@@ -94,7 +94,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
 
           {/* cs-hero: a hero's tag panel (cs-panel) takes the works cards' blue paint (case-study.css). */}
           <div className="cs-hero mt-16">
-            <VisualBlock v={s.hero} />
+            <VisualBlock v={s.hero} eager />
           </div>
 
           <StatStrip stats={s.stats} link={s.statsLink} />
@@ -283,7 +283,7 @@ function BlockView({ b }: { b: Block }) {
             {b.items.map((r, i) => (
               <li key={i} className="grid grid-cols-1 gap-3 rounded-[14px] bg-tag/55 p-4 sm:grid-cols-[120px_minmax(0,1fr)] sm:items-center sm:gap-7 sm:p-5">
                 {/* On phones the pose sits above the rule, so the text keeps the card's full width. */}
-                {r.pose ? <img src={r.pose.src} alt={r.pose.alt} draggable={false} className={`${CAL} ml-0 sm:mx-auto`} style={{ aspectRatio: CAL_ASPECT }} /> : <span />}
+                {r.pose ? <img loading="lazy" src={r.pose.src} alt={r.pose.alt} draggable={false} className={`${CAL} ml-0 sm:mx-auto`} style={{ aspectRatio: CAL_ASPECT }} /> : <span />}
                 <p className={`${PROSE} cs-body font-mono text-ink-body [text-wrap:pretty]`}>
                   <span className="block font-semibold text-ink-primary">{r.title}</span>
                   <span className="mt-1 block">{r.text}</span>
@@ -341,7 +341,8 @@ function BlockView({ b }: { b: Block }) {
   }
 }
 
-function VisualBlock({ v }: { v: Visual }) {
+// `eager`: the hero's own image loads right away; every other case study image is lazy (perf pass, 2026-11-16).
+function VisualBlock({ v, eager = false }: { v: Visual; eager?: boolean }) {
   return (
     <figure>
       {v.custom && CUSTOM_VISUALS[v.custom] ? (
@@ -385,7 +386,7 @@ function VisualBlock({ v }: { v: Visual }) {
           <picture>
             <source media="(max-width: 639px)" srcSet={v.mobile.src} />
             {v.still && <source media="(prefers-reduced-motion: reduce)" srcSet={v.still} />}
-            <img src={v.src} alt={v.alt ?? ''} draggable={false} className="block h-full w-full object-cover" />
+            <img loading={eager ? 'eager' : 'lazy'} src={v.src} alt={v.alt ?? ''} draggable={false} className="block h-full w-full object-cover" />
           </picture>
         </div>
       ) : v.src ? (
@@ -393,7 +394,7 @@ function VisualBlock({ v }: { v: Visual }) {
           {/* A plain <picture>, not next/image: the optimizer would flatten animated WebPs. */}
           <picture>
             {v.still && <source media="(prefers-reduced-motion: reduce)" srcSet={v.still} />}
-            <img src={v.src} alt={v.alt ?? ''} draggable={false} className="block h-full w-full object-cover" />
+            <img loading={eager ? 'eager' : 'lazy'} src={v.src} alt={v.alt ?? ''} draggable={false} className="block h-full w-full object-cover" />
           </picture>
         </div>
       ) : (
@@ -475,7 +476,7 @@ function Print({ v }: { v: Visual }) {
           narrow print gets it as a % of its own width (padding % reads the figure's width). */}
       <div className="cs-print-wrap" style={v.printWidth ? { paddingTop: '3%' } : undefined}>
         <div className="cs-print">
-          <img src={v.src} alt={v.alt ?? ''} draggable={false} style={{ aspectRatio: v.aspect }} />
+          <img loading="lazy" src={v.src} alt={v.alt ?? ''} draggable={false} style={{ aspectRatio: v.aspect }} />
           <span className="cs-tape" aria-hidden="true" />
         </div>
       </div>

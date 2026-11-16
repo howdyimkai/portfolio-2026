@@ -106,7 +106,7 @@ function Viewer({ dialog, item, aspect, look }: { dialog: RefObject<HTMLDialogEl
 // The image, plus its mark (or a play badge) for a screen. The wrapper shrinks to the image, so the
 // mark's % box lands on the same spot at any size.
 function Piece({ item, aspect, look, className, children }: { item: Item; aspect: string; look: Look; className: string; children?: ReactNode }) {
-  const img = <img src={item.src} alt={item.alt} draggable={false} className={`block ${className}`} style={{ aspectRatio: item.aspect ?? aspect }} />
+  const img = <img loading="lazy" src={item.src} alt={item.alt} draggable={false} className={`block ${className}`} style={{ aspectRatio: item.aspect ?? aspect }} />
   if (look !== 'screen') return img
   return (
     <span className="st-piece relative mx-auto block w-fit overflow-hidden rounded-[12px] border border-hairline" style={{ background: item.fill }}>

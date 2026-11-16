@@ -17,11 +17,11 @@ export default function Toggle({ views, aspect, framed }: { views: NonNullable<V
         const imgs = [{ src: v.src, alt: v.alt }, ...(v.with ?? [])]
         const props = { 'data-active': i === on, 'aria-hidden': i !== on, className: 'tg-view absolute inset-0' }
         return imgs.length === 1 ? (
-          <img key={v.src} src={v.src} alt={v.alt} draggable={false} {...props} className="tg-view absolute inset-0 block h-full w-full" />
+          <img loading="lazy" key={v.src} src={v.src} alt={v.alt} draggable={false} {...props} className="tg-view absolute inset-0 block h-full w-full" />
         ) : (
           <div key={v.src} {...props} className="tg-view absolute inset-0 grid gap-3 md:gap-5" style={{ gridTemplateColumns: `repeat(${imgs.length}, minmax(0, 1fr))` }}>
             {imgs.map((m) => (
-              <img key={m.src} src={m.src} alt={m.alt} draggable={false} className="block h-full w-full object-cover" />
+              <img loading="lazy" key={m.src} src={m.src} alt={m.alt} draggable={false} className="block h-full w-full object-cover" />
             ))}
           </div>
         )

@@ -21,7 +21,7 @@ export default function Loop({ webm, mp4, still, alt }: { webm: string; mp4: str
     io.observe(v)
     return () => io.disconnect()
   }, [reduce])
-  if (reduce) return <img src={still} alt={alt} draggable={false} className="block h-full w-full object-cover" />
+  if (reduce) return <img loading="lazy" src={still} alt={alt} draggable={false} className="block h-full w-full object-cover" />
   return (
     <video
       ref={ref}

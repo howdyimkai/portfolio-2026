@@ -43,7 +43,7 @@ export default function YouTube({
         {teaser ? (
           <HoverTeaser webm={teaser.webm} mp4={teaser.mp4} still={poster} alt="" className="absolute inset-0 h-full w-full" />
         ) : (
-          <img src={poster} alt="" draggable={false} className="kit-poster absolute inset-0 h-full w-full object-cover" />
+          <img loading="lazy" src={poster} alt="" draggable={false} className="kit-poster absolute inset-0 h-full w-full object-cover" />
         )}
         <span className={`kit-play-btn absolute grid size-14 place-items-center ${corner ? 'bottom-4 right-4' : 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'} rounded-full bg-white/90 text-[#211e1a] shadow-[0_4px_16px_rgba(0,0,0,0.25)]`}>
           <svg viewBox="0 0 24 24" className="ml-0.5 size-6" fill="currentColor" aria-hidden="true">

@@ -12,8 +12,8 @@ export default function QuoteDoc({ item }: { item: Item }) {
       className="relative block w-full max-w-[540px] overflow-hidden rounded-[12px] border border-hairline bg-white"
       style={{ aspectRatio: item.aspect ?? '3 / 2' }}
     >
-      <img src={item.src} alt={item.alt} draggable={false} className="qd-sharp absolute inset-0 h-full w-full object-cover object-top" />
-      <img src={item.src} alt="" aria-hidden="true" draggable={false} className="qd-veil absolute inset-0 h-full w-full object-cover object-top" />
+      <img loading="lazy" src={item.src} alt={item.alt} draggable={false} className="qd-sharp absolute inset-0 h-full w-full object-cover object-top" />
+      <img loading="lazy" src={item.src} alt="" aria-hidden="true" draggable={false} className="qd-veil absolute inset-0 h-full w-full object-cover object-top" />
     </span>
   )
 }
