@@ -62,8 +62,9 @@ export default function StepFrame({ flow }: { flow: Flow }) {
           </button>
         )}
         {flow.link && (
-          <a href={flow.link.href} target="_blank" rel="noopener noreferrer" className="sf-link press-scale shrink-0 text-ink-primary">
-            {flow.link.label} <span aria-hidden="true">↗</span>
+          <a href={flow.link.href} target="_blank" rel="noopener noreferrer" className="cs-cta ml-auto">
+            {flow.link.label} <span aria-hidden="true" className="cs-cta-arrow">↗</span>
+            <span className="sr-only"> (opens in a new tab)</span>
           </a>
         )}
       </div>

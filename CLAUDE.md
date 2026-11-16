@@ -362,6 +362,7 @@ Change the `.ts` first; if the two disagree, the `.ts` wins.
 - **Hero panel (2026-11-16):** a hero's tag panel (`cs-panel` inside `cs-hero`) wears the /works
   cards' blue paint (`cover-paint.webp`) instead of beige, with muted text darkened to #4A4236 for
   contrast. Chapter panels stay beige. Brand System and Video System heroes have no tag panel.
+  Its outside link is a dark ink pill (`.cs-cta`, `VisualLink cta`), 40px tall with a mouse, 44 on touch.
 - **Phone images (2026-11-15, ApolloEd):** a `src` visual or a `pair` item can carry `mobile`
   (`MobileImage` in `types.ts`): a phone version that swaps in under 640px (src) or 1024px (pair item),
   since desktop captures shrink to about a quarter on a phone. `device: true` marks a phone screen with

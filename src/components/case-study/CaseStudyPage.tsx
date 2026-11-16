@@ -371,8 +371,8 @@ function VisualBlock({ v }: { v: Visual }) {
             <Loop webm={v.video.webm} mp4={v.video.mp4} still={v.still} alt={v.alt ?? ''} />
           </div>
           {v.link && (
-            <div className="mt-4 flex justify-end font-mono text-[12px] leading-[1.5] md:mt-5">
-              <VisualLink link={v.link} />
+            <div className="mt-4 flex justify-end md:mt-5">
+              <VisualLink link={v.link} cta />
             </div>
           )}
         </div>
@@ -410,10 +410,11 @@ function VisualBlock({ v }: { v: Visual }) {
 }
 
 // The same link as a flow's "Take the real quiz".
-function VisualLink({ link }: { link: NonNullable<Visual['link']> }) {
+// `cta`: the dark pill button under a hero (case-study.css), not an inline text link.
+export function VisualLink({ link, cta }: { link: NonNullable<Visual['link']>; cta?: boolean }) {
   return (
-    <a href={link.href} target="_blank" rel="noopener noreferrer" className="sf-link press-scale text-ink-primary">
-      {link.label} <span aria-hidden="true">↗</span>
+    <a href={link.href} target="_blank" rel="noopener noreferrer" className={cta ? 'cs-cta' : 'sf-link press-scale text-ink-primary'}>
+      {link.label} <span aria-hidden="true" className={cta ? 'cs-cta-arrow' : undefined}>↗</span>
       <span className="sr-only"> (opens in a new tab)</span>
     </a>
   )

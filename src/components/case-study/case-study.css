@@ -204,3 +204,52 @@
 .cs-hero .cs-panel :is(.text-ink-body, .text-ink-muted, .text-ink-faint) {
   color: #4a4236;
 }
+
+/* The way out under a hero (Take the real quiz, Try the live demo, Visit Design Garden): a dark ink
+   pill, not a 12px text link, so nobody misses it (Kai, 2026-11-16). 44px tall on touch, 40px with a
+   fine pointer; the arrow side gets 2px less padding so the label reads centered. */
+.cs-cta {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px 0 20px;
+  border-radius: 999px;
+  background-color: var(--color-ink-primary);
+  color: var(--color-page);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1;
+  box-shadow: 0 1px 2px rgb(58 50 38 / 0.12), 0 6px 16px -6px rgb(58 50 38 / 0.35);
+  transition:
+    background-color 150ms ease-out,
+    transform 150ms ease-out;
+}
+.cs-cta-arrow {
+  transition: transform 200ms var(--ease-out-strong);
+}
+.cs-cta:active {
+  transform: scale(0.97);
+}
+.cs-cta:focus-visible {
+  outline: 2px solid var(--color-ink-primary);
+  outline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .cs-cta {
+    min-height: 40px;
+  }
+  .cs-cta:hover {
+    background-color: #4a4236;
+  }
+  .cs-cta:hover .cs-cta-arrow {
+    transform: translate(2px, -2px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-cta,
+  .cs-cta-arrow {
+    transition: none;
+  }
+}
