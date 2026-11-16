@@ -9,6 +9,7 @@ import SayHowdy from '@/components/resume/SayHowdy'
 import { STAMP } from '@/components/about/data'
 import { Broom } from '@/components/shelf/ShelfNav'
 import { SOCIALS } from '@/components/shelf/socials'
+import { OPEN_RESUME_EVENT } from '@/components/resume/ResumeBookmark'
 import SoundToggle from '@/components/SoundToggle'
 import './footer.css'
 
@@ -31,6 +32,16 @@ export default function Footer() {
           </div>
           <div className="ft-actions">
             <SayHowdy className="ft-copy" />
+            {/* Opens the bookmark's sheet; if no bookmark is mounted, the PDF opens instead. */}
+            <a
+              href="/resume/Kai-Tran-Resume.pdf"
+              className="ft-resume"
+              onClick={(e) => {
+                if (!window.dispatchEvent(new CustomEvent(OPEN_RESUME_EVENT, { cancelable: true }))) e.preventDefault()
+              }}
+            >
+              résumé
+            </a>
             <ul className="ft-socials">
               {SOCIALS.map((s) => (
                 <li key={s.label}>

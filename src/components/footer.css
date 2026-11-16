@@ -49,6 +49,15 @@
 }
 .ft-copy:active { scale: 0.97; }
 .ft-copy:focus-visible { outline: 2px solid rgb(244 240 230); outline-offset: 2px; }
+/* Plain text link to the résumé (reviewer pass, 2026-11-16): opens the bookmark's sheet. */
+.ft-resume {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px;
+  font-family: var(--font-mono); font-size: 14px; color: rgb(244 240 230 / 0.95);
+  text-decoration: underline; text-underline-offset: 4px; text-decoration-color: rgb(236 232 224 / 0.5);
+  transition: text-decoration-color 150ms ease-out;
+}
+.ft-resume:focus-visible { outline: 2px solid rgb(244 240 230); outline-offset: 2px; border-radius: 4px; }
+@media (hover: hover) and (pointer: fine) { .ft-resume:hover { text-decoration-color: rgb(244 240 230); } }
 /* The phone menu's marks, drawn as chalk rings on the board. */
 .ft-socials { display: flex; gap: 8px; }
 .ft-social {
@@ -85,5 +94,5 @@
 @media (hover: hover) and (pointer: fine) { .ft-sound:hover { color: #ECE8E0; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .ft-stamp, .ft-copy, .ft-social, .ft-sound { transition: none; }
+  .ft-stamp, .ft-copy, .ft-resume, .ft-social, .ft-sound { transition: none; }
 }

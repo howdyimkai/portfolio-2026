@@ -9,6 +9,7 @@ import Resume from './Resume'
 import { play } from '@/lib/sfx'
 import './resume.css'
 
+export const OPEN_RESUME_EVENT = 'open-resume'
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 export default function ResumeBookmark() {
@@ -17,6 +18,18 @@ export default function ResumeBookmark() {
   const sheet = useRef<HTMLDivElement>(null)
   const titleId = useId()
   const close = useCallback(() => setOpen(false), [])
+
+  // Other parts of the page (the footer's "résumé" link) open the same sheet by dispatching
+  // OPEN_RESUME_EVENT; preventDefault tells them it was handled.
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      e.preventDefault()
+      void play('bookmark')
+      setOpen(true)
+    }
+    window.addEventListener(OPEN_RESUME_EVENT, onOpen)
+    return () => window.removeEventListener(OPEN_RESUME_EVENT, onOpen)
+  }, [])
 
   // The homepage's first-load drop (HomeFog sets <html data-rb-enter>). Each page mounts its own
   // bookmark, so leaving mid drop would leave the flag on and replay it on the next page: clear it here too.
