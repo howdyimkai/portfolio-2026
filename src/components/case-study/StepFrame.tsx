@@ -45,7 +45,7 @@ export default function StepFrame({ flow }: { flow: Flow }) {
   )
 
   return (
-    <div ref={root} className="rounded-[14px] bg-tag px-5 pb-5 pt-6 md:px-10 md:pb-7 md:pt-10">
+    <div ref={root} className="cs-panel rounded-[14px] bg-tag px-5 pb-5 pt-6 md:px-10 md:pb-7 md:pt-10">
       <BrowserFrame className="hidden md:block">{screens(flow.desktop)}</BrowserFrame>
       <div className="mx-auto max-w-[320px] rounded-[44px] bg-[#211e1a] p-2 shadow-[0_8px_24px_rgba(58,50,38,0.18)] md:hidden">
         <div className="overflow-hidden rounded-[36px]">{screens(flow.mobile)}</div>

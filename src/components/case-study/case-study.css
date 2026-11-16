@@ -188,3 +188,19 @@
 @media (prefers-reduced-motion: reduce) {
   .sw-line { animation: none; }
 }
+
+/* A hero's tag panel wears the /works cards' blue paint (Kai, 2026-11-16) instead of the beige tag:
+   it ties the case study to the card it was opened from, and the product reads with more contrast.
+   Only the hero: panels inside chapters stay beige. The texture is the painted frame CoverPaint
+   reveals on a card's hover. */
+.cs-hero .cs-panel {
+  background-color: #b1cadf; /* the texture's average, while it loads */
+  background-image: url('/works/cover-paint.webp');
+  background-size: cover;
+  background-position: center;
+}
+/* The muted inks (ink-body and lighter) fall to about 3.6:1 on this blue, so text in a hero panel
+   is set in a darker ink (#4A4236, 5.8:1). */
+.cs-hero .cs-panel :is(.text-ink-body, .text-ink-muted, .text-ink-faint) {
+  color: #4a4236;
+}

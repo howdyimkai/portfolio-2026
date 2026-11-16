@@ -92,7 +92,8 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             </dl>
           </header>
 
-          <div className="mt-16">
+          {/* cs-hero: a hero's tag panel (cs-panel) takes the works cards' blue paint (case-study.css). */}
+          <div className="cs-hero mt-16">
             <VisualBlock v={s.hero} />
           </div>
 
@@ -362,7 +363,7 @@ function VisualBlock({ v }: { v: Visual }) {
         // On the same tag panel as the Cal quiz hero, link row inside it (Kai, 2026-10-31). Browsers
         // decode video color a shade apart, so a flat background never quite matches the panel: the
         // mask cuts the loop to its device instead.
-        <div className="rounded-[14px] bg-tag px-5 pb-5 pt-6 md:px-10 md:pb-7 md:pt-10">
+        <div className="cs-panel rounded-[14px] bg-tag px-5 pb-5 pt-6 md:px-10 md:pb-7 md:pt-10">
           <div
             className={v.video.mask ? 'cs-loop-mask' : undefined}
             style={{ aspectRatio: v.aspect ?? '16 / 10', ...(v.video.mask ? ({ '--mask': `url(${v.video.mask})` } as CSSProperties) : {}) }}
