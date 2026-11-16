@@ -91,9 +91,12 @@ const QUIET_ZONE_PAD = 32
 // The résumé bookmark (.rb) hangs beside the shelf, so it gets the same room (2026-10-27).
 const QUIET_ZONE_SELECTOR = '.shelf-wordmark, .shelf-cubby, .shelf-broom, .rb, [data-tool-quiet]'
 // Principles hint (Kai, 2026-10-24, "Whisper" from /proto/hint): after this long on the
-// page a caption fades in under the title pointing at the erase reveal, and it leaves for
-// good the first time the eraser touches the title. Desktop only, like the reveal.
-// Notes: design-intent/hint-exploration/NOTES.md.
+// page a hint fades in beside the title pointing at the erase reveal, and it leaves for
+// good the first time the eraser touches the title. Since 2026-11-16 it's Kai's drawn
+// "psst try erasing me" note with an arrow at the title (ashita misread the text caption).
+// Notes: design-intent/hint-exploration/NOTES.md, source art in design-intent/psst-hint/.
+const HINT_DELAY_MS = 4000
+const PSST_SRC = '/hero/psst-hint.webp' // 520×588, transparent
 // Second hint, in the same spot: once an erase gets this far toward the reveal (halfway,
 // 40% of the title's ink; 0.75 felt too late, Kai 2026-10-24) without finishing, nudge the visitor on with the stroke that
 // clears it best (Kai, 2026-10-24). Leaves for good once the reveal fires.
@@ -109,6 +112,8 @@ const TITLE_LOCATION_PHONE = 'Remote or Austin, Texas.'
 // Under the title: "Plant, rake, ship." always shows; the halfway line swaps in while erasing (it renders with
 // InfinityTrace before "infinity"). The first "psst, try the eraser" text hint was removed 2026-11-16.
 const TAGLINE = 'Plant, rake, ship.'
+// Where the drawn psst note doesn't fit (under 1280px), this line under the title says it instead (Kai, 2026-11-16).
+const ERASE_PROMPT = 'try to erase above'
 // Single-key tool shortcuts. Pressing the held tool's key puts it down, like clicking it.
 const TOOL_KEYS: Record<string, Tool> = { r: 'rake', e: 'eraser', b: 'blossom' }
 // Cursor rotation eases toward its target each frame instead of snapping (0-1, higher = snappier).
@@ -462,6 +467,13 @@ export default function Garden({ layout }: { layout: Layout }) {
   // A returning title isn't erasable until the eraser has left its box once, or the wipe that
   // just cleared the principle (same spot) would carve straight into it.
   const titleArmedRef = useRef(true)
+  const [hintOn, setHintOn] = useState(false)
+  const hintDoneRef = useRef(false)
+  const endHint = useCallback(() => {
+    if (hintDoneRef.current) return
+    hintDoneRef.current = true
+    setHintOn(false)
+  }, [])
   const [keepGoing, setKeepGoing] = useState(false)
   const keepGoingShownRef = useRef(false)
 
@@ -692,6 +704,7 @@ export default function Garden({ layout }: { layout: Layout }) {
         const erased = canvas.erase(local(prev), local(p), ERASE_RADIUS)
         if (erased <= titleErasedRef.current) return
         titleErasedRef.current = erased
+        endHint()
         // The title keeps full opacity while it's wiped; the reveal fades what's left.
         const coverage = Math.min(1, erased / ERASE_THRESHOLD)
         if (coverage >= 1) triggerReveal()
@@ -715,7 +728,7 @@ export default function Garden({ layout }: { layout: Layout }) {
       // finish the return on its own rather than leaving it half-erased.
       else scheduleAutoReturn(PRINCIPLE_IDLE_MS)
     },
-    [triggerReveal, beginReturn, scheduleAutoReturn]
+    [triggerReveal, beginReturn, scheduleAutoReturn, endHint]
   )
 
   // Decode each principle's still now, so its canvas paints on its first frame.
@@ -1178,6 +1191,14 @@ export default function Garden({ layout }: { layout: Layout }) {
     )
   }, [expanded])
 
+  // The psst note waits HINT_DELAY_MS in each idle state, and hides while a principle plays.
+  useEffect(() => {
+    setHintOn(false)
+    if (hintDoneRef.current || !revealOnRef.current || sequencePhase !== 'idle') return
+    const id = window.setTimeout(() => setHintOn(true), HINT_DELAY_MS)
+    return () => window.clearTimeout(id)
+  }, [tool, sequencePhase])
+
   useEffect(() => {
     // R, E and B pick (or drop) a tool; Escape drops the held tool.
     const onKey = (e: KeyboardEvent) => {
@@ -1307,14 +1328,14 @@ export default function Garden({ layout }: { layout: Layout }) {
               title is erased. hero-enter: the first-load fade (HomeFog). */}
           <div className="hero-enter relative">
             {/* Above the title in mono bold, 20% up from 13px (Kai, 2026-10-29), a step up to 18px
-                on 2026-11-16 for legibility on the sand. Mono at 18px is wider than a phone with the
-                location, so phones put it on a second, lighter line. */}
+                on 2026-11-16 for legibility on the sand. Below 1280 the location goes on a second, lighter
+                line: one long line is wider than a phone, and from 768 to 1279 the moss covers its start. */}
             <p className="mb-3 text-center font-mono text-[18px] font-bold text-ink-primary">
-              <span className="md:hidden">
+              <span className="xl:hidden">
                 {TITLE_SUBLINE_PHONE}
                 <span className="block text-[15px] font-medium">{TITLE_LOCATION_PHONE}</span>
               </span>
-              <span className="max-md:hidden">{TITLE_SUBLINE}</span>
+              <span className="max-xl:hidden">{TITLE_SUBLINE}</span>
             </p>
             <div
               ref={titleElRef}
@@ -1332,14 +1353,31 @@ export default function Garden({ layout }: { layout: Layout }) {
             {/* Under the title, in the subline's style (mono, ink-primary: 7.7:1 on the sand), a
                 step up to 14px with medium weight. "Plant, rake, ship." stays; the halfway line
                 swaps in while erasing. */}
-            {/* SLOT: Kai's drawn "psst" note with an arrow to the hero goes here (art to come). */}
+            {/* Kai's drawn psst note, its arrow aimed at the title from the left. Fades in after
+                HINT_DELAY_MS, gone for good once the eraser touches the title. From 1280px only for
+                now: narrower, it runs under the tool rail, and on phones the moss sits under the title. */}
+            <Image
+              src={PSST_SRC}
+              alt="psst, try erasing me"
+              aria-hidden={!hintOn}
+              width={520}
+              height={588}
+              draggable={false}
+              unoptimized
+              className={`pointer-events-none absolute right-full top-[34%] mr-[calc(var(--u)*1)] h-auto w-[calc(var(--u)*13)] min-w-[104px] select-none transition-opacity duration-500 ease-out max-xl:hidden ${
+                hintOn ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
             <p className="absolute left-1/2 top-full mt-4 -translate-x-1/2 whitespace-nowrap font-mono text-[14px] font-medium text-ink-primary">
               {keepGoing ? (
                 <>
                   keep going, try an <InfinityTrace /> infinity pattern
                 </>
               ) : (
-                TAGLINE
+                <>
+                  <span className="max-xl:hidden">{TAGLINE}</span>
+                  <span className="xl:hidden">{ERASE_PROMPT}</span>
+                </>
               )}
             </p>
           </div>
