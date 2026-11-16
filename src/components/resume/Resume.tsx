@@ -37,7 +37,7 @@ const EXPERIENCE = [
     bullets: [
       <>Designed and built the sprint app, with pair matching and weekly check-ins, using Claude Code and Supabase. <strong>37 designers</strong> across four crews have gone through it, with about an 80% pair check-in rate, and 29 more are on the waitlist.</>,
       <>
-        As Sprintfolio, ran nearly 200 sprint partnerships on Notion, then built a platform with the team that reached $1K MRR in its first month. <strong>One of 35 teams</strong> picked from 57,000 applicants to build in San Francisco with{' '}
+        As Sprintfolio, ran 250+ sprint teams on Notion, then built a platform with the team that reached $1K MRR in its first month. <strong>One of 35 teams</strong> picked from 57,000 applicants to build in San Francisco with{' '}
         <a href="https://buildspace.so/sf1" target="_blank" rel="noopener noreferrer">Buildspace</a>.
       </>,
     ],

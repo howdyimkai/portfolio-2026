@@ -14,7 +14,7 @@ export const designGarden: CaseStudy = {
   meta: [
     { label: 'Role', value: 'Founder. Product, design, and the app. I run every crew.' },
     { label: 'Built with', value: 'React and Supabase, with Claude Code as my build partner' },
-    { label: 'Timeline', value: 'Spring 2025 to now (app built from Jan 2026)' },
+    { label: 'Timeline', value: 'Sprintfolio in 2023, Design Garden since spring 2025 (app built from Jan 2026)' },
     { label: 'Status', value: 'Live' },
   ],
   // The landing page loop in its MacBook frame (Kai, 2026-10-31: ship it as is; a browser frame
