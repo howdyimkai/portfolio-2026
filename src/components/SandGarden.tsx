@@ -1603,18 +1603,19 @@ const DECOR: Record<'home' | 'bleed' | 'tray', { mobileTitle: string; moss: stri
     // Phones (Kai's mock, 2026-11-02): a small rock up top right, 10px above where the sand turns
     // solid under its white grid band (sandbox-home.css), beside the sub line; the moss
     // 40px under the title (room for the eraser hint) (which ends at 184px + min(90vw, 368px) × 436/900), the bonsai big on
-    // the right and the wide rock low on the left. The bonsai and that rock are anchored to the
+    // the right and the wide rock low on the left. 2026-11-16: the sub line went to two lines and
+    // pushed the title to 210px, so the moss offset went 224 → 260px and the bonsai's 487 → 523px. The bonsai and that rock are anchored to the
     // works pill (its top is 159px above the safe bottom), so they never sit on it. The bonsai
     // shrinks so its top stays 80px under the moss's top. The smallest rock stays off phones. Below
     // 767px tall the moss steps out and the bonsai drops to 40u, 8px closer to the pill, to clear the hint.
-    moss: 'w-[calc(var(--u)*33)] left-[9%] top-[max(45%,calc(224px+min(90vw,368px)*0.4844))] [@media(max-width:767px)_and_(max-height:766px)]:hidden md:max-lg:hidden md:w-[calc(var(--u)*23)] md:left-[9.6%] md:top-[15.2%]',
+    moss: 'w-[calc(var(--u)*33)] left-[9%] top-[max(45%,calc(260px+min(90vw,368px)*0.4844))] [@media(max-width:767px)_and_(max-height:766px)]:hidden md:max-lg:hidden md:w-[calc(var(--u)*23)] md:left-[9.6%] md:top-[15.2%]',
     rocks: [
       'w-[calc(var(--u)*20)] left-[8%] bottom-[calc(max(16px,env(safe-area-inset-bottom))+153px)] md:bottom-auto md:left-[9.5%] md:top-[70.6%]',
       // Kai, 2026-10-29: down and left of 81%/12% (his circle), so the résumé ribbon never hangs over it.
       'w-[calc(var(--u)*16)] left-[83%] top-[calc(23.2px+7.9dvh)] md:w-[calc(var(--u)*14)] md:left-[76.5%] md:top-[24%]',
       'hidden md:block md:w-[calc(var(--u)*9)] md:left-[27%] md:top-[82%]',
     ],
-    bonsai: 'w-[min(calc(var(--u)*71),calc((100dvh-487px-min(90vw,368px)*0.4844)*1.291))] right-[5%] bottom-[calc(max(16px,env(safe-area-inset-bottom))+167px)] [@media(max-width:767px)_and_(max-height:766px)]:w-[calc(var(--u)*40)] [@media(max-width:767px)_and_(max-height:766px)]:bottom-[calc(max(16px,env(safe-area-inset-bottom))+151px)] md:bottom-auto md:right-auto md:w-[calc(var(--u)*48)] md:left-[69.2%] md:top-[57.2%]',
+    bonsai: 'w-[min(calc(var(--u)*71),calc((100dvh-523px-min(90vw,368px)*0.4844)*1.291))] right-[5%] bottom-[calc(max(16px,env(safe-area-inset-bottom))+167px)] [@media(max-width:767px)_and_(max-height:766px)]:w-[calc(var(--u)*40)] [@media(max-width:767px)_and_(max-height:766px)]:bottom-[calc(max(16px,env(safe-area-inset-bottom))+151px)] md:bottom-auto md:right-auto md:w-[calc(var(--u)*48)] md:left-[69.2%] md:top-[57.2%]',
   },
   // Plot starts under the shelf, framed by the page.
   tray: {
