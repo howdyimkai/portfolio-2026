@@ -75,8 +75,12 @@
   transform-style: preserve-3d;
   transition: transform 450ms var(--ease-out-strong);
 }
+/* Every product screen shows at the same width, 86% of the cover (2026-11-16): a browser window is
+   all screen, so it's 86% wide; a laptop whose screen is 76% of its image grows past 100% so its
+   screen matches, and its base reaches into the cover's padding. --screen is set per card. */
 .wk-window-wide {
-  width: 100%;
+  --wk-screen: 0.86;
+  width: calc(var(--wk-screen) / var(--screen, 1) * 100%);
 }
 .wk-board {
   display: flex;
@@ -244,16 +248,23 @@ a.wk-card:focus-visible .wk-coat {
 }
 .wk-blossom-a {
   width: 13%;
-  right: -4.5%;
+  /* Perched on the screen's corner, not the image's: a laptop's base runs wider than its screen. */
+  right: calc((1 - var(--screen, 1)) / 2 * 100% - 4.5%);
   top: -7%;
   transform: translateZ(30px) rotate(-8deg);
 }
 .wk-blossom-b {
   width: 9.5%;
-  left: -3.5%;
+  left: calc((1 - var(--screen, 1)) / 2 * 100% - 3.5%);
   bottom: -5%;
   transform: translateZ(22px) rotate(14deg);
   transition-delay: 40ms;
+}
+/* One blossom per card, not two (2026-11-16): ten identical blossoms in the same two corners read
+   as wallpaper. Odd cards keep the top right one, even cards the bottom left. */
+.wk-card:nth-child(odd) .wk-blossom-b,
+.wk-card:nth-child(even) .wk-blossom-a {
+  display: none;
 }
 .wk-arrow {
   transition: transform 200ms var(--ease-out-strong);
@@ -299,10 +310,12 @@ a.wk-card:active .wk-cover {
 }
 /* A hook's marked words: a highlighter sweeps left to right under them on hover or keyboard focus,
    in the lit face of the nav's felt star (#E4B163, sampled from star.webp). The words turn the
-   board's slate as it passes so they read on the yellow. One piece, never split across lines; the
-   padding reaches a little past the words and the margin gives it back, so nothing moves. */
+   board's slate as it passes so they read on the yellow. It may wrap (2026-11-16: kept in one piece
+   it forced short first lines like "Helping designers"); each line gets its own sweep and rounded
+   ends. The padding reaches a little past the words and the margin gives it back, so nothing moves. */
 .wk-mark {
-  white-space: nowrap;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
   margin: 0 -0.12em;
   padding: 0 0.12em;
   border-radius: 2px;

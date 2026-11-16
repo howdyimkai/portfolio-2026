@@ -80,7 +80,10 @@ System links to `/works/brand-system` (noindex, built on `explore/brand-system`
 from `BUILD-PLAN_BrandSystem_ClaudeCode.md`). ApolloEd is the fifth card since 2026-11-16
 (`explore/apolloed`), its masked laptop loop playing on hover only (`video.hover`). From 1024px
 the cards sit three over two, the two centered (six column `.wk-grid`, page max 1440); two up
-(768 to 1023) the odd last card sits alone, centered (`project-card.css`). Cards are
+(768 to 1023) the odd last card sits alone, centered (`project-card.css`). Balance pass
+2026-11-16: every product screen shows at 86% of its cover (`video.screen` = a laptop's screen share
+of its image), one blossom per card on alternating corners, hooks wrap `pretty` with a highlight
+that may wrap, and Video System's still is episode one (the teaser is all flat blue). Cards are
 `src/components/works/ProjectCard.tsx`, promoted from `/proto/project-card`'s
 Chalkboard variant.
 Since 2026-11-09 the cards sit two up (five projects from 2026-11-16: two up from 768px, three over two from 1024px) with a larger cover that

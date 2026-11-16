@@ -23,6 +23,8 @@ const PROJECTS: Project[] = [
         mp4: '/works/design-garden/hero/landing-loop.mp4',
         mask: '/works/design-garden/hero/landing-mask.webp',
         aspect: '1408 / 816',
+        // The screen runs x 168 to 1240 of the 1408 wide still.
+        screen: 0.76,
       },
       alt: 'Design Garden\'s landing page on a laptop: "Dig into your craft. Ship your best work, together." with crew avatars in cowboy hats floating over fall leaves',
     },
@@ -78,13 +80,15 @@ const PROJECTS: Project[] = [
     story: 'I turned hours of live sessions into a series of under three minute episodes, then wrote the guidelines our team and interns made every video from. Twelve episodes so far.',
     role: 'video and motion',
     year: '2026',
-    // The reel teaser's first frame, in the wide window like the other 16:9 covers. It plays on hover.
+    // Episode one's thumbnail (the case study's series-ep1 at 1200), in the wide window like the
+    // other 16:9 covers; the reel teaser plays over it on hover. Not the teaser's own first frame
+    // (2026-11-16): every frame of it is one flat blue, the heaviest thing on /works.
     cover: {
-      anim: '/works/visual-media/reel-teaser-still.webp',
-      still: '/works/visual-media/reel-teaser-still.webp',
+      anim: '/works/visual-media/cover-series-ep1.webp',
+      still: '/works/visual-media/cover-series-ep1.webp',
       device: 'browser',
       teaser: { webm: '/works/visual-media/reel-teaser.webm', mp4: '/works/visual-media/reel-teaser.mp4' },
-      alt: 'Reel teaser: white type on blue reading "Real career paths," then "Real decisions," as Real Careers, Real Journeys episode cards fan in.',
+      alt: 'Episode one of Real Careers, Real Journeys: Cal the compass presents Entrepreneurship beside a woman on a call asking "Would you actually want this kind of life?"',
     },
     href: '/works/visual-media',
     cta: 'watch the reel',
@@ -108,6 +112,8 @@ const PROJECTS: Project[] = [
         mask: '/works/apolloed/hero-mask.webp',
         aspect: '1490 / 956',
         hover: true,
+        // The screen runs x 24 to 1464 of the 1490 wide lid.
+        screen: 0.97,
       },
       alt: 'A school dashboard built from three traits, with every chart tagged as generated sample data.',
     },

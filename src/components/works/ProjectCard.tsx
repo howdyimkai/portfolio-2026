@@ -34,7 +34,9 @@ export type Project = {
     // A muted loop in place of the animated image (`still` is its poster and the reduced motion
     // frame). The mask cuts it to its own device, so it takes no browser window of its own.
     // `hover` makes it a teaser instead: it plays only while the card is hovered or focused.
-    video?: { webm: string; mp4: string; mask: string; aspect: string; hover?: boolean }
+    // `screen` is the share of the image's width that is screen (a laptop's bezel and base take the
+    // rest), so every card's product shows at the same width (project-card.css, --wk-screen).
+    video?: { webm: string; mp4: string; mask: string; aspect: string; hover?: boolean; screen?: number }
     // A muted loop that plays only while the card is hovered or focused, over `still`, in the
     // browser window like any cover. Reduced motion and touch keep the still.
     teaser?: { webm: string; mp4: string }
@@ -85,7 +87,11 @@ export default function ProjectCard({ project: p }: { project: Project }) {
         {p.cover && <CoverPaint />}
         {/* The window plus two of the garden's blossoms perched on opposite corners. A plain
             <picture>, not next/image: the optimizer would flatten the animation. */}
-        <div ref={windowRef} className={`wk-window ${p.cover?.device === 'browser' ? 'wk-window-wide' : ''}`}>
+        <div
+          ref={windowRef}
+          className={`wk-window ${p.cover?.device === 'browser' ? 'wk-window-wide' : ''}`}
+          style={p.cover?.video?.screen ? ({ '--screen': p.cover.video.screen } as CSSProperties) : undefined}
+        >
           {p.cover ? (
             <>
               <div className={`wk-gif ${p.cover.device && !p.cover.video ? `wk-${p.cover.device}` : ''}`}>
@@ -149,7 +155,7 @@ export default function ProjectCard({ project: p }: { project: Project }) {
           <span className="whitespace-nowrap">{p.name}</span>
           <span className="whitespace-nowrap opacity-60">{[p.role, p.year].filter(Boolean).join(' · ')}</span>
         </div>
-        <h2 className="wk-hook wk-chalk-ink font-display font-medium [text-wrap:balance]">
+        <h2 className="wk-hook wk-chalk-ink font-display font-medium [text-wrap:pretty]">
           {p.mark && p.hook.includes(p.mark) ? (
             <>
               {p.hook.slice(0, p.hook.indexOf(p.mark))}
