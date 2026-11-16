@@ -24,7 +24,9 @@ const GRID_WIDTH = 336 // matches .grid-paper's background-size
 // so don't cover it again. Once the script is running before then, it stops the fallback and owns
 // the paper, so slow images can't push the reveal past this and lose it (seen on the Vercel preview,
 // 2026-11-08: the garden images held the reveal to 2.2s, a hair under the old second check).
-const LATE_MS = 2600
+// 3.5s since 2026-11-16 (was 2.6s): cold first visits to a fresh deployment started the script just
+// past 2.6s and got only the fallback fade, which reads as no fog.
+const LATE_MS = 3500
 // The longest the script holds the paper for the garden's images and the grid texture.
 const WAIT_MS = 1200
 // Share of the window cleared when the résumé bookmark starts its enter.

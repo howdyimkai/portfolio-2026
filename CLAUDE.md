@@ -161,7 +161,7 @@ About copy draft lives in the Positioning Brainstorm doc.
   `HomeFog` (2026-11-07, after the sprint's `inspiration/rug-reveal.mov`) covers the window in the
   grid paper on a fresh load of `/` only, then clears it outward from the title (`data-fog-origin`) in
   blotchy clumps over 1.5s: a coarse distance + noise mask stretched over a canvas. Never on a click
-  home, never under reduced motion; a CSS fallback fades the paper at 2.6s if the script never runs.
+  home, never under reduced motion; a CSS fallback fades the paper at 3.5s if the script never runs (was 2.6s until 2026-11-16).
   `/pieces/*` renders bare (one piece of the site on its own, for recordings).
   `/works`, its case studies, `/about` and `/play` use `ShelfNav` + `Footer` on white grid paper; below
   md the shelf gives way to `PhoneMenu` (paper bar + hamburger opening a one-column shelf) and
