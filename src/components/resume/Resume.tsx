@@ -8,7 +8,7 @@ import SayHowdy from './SayHowdy'
 const EXPERIENCE = [
   {
     org: 'Tallo',
-    about: 'Edtech career platform for people 13 to 30',
+    about: 'Edtech career platform for students and early career explorers',
     dates: 'May 2025 – Nov 2026',
     roles: (
       <>
