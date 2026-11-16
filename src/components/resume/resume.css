@@ -333,6 +333,9 @@ html[data-rb-enter='go'] .rb { animation: rb-enter 360ms both; }
   .rs-name { font-size: 30px; }
   .rs-doc { font-size: 14px; }
   .rs-skills div { grid-template-columns: 1fr; gap: 0; }
+  /* Easier to read on a phone: more air between jobs and between bullets (reviewer pass, 2026-11-16). */
+  .rs-job + .rs-job { margin-top: 36px; }
+  .rs-list { gap: 12px; margin-top: 12px; }
   .rs-page { margin: 0; padding: 40px 20px 56px; border-radius: 0; box-shadow: none; }
 }
 
