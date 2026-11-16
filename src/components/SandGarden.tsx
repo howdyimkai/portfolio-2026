@@ -104,6 +104,8 @@ const KEEP_GOING_AT = 0.5
 // page's tools as verbs. Replaced "Product designer. Head of Creative at Tallo." (role ends Nov 2026).
 const TITLE_SUBLINE = 'Kai Tran, product designer. Remote or Austin, Texas.'
 const TITLE_SUBLINE_PHONE = 'Kai Tran, product designer'
+// Phones get the location as its own line under the name (Robin, 2026-11-16: state the target above the fold).
+const TITLE_LOCATION_PHONE = 'Remote or Austin, Texas.'
 // Under the title: "Plant, rake, ship." always shows; the halfway line swaps in while erasing (it renders with
 // InfinityTrace before "infinity"). The first "psst, try the eraser" text hint was removed 2026-11-16.
 const TAGLINE = 'Plant, rake, ship.'
@@ -1289,6 +1291,7 @@ export default function Garden({ layout }: { layout: Layout }) {
             <TitleArt boiling={titleBoiling} />
             <p className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap font-mono text-[18px] font-bold text-ink-primary">
               {TITLE_SUBLINE_PHONE}
+              <span className="block text-center text-[15px] font-medium">{TITLE_LOCATION_PHONE}</span>
             </p>
           </div>
         )}
@@ -1304,10 +1307,13 @@ export default function Garden({ layout }: { layout: Layout }) {
               title is erased. hero-enter: the first-load fade (HomeFog). */}
           <div className="hero-enter relative">
             {/* Above the title in mono bold, 20% up from 13px (Kai, 2026-10-29), a step up to 18px
-                on 2026-11-16 for legibility on the sand. Phones drop the location (Kai, 2026-11-02 and
-                -16): mono at 18px is wider than the screen with it, so they get the short line. */}
+                on 2026-11-16 for legibility on the sand. Mono at 18px is wider than a phone with the
+                location, so phones put it on a second, lighter line. */}
             <p className="mb-3 text-center font-mono text-[18px] font-bold text-ink-primary">
-              <span className="md:hidden">{TITLE_SUBLINE_PHONE}</span>
+              <span className="md:hidden">
+                {TITLE_SUBLINE_PHONE}
+                <span className="block text-[15px] font-medium">{TITLE_LOCATION_PHONE}</span>
+              </span>
               <span className="max-md:hidden">{TITLE_SUBLINE}</span>
             </p>
             <div
