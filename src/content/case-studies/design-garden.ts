@@ -33,18 +33,14 @@ export const designGarden: CaseStudy = {
     alt: 'Design Garden\'s landing page: "Dig into your craft. Ship your best work, together." Crew avatars in cowboy hats float over fall leaves, around a card for the Fall Sprint, Oct 5 to Nov 13.',
     link: { label: 'Visit Design Garden', href: 'https://designgarden.xyz' },
   },
+  // Kai, 2026-11-20 (CaseStudy_DesignGarden_TLDR_v2_DRAFT.md). "8 of 8" left the strip; it stays as Showcase night's hook.
   stats: [
-    { value: '4', label: 'crews' },
+    { value: '250+', label: 'sprint teams since 2023' },
+    { value: '4\u00a0in\u00a05', label: 'check ins happened without me in the room' },
     {
-      value: '80%',
-      label: 'weekly check ins',
-      note: 'Of all the weekly check ins pairs were scheduled to do, 80% happened in the app.',
-    },
-    // Kai, 2026-10-31. The 8 are everyone who answered the summer 2026 survey, never "all participants".
-    {
-      value: '8\u00a0of\u00a08',
-      label: "survey respondents said they wouldn't have gotten this far without it",
-      note: '8 survey respondents, summer 2026.',
+      value: '9\u00a0of\u00a010',
+      label: 'designers made it to the fall showcase',
+      note: 'Fall 2026 showcase, November 13. The 10 includes me, since I sprinted with the crew.',
     },
   ],
   statsLink: { label: 'See what the summer 2026 crew shipped', href: 'https://designgarden.xyz/almanac' },
@@ -60,7 +56,7 @@ export const designGarden: CaseStudy = {
       blocks: [
         {
           kind: 'p',
-          text: "Most designers know what they should be working on. They're just doing it alone, at night, after a day job. Design Garden gives them one partner, four weeks, a weekly check in, and a showcase night at the end. I designed it, built it, and I run it.",
+          text: "Designers stop shipping when they work alone. Design Garden gives each one a partner, four weeks and a weekly check in. About 4 in 5 check ins happened with me out of the room. I designed the program, built the app that matches people, and now run every crew myself.",
         },
       ],
     },
@@ -136,6 +132,7 @@ export const designGarden: CaseStudy = {
           text: "I enjoyed the breakout rooms last night. I'd say they could even be 10 minutes just for the ability to meet more people.",
           cite: 'Week 1 pulse survey, summer 2026',
         },
+        { kind: 'p', text: 'I built it myself: 935 commits since January, all mine.' },
         // The real match card, rebuilt as a component (design-garden/MatchCard.tsx), scored by the
         // ported matching logic on a seeded demo pair.
         {
@@ -199,6 +196,10 @@ export const designGarden: CaseStudy = {
         {
           kind: 'p',
           text: "Since January, I built for function: make it work and get real crews using it. Now I'm giving Design Garden a proper design pass. The check in and the garden went first, and the before and after above shows what changed. The rest of the app is next.",
+        },
+        {
+          kind: 'p',
+          text: 'The next experiment is already live: a [portfolio exchange](https://designgarden.xyz/exchange) I built during Lovable\'s SheBuilds. Review one portfolio, get one back from someone in your target field. 7 founding reviewers and 5 reviews so far.',
         },
       ],
     },
